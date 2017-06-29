@@ -1,0 +1,23 @@
+{
+  "name": "ziad.rida",
+  "version": "0.5.0",
+  "description": "TT FB Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "facebook",
+    "messenger",
+    "bot",
+    "node",
+    "heroku"
+  ],
+  "author": "Ziad Rida",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "request": "^2.81.0"
+  }
+}
