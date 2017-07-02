@@ -1,3 +1,7 @@
+"scripts": {
+"start": "node index.js"
+}
+
 {
   "name": "ziad.rida",
   "version": "0.5.0",
@@ -20,4 +24,6 @@
     "express": "^4.15.3",
     "request": "^2.81.0"
   }
+
+
 }
