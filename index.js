@@ -1,4 +1,4 @@
-/*index.js*/
+
 //add all of code
 const express = require('express')
 const bodyParser = require('body-parser')
