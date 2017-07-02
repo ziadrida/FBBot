@@ -1,3 +1,6 @@
+"scripts": {
+   "start": "node index.js"
+    },
 {
   "name": "ziad.rida",
   "version": "0.5.0",
