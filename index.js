@@ -89,7 +89,7 @@ function receivedMessage(event) {
       case 'generic':
         sendGenericMessage(senderID);
         break;
-      case messageText.toUpperCase().indexOf("PHONE"):
+      case messageText.toUpperCase().indexOf("PHONE") >= 0:
         sendTextMessage(senderID, 'Our main phone number is 0785000010');
       default:
     //
