@@ -79,6 +79,12 @@ function receivedMessage(event) {
 
     // If we receive a text message, check to see if it matches a keyword
     // and send back the example. Otherwise, just echo the text we received.
+
+    // if message contains http, then it is a pricing request
+    if messageText.contains ('http'){
+      sendTextMessage(senderID, 'pricing now...');
+    }
+
     switch (messageText) {
       case 'generic':
         sendGenericMessage(senderID);
