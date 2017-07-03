@@ -81,7 +81,7 @@ function receivedMessage(event) {
     // and send back the example. Otherwise, just echo the text we received.
 
     // if message contains http, then it is a pricing request
-    if messageText.contains ('http'){
+    if (messageText.indexOf ("http") >= 0) {
       sendTextMessage(senderID, 'pricing now...');
     }
 
