@@ -1,0 +1,6 @@
+1. if message from customer has http:// or https:// then add label "PR-MON-DAY
+   Do this using ManyChats Facebook Bot.
+
+2.if customer asks for order status after hours,
+then give message that status will be provided at a later time
+and set label 'FollowUp-status'
