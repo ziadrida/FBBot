@@ -14,6 +14,10 @@ app.get('/', function (req, res) {
   res.send ('Hello - It is now working!')
 })
 
+app.get('/seema', function (req, res) {
+  res.send ('Hello - Seema!')
+})
+
 
 app.get('/webhook/', function(req, res){
   if(req.query['hub.verify_token'] ===
