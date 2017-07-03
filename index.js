@@ -5,6 +5,9 @@ const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
 
+// get token from the environment 
+const token = process.env.FB_VERIFY_TOKEN
+
 app.set('port', (process.env.PORT || 5000))
 
 app.use(bodyParser.urlencoded({extended: false}))
@@ -20,8 +23,7 @@ app.get('/seema', function (req, res) {
 
 
 app.get('/webhook/', function(req, res){
-  if(req.query['hub.verify_token'] ===
-'my_voice_is_my_password_verify_me') {
+  if(req.query['hub.verify_token'] === token) {
   res.send (req.query['hub.challenge'])
 }
 res.send('No entry')
