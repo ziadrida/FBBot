@@ -84,13 +84,14 @@ function receivedMessage(event) {
     if (messageText.toUpperCase().indexOf ("HTTP") >= 0) {
       sendTextMessage(senderID, 'pricing now...');
     }
-
+    if ( messageText.toUpperCase().indexOf("PHONE") >= 0) {
+      sendTextMessage(senderID, 'Our main phone number is 0785000010');
+    }
     switch (messageText) {
       case 'generic':
         sendGenericMessage(senderID);
         break;
-      case messageText.toUpperCase().indexOf("PHONE") >= 0:
-        sendTextMessage(senderID, 'Our main phone number is 0785000010');
+
       default:
     //
     //    sendTextMessage(senderID, messageText);
