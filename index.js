@@ -81,7 +81,7 @@ function receivedMessage(event) {
     // and send back the example. Otherwise, just echo the text we received.
 
     // if message contains http, then it is a pricing request
-    if (toUpperCase(messageText).indexOf ("HTTP") >= 0) {
+    if (messageText.toUpperCase().indexOf ("HTTP") >= 0) {
       sendTextMessage(senderID, 'pricing now...');
     }
 
@@ -89,7 +89,7 @@ function receivedMessage(event) {
       case 'generic':
         sendGenericMessage(senderID);
         break;
-      case toUpperCase(messageText).indexOf("PHONE"):
+      case messageText.toUpperCase().indexOf("PHONE"):
         sendTextMessage(senderID, 'Our main phone number is 0785000010');
       default:
     //
