@@ -3,4 +3,5 @@
 
 2.if customer asks for order status after hours,
 then give message that status will be provided at a later time
-and set label 'FollowUp-status'
+and set label 'FollowUp-status'	
+3. Send price with "Quick Reply Buttons"
