@@ -5,6 +5,10 @@
 then give message that status will be provided at a later time
 and set label 'FollowUp-status'	
 3. Send price with "Quick Reply Buttons"
+_________________________________________
+commands
+ git commit -am  "update - added post"
+git push heroku master
 
 ____________________________________________
 ziad.rida@0.5.0 C:\Users\ziad.rida\Google Drive\per\projects\FBBot

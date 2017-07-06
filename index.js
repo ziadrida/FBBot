@@ -27,7 +27,6 @@ app.get('/seema', function (req, res) {
   res.send ('Hello - Seema!')
 })
 
-
 app.get('/webhook/', function(req, res){
   if(req.query['hub.verify_token'] === token) {
   res.send (req.query['hub.challenge'])
@@ -72,6 +71,7 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
+
   console.log("==>>> Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(message));
@@ -90,13 +90,18 @@ function receivedMessage(event) {
     if (messageText.toUpperCase().indexOf ("HTTP") >= 0) {
       sendTextMessage(senderID, 'pricing now...');
       // insertDocument into mongoDB
+      db = connect(url);
+      db.price_request.insert( { userId: "011", product: "http://www.amazon.com" } )
+      /*
       MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
         insertDocument(db, function() {
-          db.close();
-  });
-});
+            db.close();
+          });
+      });
+      */
     }
+
     if ( messageText.toUpperCase().indexOf("PHONE") >= 0) {
       sendTextMessage(senderID, 'Our main phone number is 0785000010');
     }
@@ -160,7 +165,7 @@ app.listen(app.get('port'), function(){
 
 // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
 var insertDocument = function(db, callback) {
-   db.collection('restaurants').insertOne( {
+   db.collection('pricing_request').insertOne( {
       "address" : {
          "street" : "2 Avenue",
          "zipcode" : "10075",
