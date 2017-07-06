@@ -90,16 +90,16 @@ function receivedMessage(event) {
     if (messageText.toUpperCase().indexOf ("HTTP") >= 0) {
       sendTextMessage(senderID, 'pricing now...');
       // insertDocument into mongoDB
-      db = connect(url);
-      db.price_request.insert( { userId: "011", product: "http://www.amazon.com" } )
-      /*
+    //  db = MongoClient.connect(url);
+      //db.price_request.insert( { userId: "011", product: "http://www.amazon.com" } )
+
       MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
         insertDocument(db, function() {
             db.close();
           });
       });
-      */
+      
     }
 
     if ( messageText.toUpperCase().indexOf("PHONE") >= 0) {
