@@ -104,7 +104,7 @@ function receivedMessage(event) {
     "/{user-id}",
     function (response) {
       if (response && !response.error) {
-        /* handle the result */
+        // handle the result 
         console.log(JSON.stringify(response));
       } else {
         console.log("Error calling FB API ***** ");
