@@ -95,6 +95,20 @@ function receivedMessage(event) {
     //  db = MongoClient.connect(url);
       //db.price_request.insert( { userId: "011", product: "http://www.amazon.com" } )
 
+
+// get user info
+FB.api(
+    "/{user-id}",
+    function (response) {
+      if (response && !response.error) {
+        /* handle the result */
+        console.log(JSON.stringify(response));
+      } else {
+        console.log("Error calling FB API ***** ");
+      }
+    }
+);
+
       MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
         insertDocument(db, function() {
