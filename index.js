@@ -1,6 +1,6 @@
 
 // FB api
-var FB = require('fb');
+//var FB = require('fb');
   //  fb = new FB.Facebook(options);
 // mongodb
 var MongoClient = require('mongodb').MongoClient;
@@ -100,7 +100,7 @@ function receivedMessage(event) {
 
 
 // get user info
-FB.api(
+/*FB.api(
     "/{user-id}",
     function (response) {
       if (response && !response.error) {
@@ -110,7 +110,7 @@ FB.api(
         console.log("Error calling FB API ***** ");
       }
     }
-);
+); */
 
       MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
