@@ -107,7 +107,8 @@ function receivedMessage(event) {
             "recipientId" : recipientID,
             "messageText" : messageText,
             "messageId": messageId,
-            "timestamp" : new Date(timeOfMessage)
+            "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
+            "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
          }, function(err, result) {
           assert.equal(err, null);
           console.log("Inserted a document into the pricing_request collection.");
