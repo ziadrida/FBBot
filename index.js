@@ -1,7 +1,7 @@
 
 // FB api
 var FB = require('fb'),
-  //  fb = new FB.Facebook(options);
+    fb = new FB.Facebook(options);
 // mongodb
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
