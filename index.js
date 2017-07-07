@@ -99,7 +99,21 @@ function receivedMessage(event) {
             db.close();
           });
       });
-      
+
+      // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+      var insertDocument = function(db, callback) {
+         db.collection('pricing_request').insertOne( {
+            "senderId" : senderID,
+            "recipientId" : recipientID,
+            "messageText" : messageText,
+            "messageId": messageId,
+            "timestamp" : timeOfMessage
+         }, function(err, result) {
+          assert.equal(err, null);
+          console.log("Inserted a document into the pricing_request collection.");
+          callback();
+        });
+      };
     }
 
     if ( messageText.toUpperCase().indexOf("PHONE") >= 0) {
@@ -162,35 +176,3 @@ function callSendAPI(messageData) {
 app.listen(app.get('port'), function(){
   console.log('running on port', app.get('port'))
 })
-
-// insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
-var insertDocument = function(db, callback) {
-   db.collection('pricing_request').insertOne( {
-      "address" : {
-         "street" : "2 Avenue",
-         "zipcode" : "10075",
-         "building" : "1480",
-         "coord" : [ -73.9557413, 40.7720266 ]
-      },
-      "borough" : "Manhattan",
-      "cuisine" : "Italian",
-      "grades" : [
-         {
-            "date" : new Date("2014-10-01T00:00:00Z"),
-            "grade" : "A",
-            "score" : 11
-         },
-         {
-            "date" : new Date("2014-01-16T00:00:00Z"),
-            "grade" : "B",
-            "score" : 17
-         }
-      ],
-      "name" : "Vella",
-      "restaurant_id" : "41704620"
-   }, function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted a document into the restaurants collection.");
-    callback();
-  });
-};
