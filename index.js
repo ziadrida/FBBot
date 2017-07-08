@@ -80,7 +80,8 @@ function receivedMessage(event) {
     console.log("------> EVENT STRUCTURE:")
     console.log(JSON.stringify(event));
   console.log(JSON.stringify(message));
-
+    console.log("POSTBACK:--->");
+  console.log(JSON.stringify(event.postback));
   var messageId = message.mid;
 
   var messageText = message.text;
@@ -113,8 +114,11 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
+
       // If we receive a text message, check to see if it matches a keyword
       // and send back the example. Otherwise, just echo the text we received.
+
+//
 
 // check if postback
 if (event.postback) {
@@ -220,12 +224,12 @@ function sendButton(recipientId, btnText) {
           "buttons":[
             {
               "type":"postback",
-              "title":"Confirm Order",
+              "title":"Confirm Order?",
               "payload":"confirm order"
             },
             {
               "type":"postback",
-              "title":"Not Now",
+              "title":"Not Now?",
               "payload":"not now"
             }
           ]
