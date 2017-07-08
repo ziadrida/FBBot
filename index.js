@@ -88,21 +88,30 @@ function receivedMessage(event) {
 
   if (messageText) {
     //  call function to determine what response to give based on messagae text
-    determineResponse(senderID,messageText);
+    determineResponse(senderID,event);
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
 
 //  function to determine what response to give based on messagae text
-function determineResponse(senderID, text) {
-  let messageText = text.toLowerCase();
+function determineResponse(senderID, event) {
+  var senderID = event.sender.id;
+  var recipientID = event.recipient.id;
+  var timeOfMessage = event.timestamp;
+  var message = event.message;
+  var messageId = message.mid;
+
+  var messageText = message.text;
+  var messageAttachments = message.attachments;
+
+  let compareText = messageText.toLowerCase();
       // If we receive a text message, check to see if it matches a keyword
       // and send back the example. Otherwise, just echo the text we received.
 
 
       // if message contains http, then it is a pricing request
-      if (messageText.includes ("http") ) {
+      if (compareText.includes ("http") ) {
         sendTextMessage(senderID, 'Please wait! ... Pricing now...');
         // insertDocument into mongoDB
       //  db = MongoClient.connect(url);
@@ -146,7 +155,7 @@ function determineResponse(senderID, text) {
         };
       }
 
-      if ( messageText.toUpperCase().indexOf("PHONE") >= 0) {
+      if ( compareText.includes("phone") >= 0) {
         sendTextMessage(senderID, 'Our main phone number is 0785000010');
       }
       switch (messageText) {
