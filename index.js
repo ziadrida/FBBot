@@ -124,7 +124,7 @@ function determineResponse(senderID, event) {
     if (compareText.includes ("confirm order") ) {
 //  let postbackText = JSON.stringify(event.postback);
 //  if (messageText.toLowerCase().includes("confirm order")) {
-    sentTextMessage(SenderID,"Thank You");
+    sendTextMessage(SenderID,"Thank You");
 
     // insert order request to database
     //
@@ -152,7 +152,7 @@ function determineResponse(senderID, event) {
     };
 
     //
-  } else {
+  } else if (compareText.includes("not now") ) {
     sendTextMessage(senderID,"WHY WHY WHY???!!!");
     // ask WHY
     // insert follow up to why user did not buy
