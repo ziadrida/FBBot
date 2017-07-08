@@ -157,7 +157,7 @@ function determineResponse(senderID, event) {
     // ask WHY
     // insert follow up to why user did not buy
   }
-}
+
 
   if (compareText.includes ("button") ) {
       sendButton(senderID, 'Would you like to confirm order?');
