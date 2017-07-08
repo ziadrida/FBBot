@@ -51,7 +51,7 @@ app.post('/webhook', function (req, res) {
 
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
-        if (event.message) {
+        if (event.message ) {
           receivedMessage(event);
         } else {
           console.log("Webhook received unknown event: ", event);
@@ -121,9 +121,9 @@ function determineResponse(senderID, event) {
 //
 
 // check if postback
-if (event.postback) {
-  let postbackText = JSON.stringify(event.postback);
-  if (messageText.toLowerCase().includes("confirm order")) {
+    if (compareText.includes ("confirm order") ) {
+//  let postbackText = JSON.stringify(event.postback);
+//  if (messageText.toLowerCase().includes("confirm order")) {
     sentTextMessage(SenderID,"Thank You");
 
     // insert order request to database
