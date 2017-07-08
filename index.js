@@ -87,72 +87,78 @@ function receivedMessage(event) {
   var messageAttachments = message.attachments;
 
   if (messageText) {
-
-    // If we receive a text message, check to see if it matches a keyword
-    // and send back the example. Otherwise, just echo the text we received.
-
-    // if message contains http, then it is a pricing request
-    if (messageText.toUpperCase().indexOf ("HTTP") >= 0) {
-      sendTextMessage(senderID, 'pricing now...');
-      // insertDocument into mongoDB
-    //  db = MongoClient.connect(url);
-      //db.price_request.insert( { userId: "011", product: "http://www.amazon.com" } )
-
-
-// get user info
-/*FB.api(
-    "/{user-id}",
-    function (response) {
-      if (response && !response.error) {
-        // handle the result 
-        console.log(JSON.stringify(response));
-      } else {
-        console.log("Error calling FB API ***** ");
-      }
-    }
-); */
-
-      MongoClient.connect(url, function(err, db) {
-        assert.equal(null, err);
-        insertDocument(db, function() {
-            db.close();
-          });
-      });
-
-      // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
-      var insertDocument = function(db, callback) {
-         db.collection('pricing_request').insertOne( {
-            "senderId" : senderID,
-            "recipientId" : recipientID,
-            "messageText" : messageText,
-            "messageId": messageId,
-            "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
-            "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
-         }, function(err, result) {
-          assert.equal(err, null);
-          console.log("Inserted a document into the pricing_request collection.");
-          callback();
-        });
-      };
-    }
-
-    if ( messageText.toUpperCase().indexOf("PHONE") >= 0) {
-      sendTextMessage(senderID, 'Our main phone number is 0785000010');
-    }
-    switch (messageText) {
-      case 'generic':
-        sendGenericMessage(senderID);
-        break;
-
-      default:
-    //
-    //    sendTextMessage(senderID, messageText);
-    }
+    //  call function to determine what response to give based on messagae text
+    determineResponse(senderID,messageText);
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
 
+//  function to determine what response to give based on messagae text
+function determineResponse(senderID, text) {
+  let messageText = text.toLowerCase();
+      // If we receive a text message, check to see if it matches a keyword
+      // and send back the example. Otherwise, just echo the text we received.
+
+
+      // if message contains http, then it is a pricing request
+      if (messageText.includes ("http") ) {
+        sendTextMessage(senderID, 'Please wait! ... Pricing now...');
+        // insertDocument into mongoDB
+      //  db = MongoClient.connect(url);
+        //db.price_request.insert( { userId: "011", product: "http://www.amazon.com" } )
+
+
+  // get user info
+  /*FB.api(
+      "/{user-id}",
+      function (response) {
+        if (response && !response.error) {
+          // handle the result
+          console.log(JSON.stringify(response));
+        } else {
+          console.log("Error calling FB API ***** ");
+        }
+      }
+  ); */
+
+        MongoClient.connect(url, function(err, db) {
+          assert.equal(null, err);
+          insertDocument(db, function() {
+              db.close();
+            });
+        });
+
+        // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+        var insertDocument = function(db, callback) {
+           db.collection('pricing_request').insertOne( {
+              "senderId" : senderID,
+              "recipientId" : recipientID,
+              "messageText" : messageText,
+              "messageId": messageId,
+              "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
+              "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
+           }, function(err, result) {
+            assert.equal(err, null);
+            console.log("Inserted a document into the pricing_request collection.");
+            callback();
+          });
+        };
+      }
+
+      if ( messageText.toUpperCase().indexOf("PHONE") >= 0) {
+        sendTextMessage(senderID, 'Our main phone number is 0785000010');
+      }
+      switch (messageText) {
+        case 'generic':
+          sendGenericMessage(senderID);
+          break;
+
+        default:
+      //
+      //    sendTextMessage(senderID, messageText);
+      }
+}
 function sendGenericMessage(recipientId, messageText) {
   // To be expanded in later sections
 }
