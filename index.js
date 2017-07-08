@@ -193,27 +193,34 @@ function sendGenericMessage(recipientId, messageText) {
 
 function sendButton(recipientId, btnText) {
   let messageData = {
-    "attachment":{
-      "type":"template",
-      "payload":{
-        "template_type":"button",
-        "text":btnText,
-        "buttons":[
-          {
-            "type":"postback",
-            "title":"Confirm Order",
-            "payload":"We will send you the Purchase Order shortly"
-          },
-          {
-            "type":"postback",
-            "title":"Not Now",
-            "payload":"We gurantee the best price"
-          }
-        ]
+      "recipient":{
+      "id":recipientId
+    },
+    "message":{
+      "attachment":{
+        "type":"template",
+        "payload":{
+          "template_type":"button",
+          "text":btnText,
+          "buttons":[
+            {
+              "type":"postback",
+              "title":"Confirm Order",
+              "payload":"confirm order"
+            },
+            {
+              "type":"postback",
+              "title":"Not Now",
+              "payload":"not now"
+            }
+          ]
+        }
       }
-  }
- }
+    }
 }
+  callSendAPI(messageData);
+}
+
 
 function sendTextMessage(recipientId, messageText) {
   var messageData = {
