@@ -86,6 +86,13 @@ function receivedMessage(event) {
   var messageText = message.text;
   var messageAttachments = message.attachments;
 
+
+ // check if event is a postback
+ if (event.postback) {
+
+    determineResponse(senderID,event)  ;
+ }
+
   if (messageText) {
     //  call function to determine what response to give based on messagae text
     determineResponse(senderID,event);
@@ -109,7 +116,19 @@ function determineResponse(senderID, event) {
       // If we receive a text message, check to see if it matches a keyword
       // and send back the example. Otherwise, just echo the text we received.
 
+// check if postback
+if (event.postback) {
+  let postbackText = JSON.stringify(event.postback);
+  if (postbackText.includes("confirm order")) {
+    sentTextMessage(SenderID,"Thank You");
+  } else {
+    sendTextMessage(senderID,"WHY WHY WHY???!!!")
+  }
+}
 
+  if (compareText.includes ("button") ) {
+      sendButton(senderID, 'Would you like to confirm order?');
+  }
       // if message contains http, then it is a pricing request
       if (compareText.includes ("http") ) {
         sendTextMessage(senderID, 'Please wait! ... Pricing now...');
@@ -155,7 +174,7 @@ function determineResponse(senderID, event) {
         };
       }
 
-      if ( compareText.includes("phone") >= 0) {
+      if ( compareText.includes("phone")) {
         sendTextMessage(senderID, 'Our main phone number is 0785000010');
       }
       switch (messageText) {
@@ -170,6 +189,30 @@ function determineResponse(senderID, event) {
 }
 function sendGenericMessage(recipientId, messageText) {
   // To be expanded in later sections
+}
+
+function sendButton(recipientId, btnText) {
+  let messageData = {
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        "text":btnText,
+        "buttons":[
+          {
+            "type":"postback",
+            "title":"Confirm Order",
+            "payload":"We will send you the Purchase Order shortly"
+          },
+          {
+            "type":"postback",
+            "title":"Not Now",
+            "payload":"We gurantee the best price"
+          }
+        ]
+      }
+  }
+ }
 }
 
 function sendTextMessage(recipientId, messageText) {
