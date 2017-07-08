@@ -124,7 +124,7 @@ function determineResponse(senderID, event) {
     if (compareText.includes ("confirm order") ) {
 //  let postbackText = JSON.stringify(event.postback);
 //  if (messageText.toLowerCase().includes("confirm order")) {
-    sendTextMessage(SenderID,"Thank You");
+    sendTextMessage(senderID,"Thank You");
 
     // insert order request to database
     //
