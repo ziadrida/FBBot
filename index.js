@@ -119,10 +119,39 @@ function determineResponse(senderID, event) {
 // check if postback
 if (event.postback) {
   let postbackText = JSON.stringify(event.postback);
-  if (postbackText.includes("confirm order")) {
+  if (postbackText.toLowerCase().includes("confirm order")) {
     sentTextMessage(SenderID,"Thank You");
+
+    // insert order request to database
+    //
+    MongoClient.connect(url, function(err, db) {
+      assert.equal(null, err);
+      insertOrderRequest(db, function() {
+          db.close();
+        });
+    });
+
+    // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+    var insertOrderRequest = function(db, callback) {
+       db.collection('order_request').insertOne( {
+          "senderId" : senderID,
+          "recipientId" : recipientID,
+          "messageText" : messageText,
+          "messageId": messageId,
+          "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
+          "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
+       }, function(err, result) {
+        assert.equal(err, null);
+        console.log("Inserted a document into the order_request collection.");
+        callback();
+      });
+    };
+
+    //
   } else {
-    sendTextMessage(senderID,"WHY WHY WHY???!!!")
+    sendTextMessage(senderID,"WHY WHY WHY???!!!");
+    // ask WHY
+    // insert follow up to why user did not buy
   }
 }
 
@@ -132,33 +161,18 @@ if (event.postback) {
       // if message contains http, then it is a pricing request
       if (compareText.includes ("http") ) {
         sendTextMessage(senderID, 'Please wait! ... Pricing now...');
-        // insertDocument into mongoDB
-      //  db = MongoClient.connect(url);
-        //db.price_request.insert( { userId: "011", product: "http://www.amazon.com" } )
 
 
-  // get user info
-  /*FB.api(
-      "/{user-id}",
-      function (response) {
-        if (response && !response.error) {
-          // handle the result
-          console.log(JSON.stringify(response));
-        } else {
-          console.log("Error calling FB API ***** ");
-        }
-      }
-  ); */
 
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
-          insertDocument(db, function() {
+          insertMesssageText(db, function() {
               db.close();
             });
         });
 
         // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
-        var insertDocument = function(db, callback) {
+        var insertMesssageText = function(db, callback) {
            db.collection('pricing_request').insertOne( {
               "senderId" : senderID,
               "recipientId" : recipientID,
@@ -172,7 +186,8 @@ if (event.postback) {
             callback();
           });
         };
-      }
+      } // if message contains http, then it is a pricing request
+
 
       if ( compareText.includes("phone")) {
         sendTextMessage(senderID, 'Our main phone number is 0785000010');
