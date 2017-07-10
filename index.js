@@ -114,14 +114,14 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-
+  let payloadText = event.postback.payload.toLowerCase();
       // If we receive a text message, check to see if it matches a keyword
       // and send back the example. Otherwise, just echo the text we received.
 
 //
 
 // check if postback
-    if (compareText.includes ("confirm order") ) {
+    if (payloadText.includes ("yes_confirm_order") ) {
 //  let postbackText = JSON.stringify(event.postback);
 //  if (messageText.toLowerCase().includes("confirm order")) {
     sendTextMessage(senderID,"Thank You");
@@ -140,7 +140,7 @@ function determineResponse(senderID, event) {
        db.collection('order_request').insertOne( {
           "senderId" : senderID,
           "recipientId" : recipientID,
-          "messageText" : messageText,
+          "orderItem" : payloadText,
           "messageId": messageId,
           "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
           "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
@@ -224,13 +224,13 @@ function sendButton(recipientId, btnText) {
           "buttons":[
             {
               "type":"postback",
-              "title":"Confirm Order?",
-              "payload":"confirm order"
+              "title":"Yes",
+              "payload":"confirm_order"
             },
             {
               "type":"postback",
-              "title":"Not Now?",
-              "payload":"not now"
+              "title":"Not Now",
+              "payload":"not_now"
             }
           ]
         }
