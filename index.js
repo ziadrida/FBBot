@@ -114,14 +114,18 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-  let payloadText = event.postback.payload.toLowerCase();
+  let payloadText = ""
+  if ( event.postback ) {
+    payloadText = event.postback.payload.toLowerCase();
+  }
+
       // If we receive a text message, check to see if it matches a keyword
       // and send back the example. Otherwise, just echo the text we received.
 
 //
 
 // check if postback
-    if (payloadText.includes ("yes_confirm_order") ) {
+    if ( payloadText.includes ("yes_confirm_order") ) {
 //  let postbackText = JSON.stringify(event.postback);
 //  if (messageText.toLowerCase().includes("confirm order")) {
     sendTextMessage(senderID,"Thank You");
@@ -152,7 +156,7 @@ function determineResponse(senderID, event) {
     };
 
     //
-  } else if (compareText.includes("not now") ) {
+  } else if (payloadText.includes("not_now") ) {
     sendTextMessage(senderID,"WHY WHY WHY???!!!");
     // ask WHY
     // insert follow up to why user did not buy
