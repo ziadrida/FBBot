@@ -114,9 +114,12 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
+
   let payloadText = ""
   if ( event.postback ) {
+
     payloadText = event.postback.payload.toLowerCase();
+      console.log('payloadText::',payloadText);
   }
 
       // If we receive a text message, check to see if it matches a keyword
@@ -167,7 +170,7 @@ function determineResponse(senderID, event) {
       sendButton(senderID, 'Would you like to confirm order?');
   }
       // if message contains http, then it is a pricing request
-      if (compareText.includes ("http") ) {
+  if (compareText.includes ("http") ) {
         sendTextMessage(senderID, 'Please wait! ... Pricing now...');
 
 
