@@ -229,7 +229,7 @@ function sendButton(recipientId, btnText) {
             {
               "type":"postback",
               "title":"Yes",
-              "payload":"confirm_order"
+              "payload":"yes_confirm_order"
             },
             {
               "type":"postback",
