@@ -152,6 +152,9 @@ function determineResponse(senderID, event) {
      if (userObj.weight) {
        console.log ('weight in lbs:',userObj.weight)
     }
+    if (userObj.category) {
+      console.log ('category:',userObj.category)
+   }
     }
   } catch (e) {
     console.log("compareText not a JSON string");
@@ -355,7 +358,7 @@ function getRegularAmmanPrice(price,weight,shipping,category) {
   // return price in JD
   console.log('in getRegularAmmanPrice *********** ')
   let tax = 0;
-  if (category == "Notebook") {
+  if (category && category.toLowerCase() == "notebook") {
     tax = .16;
   }
   console.log('tax=',tax);
