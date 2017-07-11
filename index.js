@@ -125,6 +125,7 @@ function determineResponse(senderID, event) {
 
   let compareText = messageText.toLowerCase();
   console.log("compareText ||||||<>||||||||||||||||:",compareText);
+  /*
   var userObj = JSON.parse(compareText);
   if (userObj && userObj.action) {
     console.log ('action = ',userObj.action);
@@ -132,6 +133,8 @@ function determineResponse(senderID, event) {
   if (userObj && userObj.price) {
     console.log ('price in USD:',userObj.price)
  }
+ */
+ 
   /*
   try {
     if (compareText) {
