@@ -121,7 +121,7 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-  console.log("compareText:",compareText);
+  console.log("compareText ||||||||||||||||||||||:",compareText);
   let myText = ""
   if ( event.postback ) {
 
@@ -183,7 +183,8 @@ function determineResponse(senderID, event) {
    ---------------------------------*/
   if (compareText.includes ("*pr") ) {
     sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
-      sendTextMessage(senderID, getRegularAmmanPrice(100));
+    let itemPrice = 100
+      sendTextMessage(senderID, getRegularAmmanPrice(itemPrice));
   }
 
       // if message contains http, then it is a pricing request
@@ -313,5 +314,5 @@ function getRegularAmmanPrice(price) {
   // input price is in USD
   // return price in JD
   console.log('in getRegularAmmanPrice *********** ')
-  return price * 1.16
+  return price * 2
 }
