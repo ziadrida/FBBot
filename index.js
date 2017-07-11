@@ -183,6 +183,7 @@ function determineResponse(senderID, event) {
    ---------------------------------*/
   if (compareText.includes ("*pr") ) {
     sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
+      sendTextMessage(senderID, getRegularAmmanPrice(100));
   }
 
       // if message contains http, then it is a pricing request
@@ -311,5 +312,6 @@ app.listen(app.get('port'), function(){
 function getRegularAmmanPrice(price) {
   // input price is in USD
   // return price in JD
+  console.log('in getRegularAmmanPrice *********** ')
   return price * 1.16
 }
