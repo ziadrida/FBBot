@@ -124,7 +124,7 @@ function determineResponse(senderID, event) {
   let myText = ""
   if ( event.postback ) {
 
-    myText = event.postback..toLowerCase();
+    myText = event.postback.toLowerCase();
       console.log('Text::',myText);
   }
 
