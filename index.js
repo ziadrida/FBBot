@@ -84,7 +84,9 @@ function receivedMessage(event) {
     console.log(JSON.stringify(event));
   console.log(JSON.stringify(message));
     console.log("POSTBACK:--->");
-  console.log(JSON.stringify(event.postback));
+    if (event.postback) {
+        console.log(JSON.stringify(event.postback));
+    }
   var messageId = message.mid;
 
   var messageText = message.text;
@@ -92,7 +94,7 @@ function receivedMessage(event) {
 
 
  // check if event is a postback
- if (event.postback) {
+ if (postback && event.postback) {
 
     determineResponse(senderID,event)  ;
  }
@@ -135,7 +137,7 @@ function determineResponse(senderID, event) {
 
 
   let myText = ""
-  if ( event.postback ) {
+  if ( postback && event.postback ) {
 
     myText = event.postback.toLowerCase();
       console.log('Text::',myText);
