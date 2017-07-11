@@ -131,8 +131,10 @@ function determineResponse(senderID, event) {
       console.log("do JSON parse of compareText");
       userObj = JSON.parse(compareText);
       console.log("after JSON parse of compareText");
-      if (userObj) {
+      if (userObj.action) {
         console.log ('action = ',userObj.action);
+      }
+      if (userObj.price) {
         console.log ('price in USD:',userObj.price)
      }
     }
