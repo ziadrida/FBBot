@@ -149,10 +149,13 @@ function determineResponse(senderID, event) {
       if (userObj.price) {
         console.log ('price in USD:',userObj.price)
      }
+     if (userObj.weight) {
+       console.log ('weight in lbs:',userObj.weight)
+    }
     }
   } catch (e) {
     console.log("compareText not a JSON string");
-} 
+}
 
 
   let myText = ""
@@ -217,7 +220,8 @@ function determineResponse(senderID, event) {
   if (typeof userObj != 'undefined' && userObj.action === "*pr" ) {
     sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
     let itemPrice = userObj.price;
-      sendTextMessage(senderID, getRegularAmmanPrice(itemPrice));
+    let itemWeight = userObj.weight
+      sendTextMessage(senderID, getRegularAmmanPrice(itemPrice,itemWeight));
   }
 
       // if message contains http, then it is a pricing request
@@ -344,9 +348,9 @@ app.listen(app.get('port'), function(){
 /*******************************************
   This is hte pricing MODULE
 **********************************************/
-function getRegularAmmanPrice(price) {
+function getRegularAmmanPrice(price,weight) {
   // input price is in USD
   // return price in JD
   console.log('in getRegularAmmanPrice *********** ')
-  return price * 2
+  return price * 2 + weight*5
 }
