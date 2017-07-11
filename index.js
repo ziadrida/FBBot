@@ -122,9 +122,13 @@ function determineResponse(senderID, event) {
 
   let compareText = messageText.toLowerCase();
   console.log("compareText ||||||||||||||||||||||:",compareText);
-  var userObj = JSON.parse(compareText);
-  console.log ('action = ',userObj.action);
-    console.log ('price in USD:',userObj.price)
+  try {
+      var userObj = JSON.parse(compareText);
+      console.log ('action = ',userObj.action);
+      console.log ('price in USD:',userObj.price)
+  } catch (e) {
+}
+
 
   let myText = ""
   if ( event.postback ) {
@@ -185,7 +189,7 @@ function determineResponse(senderID, event) {
   /*---------------------------------
    check if this is a pricing request
    ---------------------------------*/
-  if (userObj.action.includes ("*pr") ) {
+  if (userObj && userObj.action.includes ("*pr") ) {
     sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
     let itemPrice = userObj.price;
       sendTextMessage(senderID, getRegularAmmanPrice(itemPrice));
