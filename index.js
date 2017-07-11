@@ -125,7 +125,8 @@ function determineResponse(senderID, event) {
 
   let compareText = messageText.toLowerCase();
   console.log("compareText ||||||<>||||||||||||||||:",compareText);
-  var userObj = "";
+  var userObj ;
+
   /*
   var userObj = JSON.parse(compareText);
   if (userObj && userObj.action) {
@@ -136,7 +137,7 @@ function determineResponse(senderID, event) {
  }
  */
 
-  /*
+
   try {
     if (compareText) {
       console.log("do JSON parse of compareText");
@@ -151,7 +152,7 @@ function determineResponse(senderID, event) {
     }
   } catch (e) {
     console.log("compareText not a JSON string");
-} */
+} 
 
 
   let myText = ""
