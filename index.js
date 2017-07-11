@@ -124,12 +124,12 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-  console.log("compareText ||||||()||||||||||||||||:",compareText);
-  var userObj = "";
+  console.log("compareText ||||||==||||||||||||||||:",compareText);
+
   try {
     if (compareText) {
       console.log("do JSON parse of compareText");
-      userObj = JSON.parse(compareText);
+      var userObj = JSON.parse(compareText);
       console.log("after JSON parse of compareText");
       if (userObj.action) {
         console.log ('action = ',userObj.action);
