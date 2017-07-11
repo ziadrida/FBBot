@@ -222,7 +222,8 @@ function determineResponse(senderID, event) {
     let itemPrice = userObj.price;
     let itemWeight = userObj.weight
     let shipping = userObj.shipping
-      sendTextMessage(senderID, getRegularAmmanPrice(itemPrice,itemWeight,shipping));
+    let category = userObj.category;
+      sendTextMessage(senderID, getRegularAmmanPrice(itemPrice,itemWeight,shipping,category));
   }
 
       // if message contains http, then it is a pricing request
@@ -349,9 +350,14 @@ app.listen(app.get('port'), function(){
 /*******************************************
   This is hte pricing MODULE
 **********************************************/
-function getRegularAmmanPrice(price,weight,shipping) {
+function getRegularAmmanPrice(price,weight,shipping,category) {
   // input price is in USD
   // return price in JD
   console.log('in getRegularAmmanPrice *********** ')
-  return price * 2 + weight*5 + shipping
+  let tax = 0;
+  if (category == "Notebook") {
+    tax = .16;
+  }
+  console.log('tax=',tax);
+  return price * (1+tax) + weight*5 + shipping
 }
