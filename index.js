@@ -129,8 +129,10 @@ function determineResponse(senderID, event) {
   try {
     if (compareText) {
      userObj = JSON.parse(compareText);
+      if (userObj) {
       console.log ('action = ',userObj.action);
       console.log ('price in USD:',userObj.price)
+     }
     }
   } catch (e) {
     console.log("compareText not a JSON string");
@@ -282,6 +284,7 @@ function sendButton(recipientId, btnText) {
 
 
 function sendTextMessage(recipientId, messageText) {
+  console.log("in sendTextMessage function -->");
   var messageData = {
     recipient: {
       id: recipientId
