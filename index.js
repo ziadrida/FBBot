@@ -95,7 +95,7 @@ function receivedMessage(event) {
 
 
  // check if event is a postback
- if (postback && event.postback) {
+ if (event && event.postback) {
 
     determineResponse(senderID,event)  ;
  }
@@ -138,7 +138,7 @@ function determineResponse(senderID, event) {
 
 
   let myText = ""
-  if ( postback && event.postback ) {
+  if ( event && event.postback ) {
 
     myText = event.postback.toLowerCase();
       console.log('Text::',myText);
