@@ -124,14 +124,16 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-  console.log("compareText ||||||||||||||||||||||:",compareText);
+  console.log("compareText ||||||()||||||||||||||||:",compareText);
   var userObj = "";
   try {
     if (compareText) {
-     userObj = JSON.parse(compareText);
+      console.log("do JSON parse of compareText");
+      userObj = JSON.parse(compareText);
+      console.log("after JSON parse of compareText");
       if (userObj) {
-      console.log ('action = ',userObj.action);
-      console.log ('price in USD:',userObj.price)
+        console.log ('action = ',userObj.action);
+        console.log ('price in USD:',userObj.price)
      }
     }
   } catch (e) {
