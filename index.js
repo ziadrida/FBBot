@@ -125,6 +125,7 @@ function determineResponse(senderID, event) {
 
   let compareText = messageText.toLowerCase();
   console.log("compareText ||||||<>||||||||||||||||:",compareText);
+  var userObj = "";
   /*
   var userObj = JSON.parse(compareText);
   if (userObj && userObj.action) {
@@ -134,7 +135,7 @@ function determineResponse(senderID, event) {
     console.log ('price in USD:',userObj.price)
  }
  */
- 
+
   /*
   try {
     if (compareText) {
@@ -212,7 +213,7 @@ function determineResponse(senderID, event) {
   /*---------------------------------
    check if this is a pricing request
    ---------------------------------*/
-  if (userObj && userObj.action.includes ("*pr") ) {
+  if (typeof userObj != 'undefined' && userObj.action === "*pr" ) {
     sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
     let itemPrice = userObj.price;
       sendTextMessage(senderID, getRegularAmmanPrice(itemPrice));
