@@ -124,7 +124,7 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-  console.log("compareText ||||||==||||||||||||||||:",compareText);
+  console.log("compareText ||||||<>||||||||||||||||:",compareText);
   var userObj = JSON.parse(compareText);
   if (userObj && userObj.action) {
     console.log ('action = ',userObj.action);
