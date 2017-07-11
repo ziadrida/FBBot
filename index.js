@@ -30,6 +30,9 @@ app.get('/seema', function (req, res) {
   res.send ('Hello - Seema!')
 })
 
+/***********************************
+THIS IS THE CALL FROM FACEBOOK
+*************************************/
 app.get('/webhook/', function(req, res){
   if(req.query['hub.verify_token'] === token) {
   res.send (req.query['hub.challenge'])
@@ -102,7 +105,10 @@ function receivedMessage(event) {
   }
 }
 
-//  function to determine what response to give based on messagae text
+/**************************************************************
+  AI ENGINE (Artificial Intelligence)
+  function to determine what response to give based on messagae text
+****************************************************************/
 function determineResponse(senderID, event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -115,11 +121,11 @@ function determineResponse(senderID, event) {
 
   let compareText = messageText.toLowerCase();
 
-  let payloadText = ""
+  let myText = ""
   if ( event.postback ) {
 
-    payloadText = event.postback.payload.toLowerCase();
-      console.log('payloadText::',payloadText);
+    myText = event.postback..toLowerCase();
+      console.log('Text::',myText);
   }
 
       // If we receive a text message, check to see if it matches a keyword
@@ -128,7 +134,7 @@ function determineResponse(senderID, event) {
 //
 
 // check if postback
-    if ( payloadText.includes ("yes_confirm_order") ) {
+    if ( myText.includes ("yes_confirm_order") ) {
 //  let postbackText = JSON.stringify(event.postback);
 //  if (messageText.toLowerCase().includes("confirm order")) {
     sendTextMessage(senderID,"Thank You");
@@ -147,7 +153,7 @@ function determineResponse(senderID, event) {
        db.collection('order_request').insertOne( {
           "senderId" : senderID,
           "recipientId" : recipientID,
-          "orderItem" : payloadText,
+          "orderItem" : myText,
           "messageId": messageId,
           "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
           "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
@@ -159,7 +165,7 @@ function determineResponse(senderID, event) {
     };
 
     //
-  } else if (payloadText.includes("not_now") ) {
+  } else if (myText.includes("not_now") ) {
     sendTextMessage(senderID,"WHY WHY WHY???!!!");
     // ask WHY
     // insert follow up to why user did not buy
@@ -169,6 +175,15 @@ function determineResponse(senderID, event) {
   if (compareText.includes ("button") ) {
       sendButton(senderID, 'Would you like to confirm order?');
   }
+
+
+  /*---------------------------------
+   check if this is a pricing request
+   ---------------------------------*/
+  if (compareText.includes ("*PR") ) {
+    sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
+  }
+
       // if message contains http, then it is a pricing request
   if (compareText.includes ("http") ) {
         sendTextMessage(senderID, 'Please wait! ... Pricing now...');
@@ -225,19 +240,19 @@ function sendButton(recipientId, btnText) {
     "message":{
       "attachment":{
         "type":"template",
-        "payload":{
+        "":{
           "template_type":"button",
           "text":btnText,
           "buttons":[
             {
               "type":"postback",
               "title":"Yes",
-              "payload":"yes_confirm_order"
+              "":"yes_confirm_order"
             },
             {
               "type":"postback",
               "title":"Not Now",
-              "payload":"not_now"
+              "":"not_now"
             }
           ]
         }
@@ -287,3 +302,13 @@ function callSendAPI(messageData) {
 app.listen(app.get('port'), function(){
   console.log('running on port', app.get('port'))
 })
+
+
+/*******************************************
+  This is hte pricing MODULE
+**********************************************/
+function getRegularAmmanPrice(price) {
+  // input price is in USD
+  // return price in JD
+  return price * 1.16
+}
