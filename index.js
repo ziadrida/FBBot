@@ -83,8 +83,9 @@ function receivedMessage(event) {
     console.log("------> EVENT STRUCTURE:")
     console.log(JSON.stringify(event));
   console.log(JSON.stringify(message));
-    console.log("POSTBACK:====>");
-    if (event.postback) {
+
+  if (event  && event.postback) {
+      console.log("POSTBACK:====>");
         console.log(JSON.stringify(event.postback));
     }
   var messageId = message.mid;
