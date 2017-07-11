@@ -110,6 +110,7 @@ function receivedMessage(event) {
   function to determine what response to give based on messagae text
 ****************************************************************/
 function determineResponse(senderID, event) {
+    console.log("IN determineResponse:--->");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -120,7 +121,7 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-
+  console.log("compareText:",compareText);
   let myText = ""
   if ( event.postback ) {
 
@@ -180,7 +181,7 @@ function determineResponse(senderID, event) {
   /*---------------------------------
    check if this is a pricing request
    ---------------------------------*/
-  if (compareText.includes ("*PR") ) {
+  if (compareText.includes ("*pr") ) {
     sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
   }
 
