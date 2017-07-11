@@ -83,7 +83,7 @@ function receivedMessage(event) {
     console.log("------> EVENT STRUCTURE:")
     console.log(JSON.stringify(event));
   console.log(JSON.stringify(message));
-    console.log("POSTBACK:--->");
+    console.log("POSTBACK:====>");
     if (event.postback) {
         console.log(JSON.stringify(event.postback));
     }
