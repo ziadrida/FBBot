@@ -124,7 +124,7 @@ function determineResponse(senderID, event) {
   console.log("compareText ||||||||||||||||||||||:",compareText);
   var userObj = JSON.parse(compareText);
   console.log ('action = ',userObj.action);
-  console.log ('price in USD:',userObj.price)
+    console.log ('price in USD:',userObj.price)
 
   let myText = ""
   if ( event.postback ) {
@@ -185,9 +185,9 @@ function determineResponse(senderID, event) {
   /*---------------------------------
    check if this is a pricing request
    ---------------------------------*/
-  if (compareText.includes ("*pr") ) {
+  if (userObj.action.includes ("*pr") ) {
     sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
-    let itemPrice = 100
+    let itemPrice = userObj.price;
       sendTextMessage(senderID, getRegularAmmanPrice(itemPrice));
   }
 
