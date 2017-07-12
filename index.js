@@ -285,7 +285,7 @@ function sendButton(recipientId, btnText) {
     "message":{
       "attachment":{
         "type":"template",
-        "":{
+        "payload":{
           "template_type":"button",
           "text":btnText,
           "buttons":[
