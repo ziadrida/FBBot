@@ -13,6 +13,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
+const express = require('cheerio')
+
 // get token from the environment
 const token = process.env.FB_VERIFY_TOKEN
 const access = process.env.FB_ACCESS_TOKEN
@@ -236,7 +238,15 @@ function determineResponse(senderID, event) {
   if (compareText.includes ("http") ) {
         sendTextMessage(senderID, 'Please wait! ... Pricing now...');
 
-
+        //    var httpUrl = compareText;
+        var httpUrl = "https://www.amazon.com/gp/product/B01MTLMV89/ref=od_aui_detailpages00?ie=UTF8&psc=1"
+        //scrape url
+        request(httpUrl, function(err, resp, body) {
+          var $ = cherio.load (body);
+          var shippingWeightName = $('.Shipping Weight');
+          var shippingWeightText = shippingWeightName.text();
+          console.log("ShippingWeight ====> ",shippingWeightText)
+        })
 
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
@@ -276,6 +286,11 @@ function determineResponse(senderID, event) {
       //    sendTextMessage(senderID, messageText);
       }
 }
+/*.......................................
+          screen scraper function
+.......................................*/
+
+
 function sendGenericMessage(recipientId, messageText) {
   // To be expanded in later sections
 }
