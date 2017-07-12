@@ -245,7 +245,7 @@ function determineResponse(senderID, event) {
         //scrape url
         request(httpUrl, function(err, resp, body) {
           var $ = cheerio.load (body);
-          var shippingWeightName = $('.Shipping Weight');
+          var shippingWeightName = $('.a-size-base');
           var shippingWeightText = shippingWeightName.text();
           console.log("ShippingWeight ====> ",shippingWeightText)
         })
