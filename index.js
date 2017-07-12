@@ -127,12 +127,12 @@ function handleEvent(senderID, event) {
       var recipientID = event.recipient.id;
       var timeOfMessage = event.timestamp;
 
-      let myText = "";
+      let myText ;
       console.log('Check postback Text==>');
-      if ( typeof event != 'undefined' && event.postback ) {
+      if ( typeof event != 'undefined' && event.postback && event.postback.payload) {
 
-          myText = event.postback;
-          console.log('postback Text::',myText);
+          myText = event.postback.payload;
+          console.log('postback payload Text::',myText);
       }
 
       // check if postback
@@ -143,7 +143,7 @@ function handleEvent(senderID, event) {
 
         // insert order request to database
         //
-            MongoClient.connect(url, function(err, db) {
+        MongoClient.connect(url, function(err, db) {
               assert.equal(null, err);
               insertOrderRequest(db, function() {
                   db.close();
@@ -358,7 +358,7 @@ function sendButton(recipientId, btnText) {
 
 
 function sendTextMessage(recipientId, messageText) {
-  console.log("in sendTextMessage function -->");
+  console.log("in sendTextMessage function --> recipentID:",recipientId);
   var messageData = {
     recipient: {
       id: recipientId
