@@ -12,7 +12,7 @@ var url = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.co
 const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
-const cheerio = require('cheerio')
+//const cheerio = require('cheerio')
 const app = express()
 
 
