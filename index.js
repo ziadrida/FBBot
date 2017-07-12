@@ -139,7 +139,7 @@ function handleEvent(senderID, event) {
             console.log('postback Text::',myText);
         }
 
-        / check if postback
+        // check if postback
             if ( typeof myText != 'undefined' && myText == 'yes_confirm_order' ) {
         //  let postbackText = JSON.stringify(event.postback);
         //  if (messageText.toLowerCase().includes("confirm order")) {
