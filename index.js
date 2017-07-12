@@ -243,7 +243,7 @@ function determineResponse(senderID, event) {
         //    var httpUrl = compareText;
         var httpUrl = "https://www.amazon.com/gp/product/B01MTLMV89/ref=od_aui_detailpages00?ie=UTF8&psc=1"
         //scrape url
-        request(httpUrl, function(err, resp, body) {
+        /* request(httpUrl, function(err, resp, body) {
           var $ = cheerio.load (body);
           var shippingWeightName = $('.a-size-base');
           var shippingWeightText = shippingWeightName.text();
@@ -260,7 +260,7 @@ function determineResponse(senderID, event) {
                 console.log("price 1 ==>:",price);
             })
         }
-    });
+    }); */
 
     console.log(" Scrape for Price 2 *********** " );
     request(httpUrl, function(error, response, html) {
