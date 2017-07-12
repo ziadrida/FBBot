@@ -9,11 +9,12 @@ var ObjectId = require('mongodb').ObjectID;
 var url = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 
 //add all of code
-const express = require('express')
-const bodyParser = require('body-parser')
-const request = require('request')
-//const cheerio = require('cheerio')
-const app = express()
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const cheerio = require('cheerio');
+const request = require('request');
+const app = express();
 
 
 // get token from the environment
