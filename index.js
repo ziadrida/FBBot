@@ -81,19 +81,31 @@ function receivedMessage(event) {
 
   console.log("==>>> Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
-  console.log("------> EVENT STRUCTURE:")
-  console.log(JSON.stringify(event));
+    if (typeof event == 'undefined' ) {
+          console.log(" EVENT is Undefined <><>")
+    } else {
+        console.log("----------=> EVENT STRUCTURE:")
+        console.log(JSON.stringify(event));
+    }
+
+  if (typeof message == 'undefined') {
+    console.log('Message is undefined =====><><>')
+  } else {
   console.log("------> Message STRUCTURE:")
   console.log(JSON.stringify(message));
-
-  if (typeof event != 'undefined'  && event.postback) {
-      console.log("POSTBACK:====>");
-        console.log(JSON.stringify(event.postback));
-    }
   var messageId = message.mid;
 
   var messageText = message.text;
   var messageAttachments = message.attachments;
+}
+
+  if (typeof event != 'undefined'  && event.postback) {
+      console.log("POSTBACK:=====>");
+        console.log(JSON.stringify(event.postback));
+    }
+
+
+
 
 
  // check if event is a postback
