@@ -266,10 +266,10 @@ function determineResponse(senderID, event) {
     request(httpUrl, function(error, response, html) {
     if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html);
-        $('#priceblock_ourprice span.a-size-medium span.a-color-price').each(function(i, element) {
+        $('span.a-size-medium span.a-color-price #priceblock_ourprice').each(function(i, element) {
             var el = $(this);
             var price = el.text();
-            console.log("price 2==>:",price);
+            console.log("pr ice 2==>:",price);
         })
     }
 });
