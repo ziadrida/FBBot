@@ -249,6 +249,26 @@ function determineResponse(senderID, event) {
           var shippingWeightText = shippingWeightName.text();
           console.log("ShippingWeight ====> ",shippingWeightText)
         })
+        request(httpUrl, function(error, response, html) {
+        if (!error && response.statusCode == 200) {
+            var $ = cheerio.load(html);
+            $('span.priceblock_ourprice span.a-color-price').each(function(i, element) {
+                var el = $(this);
+                var price = el.text();
+                console.log("price 1 ==>:",price);
+            })
+        }
+    });
+    request(httpUrl, function(error, response, html) {
+    if (!error && response.statusCode == 200) {
+        var $ = cheerio.load(html);
+        $('span.a-span12  span.a-color-price').each(function(i, element) {
+            var el = $(this);
+            var price = el.text();
+            console.log("price 2==>:",price);
+        })
+    }
+});
 
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
