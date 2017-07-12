@@ -13,7 +13,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
-const express = require('cheerio')
+const cheerio = require('cheerio')
 
 // get token from the environment
 const token = process.env.FB_VERIFY_TOKEN
