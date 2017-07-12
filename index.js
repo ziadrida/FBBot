@@ -91,12 +91,12 @@ function receivedMessage(event) {
   if (typeof message == 'undefined') {
     console.log('Message is undefined =====><><>')
   } else {
-  console.log("------> Message STRUCTURE:")
-  console.log(JSON.stringify(message));
-  var messageId = message.mid;
+    console.log("------> Message STRUCTURE:")
+    console.log(JSON.stringify(message));
+    var messageId = message.mid;
 
-  var messageText = message.text;
-  var messageAttachments = message.attachments;
+    var messageText = message.text;
+    var messageAttachments = message.attachments;
 }
 
   if (typeof event != 'undefined'  && event.postback) {
@@ -110,7 +110,7 @@ function receivedMessage(event) {
 
  // check if event is a postback
  if (typeof event != 'undefined' && event.postback) {
-    determineResponse(senderID,event)  ;
+    handleEvent(senderID,event)  ;
  }
 
   if (messageText) {
@@ -125,6 +125,58 @@ function receivedMessage(event) {
   AI ENGINE (Artificial Intelligence)
   function to determine what response to give based on messagae text
 ****************************************************************/
+function handleEvent(senderID, event) {
+      console.log("IN handleEvent:--->");
+      var senderID = event.sender.id;
+      var recipientID = event.recipient.id;
+      var timeOfMessage = event.timestamp;
+
+        let myText = "";
+        console.log('Check postback Text::');
+        if ( typeof event != 'undefined' && event.postback ) {
+
+          myText = event.postback.toLowerCase();
+            console.log('postback Text::',myText);
+        }
+
+        / check if postback
+            if ( typeof myText != 'undefined' && myText == 'yes_confirm_order' ) {
+        //  let postbackText = JSON.stringify(event.postback);
+        //  if (messageText.toLowerCase().includes("confirm order")) {
+            sendTextMessage(senderID,"Thank You");
+
+            // insert order request to database
+            //
+            MongoClient.connect(url, function(err, db) {
+              assert.equal(null, err);
+              insertOrderRequest(db, function() {
+                  db.close();
+                });
+            });
+
+            // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+            var insertOrderRequest = function(db, callback) {
+               db.collection('order_request').insertOne( {
+                  "senderId" : senderID,
+                  "recipientId" : recipientID,
+                  "orderItem" : myText,
+                  "messageId": messageId,
+                  "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
+                  "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
+               }, function(err, result) {
+                assert.equal(err, null);
+                console.log("Inserted a document into the order_request collection.");
+                callback();
+              });
+            };
+          } else if (typeof myText != 'undefined' && myText == 'not_now')  {
+            sendTextMessage(senderID,"WHY WHY WHY???!!!");
+            // ask WHY
+            // insert follow up to why user did not buy
+          }
+
+
+}
 function determineResponse(senderID, event) {
     console.log("IN determineResponse:--->");
   var senderID = event.sender.id;
@@ -162,7 +214,7 @@ function determineResponse(senderID, event) {
     console.log("compareText not a JSON string");
 }
 
-
+// only if event
   let myText = "";
   console.log('Check postback Text::');
   if ( typeof event != 'undefined' && event.postback ) {
