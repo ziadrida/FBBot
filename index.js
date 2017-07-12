@@ -244,7 +244,7 @@ function determineResponse(senderID, event) {
         var httpUrl = "https://www.amazon.com/gp/product/B01MTLMV89/ref=od_aui_detailpages00?ie=UTF8&psc=1"
         //scrape url
         request(httpUrl, function(err, resp, body) {
-          var $ = cherio.load (body);
+          var $ = cheerio.load (body);
           var shippingWeightName = $('.Shipping Weight');
           var shippingWeightText = shippingWeightName.text();
           console.log("ShippingWeight ====> ",shippingWeightText)
