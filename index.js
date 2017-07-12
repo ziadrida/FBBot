@@ -249,16 +249,20 @@ function determineResponse(senderID, event) {
           var shippingWeightText = shippingWeightName.text();
           console.log("ShippingWeight ====> ",shippingWeightText)
         })
+
+        console.log(" Scrape for Price 1 *********** " );
         request(httpUrl, function(error, response, html) {
         if (!error && response.statusCode == 200) {
             var $ = cheerio.load(html);
-            $('priceblock_ourprice span.a-color-price').each(function(i, element) {
+            $('priceblock_ourprice span.a-size-medium  span.a-color-price').each(function(i, element) {
                 var el = $(this);
                 var price = el.text();
                 console.log("price 1 ==>:",price);
             })
         }
     });
+
+    console.log(" Scrape for Price 2 *********** " );
     request(httpUrl, function(error, response, html) {
     if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html);
