@@ -252,7 +252,7 @@ function determineResponse(senderID, event) {
         request(httpUrl, function(error, response, html) {
         if (!error && response.statusCode == 200) {
             var $ = cheerio.load(html);
-            $('span.a-color-price').each(function(i, element) {
+            $('priceblock_ourprice span.a-color-price').each(function(i, element) {
                 var el = $(this);
                 var price = el.text();
                 console.log("price 1 ==>:",price);
@@ -262,7 +262,7 @@ function determineResponse(senderID, event) {
     request(httpUrl, function(error, response, html) {
     if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html);
-        $('span.a-size-medium span.a-color-price').each(function(i, element) {
+        $('#priceblock_ourprice span.a-size-medium span.a-color-price').each(function(i, element) {
             var el = $(this);
             var price = el.text();
             console.log("price 2==>:",price);
