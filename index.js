@@ -26,9 +26,6 @@ app.get('/', function (req, res) {
   res.send ('Hello - It is now working!')
 })
 
-app.get('/seema', function (req, res) {
-  res.send ('Hello - Seema!')
-})
 
 /***********************************
 THIS IS THE CALL FROM FACEBOOK
@@ -80,11 +77,12 @@ function receivedMessage(event) {
 
   console.log("==>>> Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
-    console.log("------> EVENT STRUCTURE:")
-    console.log(JSON.stringify(event));
+  console.log("------> EVENT STRUCTURE:")
+  console.log(JSON.stringify(event));
+  console.log("------> Message STRUCTURE:")
   console.log(JSON.stringify(message));
 
-  if (event  && event.postback) {
+  if (typeof event != 'undefined'  && event.postback) {
       console.log("POSTBACK:====>");
         console.log(JSON.stringify(event.postback));
     }
@@ -95,8 +93,7 @@ function receivedMessage(event) {
 
 
  // check if event is a postback
- if (event && event.postback) {
-
+ if (typeof event != 'undefined' && event.postback) {
     determineResponse(senderID,event)  ;
  }
 
@@ -124,48 +121,38 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-  console.log("compareText ||||||<>||||||||||||||||:",compareText);
+  console.log("compareText ||||||||||||||||||||||:",compareText);
   var userObj ;
-
-  /*
-  var userObj = JSON.parse(compareText);
-  if (userObj && userObj.action) {
-    console.log ('action = ',userObj.action);
-  }
-  if (userObj && userObj.price) {
-    console.log ('price in USD:',userObj.price)
- }
- */
-
 
   try {
     if (compareText) {
-      console.log("do JSON parse of compareText");
-      var userObj = JSON.parse(compareText);
-      console.log("after JSON parse of compareText");
-      if (userObj.action) {
-        console.log ('action = ',userObj.action);
-      }
-      if (userObj.price) {
-        console.log ('price in USD:',userObj.price)
-     }
-     if (userObj.weight) {
-       console.log ('weight in lbs:',userObj.weight)
-    }
-    if (userObj.category) {
-      console.log ('category:',userObj.category)
-   }
+          console.log("do JSON parse of compareText");
+          var userObj = JSON.parse(compareText);
+          console.log("after JSON parse of compareText");
+          if (typeof userObj != 'undefined' && userObj.action) {
+            console.log ('action = ',userObj.action);
+          }
+          if (typeof userObj != 'undefined' && userObj.price) {
+            console.log ('price in USD:',userObj.price)
+         }
+         if (typeof userObj != 'undefined' && userObj.weight) {
+           console.log ('weight in lbs:',userObj.weight)
+        }
+        if (typeof userObj != 'undefined' && userObj.category) {
+          console.log ('category:',userObj.category)
+       }
     }
   } catch (e) {
     console.log("compareText not a JSON string");
 }
 
 
-  let myText = ""
-  if ( event && event.postback ) {
+  let myText = "";
+  console.log('Check postback Text::');
+  if ( typeof event != 'undefined' && event.postback ) {
 
     myText = event.postback.toLowerCase();
-      console.log('Text::',myText);
+      console.log('postback Text::',myText);
   }
 
       // If we receive a text message, check to see if it matches a keyword
@@ -174,7 +161,7 @@ function determineResponse(senderID, event) {
 //
 
 // check if postback
-    if ( myText.includes ("yes_confirm_order") ) {
+    if ( typeof myText != 'undefined' && myText == 'yes_confirm_order' ) {
 //  let postbackText = JSON.stringify(event.postback);
 //  if (messageText.toLowerCase().includes("confirm order")) {
     sendTextMessage(senderID,"Thank You");
@@ -203,9 +190,7 @@ function determineResponse(senderID, event) {
         callback();
       });
     };
-
-    //
-  } else if (myText.includes("not_now") ) {
+  } else if (typeof myText != 'undefined' && myText == 'not_now')  {
     sendTextMessage(senderID,"WHY WHY WHY???!!!");
     // ask WHY
     // insert follow up to why user did not buy
