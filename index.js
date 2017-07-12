@@ -104,10 +104,6 @@ function receivedMessage(event) {
         console.log(JSON.stringify(event.postback));
     }
 
-
-
-
-
  // check if event is a postback
  if (typeof event != 'undefined' && event.postback) {
     handleEvent(senderID,event)  ;
@@ -131,22 +127,22 @@ function handleEvent(senderID, event) {
       var recipientID = event.recipient.id;
       var timeOfMessage = event.timestamp;
 
-        let myText = "";
-        console.log('Check postback Text::');
-        if ( typeof event != 'undefined' && event.postback ) {
+      let myText = "";
+      console.log('Check postback Text==>');
+      if ( typeof event != 'undefined' && event.postback ) {
 
-          myText = event.postback.toLowerCase();
-            console.log('postback Text::',myText);
-        }
+          myText = event.postback;
+          console.log('postback Text::',myText);
+      }
 
-        // check if postback
-            if ( typeof myText != 'undefined' && myText == 'yes_confirm_order' ) {
+      // check if postback
+      if ( typeof myText != 'undefined' && myText == 'yes_confirm_order' ) {
         //  let postbackText = JSON.stringify(event.postback);
         //  if (messageText.toLowerCase().includes("confirm order")) {
-            sendTextMessage(senderID,"Thank You");
+              sendTextMessage(senderID,"Thank You");
 
-            // insert order request to database
-            //
+        // insert order request to database
+        //
             MongoClient.connect(url, function(err, db) {
               assert.equal(null, err);
               insertOrderRequest(db, function() {
