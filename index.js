@@ -292,12 +292,12 @@ function sendButton(recipientId, btnText) {
             {
               "type":"postback",
               "title":"Yes",
-              "":"yes_confirm_order"
+              "payload":"yes_confirm_order"
             },
             {
               "type":"postback",
               "title":"Not Now",
-              "":"not_now"
+              "payload":"not_now"
             }
           ]
         }
