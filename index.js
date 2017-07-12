@@ -210,56 +210,10 @@ function determineResponse(senderID, event) {
     console.log("compareText not a JSON string");
 }
 
-// only if event
-  let myText = "";
-  console.log('Check postback Text::');
-  if ( typeof event != 'undefined' && event.postback ) {
 
-    myText = event.postback.toLowerCase();
-      console.log('postback Text::',myText);
-  }
 
       // If we receive a text message, check to see if it matches a keyword
       // and send back the example. Otherwise, just echo the text we received.
-
-//
-
-// check if postback
-    if ( typeof myText != 'undefined' && myText == 'yes_confirm_order' ) {
-//  let postbackText = JSON.stringify(event.postback);
-//  if (messageText.toLowerCase().includes("confirm order")) {
-    sendTextMessage(senderID,"Thank You");
-
-    // insert order request to database
-    //
-    MongoClient.connect(url, function(err, db) {
-      assert.equal(null, err);
-      insertOrderRequest(db, function() {
-          db.close();
-        });
-    });
-
-    // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
-    var insertOrderRequest = function(db, callback) {
-       db.collection('order_request').insertOne( {
-          "senderId" : senderID,
-          "recipientId" : recipientID,
-          "orderItem" : myText,
-          "messageId": messageId,
-          "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
-          "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
-       }, function(err, result) {
-        assert.equal(err, null);
-        console.log("Inserted a document into the order_request collection.");
-        callback();
-      });
-    };
-  } else if (typeof myText != 'undefined' && myText == 'not_now')  {
-    sendTextMessage(senderID,"WHY WHY WHY???!!!");
-    // ask WHY
-    // insert follow up to why user did not buy
-  }
-
 
   if (compareText.includes ("button") ) {
       sendButton(senderID, 'Would you like to confirm order?');
