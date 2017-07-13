@@ -272,7 +272,7 @@ var ebayPrice =0;
     //    console.log("********** Load page HTML ---<>",html);
         var $ = cheerio.load(html);
         // ebay #prcIsum
-        $('.vi-price').each(function(i, element) {
+        $('#vi-mskumap-none').each(function(i, element) {
           var el = $(this);
           ebayPrice = el.text();
           console.log("+++++++++++ebayPrice  ==>:",ebayPrice);
