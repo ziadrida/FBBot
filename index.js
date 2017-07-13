@@ -238,7 +238,7 @@ function determineResponse(senderID, event) {
 
       // if message contains http, then it is a pricing request
   if (compareText.includes ("http") ) {
-        sendTextMessage(senderID, 'Please wait! ... Pricing now...');
+
 
         //    var httpUrl = compareText;
         var httpUrl = "https://www.amazon.com/gp/product/B01MTLMV89/ref=od_aui_detailpages00?ie=UTF8&psc=1"
@@ -266,35 +266,25 @@ function determineResponse(senderID, event) {
     request(httpUrl, function(error, response, html) {
       console.log("after request:",error,"******   statuscode:",response.statusCode);
     if (!error && response.statusCode == 200) {
-        console.log("********** Load page HTML ---<>",html);
+    //    console.log("********** Load page HTML ---<>",html);
         var $ = cheerio.load(html);
 
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
-        $('td.a-span12 span.a-color-price').each(function(i, element) {
+        $('#priceblock_ourprice td.a-span12 span.a-color-price').each(function(i, element) {
             var el = $(this);
-          //  console.log("+++++++++++==> e1--->:",e1);
             var price = el.text();
-            console.log("+++++++++++price ==>:",price);
+            console.log("+++++++++++our price  ==>:",price);
+        }) // close function
+
+        $('#priceblock_dealprice td.a-span12 span.a-color-price').each(function(i, element) {
+            var el = $(this);
+            var dealPrice = el.text();
+            console.log("+++++++++++deal price ==>:",dealPrice);
         }) // close function
     }
   }); // close request
-/*
-console.log(" Scrape for shippingWeight *********** " );
-request(httpUrl, function(error, response, html) {
-if (!error && response.statusCode == 200) {
-    var $ = cheerio.load(html);
 
-// #productDetails_detailBullets_sections1 > tbody > tr:nth-child(4) > td
-// #productDetails_detailBullets_sections1 > tbody > tr:nth-child(4) > td
-    $('#productDetails_detailBullets_sections1').each(function(i, element) {
-        var el = $(this);
-          console.log("+++++++++++==>:",e1);
-        var prod = el.text();
-        console.log("+++++++++++proe details ==>:",prod);
-    })
-}
-});
-*/
+  sendTextMessage(senderID, 'Item Price was:',price, " deal price:",dealPrice);
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
           insertMesssageText(db, function() {
