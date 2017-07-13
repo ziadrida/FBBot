@@ -271,12 +271,13 @@ var ebayPrice =0;
     if (!error && response.statusCode == 200) {
     //    console.log("********** Load page HTML ---<>",html);
         var $ = cheerio.load(html);
-// ebay #prcIsum
-$('#prcIsum').each(function(i, element) {
-    var el = $(this);
-    ebayPrice = el.text();
-    console.log("+++++++++++ebayPrice  ==>:",ebayPrice);
-}) // close function
+        // ebay #prcIsum
+        $('.vi-price').each(function(i, element) {
+          var el = $(this);
+          ebayPrice = el.text();
+          console.log("+++++++++++ebayPrice  ==>:",ebayPrice);
+        }) // close function
+        /*
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
         $('#priceblock_ourprice td.a-span12 span.a-color-price').each(function(i, element) {
             var el = $(this);
@@ -289,7 +290,9 @@ $('#prcIsum').each(function(i, element) {
             dealPrice = el.text();
             console.log("+++++++++++deal price ==>:",dealPrice);
         }) // close function
+*/
     }
+
   }); // close request
   var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPrice:" + ebayPrice
   sendTextMessage(senderID,msg);
