@@ -270,11 +270,27 @@ function determineResponse(senderID, event) {
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
         $('#priceblock_ourprice').each(function(i, element) {
             var el = $(this);
-              console.log("+++++++++++e1==>:",price);
+              console.log("+++++++++++==>:",e1);
             var price = el.text();
             console.log("+++++++++++price ==>:",price);
         })
     }
+});
+
+console.log(" Scrape for shippingWeight *********** " );
+request(httpUrl, function(error, response, html) {
+if (!error && response.statusCode == 200) {
+    var $ = cheerio.load(html);
+
+// #productDetails_detailBullets_sections1 > tbody > tr:nth-child(4) > td
+// #productDetails_detailBullets_sections1 > tbody > tr:nth-child(4) > td
+    $('#productDetails_detailBullets_sections1').each(function(i, element) {
+        var el = $(this);
+          console.log("+++++++++++==>:",e1);
+        var prod = el.text();
+        console.log("+++++++++++proe details ==>:",prod);
+    })
+}
 });
 
         MongoClient.connect(url, function(err, db) {
