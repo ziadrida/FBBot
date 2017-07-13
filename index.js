@@ -268,7 +268,7 @@ function determineResponse(senderID, event) {
         var $ = cheerio.load(html);
 
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
-        $('span.a-color-price').each(function(i, element) {
+        $('td.a-span12 span.a-color-price').each(function(i, element) {
             var el = $(this);
           //    console.log("+++++++++++==>:",e1);
             var price = el.text();
