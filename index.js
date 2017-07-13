@@ -262,8 +262,9 @@ function determineResponse(senderID, event) {
         }
     }); */
 
-var ourPrice;
-var dealPrice;
+var ourPrice =0;
+var dealPrice =0;
+var ebayPrice =0;
     console.log(" ************ Scrape for Price *********** url= ",compareText );
     request(httpUrl, function(error, response, html) {
       console.log("after request:",error,"******   statuscode:",response.statusCode);
