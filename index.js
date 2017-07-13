@@ -266,7 +266,7 @@ function determineResponse(senderID, event) {
     request(httpUrl, function(error, response, html) {
       console.log("after request:",error,"******   statuscode:",response.statusCode);
     if (!error && response.statusCode == 200) {
-        console.log("********** Load page HTML ---<>");
+        console.log("********** Load page HTML ---<>",html);
         var $ = cheerio.load(html);
 
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
