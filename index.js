@@ -262,8 +262,9 @@ function determineResponse(senderID, event) {
         }
     }); */
 
-    console.log(" Scrape for Price *********** " );
+    console.log(" ************ Scrape for Price *********** " );
     request(httpUrl, function(error, response, html) {
+      console.log("after request:",error,"******   statuscode:",response.statusCode);
     if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html);
 
