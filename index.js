@@ -266,18 +266,16 @@ function determineResponse(senderID, event) {
     request(httpUrl, function(error, response, html) {
       console.log("after request:",error,"******   statuscode:",response.statusCode);
     if (!error && response.statusCode == 200) {
-        console.log("Load page HTML ---<>");
+        console.log("********** Load page HTML ---<>");
         var $ = cheerio.load(html);
 
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
         $('td.a-span12 span.a-color-price').each(function(i, element) {
             var el = $(this);
-            console.log("+++++++++++==> e1--->:",e1);
+          //  console.log("+++++++++++==> e1--->:",e1);
             var price = el.text();
             console.log("+++++++++++price ==>:",price);
         }) // close function
-
-
     }
   }); // close request
 /*
