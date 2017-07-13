@@ -266,10 +266,13 @@ function determineResponse(senderID, event) {
     request(httpUrl, function(error, response, html) {
     if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html);
-        $('span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice').each(function(i, element) {
+
+// <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
+        $('#priceblock_ourprice').each(function(i, element) {
             var el = $(this);
+              console.log("+++++++++++e1==>:",price);
             var price = el.text();
-            console.log("pr ice 2==>:",price);
+            console.log("+++++++++++price ==>:",price);
         })
     }
 });
