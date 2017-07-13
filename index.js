@@ -262,7 +262,7 @@ function determineResponse(senderID, event) {
         }
     }); */
 
-    console.log(" Scrape for Price 2 *********** " );
+    console.log(" Scrape for Price *********** " );
     request(httpUrl, function(error, response, html) {
     if (!error && response.statusCode == 200) {
         var $ = cheerio.load(html);
@@ -270,13 +270,13 @@ function determineResponse(senderID, event) {
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
         $('#priceblock_ourprice').each(function(i, element) {
             var el = $(this);
-              console.log("+++++++++++==>:",e1);
+          //    console.log("+++++++++++==>:",e1);
             var price = el.text();
             console.log("+++++++++++price ==>:",price);
         })
     }
 });
-
+/*
 console.log(" Scrape for shippingWeight *********** " );
 request(httpUrl, function(error, response, html) {
 if (!error && response.statusCode == 200) {
@@ -292,7 +292,7 @@ if (!error && response.statusCode == 200) {
     })
 }
 });
-
+*/
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
           insertMesssageText(db, function() {
