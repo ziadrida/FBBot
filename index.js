@@ -275,11 +275,7 @@ function determineResponse(senderID, event) {
             console.log("+++++++++++price ==>:",price);
         })
 
-        var mrp  = '#priceblock_ourprice';
-        scraper(mrp).filter(function(){
-          var data_mrp = scraper(this);
-            console.log("******NEW SCRAPEER ******", data_mrp.text());
-            // scraped = scraped + data_mrp.text()+';';
+
 });
     }
 });
