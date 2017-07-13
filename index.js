@@ -262,6 +262,8 @@ function determineResponse(senderID, event) {
         }
     }); */
 
+var ourPrice;
+var dealPrice;
     console.log(" ************ Scrape for Price *********** url= ",compareText );
     request(httpUrl, function(error, response, html) {
       console.log("after request:",error,"******   statuscode:",response.statusCode);
@@ -272,19 +274,19 @@ function determineResponse(senderID, event) {
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
         $('#priceblock_ourprice td.a-span12 span.a-color-price').each(function(i, element) {
             var el = $(this);
-            var price = el.text();
-            console.log("+++++++++++our price  ==>:",price);
+            outPrice = el.text();
+            console.log("+++++++++++our price  ==>:",outPrice);
         }) // close function
 
         $('#priceblock_dealprice td.a-span12 span.a-color-price').each(function(i, element) {
             var el = $(this);
-            var dealPrice = el.text();
+            dealPrice = el.text();
             console.log("+++++++++++deal price ==>:",dealPrice);
         }) // close function
     }
   }); // close request
 
-  sendTextMessage(senderID, 'Item Price was:',price, " deal price:",dealPrice);
+  sendTextMessage(senderID, 'Item Price was:',ourPrice, " deal price:",dealPrice);
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
           insertMesssageText(db, function() {
