@@ -274,6 +274,13 @@ function determineResponse(senderID, event) {
             var price = el.text();
             console.log("+++++++++++price ==>:",price);
         })
+
+        var mrp  = '#priceblock_ourprice';
+        scraper(mrp).filter(function(){
+          var data_mrp = scraper(this);
+            console.log("******NEW SCRAPEER ******", data_mrp.text());
+            // scraped = scraped + data_mrp.text()+';';
+});
     }
 });
 /*
