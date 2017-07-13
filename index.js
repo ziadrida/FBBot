@@ -270,12 +270,17 @@ var dealPrice;
     if (!error && response.statusCode == 200) {
     //    console.log("********** Load page HTML ---<>",html);
         var $ = cheerio.load(html);
-
+// ebay #prcIsum
+$('#prcIsum').each(function(i, element) {
+    var el = $(this);
+    ebayPrice = el.text();
+    console.log("+++++++++++ebayPrice  ==>:",ebayPrice);
+}) // close function
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
         $('#priceblock_ourprice td.a-span12 span.a-color-price').each(function(i, element) {
             var el = $(this);
-            outPrice = el.text();
-            console.log("+++++++++++our price  ==>:",outPrice);
+            ourPrice = el.text();
+            console.log("+++++++++++our price  ==>:",ourPrice);
         }) // close function
 
         $('#priceblock_dealprice td.a-span12 span.a-color-price').each(function(i, element) {
@@ -285,7 +290,7 @@ var dealPrice;
         }) // close function
     }
   }); // close request
-  var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice
+  var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPrice:" + ebayPrice
   sendTextMessage(senderID,msg);
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
