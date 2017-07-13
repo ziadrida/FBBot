@@ -272,12 +272,14 @@ var ebayPrice =0;
     //    console.log("********** Load page HTML ---<>",html);
         var $ = cheerio.load(html);
         // ebay #prcIsum
+        /*
         $('#vi-mskumap-none').each(function(i, element) {
           var el = $(this);
           ebayPrice = el.text();
           console.log("+++++++++++ebayPrice  ==>:",ebayPrice);
         }) // close function
-        /*
+        */
+
 // <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
         $('#priceblock_ourprice td.a-span12 span.a-color-price').each(function(i, element) {
             var el = $(this);
@@ -290,7 +292,7 @@ var ebayPrice =0;
             dealPrice = el.text();
             console.log("+++++++++++deal price ==>:",dealPrice);
         }) // close function
-*/
+
     }
 
   }); // close request
