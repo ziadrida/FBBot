@@ -285,8 +285,8 @@ var dealPrice;
         }) // close function
     }
   }); // close request
-
-  sendTextMessage(senderID, 'Item Price was:',ourPrice, " deal price:",dealPrice);
+  var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice
+  sendTextMessage(senderID,msg);
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
           insertMesssageText(db, function() {
