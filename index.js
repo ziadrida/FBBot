@@ -276,6 +276,7 @@ iterate("FormattedPrice",object[0].Offers[0], cat)
 console.log("cat",cat);
 cat.forEach(function(a) {
  console.log(a);
+ itemPrice = a[0];
 });
 
 var attr = []
@@ -283,9 +284,11 @@ var attr2 = []
 iterate("PackageDimensions",object[0].ItemAttributes[0], attr);
 console.log("attr:",JSON.stringify(attr));
 var d = JSON.parse(JSON.stringify(attr));
-console.log("H:",d[0][0].Length[0]._*d[0][0].Width[0]._* d[0][0].Height[0]._*Math.pow(2.54,3)/(5000*1000000),"KG");
+var weightKG = d[0][0].Length[0]._*d[0][0].Width[0]._* d[0][0].Height[0]._*Math.pow(2.54,3)/(5000*1000000);
 
-
+console.log("Weight:",weightKG);
+var msg = "Category:"+cat + " weight:"+weightKG + " Price:"+ itemPrice
+  sendTextMessage(senderID,msg);
 }).catch(function(err) {
  console.log(err);
 });
@@ -357,7 +360,7 @@ var ebayPrice =0;
   var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPrice:" + ebayPrice
 */
 
-  sendTextMessage(senderID,msg);
+
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
           insertMesssageText(db, function() {
