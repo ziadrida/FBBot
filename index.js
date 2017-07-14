@@ -15,6 +15,7 @@ const bodyParser = require('body-parser');
 const cheerio = require('cheerio');
 const request = require('request');
 const app = express();
+var amazon = require('amazon-product-api');
 
 
 // get token from the environment
@@ -239,29 +240,76 @@ function determineResponse(senderID, event) {
       // if message contains http, then it is a pricing request
   if (compareText.includes ("http") ) {
 
+    /* asin match
+    var url = "http://www.en-jo.alpha-secure.shop.cashbasha.com/s?field-keywords=B01AVXFD9S";
+var regex = RegExp("/([A-Z0-9]{10})");
+m = url.match("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])/");
 
-        //    var httpUrl = compareText;
-        var httpUrl = "https://www.amazon.com/gp/product/B01MTLMV89/ref=od_aui_detailpages00?ie=UTF8&psc=1"
-        //scrape url
-        /* request(httpUrl, function(err, resp, body) {
-          var $ = cheerio.load (body);
-          var shippingWeightName = $('.a-size-base');
-          var shippingWeightText = shippingWeightName.text();
-          console.log("ShippingWeight ====> ",shippingWeightText)
-        })
+    console.log(m);
 
-        console.log(" Scrape for Price 1 *********** " );
-        request(httpUrl, function(error, response, html) {
-        if (!error && response.statusCode == 200) {
-            var $ = cheerio.load(html);
-            $('priceblock_ourprice span.a-size-medium  span.a-color-price').each(function(i, element) {
-                var el = $(this);
-                var price = el.text();
-                console.log("price 1 ==>:",price);
-            })
+*/
+
+    var client = amazon.createClient({
+      awsTag: "tech1",
+      awsId: "AKIAIN3EIRW3VGI3UT2Q",
+      awsSecret: "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"
+    });
+
+    client.itemLookup({
+  itemId: 'B00CCYLBZ0',
+  ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
+}).then(function(results) {
+  console.log(JSON.stringify(results));
+}).catch(function(err) {
+  console.log(err);
+});
+
+var cat = [];
+iterate("Name",object[0].BrowseNodes[0], cat)
+console.log("cat",cat);
+cat.forEach(function(a) {
+  console.log(a);
+});
+cat = [];
+iterate("FormattedPrice",object[0].Offers[0], cat)
+console.log("cat",cat);
+cat.forEach(function(a) {
+  console.log(a);
+});
+
+var attr = []
+var attr2 = []
+iterate("PackageDimensions",object[0].ItemAttributes[0], attr);
+console.log("attr:",JSON.stringify(attr));
+var d = JSON.parse(JSON.stringify(attr));
+console.log("H:",d[0][0].Length[0]._*d[0][0].Width[0]._* d[0][0].Height[0]._*Math.pow(2.54,3)/(5000*1000000),"KG");
+
+
+// MUST PASS ROOT TO BrowseNodes
+function iterate(node,obj, stack) {
+        //var cat = [];
+        for (var property in obj) {
+       // console.log("property:",property);
+            if (obj.hasOwnProperty(property)) {
+             if (property.includes(node)) {
+                 console.log(property + "// " + obj[property]);
+                 //stack = stack + '|' + obj[property]
+                 stack.push(obj[property]);
+                }
+                if (typeof obj[property] == "object") {
+
+                    iterate(node,obj[property], stack);
+
+                } else {
+                   // console.log(property + "/ " + obj[property]);
+                  //  $('#output').append($("<div/>").text(stack))
+                }
+
+            }
         }
-    }); */
+    }
 
+/*
 var ourPrice =0;
 var dealPrice =0;
 var ebayPrice =0;
@@ -287,7 +335,7 @@ var ebayPrice =0;
             console.log("+++++++++++our price  ==>:",ourPrice);
         }) // close function
 
-        $('#priceblock_dealprice td.a-span12 span.a-color-price').each(function(i, element) {
+        $('priceblock_dealprice td.a-span12 span.a-color-price').each(function(i, element) {
             var el = $(this);
             dealPrice = el.text();
             console.log("+++++++++++deal price ==>:",dealPrice);
@@ -297,6 +345,8 @@ var ebayPrice =0;
 
   }); // close request
   var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPrice:" + ebayPrice
+*/
+
   sendTextMessage(senderID,msg);
         MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
@@ -336,6 +386,8 @@ var ebayPrice =0;
       //    sendTextMessage(senderID, messageText);
       }
 }
+
+
 /*.......................................
           screen scraper function
 .......................................*/
