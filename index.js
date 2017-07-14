@@ -196,7 +196,7 @@ function determineResponse(senderID, event) {
   try {
     if (compareText) {
           console.log("do JSON parse of compareText");
-          var userObj = JSON.parse(compareText);
+           userObj = JSON.parse(compareText);
           console.log("after JSON parse of compareText");
           if (typeof userObj != 'undefined' && userObj.action) {
             console.log ('action = ',userObj.action);
@@ -248,33 +248,34 @@ m = url.match("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])/");
     console.log(m);
 
 */
+var object ;
 
-    var client = amazon.createClient({
-      awsTag: "tech1",
-      awsId: "AKIAIN3EIRW3VGI3UT2Q",
+   var client = amazon.createClient({
+     awsTag: "tech1",
+     awsId: "AKIAIN3EIRW3VGI3UT2Q",
       awsSecret: "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"
-    });
+   });
 
-    client.itemLookup({
-  itemId: 'B00CCYLBZ0',
-  ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
+
+   client.itemLookup({
+ itemId: 'B00CCYLBZ0',
+ ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
 }).then(function(results) {
-  console.log(JSON.stringify(results));
-}).catch(function(err) {
-  console.log(err);
-});
+ console.log(JSON.stringify(results));
+   var res = JSON.stringify(results)
+   object = JSON.parse(res);
+   var cat = [];
 
-var cat = [];
 iterate("Name",object[0].BrowseNodes[0], cat)
 console.log("cat",cat);
 cat.forEach(function(a) {
-  console.log(a);
+ console.log(a);
 });
 cat = [];
 iterate("FormattedPrice",object[0].Offers[0], cat)
 console.log("cat",cat);
 cat.forEach(function(a) {
-  console.log(a);
+ console.log(a);
 });
 
 var attr = []
@@ -285,29 +286,37 @@ var d = JSON.parse(JSON.stringify(attr));
 console.log("H:",d[0][0].Length[0]._*d[0][0].Width[0]._* d[0][0].Height[0]._*Math.pow(2.54,3)/(5000*1000000),"KG");
 
 
+}).catch(function(err) {
+ console.log(err);
+});
+
+
+
+
 // MUST PASS ROOT TO BrowseNodes
 function iterate(node,obj, stack) {
-        //var cat = [];
-        for (var property in obj) {
-       // console.log("property:",property);
-            if (obj.hasOwnProperty(property)) {
-             if (property.includes(node)) {
-                 console.log(property + "// " + obj[property]);
-                 //stack = stack + '|' + obj[property]
-                 stack.push(obj[property]);
-                }
-                if (typeof obj[property] == "object") {
+       //var cat = [];
+       for (var property in obj) {
+      // console.log("property:",property);
+           if (obj.hasOwnProperty(property)) {
+            if (property.includes(node)) {
+                console.log(property + "// " + obj[property]);
+                //stack = stack + '|' + obj[property]
+                stack.push(obj[property]);
+               }
+               if (typeof obj[property] == "object") {
 
-                    iterate(node,obj[property], stack);
+                   iterate(node,obj[property], stack);
 
-                } else {
-                   // console.log(property + "/ " + obj[property]);
-                  //  $('#output').append($("<div/>").text(stack))
-                }
+               } else {
+                  // console.log(property + "/ " + obj[property]);
+                 //  $('#output').append($("<div/>").text(stack))
+               }
 
-            }
-        }
-    }
+           }
+       }
+       }
+
 
 /*
 var ourPrice =0;
@@ -344,7 +353,7 @@ var ebayPrice =0;
     }
 
   }); // close request
-  
+
   var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPrice:" + ebayPrice
 */
 
