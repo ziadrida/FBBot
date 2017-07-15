@@ -280,7 +280,7 @@ function determineResponse(senderID, event) {
 
   var regex = RegExp("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])/");
   var asin =compareText.match(regex);
-
+ console.log ("ASIN:",asin[0]);
    // if ASIN is set then request if from amazon website
    // for now i will assume it is the USA AMAZON
  if (typeof asin != 'undefined' && asin ) {
@@ -294,7 +294,7 @@ function determineResponse(senderID, event) {
 
 
            client.itemLookup({
-          itemId: asin,
+          itemId: asin[0],
           ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
           }).then(function(results) {
           console.log(JSON.stringify(results));
