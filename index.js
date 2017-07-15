@@ -253,7 +253,7 @@ function determineResponse(senderID, event) {
           });
 
           let domainName =   parseDomain(http);
-          console.log(<><><>"Domain Name:",domainName);
+          console.log("<><><> Domain Name:",domainName);
 
           // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
           var insertMesssageText = function(db, callback) {
