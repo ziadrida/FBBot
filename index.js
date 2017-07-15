@@ -214,7 +214,7 @@ function determineResponse(senderID, event) {
        }
     }
   } catch (e) {
-    console.log("compareText not a JSON string");
+    console.log("compareText not a JSON string - not a problem");
 }
 
 
@@ -279,8 +279,9 @@ function determineResponse(senderID, event) {
 //    var compareText = "http://www.en-jo.alpha-secure.shop.cashbasha.com/s?field-keywords=B01AVXFD9S";
 
   var regex = RegExp("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])/");
-  var asin =compareText.match(regex);
- console.log ("ASIN:",asin[0]);
+  console.log("CompareText before regexp match:",compareText)
+  var asin =messageText.match(regex);
+ console.log ("ASIN:",asin);
    // if ASIN is set then request if from amazon website
    // for now i will assume it is the USA AMAZON
  if (typeof asin != 'undefined' && asin ) {
