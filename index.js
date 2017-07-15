@@ -243,7 +243,10 @@ function determineResponse(senderID, event) {
   if (compareText.includes ("http") ) {
 
 
-
+    let domainName =   parseDomain(compareText);
+    console.log("<><><> Domain Name:",domainName);
+    if (typeof domainName != 'undefined' && domainName ) {
+      // valid domainName
           // insert all http request in the database
           MongoClient.connect(url, function(err, db) {
             assert.equal(null, err);
@@ -251,9 +254,6 @@ function determineResponse(senderID, event) {
                 db.close();
               });
           });
-
-          let domainName =   parseDomain(http);
-          console.log("<><><> Domain Name:",domainName);
 
           // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
           var insertMesssageText = function(db, callback) {
@@ -402,6 +402,8 @@ var ebayPrice =0;
 
   var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPrice:" + ebayPrice
 */
+
+} // valid domainName
       if ( compareText.includes("phone")) {
         sendTextMessage(senderID, 'Our main phone number is 0785000010');
       }
