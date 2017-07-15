@@ -8,6 +8,8 @@ var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var url = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 
+// parse URL
+  var parseDomain = require("parse-domain");
 //add all of code
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -240,58 +242,96 @@ function determineResponse(senderID, event) {
       // if message contains http, then it is a pricing request
   if (compareText.includes ("http") ) {
 
-    /* asin match
-    var url = "http://www.en-jo.alpha-secure.shop.cashbasha.com/s?field-keywords=B01AVXFD9S";
-var regex = RegExp("/([A-Z0-9]{10})");
-m = url.match("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])/");
-
-    console.log(m);
-
-*/
-var object ;
-
-   var client = amazon.createClient({
-     awsTag: "tech1",
-     awsId: "AKIAIN3EIRW3VGI3UT2Q",
-      awsSecret: "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"
-   });
 
 
-   client.itemLookup({
- itemId: 'B00CCYLBZ0',
- ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
-}).then(function(results) {
- console.log(JSON.stringify(results));
-   var res = JSON.stringify(results)
-   object = JSON.parse(res);
-   var cat = [];
+          // insert all http request in the database
+          MongoClient.connect(url, function(err, db) {
+            assert.equal(null, err);
+            insertMesssageText(db, function() {
+                db.close();
+              });
+          });
 
-iterate("Name",object[0].BrowseNodes[0], cat)
-console.log("cat",cat);
-cat.forEach(function(a) {
- console.log(a);
-});
-cat = [];
-iterate("FormattedPrice",object[0].Offers[0], cat)
-console.log("cat",cat);
-cat.forEach(function(a) {
- console.log(a);
- itemPrice = a[0];
-});
+          let domainName =   parseDomain(http);
+          console.log(<><><>"Domain Name:",domainName);
 
-var attr = []
-var attr2 = []
-iterate("PackageDimensions",object[0].ItemAttributes[0], attr);
-console.log("attr:",JSON.stringify(attr));
-var d = JSON.parse(JSON.stringify(attr));
-var weightKG = d[0][0].Length[0]._*d[0][0].Width[0]._* d[0][0].Height[0]._*Math.pow(2.54,3)/(5000*1000000);
+          // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+          var insertMesssageText = function(db, callback) {
+             db.collection('pricing_request').insertOne( {
+                "senderId" : senderID,
+                "recipientId" : recipientID,
+                "domainName" : domainName,
+                "messageText" : messageText,
+                "messageId": messageId,
+                "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
+                "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
+             }, function(err, result) {
+              assert.equal(err, null);
+              console.log("Inserted a document into the pricing_request collection.");
+              callback();
+            });
+          };
 
-console.log("Weight:",weightKG);
-var msg = "Category:"+cat + " weight:"+weightKG + " Price:"+ itemPrice
-  sendTextMessage(senderID,msg);
-}).catch(function(err) {
- console.log(err);
-});
+
+    // check if this is a price request from Amazon or it is an Amazon product ID
+    // extract  Amazon product ID in the url
+    // asin match
+//    var compareText = "http://www.en-jo.alpha-secure.shop.cashbasha.com/s?field-keywords=B01AVXFD9S";
+
+  var regex = RegExp("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])/");
+  var asin =compareText.match(regex);
+
+   // if ASIN is set then request if from amazon website
+   // for now i will assume it is the USA AMAZON
+ if (typeof asin != 'undefined' && asin ) {
+         // price from amazon
+           console.log("AMAZON:",asin[0]);
+           var client = amazon.createClient({
+             awsTag: "tech1",
+             awsId: "AKIAIN3EIRW3VGI3UT2Q",
+              awsSecret: "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"
+           });
+
+
+           client.itemLookup({
+          itemId: asin,
+          ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
+          }).then(function(results) {
+          console.log(JSON.stringify(results));
+           var res = JSON.stringify(results)
+           object = JSON.parse(res);
+           var cat = [];
+
+          iterate("Name",object[0].BrowseNodes[0], cat)
+          console.log("cat",cat);
+          cat.forEach(function(a) {
+          console.log(a);
+          });
+          priceValues = [];
+          iterate("FormattedPrice",object[0].Offers[0], priceValues)
+          console.log("priceValues",priceValues);
+          priceValues.forEach(function(a) {
+          console.log(a);
+          itemPrice = a[0];
+          });
+
+          var attr = []
+          var attr2 = []
+          iterate("PackageDimensions",object[0].ItemAttributes[0], attr);
+          console.log("attr:",JSON.stringify(attr));
+          var d = JSON.parse(JSON.stringify(attr));
+          var weightKG = d[0][0].Length[0]._*d[0][0].Width[0]._* d[0][0].Height[0]._*Math.pow(2.54,3)/(5000*1000000);
+
+          console.log("Weight:",weightKG);
+          var msg = "Category:"+cat + " weight:"+weightKG + " Price:"+ itemPrice
+          sendTextMessage(senderID,msg);
+          }).catch(function(err) {
+          console.log(err);
+          });
+
+          } // if (asin)  price from amazon
+  }
+ else { console.log("not amazon"); }
 
 
 
@@ -361,28 +401,7 @@ var ebayPrice =0;
 */
 
 
-        MongoClient.connect(url, function(err, db) {
-          assert.equal(null, err);
-          insertMesssageText(db, function() {
-              db.close();
-            });
-        });
 
-        // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
-        var insertMesssageText = function(db, callback) {
-           db.collection('pricing_request').insertOne( {
-              "senderId" : senderID,
-              "recipientId" : recipientID,
-              "messageText" : messageText,
-              "messageId": messageId,
-              "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
-              "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
-           }, function(err, result) {
-            assert.equal(err, null);
-            console.log("Inserted a document into the pricing_request collection.");
-            callback();
-          });
-        };
       } // if message contains http, then it is a pricing request
 
 
