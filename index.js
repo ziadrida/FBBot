@@ -329,9 +329,12 @@ function determineResponse(senderID, event) {
           console.log(err);
           });
 
-          } // if (asin)  price from amazon
+    } // if (asin)  price from amazon
+   else {
+   console.log("not amazon");
   }
- else { console.log("not amazon"); }
+
+} // if message contains http, then it is a pricing request
 
 
 
@@ -358,7 +361,7 @@ function iterate(node,obj, stack) {
 
            }
        }
-       }
+     } // end iterate function
 
 
 /*
@@ -399,24 +402,10 @@ var ebayPrice =0;
 
   var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPrice:" + ebayPrice
 */
-
-
-
-      } // if message contains http, then it is a pricing request
-
-
       if ( compareText.includes("phone")) {
         sendTextMessage(senderID, 'Our main phone number is 0785000010');
       }
-      switch (messageText) {
-        case 'generic':
-          sendGenericMessage(senderID);
-          break;
 
-        default:
-      //
-      //    sendTextMessage(senderID, messageText);
-      }
 }
 
 
