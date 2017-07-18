@@ -164,7 +164,7 @@ function handleEvent(senderID, event) {
                   "recipientId" : recipientID,
                   "orderItem" : myText,
                   "messageId": messageId,
-                  "timestamp" : new Date(timeOfMessage)),
+                  "timestamp" : new Date(timeOfMessage),
                   "dateCreated": new Date()
                }, function(err, result) {
                 assert.equal(err, null);
