@@ -178,9 +178,8 @@ function handleEvent(senderID, event) {
             // ask WHY
             // insert follow up to why user did not buy
           }
-
-
 }
+
 function determineResponse(senderID, event) {
     console.log("IN determineResponse:--->");
   var senderID = event.sender.id;
@@ -405,7 +404,7 @@ function iterate(node,obj, stack) {
 
            }
        }
-     } // end iteterate function
+  } // end iteterate function
 
 
 /*
@@ -448,6 +447,8 @@ var ebayPrice =0;
 */
 
 } // valid domainName
+} // end of if http 
+
       if ( compareText.includes("phone")) {
         sendTextMessage(senderID, 'Our main phone number is 0785000010');
       }
@@ -534,7 +535,7 @@ function callSendAPI(messageData) {
 
 app.listen(app.get('port'), function(){
   console.log('running on port', app.get('port'))
-})
+});
 
 
 /*******************************************
