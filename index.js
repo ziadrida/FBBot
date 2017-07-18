@@ -164,14 +164,15 @@ function handleEvent(senderID, event) {
                   "recipientId" : recipientID,
                   "orderItem" : myText,
                   "messageId": messageId,
-                  "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
-                  "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
+                  "timestamp" : new Date(timeOfMessage)),
+                  "dateCreated": new Date()
                }, function(err, result) {
                 assert.equal(err, null);
                 console.log("Inserted a document into the order_request collection.");
                 callback();
               });
             };
+            // "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
           } else if (typeof myText != 'undefined' && myText == 'not_now')  {
             sendTextMessage(senderID,"WHY WHY WHY???!!!");
             // ask WHY
@@ -244,7 +245,7 @@ function determineResponse(senderID, event) {
 
 
     let domainName =   parseDomain(compareText);
-    console.log("<><><> Domain Name:",domainName);
+    console.log("<><><> Domain Name:",domainName.domain);
     if (typeof domainName != 'undefined' && domainName ) {
       // valid domainName
           // insert all http request in the database
@@ -260,11 +261,11 @@ function determineResponse(senderID, event) {
              db.collection('pricing_request').insertOne( {
                 "senderId" : senderID,
                 "recipientId" : recipientID,
-                "domainName" : domainName,
+                "domainName" : domainName.domain,
                 "messageText" : messageText,
                 "messageId": messageId,
-                "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
-                "dateCreated": new Date("<YYYY-mm-ddTHH:MM:ss>")
+                "timestamp" : new Date(timeOfMessage),
+                "dateCreated": new Date()
              }, function(err, result) {
               assert.equal(err, null);
               console.log("Inserted a document into the pricing_request collection.");
@@ -278,8 +279,12 @@ function determineResponse(senderID, event) {
     // asin match
 //    var compareText = "http://www.en-jo.alpha-secure.shop.cashbasha.com/s?field-keywords=B01AVXFD9S";
 
+
+
   var regex = RegExp("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])/");
-  console.log("CompareText before regexp match:",compareText)
+
+messageText = "https://www.amazon.com/4pk-Assorted-colors-Pocket-T-Shirt/dp/B00WK0ST3S/ref=sr_1_1?ie=";
+
   var asin =messageText.match(regex);
  console.log ("ASIN:",asin);
    // if ASIN is set then request if from amazon website
@@ -298,34 +303,77 @@ function determineResponse(senderID, event) {
           itemId: asin[0],
           ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
           }).then(function(results) {
+          console.log("Resulting Message from Amazon");
           console.log(JSON.stringify(results));
            var res = JSON.stringify(results)
            object = JSON.parse(res);
+         var prime = object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0]
+         shippingCost = -1; // unknown
+           if (prime && prime == "1" ) {
+              shippingCost = 0;
+           }
+
+              console.log("formattedPrice:" , object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]);
+    var   itemPrice = 1 *  object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]/100.00;
+    console.log("itemPrice:" ,itemPrice);
+    var category = object[0].BrowseNodes[0].BrowseNode[0].Name[0]
            var cat = [];
 
-          iterate("Name",object[0].BrowseNodes[0], cat)
+console.log("Prime eligible:",prime," -  shippingCost:",shippingCost);
+    console.log("itemPrice:",itemPrice.toFixed(2));
+     console.log("category:",category);
+      try {
+      itemheight = 1 * object[0].ItemAttributes[0].ItemDimensions[0].Height[0]._ ;
+
+ itemlength=1*object[0].ItemAttributes[0].ItemDimensions[0].Length[0]._;
+
+ itemwidth =1* object[0].ItemAttributes[0].ItemDimensions[0].Width[0]._;
+ }
+  catch (e) {
+        itemheight = -1; itemwidth = -1;
+         itemlength = -1;
+        }
+        try {
+        itemWeight = 1* object[0].ItemAttributes[0].ItemDimensions[0].Weight[0]._/100.00 } catch (e) {
+        itemWeight = -1;
+        }
+
+ height = 1 *  object[0].ItemAttributes[0].PackageDimensions[0].Height[0]._ ;
+
+ length = 1* object[0].ItemAttributes[0].PackageDimensions[0].Length[0]._;
+ weight =1 * object[0].ItemAttributes[0].PackageDimensions[0].Weight[0]._/100.00;
+ width =1* object[0].ItemAttributes[0].PackageDimensions[0].Width[0]._;
+ console.log("package HxLxW",length,"x",width,"x",height," wt",weight);
+
+ console.log("item HxLxW",itemlength,"x",itemwidth,"x",itemheight," itemWeight:",itemWeight);
+
+         var  volWeightKG =length*width*height*Math.pow(2.54,3)/(5000*1000000);
+         console.log("volWeightKG:",volWeightKG);
+                var chargableWt = 1* Math.max(volWeightKG*1,weight*1/2.20).toFixed(2);
+          console.log("x volWeight:",volWeightKG.toFixed(2));
+          console.log("x chargableWt:",chargableWt.toFixed(2));
+
+              // part#
+          var MPN = object[0].ItemAttributes[0].MPN[0]
+          console.log("MPN:",MPN);
+          var available = object[0].Offers[0].Offer[0].OfferListing[0].AvailabilityAttributes[0].AvailabilityType[0]
+          console.log("Availability:",available);
+
+// size of item
+      var sizeofitem = "NONE"
+     try {
+        sizeofitem = object[0].ItemAttributes[0].Size[0];
+        // sizeofitem = object[0].ItemAttributes[0].ClothingSize[0];
+      } catch(e) { console.log(e);}
+      console.log("<> size of item:",sizeofitem)
+
+         iterate("Name",object[0].BrowseNodes[0], cat)
           console.log("cat",cat);
           cat.forEach(function(a) {
-          console.log(a);
+        //  console.log(a);
           });
-          priceValues = [];
-          iterate("FormattedPrice",object[0].Offers[0], priceValues)
-          console.log("priceValues",priceValues);
-          priceValues.forEach(function(a) {
-          console.log(a);
-          itemPrice = a[0];
-          });
-
-          var attr = []
-          var attr2 = []
-          iterate("PackageDimensions",object[0].ItemAttributes[0], attr);
-          console.log("attr:",JSON.stringify(attr));
-          var d = JSON.parse(JSON.stringify(attr));
-          var weightKG = d[0][0].Length[0]._*d[0][0].Width[0]._* d[0][0].Height[0]._*Math.pow(2.54,3)/(5000*1000000);
-
-          console.log("Weight:",weightKG);
-          var msg = "Category:"+cat + " weight:"+weightKG + " Price:"+ itemPrice
-          sendTextMessage(senderID,msg);
+    //  var msg = "Category:"+cat + " weight:"+chargableWt + " Price:"+ itemPrice
+        //  sendTextMessage(senderID,msg);
           }).catch(function(err) {
           console.log(err);
           });
@@ -335,10 +383,6 @@ function determineResponse(senderID, event) {
    console.log("not amazon");
   }
 
-} // if message contains http, then it is a pricing request
-
-
-
 
 // MUST PASS ROOT TO BrowseNodes
 function iterate(node,obj, stack) {
@@ -347,7 +391,7 @@ function iterate(node,obj, stack) {
       // console.log("property:",property);
            if (obj.hasOwnProperty(property)) {
             if (property.includes(node)) {
-                console.log(property + "// " + obj[property]);
+              //  console.log(property + "// " + obj[property]);
                 //stack = stack + '|' + obj[property]
                 stack.push(obj[property]);
                }
@@ -356,13 +400,12 @@ function iterate(node,obj, stack) {
                    iterate(node,obj[property], stack);
 
                } else {
-                  // console.log(property + "/ " + obj[property]);
-                 //  $('#output').append($("<div/>").text(stack))
+
                }
 
            }
        }
-     } // end iterate function
+     } // end iteterate function
 
 
 /*
