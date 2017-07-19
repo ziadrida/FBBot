@@ -414,7 +414,7 @@ function getRegularAmmanPrice(price,weight,shipping,category) {
 
 
 // processHttpRequest function
-function processHttpRequest) {
+function processHttpRequest() {
   let domainName =   parseDomain(compareText);
   console.log("<><><> Domain Name:",domainName.domain);
   if (typeof domainName != 'undefined' && domainName ) {
