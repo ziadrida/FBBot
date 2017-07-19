@@ -6,7 +6,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
-var url = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
+var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 
 // parse URL
   var parseDomain = require("parse-domain");
@@ -150,7 +150,7 @@ function handleEvent(senderID, event) {
 
         // insert order request to database
         //
-        MongoClient.connect(url, function(err, db) {
+        MongoClient.connect(mongodbUrl, function(err, db) {
               assert.equal(null, err);
               insertOrderRequest(db, function() {
                   db.close();
@@ -248,7 +248,7 @@ function determineResponse(senderID, event) {
     if (typeof domainName != 'undefined' && domainName ) {
       // valid domainName
           // insert all http request in the database
-          MongoClient.connect(url, function(err, db) {
+          MongoClient.connect(mongodbUrl, function(err, db) {
             assert.equal(null, err);
             insertMesssageText(db, function() {
                 db.close();
@@ -382,31 +382,6 @@ console.log("Prime eligible:",prime," -  shippingCost:",shippingCost);
    console.log("not amazon");
   }
 
-
-// MUST PASS ROOT TO BrowseNodes
-function iterate(node,obj, stack) {
-       //var cat = [];
-       for (var property in obj) {
-      // console.log("property:",property);
-           if (obj.hasOwnProperty(property)) {
-            if (property.includes(node)) {
-              //  console.log(property + "// " + obj[property]);
-                //stack = stack + '|' + obj[property]
-                stack.push(obj[property]);
-               }
-               if (typeof obj[property] == "object") {
-
-                   iterate(node,obj[property], stack);
-
-               } else {
-
-               }
-
-           }
-       }
-  } // end iteterate function
-
-
 /*
 var ourPrice =0;
 var dealPrice =0;
@@ -447,14 +422,73 @@ var ebayPrice =0;
 */
 
 } // valid domainName
-} // end of if http 
+} // end of if http
 
-      if ( compareText.includes("phone")) {
-        sendTextMessage(senderID, 'Our main phone number is 0785000010');
+      if ( compareText.includes("*Report")) {
+        MongoClient.connect(mongodbUrl, (err, db) => {
+
+    assert.equal(null, err);
+
+    pricingRequestSummary(db, () => {
+
+        db.close();
+    });
+});
+
+var     pricingRequestSummary(db, () => {
+ = (db, callback) => {
+
+    var agr = [
+{$match: {'timestamp': {
+   $gte: (new Date((new Date()).getTime() - (2 * 24 * 60 * 60 * 1000)))}
+}},
+{'$group' : {
+'_id' :
+{ "year": {'$year' : '$timestamp'},
+  "month": {'$month' : '$timestamp'},
+  "day": {'$dayOfMonth' : '$timestamp' },
+  "hour":{"$hour":"$timestamp"}
+},
+'total requests' : { '$sum' : 1 }
+}
+} ];
+
+    var cursor = db.collection('pricing_request').aggregate(agr).toArray( (err, res) => {
+
+       assert.equal(err, null);
+       console.log(JSON.stringify(res));
+         sendTextMessage(senderID, JSON.stringify(res));
+       callback(res);
+    });
+};
+
       }
 
 }
 
+
+// MUST PASS ROOT TO BrowseNodes
+function iterate(node,obj, stack) {
+       //var cat = [];
+       for (var property in obj) {
+      // console.log("property:",property);
+           if (obj.hasOwnProperty(property)) {
+            if (property.includes(node)) {
+              //  console.log(property + "// " + obj[property]);
+                //stack = stack + '|' + obj[property]
+                stack.push(obj[property]);
+               }
+               if (typeof obj[property] == "object") {
+
+                   iterate(node,obj[property], stack);
+
+               } else {
+
+               }
+
+           }
+       }
+  } // end iteterate function
 
 /*.......................................
           screen scraper function
