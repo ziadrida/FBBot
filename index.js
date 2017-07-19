@@ -241,187 +241,7 @@ function determineResponse(senderID, event) {
 
       // if message contains http, then it is a pricing request
   if (compareText.includes ("http") ) {
-
-
-    let domainName =   parseDomain(compareText);
-    console.log("<><><> Domain Name:",domainName.domain);
-    if (typeof domainName != 'undefined' && domainName ) {
-      // valid domainName
-          // insert all http request in the database
-          MongoClient.connect(mongodbUrl, function(err, db) {
-            assert.equal(null, err);
-            insertMesssageText(db, function() {
-                db.close();
-              });
-          });
-
-          // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
-          var insertMesssageText = function(db, callback) {
-             db.collection('pricing_request').insertOne( {
-                "senderId" : senderID,
-                "recipientId" : recipientID,
-                "domainName" : domainName.domain,
-                "messageText" : messageText,
-                "messageId": messageId,
-                "timestamp" : new Date(timeOfMessage),
-                "dateCreated": new Date()
-             }, function(err, result) {
-              assert.equal(err, null);
-              console.log("Inserted a document into the pricing_request collection.");
-              callback();
-            });
-          };
-
-
-    // check if this is a price request from Amazon or it is an Amazon product ID
-    // extract  Amazon product ID in the url
-    // asin match
-//    var compareText = "http://www.en-jo.alpha-secure.shop.cashbasha.com/s?field-keywords=B01AVXFD9S";
-
-
-
-  var regex = RegExp("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])/");
-
-messageText = "https://www.amazon.com/4pk-Assorted-colors-Pocket-T-Shirt/dp/B00WK0ST3S/ref=sr_1_1?ie=";
-
-  var asin =messageText.match(regex);
- console.log ("ASIN:",asin);
-   // if ASIN is set then request if from amazon website
-   // for now i will assume it is the USA AMAZON
- if (typeof asin != 'undefined' && asin ) {
-         // price from amazon
-           console.log("AMAZON:",asin[0]);
-           var client = amazon.createClient({
-             awsTag: "tech1",
-             awsId: "AKIAIN3EIRW3VGI3UT2Q",
-              awsSecret: "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"
-           });
-
-
-           client.itemLookup({
-          itemId: asin[0],
-          ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
-          }).then(function(results) {
-          console.log("Resulting Message from Amazon");
-          console.log(JSON.stringify(results));
-           var res = JSON.stringify(results)
-           object = JSON.parse(res);
-         var prime = object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0]
-         shippingCost = -1; // unknown
-           if (prime && prime == "1" ) {
-              shippingCost = 0;
-           }
-
-              console.log("formattedPrice:" , object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]);
-    var   itemPrice = 1 *  object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]/100.00;
-    console.log("itemPrice:" ,itemPrice);
-    var category = object[0].BrowseNodes[0].BrowseNode[0].Name[0]
-           var cat = [];
-
-console.log("Prime eligible:",prime," -  shippingCost:",shippingCost);
-    console.log("itemPrice:",itemPrice.toFixed(2));
-     console.log("category:",category);
-      try {
-      itemheight = 1 * object[0].ItemAttributes[0].ItemDimensions[0].Height[0]._ ;
-
- itemlength=1*object[0].ItemAttributes[0].ItemDimensions[0].Length[0]._;
-
- itemwidth =1* object[0].ItemAttributes[0].ItemDimensions[0].Width[0]._;
- }
-  catch (e) {
-        itemheight = -1; itemwidth = -1;
-         itemlength = -1;
-        }
-        try {
-        itemWeight = 1* object[0].ItemAttributes[0].ItemDimensions[0].Weight[0]._/100.00 } catch (e) {
-        itemWeight = -1;
-        }
-
- height = 1 *  object[0].ItemAttributes[0].PackageDimensions[0].Height[0]._ ;
-
- length = 1* object[0].ItemAttributes[0].PackageDimensions[0].Length[0]._;
- weight =1 * object[0].ItemAttributes[0].PackageDimensions[0].Weight[0]._/100.00;
- width =1* object[0].ItemAttributes[0].PackageDimensions[0].Width[0]._;
- console.log("package HxLxW",length,"x",width,"x",height," wt",weight);
-
- console.log("item HxLxW",itemlength,"x",itemwidth,"x",itemheight," itemWeight:",itemWeight);
-
-         var  volWeightKG =length*width*height*Math.pow(2.54,3)/(5000*1000000);
-         console.log("volWeightKG:",volWeightKG);
-                var chargableWt = 1* Math.max(volWeightKG*1,weight*1/2.20).toFixed(2);
-          console.log("x volWeight:",volWeightKG.toFixed(2));
-          console.log("x chargableWt:",chargableWt.toFixed(2));
-
-              // part#
-          var MPN = object[0].ItemAttributes[0].MPN[0]
-          console.log("MPN:",MPN);
-          var available = object[0].Offers[0].Offer[0].OfferListing[0].AvailabilityAttributes[0].AvailabilityType[0]
-          console.log("Availability:",available);
-
-// size of item
-      var sizeofitem = "NONE"
-     try {
-        sizeofitem = object[0].ItemAttributes[0].Size[0];
-        // sizeofitem = object[0].ItemAttributes[0].ClothingSize[0];
-      } catch(e) { console.log(e);}
-      console.log("<> size of item:",sizeofitem)
-
-         iterate("Name",object[0].BrowseNodes[0], cat)
-          console.log("cat",cat);
-          cat.forEach(function(a) {
-        //  console.log(a);
-          });
-    //  var msg = "Category:"+cat + " weight:"+chargableWt + " Price:"+ itemPrice
-        //  sendTextMessage(senderID,msg);
-          }).catch(function(err) {
-          console.log(err);
-          });
-
-    } // if (asin)  price from amazon
-   else {
-   console.log("not amazon");
-  }
-
-/*
-var ourPrice =0;
-var dealPrice =0;
-var ebayPrice =0;
-    console.log(" ************ Scrape for Price *********** url= ",compareText );
-    request(httpUrl, function(error, response, html) {
-      console.log("after request:",error,"******   statuscode:",response.statusCode);
-    if (!error && response.statusCode == 200) {
-    //    console.log("********** Load page HTML ---<>",html);
-        var $ = cheerio.load(html);
-        // ebay #prcIsum
-
-        $('#vi-mskumap-none').each(function(i, element) {
-          var el = $(this);
-          ebayPrice = el.text();
-          console.log("+++++++++++ebayPrice  ==>:",ebayPrice);
-        }) // close function
-
-
-// <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
-        $('td.a-span12 span.a-color-price').each(function(i, element) {
-            var el = $(this);
-            ourPrice = el.text();
-            console.log("+++++++++++our price  ==>:",ourPrice);
-        }) // close function
-
-        $('priceblock_dealprice td.a-span12 span.a-color-price').each(function(i, element) {
-            var el = $(this);
-            dealPrice = el.text();
-            console.log("+++++++++++deal price ==>:",dealPrice);
-        }) // close function
-
-    }
-
-  }); // close request
-
-  var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPrice:" + ebayPrice
-*/
-
-} // valid domainName
+       processHttpRequest();
 } // end of if http
 
   if ( compareText.includes("*report")) { // Report Reqeust
@@ -590,4 +410,188 @@ function getRegularAmmanPrice(price,weight,shipping,category) {
   }
   console.log('tax=',tax);
   return price * (1+tax) + weight*5 + shipping
+}
+
+
+// processHttpRequest function
+function processHttpRequest) {
+  let domainName =   parseDomain(compareText);
+  console.log("<><><> Domain Name:",domainName.domain);
+  if (typeof domainName != 'undefined' && domainName ) {
+    // valid domainName
+        // insert all http request in the database
+        MongoClient.connect(mongodbUrl, function(err, db) {
+          assert.equal(null, err);
+          insertMesssageText(db, function() {
+              db.close();
+            });
+        });
+
+        // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+        var insertMesssageText = function(db, callback) {
+           db.collection('pricing_request').insertOne( {
+              "senderId" : senderID,
+              "recipientId" : recipientID,
+              "domainName" : domainName.domain,
+              "messageText" : messageText,
+              "messageId": messageId,
+              "timestamp" : new Date(timeOfMessage),
+              "dateCreated": new Date()
+           }, function(err, result) {
+            assert.equal(err, null);
+            console.log("Inserted a document into the pricing_request collection.");
+            callback();
+          });
+        };
+
+
+  // check if this is a price request from Amazon or it is an Amazon product ID
+  // extract  Amazon product ID in the url
+  // asin match
+//    var compareText = "http://www.en-jo.alpha-secure.shop.cashbasha.com/s?field-keywords=B01AVXFD9S";
+
+
+
+var regex = RegExp("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])/");
+
+messageText = "https://www.amazon.com/4pk-Assorted-colors-Pocket-T-Shirt/dp/B00WK0ST3S/ref=sr_1_1?ie=";
+
+var asin =messageText.match(regex);
+console.log ("ASIN:",asin);
+ // if ASIN is set then request if from amazon website
+ // for now i will assume it is the USA AMAZON
+if (typeof asin != 'undefined' && asin ) {
+       // price from amazon
+         console.log("AMAZON:",asin[0]);
+         var client = amazon.createClient({
+           awsTag: "tech1",
+           awsId: "AKIAIN3EIRW3VGI3UT2Q",
+            awsSecret: "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"
+         });
+
+
+         client.itemLookup({
+        itemId: asin[0],
+        ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
+        }).then(function(results) {
+        console.log("Resulting Message from Amazon");
+        console.log(JSON.stringify(results));
+         var res = JSON.stringify(results)
+         object = JSON.parse(res);
+       var prime = object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0]
+       shippingCost = -1; // unknown
+         if (prime && prime == "1" ) {
+            shippingCost = 0;
+         }
+
+            console.log("formattedPrice:" , object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]);
+  var   itemPrice = 1 *  object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]/100.00;
+  console.log("itemPrice:" ,itemPrice);
+  var category = object[0].BrowseNodes[0].BrowseNode[0].Name[0]
+         var cat = [];
+
+console.log("Prime eligible:",prime," -  shippingCost:",shippingCost);
+  console.log("itemPrice:",itemPrice.toFixed(2));
+   console.log("category:",category);
+    try {
+    itemheight = 1 * object[0].ItemAttributes[0].ItemDimensions[0].Height[0]._ ;
+
+itemlength=1*object[0].ItemAttributes[0].ItemDimensions[0].Length[0]._;
+
+itemwidth =1* object[0].ItemAttributes[0].ItemDimensions[0].Width[0]._;
+}
+catch (e) {
+      itemheight = -1; itemwidth = -1;
+       itemlength = -1;
+      }
+      try {
+      itemWeight = 1* object[0].ItemAttributes[0].ItemDimensions[0].Weight[0]._/100.00 } catch (e) {
+      itemWeight = -1;
+      }
+
+height = 1 *  object[0].ItemAttributes[0].PackageDimensions[0].Height[0]._ ;
+
+length = 1* object[0].ItemAttributes[0].PackageDimensions[0].Length[0]._;
+weight =1 * object[0].ItemAttributes[0].PackageDimensions[0].Weight[0]._/100.00;
+width =1* object[0].ItemAttributes[0].PackageDimensions[0].Width[0]._;
+console.log("package HxLxW",length,"x",width,"x",height," wt",weight);
+
+console.log("item HxLxW",itemlength,"x",itemwidth,"x",itemheight," itemWeight:",itemWeight);
+
+       var  volWeightKG =length*width*height*Math.pow(2.54,3)/(5000*1000000);
+       console.log("volWeightKG:",volWeightKG);
+              var chargableWt = 1* Math.max(volWeightKG*1,weight*1/2.20).toFixed(2);
+        console.log("x volWeight:",volWeightKG.toFixed(2));
+        console.log("x chargableWt:",chargableWt.toFixed(2));
+
+            // part#
+        var MPN = object[0].ItemAttributes[0].MPN[0]
+        console.log("MPN:",MPN);
+        var available = object[0].Offers[0].Offer[0].OfferListing[0].AvailabilityAttributes[0].AvailabilityType[0]
+        console.log("Availability:",available);
+
+// size of item
+    var sizeofitem = "NONE"
+   try {
+      sizeofitem = object[0].ItemAttributes[0].Size[0];
+      // sizeofitem = object[0].ItemAttributes[0].ClothingSize[0];
+    } catch(e) { console.log(e);}
+    console.log("<> size of item:",sizeofitem)
+
+       iterate("Name",object[0].BrowseNodes[0], cat)
+        console.log("cat",cat);
+        cat.forEach(function(a) {
+      //  console.log(a);
+        });
+  //  var msg = "Category:"+cat + " weight:"+chargableWt + " Price:"+ itemPrice
+      //  sendTextMessage(senderID,msg);
+        }).catch(function(err) {
+        console.log(err);
+        });
+
+  } // if (asin)  price from amazon
+ else {
+ console.log("not amazon");
+}
+
+/*
+var ourPrice =0;
+var dealPrice =0;
+var ebayPrice =0;
+  console.log(" ************ Scrape for Price *********** url= ",compareText );
+  request(httpUrl, function(error, response, html) {
+    console.log("after request:",error,"******   statuscode:",response.statusCode);
+  if (!error && response.statusCode == 200) {
+  //    console.log("********** Load page HTML ---<>",html);
+      var $ = cheerio.load(html);
+      // ebay #prcIsum
+
+      $('#vi-mskumap-none').each(function(i, element) {
+        var el = $(this);
+        ebayPrice = el.text();
+        console.log("+++++++++++ebayPrice  ==>:",ebayPrice);
+      }) // close function
+
+
+// <span id="priceblock_ourprice" class="a-size-medium a-color-price">$79.99</span>  span.a-size-medium', 'span.a-color-price', '#priceblock_ourprice
+      $('td.a-span12 span.a-color-price').each(function(i, element) {
+          var el = $(this);
+          ourPrice = el.text();
+          console.log("+++++++++++our price  ==>:",ourPrice);
+      }) // close function
+
+      $('priceblock_dealprice td.a-span12 span.a-color-price').each(function(i, element) {
+          var el = $(this);
+          dealPrice = el.text();
+          console.log("+++++++++++deal price ==>:",dealPrice);
+      }) // close function
+
+  }
+
+}); // close request
+
+var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPrice:" + ebayPrice
+*/
+
+} // valid domainName
 }
