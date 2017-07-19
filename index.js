@@ -424,34 +424,33 @@ var ebayPrice =0;
 } // valid domainName
 } // end of if http
 
-      if ( compareText.includes("*Report")) {
+  if ( compareText.includes("*Report")) { // Report Reqeust
         MongoClient.connect(mongodbUrl, (err, db) => {
 
-    assert.equal(null, err);
+          assert.equal(null, err);
 
-    pricingRequestSummary(db, () => {
+      pricingRequestSummary(db, () => {
 
-        db.close();
+          db.close();
+        }); // CALL pricingRequestSummary
     });
-});
 
-var     pricingRequestSummary(db, () => {
- = (db, callback) => {
+// pricingRequestSummary FUNCTION
+var     pricingRequestSummary= (db, callback) => {
 
-    var agr = [
-{$match: {'timestamp': {
-   $gte: (new Date((new Date()).getTime() - (2 * 24 * 60 * 60 * 1000)))}
-}},
-{'$group' : {
-'_id' :
-{ "year": {'$year' : '$timestamp'},
-  "month": {'$month' : '$timestamp'},
-  "day": {'$dayOfMonth' : '$timestamp' },
-  "hour":{"$hour":"$timestamp"}
-},
-'total requests' : { '$sum' : 1 }
-}
-} ];
+    var agr = [{$match: {'timestamp': {
+         $gte: (new Date((new Date()).getTime() - (2 * 24 * 60 * 60 * 1000)))}
+        }},
+        {'$group' : {
+          '_id' :
+          { "year": {'$year' : '$timestamp'},
+          "month": {'$month' : '$timestamp'},
+          "day": {'$dayOfMonth' : '$timestamp' },
+          "hour":{"$hour":"$timestamp"}
+        },
+          'total requests' : { '$sum' : 1 }
+        }
+        } ];
 
     var cursor = db.collection('pricing_request').aggregate(agr).toArray( (err, res) => {
 
@@ -459,12 +458,10 @@ var     pricingRequestSummary(db, () => {
        console.log(JSON.stringify(res));
          sendTextMessage(senderID, JSON.stringify(res));
        callback(res);
-    });
-};
-
-      }
-
-}
+    }); // aggregate
+  }; // DB callback , pricingRequestSummary
+ 
+} // *Report
 
 
 // MUST PASS ROOT TO BrowseNodes
