@@ -448,15 +448,23 @@ var  pricingRequestSummary= (db, callback) => {
           "day": {'$dayOfMonth' : '$timestamp' },
           "hour":{"$hour":"$timestamp"}
         },
-          'total requests' : { '$sum' : 1 }
+          'totalrequests' : { '$sum' : 1 }
         }
         } ];
-
+   var out = [];
     var cursor = db.collection('pricing_request').aggregate(agr).toArray( (err, res) => {
 
        assert.equal(err, null);
        console.log(JSON.stringify(res));
-         sendTextMessage(senderID, JSON.stringify(res));
+       var obj = JSON.parse(JSON.stringify(res));
+      obj.forEach(function(a) {
+
+       out.push( a._id.day + "/" + a._id.month + "/" + a._id.year + ": PR=" + a.totalrequests );
+
+      });
+
+    console.log(out);
+         sendTextMessage(senderID, out);
        callback(res);
     }); // aggregate
   }; // DB callback , pricingRequestSummary
