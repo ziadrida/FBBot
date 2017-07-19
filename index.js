@@ -424,7 +424,7 @@ var ebayPrice =0;
 } // valid domainName
 } // end of if http
 
-  if ( compareText.includes("*Report")) { // Report Reqeust
+  if ( compareText.includes("*report")) { // Report Reqeust
         MongoClient.connect(mongodbUrl, (err, db) => {
 
           assert.equal(null, err);
