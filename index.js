@@ -433,10 +433,10 @@ var ebayPrice =0;
 
           db.close();
         }); // CALL pricingRequestSummary
-    });
+    }); // db connect
 
 // pricingRequestSummary FUNCTION
-var     pricingRequestSummary= (db, callback) => {
+var  pricingRequestSummary= (db, callback) => {
 
     var agr = [{$match: {'timestamp': {
          $gte: (new Date((new Date()).getTime() - (2 * 24 * 60 * 60 * 1000)))}
@@ -460,9 +460,9 @@ var     pricingRequestSummary= (db, callback) => {
        callback(res);
     }); // aggregate
   }; // DB callback , pricingRequestSummary
- 
-} // *Report
 
+} // *Report
+} // determineResponse
 
 // MUST PASS ROOT TO BrowseNodes
 function iterate(node,obj, stack) {
@@ -539,7 +539,7 @@ function sendTextMessage(recipientId, messageText) {
   };
 
   callSendAPI(messageData);
-}
+} // sendTextMessage
 
 function callSendAPI(messageData) {
   request({
