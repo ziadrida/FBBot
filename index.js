@@ -460,11 +460,11 @@ var  pricingRequestSummary= (db, callback) => {
       obj.forEach(function(a) {
 
        out.push( a._id.day + "/" + a._id.month + "/" + a._id.year + ": PR=" + a.totalrequests );
-
+       sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + ": PR=" + a.totalrequests);
       });
 
     console.log(out);
-         sendTextMessage(senderID, out);
+        // sendTextMessage(senderID, out);
        callback(res);
     }); // aggregate
   }; // DB callback , pricingRequestSummary
