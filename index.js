@@ -180,8 +180,12 @@ function handleEvent(senderID, event) {
           }
 }
 
+/*********************************
+Function determineResponse
+*********************************/
+
 function determineResponse(senderID, event) {
-    console.log("IN determineResponse:--->");
+  console.log("IN determineResponse:--->");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -192,133 +196,87 @@ function determineResponse(senderID, event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-  console.log("compareText ||||||||||||||||||||||:",compareText);
-  var userObj ;
+  console.log("compareText ||||||||||||||||||||||:", compareText);
+  var userObj;
 
+// check is message from user is a JSON formatted message (i.e. Command)
   try {
     if (compareText) {
-          console.log("do JSON parse of compareText");
-           userObj = JSON.parse(compareText);
-          console.log("after JSON parse of compareText");
-          if (typeof userObj != 'undefined' && userObj.action) {
-            console.log ('action = ',userObj.action);
-          }
-          if (typeof userObj != 'undefined' && userObj.price) {
-            console.log ('price in USD:',userObj.price)
-         }
-         if (typeof userObj != 'undefined' && userObj.weight) {
-           console.log ('weight in lbs:',userObj.weight)
-        }
-        if (typeof userObj != 'undefined' && userObj.category) {
-          console.log ('category:',userObj.category)
-       }
+      console.log("do JSON parse of compareText");
+      userObj = JSON.parse(compareText);
+      console.log("after JSON parse of compareText");
+      if (typeof userObj != 'undefined' && userObj.action) {
+        console.log('action = ', userObj.action);
+      }
+      if (typeof userObj != 'undefined' && userObj.price) {
+        console.log('price in USD:', userObj.price)
+      }
+      if (typeof userObj != 'undefined' && userObj.weight) {
+        console.log('weight in lbs:', userObj.weight)
+      }
+      if (typeof userObj != 'undefined' && userObj.category) {
+        console.log('category:', userObj.category)
+      }
     }
   } catch (e) {
     console.log("compareText not a JSON string - not a problem");
-}
+  } // end function determineResponse
 
 
 
-      // If we receive a text message, check to see if it matches a keyword
-      // and send back the example. Otherwise, just echo the text we received.
+  // If we receive a text message, check to see if it matches a keyword
+  // and send back the example. Otherwise, just echo the text we received.
 
-  if (compareText.includes ("button") ) {
-      sendButton(senderID, 'Would you like to confirm order?');
+  if (compareText.includes("button")) {
+    sendButton(senderID, 'Would you like to confirm order?');
   }
-
 
   /*---------------------------------
    check if this is a pricing request
    ---------------------------------*/
-  if (typeof userObj != 'undefined' && userObj.action === "*pr" ) {
-    sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
-    let itemPrice = userObj.price;
-    let itemWeight = userObj.weight
-    let shipping = userObj.shipping
-    let category = userObj.category;
-      sendTextMessage(senderID, getRegularAmmanPrice(itemPrice,itemWeight,shipping,category));
-  }
+  if (typeof userObj != 'undefined' && userObj.action === "*pr") {
+    getPricing();
+  } //if action *pr
 
-      // if message contains http, then it is a pricing request
-  if (compareText.includes ("http") ) {
-       processHttpRequest();
-} // end of if http
+  if (typeof userObj != 'undefined' && userObj.action === "*report") {
+    sendTextMessage(senderID, 'I understand that you want me to give you a PR report .. please wait');
+    let daysBack = userObj.days;
 
-  if ( compareText.includes("*report")) { // Report Reqeust
-        MongoClient.connect(mongodbUrl, (err, db) => {
+    genPrReport(daysBack);
+  } // if *report action
 
-          assert.equal(null, err);
-
-      pricingRequestSummary(db, () => {
-
-          db.close();
-        }); // CALL pricingRequestSummary
-    }); // db connect
-
-// pricingRequestSummary FUNCTION
-var  pricingRequestSummary= (db, callback) => {
-
-    var agr = [{$match: {'timestamp': {
-         $gte: (new Date((new Date()).getTime() - (2 * 24 * 60 * 60 * 1000)))}
-        }},
-        {'$group' : {
-          '_id' :
-          { "year": {'$year' : '$timestamp'},
-          "month": {'$month' : '$timestamp'},
-          "day": {'$dayOfMonth' : '$timestamp' },
-          "hour":{"$hour":"$timestamp"}
-        },
-          'totalrequests' : { '$sum' : 1 }
-        }
-        } ];
-   var out = [];
-    var cursor = db.collection('pricing_request').aggregate(agr).toArray( (err, res) => {
-
-       assert.equal(err, null);
-       console.log(JSON.stringify(res));
-       var obj = JSON.parse(JSON.stringify(res));
-      obj.forEach(function(a) {
-
-       out.push( a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests );
-       sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour  + ": PR=" + a.totalrequests);
-      });
-
-    console.log(out);
-        // sendTextMessage(senderID, out);
-       callback(res);
-    }); // aggregate
-  }; // DB callback , pricingRequestSummary
-
-} // *Report
-} // determineResponse
+  // if message contains http, then it is a pricing request
+  if (compareText.includes("http")) {
+    processHttpRequest();
+  } // end of if http
+} // end function determineResponse
 
 // MUST PASS ROOT TO BrowseNodes
-function iterate(node,obj, stack) {
-       //var cat = [];
-       for (var property in obj) {
-      // console.log("property:",property);
-           if (obj.hasOwnProperty(property)) {
-            if (property.includes(node)) {
-              //  console.log(property + "// " + obj[property]);
-                //stack = stack + '|' + obj[property]
-                stack.push(obj[property]);
-               }
-               if (typeof obj[property] == "object") {
+function iterate(node, obj, stack) {
+  //var cat = [];
+  for (var property in obj) {
+    // console.log("property:",property);
+    if (obj.hasOwnProperty(property)) {
+      if (property.includes(node)) {
+        //  console.log(property + "// " + obj[property]);
+        //stack = stack + '|' + obj[property]
+        stack.push(obj[property]);
+      }
+      if (typeof obj[property] == "object") {
 
-                   iterate(node,obj[property], stack);
+        iterate(node, obj[property], stack);
 
-               } else {
+      } else {
 
-               }
+      }
 
-           }
-       }
-  } // end iteterate function
+    }
+  }
+} // end iteterate function
 
 /*.......................................
           screen scraper function
 .......................................*/
-
 
 function sendGenericMessage(recipientId, messageText) {
   // To be expanded in later sections
@@ -594,4 +552,65 @@ var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPri
 */
 
 } // valid domainName
+}
+
+/* genPrReport */
+function genPrReport(daysBack) {
+  MongoClient.connect(mongodbUrl, (err, db) => {
+
+    assert.equal(null, err);
+
+pricingRequestSummary(db, () => {
+
+    db.close();
+  }); // CALL pricingRequestSummary
+}); // db connect
+
+// pricingRequestSummary FUNCTION
+var  pricingRequestSummary= (db, callback) => {
+
+var agr = [{$match: {'timestamp': {
+   $gte: (new Date((new Date()).getTime() - (daysBack * 24 * 60 * 60 * 1000)))}
+  }},
+  {'$group' : {
+    '_id' :
+    { "year": {'$year' : '$timestamp'},
+    "month": {'$month' : '$timestamp'},
+    "day": {'$dayOfMonth' : '$timestamp' },
+    "hour":{"$hour":"$timestamp"}
+  },
+    'totalrequests' : { '$sum' : 1 }
+  }
+  } ];
+var out = [];
+var cursor = db.collection('pricing_request').aggregate(agr).toArray( (err, res) => {
+
+ assert.equal(err, null);
+ console.log(JSON.stringify(res));
+ var obj = JSON.parse(JSON.stringify(res));
+obj.forEach(function(a) {
+
+ out.push( a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests );
+ sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour  + ": PR=" + a.totalrequests);
+});
+
+console.log(out);
+  // sendTextMessage(senderID, out);
+ callback(res);
+}); // aggregate
+}; // DB callback , pricingRequestSummary
+
+}
+
+
+/*************************
+getPricing
+**************************/
+function getPricing() {
+  sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
+  let itemPrice = userObj.price;
+  let itemWeight = userObj.weight
+  let shipping = userObj.shipping
+  let category = userObj.category;
+  sendTextMessage(senderID, getRegularAmmanPrice(itemPrice, itemWeight, shipping, category));
 }
