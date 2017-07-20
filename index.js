@@ -118,7 +118,7 @@ function receivedMessage(event) {
 
   if (messageText) {
     //  call function to determine what response to give based on messagae text
-    determineResponse(senderID,event);
+    determineResponse(event);
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
@@ -184,7 +184,7 @@ function handleEvent(senderID, event) {
 Function determineResponse
 *********************************/
 
-function determineResponse(senderID, event) {
+function determineResponse( event) {
   console.log("IN determineResponse:--->");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -251,7 +251,7 @@ function determineResponse(senderID, event) {
 
   // if message contains http, then it is a pricing request
   if (compareText.includes("http")) {
-    processHttpRequest();
+    processHttpRequest(event);
   } // end of if http
 } // end function determineResponse
 
@@ -376,7 +376,17 @@ function getRegularAmmanPrice(price,weight,shipping,category) {
 
 
 // processHttpRequest function
-function processHttpRequest() {
+function processHttpRequest(event) {
+  var senderID = event.sender.id;
+  var recipientID = event.recipient.id;
+  var timeOfMessage = event.timestamp;
+  var message = event.message;
+  var messageId = message.mid;
+
+  var messageText = message.text;
+  var messageAttachments = message.attachments;
+
+  let compareText = messageText.toLowerCase();
   let domainName =   parseDomain(compareText);
   console.log("<><><> Domain Name:",domainName.domain);
   if (typeof domainName != 'undefined' && domainName ) {
@@ -505,8 +515,9 @@ console.log("item HxLxW",itemlength,"x",itemwidth,"x",itemheight," itemWeight:",
         cat.forEach(function(a) {
       //  console.log(a);
         });
-  //  var msg = "Category:"+cat + " weight:"+chargableWt + " Price:"+ itemPrice
-      //  sendTextMessage(senderID,msg);
+        var msg = "Category:"+cat + " weight:"+chargableWt + " Price:"+ itemPrice + " available:" + available
+          + " MPN:" + MPN;
+        sendTextMessage(senderID,msg);
         }).catch(function(err) {
         console.log(err);
         });
