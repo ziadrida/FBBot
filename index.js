@@ -246,7 +246,7 @@ function determineResponse(senderID, event) {
        daysBack = userObj.days
      };
 
-    genPrReport(daysBack);
+    genPrReport(senderID,daysBack);
   } // if *report action
 
   // if message contains http, then it is a pricing request
@@ -559,7 +559,7 @@ var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPri
 }
 
 /* genPrReport */
-function genPrReport(daysBack) {
+function genPrReport(senderID,daysBack) {
   console.log("In genPrReport daysBack:",daysBack);
 
   MongoClient.connect(mongodbUrl, (err, db) => {
