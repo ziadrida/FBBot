@@ -240,7 +240,11 @@ function determineResponse(senderID, event) {
 
   if (typeof userObj != 'undefined' && userObj.action === "*report") {
     sendTextMessage(senderID, 'I understand that you want me to give you a PR report .. please wait');
-    let daysBack = userObj.days;
+    console.log("Report for days back:",userObj.days)
+    daysBack = 1;
+    if (userObj.days) {
+       daysBack = userObj.days
+     };
 
     genPrReport(daysBack);
   } // if *report action
@@ -556,52 +560,68 @@ var msg =  'Item Price was:' + ourPrice + " deal price:" + dealPrice + " ebayPri
 
 /* genPrReport */
 function genPrReport(daysBack) {
-  MongoClient.connect(mongodbUrl, (err, db) => {
+  console.log("In genPrReport daysBack:",daysBack);
 
+  MongoClient.connect(mongodbUrl, (err, db) => {
     assert.equal(null, err);
 
-pricingRequestSummary(db, () => {
+    pricingRequestSummary(db, () => {
 
-    db.close();
-  }); // CALL pricingRequestSummary
-}); // db connect
+      db.close();
+    }); // CALL pricingRequestSummary
+  }); // db connect
 
-// pricingRequestSummary FUNCTION
-var  pricingRequestSummary= (db, callback) => {
+  // pricingRequestSummary FUNCTION
+  var pricingRequestSummary = (db, callback) => {
+    console.log(" in pricingRequestSummary ");
+    var agr = [{
+        $match: {
+          'timestamp': {
+            $gte: (new Date((new Date()).getTime() - (daysBack * 24 * 60 * 60 * 1000)))
+          }
+        }
+      },
+      {
+        '$group': {
+          '_id': {
+            "year": {
+              '$year': '$timestamp'
+            },
+            "month": {
+              '$month': '$timestamp'
+            },
+            "day": {
+              '$dayOfMonth': '$timestamp'
+            },
+            "hour": {
+              "$hour": "$timestamp"
+            }
+          },
+          'totalrequests': {
+            '$sum': 1
+          }
+        }
+      }
+    ];
+    var out = [];
+    var cursor = db.collection('pricing_request').aggregate(agr).toArray((err, res) => {
 
-var agr = [{$match: {'timestamp': {
-   $gte: (new Date((new Date()).getTime() - (daysBack * 24 * 60 * 60 * 1000)))}
-  }},
-  {'$group' : {
-    '_id' :
-    { "year": {'$year' : '$timestamp'},
-    "month": {'$month' : '$timestamp'},
-    "day": {'$dayOfMonth' : '$timestamp' },
-    "hour":{"$hour":"$timestamp"}
-  },
-    'totalrequests' : { '$sum' : 1 }
-  }
-  } ];
-var out = [];
-var cursor = db.collection('pricing_request').aggregate(agr).toArray( (err, res) => {
+      assert.equal(err, null);
+      console.log(JSON.stringify(res));
+      var obj = JSON.parse(JSON.stringify(res));
+      obj.forEach(function(a) {
 
- assert.equal(err, null);
- console.log(JSON.stringify(res));
- var obj = JSON.parse(JSON.stringify(res));
-obj.forEach(function(a) {
+        out.push(a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
+        sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
+      });
 
- out.push( a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests );
- sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour  + ": PR=" + a.totalrequests);
-});
+      console.log(out);
+      // sendTextMessage(senderID, out);
+      callback(res);
+    }); // aggregate
+  }; // DB callback , pricingRequestSummary
 
-console.log(out);
-  // sendTextMessage(senderID, out);
- callback(res);
-}); // aggregate
-}; // DB callback , pricingRequestSummary
-
-}
-
+} //end function genPrReport
 
 /*************************
 getPricing
