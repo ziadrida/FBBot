@@ -402,20 +402,19 @@ function processHttpRequest(event) {
 
   let compareText = messageText.toLowerCase();
 
-  let domainName =   parseDomain(compareText);
-  if (donameName) {
-    console.log("<><><> Domain Name:",domainName.domain);
-  }
+
 
   // get user public profile
   var resp = getUserPublicInfo(senderID);
   if (resp) {
-   var res = JSON.parse(resp);
-    console.log("resp first_name:",res.first_name);
-}
+      console.log("resp first_name:",res.first_name);
+      console.log("resp last_name:",res.last_name);
+  }
 
+  let domainName =   parseDomain(compareText);
 
   if (typeof domainName != 'undefined' && domainName ) {
+    console.log("<><><> Domain Name:",domainName.domain);
     // valid domainName
         // insert all http request in the database
         MongoClient.connect(mongodbUrl, function(err, db) {
