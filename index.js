@@ -672,9 +672,9 @@ function getPricing() {
 function getUserPublicInfo(fbId){
 var data ;
  console.log('In getUserPublicInfo - fbId:',fbId);
- var url = 'https://graph.facebook.com/v2.6/' + function getUserPublicInfo(fbId){
+ var url = 'https://graph.facebook.com/v2.6/' + fbId;
+var qs = {fields:'first_name,last_name',access_token:token};
 
-var qs = {fields:'first_name,last_name',access_token:token}
 request({
 
           url: url,
@@ -687,8 +687,9 @@ request({
           } else if (response.body.error) {
               console.log('Error: ', response.body.error);
           }else{
-            console.log("**** body:",body);
             console.log("**** response:",response);
+            console.log("**** body:",body);
+
               data = JSON.parse(body);
               console.log("******* first_name:",data.first_name);
               return data;
