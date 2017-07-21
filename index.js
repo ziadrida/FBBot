@@ -337,7 +337,7 @@ function sendTextMessage(recipientId, messageText) {
 GET https://graph.facebook.com/v2.6/<USER_ID>?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=<PAGE_ACCESS_TOKEN>
 Result:
 {
-  first_name: 'Philipp',
+  : 'Philipp',
   last_name: 'Holly',
   profile_pic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/13177091_10209330090191529_6260308789231765xx_n.jpg?oh=83704b11843eef0e2b590943532e3cxx&oe=57AA83xx',
   ...
@@ -406,7 +406,8 @@ function processHttpRequest(event) {
 
   // get user public profile
   var resp = getUserPublicInfo(recipientID);
-  console.log("resp first_name:",resp.first_name);
+  var res = JSON.parse(resp);
+  console.log("resp first_name:",res.first_name);
 
   if (typeof domainName != 'undefined' && domainName ) {
     // valid domainName
@@ -666,10 +667,11 @@ function getPricing() {
 }
 
 function getUserPublicInfo(recipientId){
-var name;
+var resp ;
  console.log('In getUserPublicInfo');
 request({
-          url: 'https://graph.facebook.com/v2.6/'+ recipientId +'?fields=first_name',
+
+          url: 'https://graph.facebook.com/v2.6/'+ recipientId +'?fields=first_name,last_name,locale,timezone',
           qs: {access_token: access},
           method: 'GET'
       }, function(error, response, body) {
@@ -678,7 +680,9 @@ request({
           } else if (response.body.error) {
               console.log('Error: ', response.body.error);
           }else{
-              return JSON.parse(body);
+              resp = JSON.parse(body);
+              console.log("******* first_name:",resp.first_name);
+              return resp;
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
           }
       });
