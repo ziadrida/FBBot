@@ -401,8 +401,11 @@ function processHttpRequest(event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
+
   let domainName =   parseDomain(compareText);
-  console.log("<><><> Domain Name:",domainName.domain);
+  if (donameName) {
+    console.log("<><><> Domain Name:",domainName.domain);
+  }
 
   // get user public profile
   var resp = getUserPublicInfo(senderID);
@@ -420,7 +423,7 @@ function processHttpRequest(event) {
           insertMesssageText(db, function() {
               db.close();
             });
-        });
+        }); // connect
 
         // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
         var insertMesssageText = function(db, callback) {
@@ -437,7 +440,7 @@ function processHttpRequest(event) {
             console.log("Inserted a document into the pricing_request collection.");
             callback();
           });
-        };
+        };  // insertMesssageText
 
 
   // check if this is a price request from Amazon or it is an Amazon product ID
