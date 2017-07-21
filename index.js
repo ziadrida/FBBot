@@ -671,7 +671,7 @@ function getPricing() {
 
 function getUserPublicInfo(fbId){
 var resp ;
- console.log('In getUserPublicInfo - fbId':,fbId;
+ console.log('In getUserPublicInfo - fbId:',fbId);
 request({
           url: 'https://graph.facebook.com/v2.6/'+ fbId +'?fields=first_name,last_name,locale,timezone',
           qs: {access_token: access},
