@@ -333,7 +333,7 @@ function sendTextMessage(recipientId, messageText) {
 
 
 /**********
-// get user profile from user id
+// get user *** body from user id
 GET https://graph.facebook.com/v2.6/<USER_ID>?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=<PAGE_ACCESS_TOKEN>
 Result:
 {
@@ -675,24 +675,28 @@ function getUserPublicInfo(fbId){
 var data ;
  console.log('In getUserPublicInfo - fbId:',fbId);
  var url = 'https://graph.facebook.com/v2.6/' + fbId;
-var qs = {fields:'first_name,last_name',access_token:my_access_token};
+var qs = {fields:'first_name,last_name,gender,locale,timezone',access_token:my_access_token};
 
 request({
 
           url: url,
           method: 'GET',
-          qs: qs
+          qs: qs,
+          json: true
       }, function(error, response, body) {
           if (error) {
               console.log('Error sending message: ', error);
           } else if (response.body.error) {
               console.log('Error: ', response.body.error);
           }else{
-            console.log("**** response:",response);
+            //  console.log("**** response:",response);
             console.log("**** body:",body);
 
-              data = JSON.parse(JSON.stringify(body));
+              data = JSON.parse( JSON.stringify(body) );
+                console.log("******* data:",data);
               console.log("******* first_name:",data.first_name);
+                console.log("******* last_name:",data.last_name);
+                  console.log("******* gender:",data.gender);
               return data;
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
           }
