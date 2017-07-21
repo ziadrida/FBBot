@@ -670,23 +670,28 @@ function getPricing() {
 }
 
 function getUserPublicInfo(fbId){
-var resp ;
+var data ;
  console.log('In getUserPublicInfo - fbId:',fbId);
+ var url = 'https://graph.facebook.com/v2.6/' + function getUserPublicInfo(fbId){
+
+var qs = {fields:'first_name,last_name',access_token:token}
 request({
-          url: 'https://graph.facebook.com/v2.6/'+ fbId +'?fields=first_name,last_name,locale,timezone',
-          qs: {access_token: access},
-          method: 'GET'
+
+          url: url,
+          method: 'GET',
+          qs: qs,
+          json: true
       }, function(error, response, body) {
           if (error) {
               console.log('Error sending message: ', error);
           } else if (response.body.error) {
               console.log('Error: ', response.body.error);
           }else{
-            console.log("body:",body);
-            console.log("response:",response);
-              resp = JSON.parse(JSON.stringify(body));
-              console.log("******* first_name:",resp.first_name);
-              return resp;
+            console.log("**** body:",body);
+            console.log("**** response:",response);
+              data = JSON.parse(body);
+              console.log("******* first_name:",data.first_name);
+              return data;
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
           }
       });
