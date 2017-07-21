@@ -681,8 +681,7 @@ request({
 
           url: url,
           method: 'GET',
-          qs: qs,
-          json: true
+          qs: qs
       }, function(error, response, body) {
           if (error) {
               console.log('Error sending message: ', error);
@@ -692,7 +691,7 @@ request({
             console.log("**** response:",response);
             console.log("**** body:",body);
 
-              data = JSON.parse(body);
+              data = JSON.parse(JSON.stringify(body));
               console.log("******* first_name:",data.first_name);
               return data;
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
