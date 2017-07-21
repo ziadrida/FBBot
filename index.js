@@ -38,6 +38,7 @@ app.get('/', function (req, res) {
 THIS IS THE CALL FROM FACEBOOK
 *************************************/
 app.get('/webhook/', function(req, res){
+  console.log("****** webhook",req);
   if(req.query['hub.verify_token'] === token) {
   res.send (req.query['hub.challenge'])
 }
