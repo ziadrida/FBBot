@@ -680,7 +680,9 @@ request({
           } else if (response.body.error) {
               console.log('Error: ', response.body.error);
           }else{
-              resp = JSON.parse(body);
+            console.log("body:",body);
+            console.log("response:",response);
+              resp = JSON.parse(JSON.stringify(body));
               console.log("******* first_name:",resp.first_name);
               return resp;
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
