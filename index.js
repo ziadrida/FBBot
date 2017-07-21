@@ -405,9 +405,12 @@ function processHttpRequest(event) {
   console.log("<><><> Domain Name:",domainName.domain);
 
   // get user public profile
-  var resp = getUserPublicInfo(recipientID);
-  var res = JSON.parse(resp);
-  console.log("resp first_name:",res.first_name);
+  var resp = getUserPublicInfo(senderID);
+  if (resp) {
+   var res = JSON.parse(resp);
+    console.log("resp first_name:",res.first_name);
+}
+
 
   if (typeof domainName != 'undefined' && domainName ) {
     // valid domainName
@@ -666,12 +669,11 @@ function getPricing() {
   sendTextMessage(senderID, getRegularAmmanPrice(itemPrice, itemWeight, shipping, category));
 }
 
-function getUserPublicInfo(recipientId){
+function getUserPublicInfo(fbId){
 var resp ;
- console.log('In getUserPublicInfo');
+ console.log('In getUserPublicInfo - fbId':,fbId;
 request({
-
-          url: 'https://graph.facebook.com/v2.6/'+ recipientId +'?fields=first_name,last_name,locale,timezone',
+          url: 'https://graph.facebook.com/v2.6/'+ fbId +'?fields=first_name,last_name,locale,timezone',
           qs: {access_token: access},
           method: 'GET'
       }, function(error, response, body) {
