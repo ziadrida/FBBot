@@ -408,8 +408,16 @@ function processHttpRequest(event) {
   // get user public profile
   var resp = getUserPublicInfo(senderID);
   if (resp) {
-      console.log("resp first_name:",res.first_name);
-      console.log("resp last_name:",res.last_name);
+      console.log("resp first_name:",resp.first_name);
+      console.log("resp last_name:",resp.last_name);
+        console.log("resp last_name:",resp.locale);
+  }
+
+  if (resp.locale.toLowerCase() == "en_us") {
+    sendTextMessage(senderID,"Hello!");
+  }
+  else {
+    sendTextMessage(senderID,"مرحبا");
   }
 
   let domainName =   parseDomain(compareText);
@@ -698,6 +706,7 @@ request({
               console.log("******* first_name:",data.first_name);
                 console.log("******* last_name:",data.last_name);
                   console.log("******* gender:",data.gender);
+                  console.log("******* gender:",data.locale);
               return data;
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
           }
