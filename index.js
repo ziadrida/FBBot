@@ -407,18 +407,19 @@ function processHttpRequest(event) {
 
   // get user public profile
   var resp = getUserPublicInfo(senderID);
-  if (resp) {
+  if (resp != 'undefined' && resp) {
       console.log("resp first_name:",resp.first_name);
       console.log("resp last_name:",resp.last_name);
-        console.log("resp last_name:",resp.locale);
+      console.log("resp last_name:",resp.locale);
+      if (resp.locale.toLowerCase() == "en_us") {
+          sendTextMessage(senderID,"Hello!");
+      }
+        else {
+          sendTextMessage(senderID,"مرحبا");
+      }
   }
 
-  if (resp.locale.toLowerCase() == "en_us") {
-    sendTextMessage(senderID,"Hello!");
-  }
-  else {
-    sendTextMessage(senderID,"مرحبا");
-  }
+
 
   let domainName =   parseDomain(compareText);
 
@@ -661,6 +662,7 @@ function genPrReport(senderID,daysBack) {
       });
 
       console.log(out);
+
       // sendTextMessage(senderID, out);
       callback(res);
     }); // aggregate
@@ -680,6 +682,7 @@ function getPricing() {
   sendTextMessage(senderID, getRegularAmmanPrice(itemPrice, itemWeight, shipping, category));
 }
 
+
 function getUserPublicInfo(fbId){
 var data ;
  console.log('In getUserPublicInfo - fbId:',fbId);
@@ -694,9 +697,9 @@ request({
           json: true
       }, function(error, response, body) {
           if (error) {
-              console.log('Error sending message: ', error);
+              console.log('Error getUserPublicInfo: ', error);
           } else if (response.body.error) {
-              console.log('Error: ', response.body.error);
+              console.log('Body Error getUserPublicInfo: ', response.body.error);
           }else{
             //  console.log("**** response:",response);
             console.log("**** body:",body);
@@ -706,7 +709,7 @@ request({
               console.log("******* first_name:",data.first_name);
                 console.log("******* last_name:",data.last_name);
                   console.log("******* gender:",data.gender);
-                  console.log("******* gender:",data.locale);
+                  console.log("******* locale:",data.locale);
               return data;
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
           }
