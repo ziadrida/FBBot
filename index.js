@@ -406,19 +406,19 @@ function processHttpRequest(event) {
 
 
   // get user public profile
-  getUserPublicInfo(senderID,function(resp) {;
-  console.log("resp:",resp);
+  getUserPublicInfo(senderID, function(resp) {
+    console.log("resp:", resp);
 
-  if (typeof resp != 'undefined' && resp) {
-      console.log("resp first_name:",resp.first_name);
-      console.log("resp last_name:",resp.last_name);
-      console.log("resp last_name:",resp.locale);
-      if (  resp.locale.toLowerCase() == "en_us") {
-          sendTextMessage(senderID,"Hello!");
+    if (typeof resp != 'undefined' && resp) {
+      console.log("resp first_name:", resp.first_name);
+      console.log("resp last_name:", resp.last_name);
+      console.log("resp last_name:", resp.locale);
+      if (resp.locale.toLowerCase() == "en_us") {
+        sendTextMesssage(senderID, "Hello!");
+      } else {
+        sendTextMessage(senderID, "مرحبا");
       }
-        else {
-          sendTextMessage(senderID,"مرحبا");
-      }
+    }
   });
 
 
