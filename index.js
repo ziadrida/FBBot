@@ -407,7 +407,9 @@ function processHttpRequest(event) {
 
   // get user public profile
   var resp = getUserPublicInfo(senderID);
-  if (resp != 'undefined' && resp) {
+  console.log("resp:",resp);
+
+  if (typeof resp != 'undefined' && resp) {
       console.log("resp first_name:",resp.first_name);
       console.log("resp last_name:",resp.last_name);
       console.log("resp last_name:",resp.locale);
