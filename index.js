@@ -406,7 +406,7 @@ function processHttpRequest(event) {
 
 
   // get user public profile
-  var resp = getUserPublicInfo(senderID);
+  var resp = getUserPublicInfo(senderID,function(resp));
   console.log("resp:",resp);
 
   if (typeof resp != 'undefined' && resp) {
@@ -712,7 +712,7 @@ request({
                 console.log("******* last_name:",data.last_name);
                   console.log("******* gender:",data.gender);
                   console.log("******* locale:",data.locale);
-              return data;
+              callback(data);
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
           }
       });
