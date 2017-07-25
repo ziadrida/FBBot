@@ -406,7 +406,7 @@ function processHttpRequest(event) {
 
 
   // get user public profile
-  var resp = getUserPublicInfo(senderID,function(resp));
+  getUserPublicInfo(senderID,function(resp) {;
   console.log("resp:",resp);
 
   if (typeof resp != 'undefined' && resp) {
@@ -419,7 +419,7 @@ function processHttpRequest(event) {
         else {
           sendTextMessage(senderID,"مرحبا");
       }
-  }
+  });
 
 
 
@@ -685,7 +685,7 @@ function getPricing() {
 }
 
 
-function getUserPublicInfo(fbId){
+function getUserPublicInfo(fbId,callback){
 var data ;
  console.log('In getUserPublicInfo - fbId:',fbId);
  var url = 'https://graph.facebook.com/v2.6/' + fbId;
@@ -699,9 +699,11 @@ request({
           json: true
       }, function(error, response, body) {
           if (error) {
+            callback(null);
               console.log('Error getUserPublicInfo: ', error);
           } else if (response.body.error) {
               console.log('Body Error getUserPublicInfo: ', response.body.error);
+              callback(null);
           }else{
             //  console.log("**** response:",response);
             console.log("**** body:",body);
