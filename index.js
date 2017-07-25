@@ -411,7 +411,7 @@ function processHttpRequest(event) {
       console.log("resp first_name:",resp.first_name);
       console.log("resp last_name:",resp.last_name);
       console.log("resp last_name:",resp.locale);
-      if (resp.locale.toLowerCase() == "en_us") {
+      if (  resp.locale.toLowerCase() == "en_us") {
           sendTextMessage(senderID,"Hello!");
       }
         else {
