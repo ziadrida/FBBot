@@ -346,8 +346,8 @@ function determineResponse( event,sessionId) {
      console.log ("Not a greeting ************ ");
    }
 
-   const greeting = firstEntity(message.nlp, 'bye');
-   if (greeting && greeting.confidence > 0.8) {
+   const bye = firstEntity(message.nlp, 'bye');
+   if (bye && bye.confidence > 0.8) {
      sendTextMessage(senderID,'see you soon!');
    } else {
      console.log ("Not a bye  ************ ");
