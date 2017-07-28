@@ -87,6 +87,8 @@ const actions = {
   // See https://wit.ai/docs/quickstart
 };
 
+var logger = require('logger');
+
 // Setting up our bot
 const wit = new Wit({
   accessToken: wit_access_token,
