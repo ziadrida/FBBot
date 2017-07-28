@@ -29,14 +29,79 @@ app.set('port', (process.env.PORT || 5000))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
+
+// Wit.ai bot specific code
+
+// This will contain all user sessions.
+// Each session has an entry:
+// sessionId -> {fbid: facebookUserId, context: sessionState}
+const sessions = {};
+
+const findOrCreateSession = (fbid) => {
+  let sessionId;
+  // Let's see if we already have a session for the user fbid
+  Object.keys(sessions).forEach(k => {
+    if (sessions[k].fbid === fbid) {
+      // Yep, got it!
+      sessionId = k;
+    }
+  });
+  if (!sessionId) {
+    // No session found for user fbid, let's create a new one
+    sessionId = new Date().toISOString();
+    sessions[sessionId] = {fbid: fbid, context: {}};
+  }
+  return sessionId;
+};
+
+
+// Our bot actions
+const actions = {
+  send({sessionId}, {text}) {
+    // Our bot has something to say!
+    // Let's retrieve the Facebook user whose session belongs to
+    const recipientId = sessions[sessionId].fbid;
+    if (recipientId) {
+      // Yay, we found our recipient!
+      // Let's forward our bot response to her.
+      // We return a promise to let our bot know when we're done sending
+      return fbMessage(recipientId, text)
+      .then(() => null)
+      .catch((err) => {
+        console.error(
+          'Oops! An error occurred while forwarding the response to',
+          recipientId,
+          ':',
+          err.stack || err
+        );
+      });
+    } else {
+      console.error('Oops! Couldn\'t find user for session:', sessionId);
+      // Giving the wheel back to our bot
+      return Promise.resolve()
+    }
+  },
+  // You should implement your custom actions here
+  // See https://wit.ai/docs/quickstart
+};
+
+// Setting up our bot
+const wit = new Wit({
+  accessToken: WIT_TOKEN,
+  actions,
+  logger: new log.Logger(log.INFO)
+});
+
+
+// test webpage CALL
 app.get('/', function (req, res) {
   res.send ('Hello - It is now working!')
 })
 
-
 /***********************************
 THIS IS THE CALL FROM FACEBOOK
 *************************************/
+
 app.get('/webhook/', function(req, res){
   console.log("****** webhook",req);
   if(req.query['hub.verify_token'] === token) {
@@ -80,6 +145,11 @@ app.post('/webhook', function (req, res) {
   }
 });
 
+
+
+/*****************************************************
+handle message recevied from facebook
+***************************************************/
 function receivedMessage(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -89,12 +159,18 @@ function receivedMessage(event) {
 
   console.log("==>>> Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
+
+    // We retrieve the user's current session, or create one if it doesn't exist
+              // This is needed for our bot to figure out the conversation history
+              const sessionId = findOrCreateSession(senderID);
+
     if (typeof event == 'undefined' ) {
           console.log(" EVENT is Undefined <><>")
     } else {
         console.log("----------=> EVENT STRUCTURE:")
         console.log(JSON.stringify(event));
     }
+
 
   if (typeof message == 'undefined') {
     console.log('Message is undefined =====><><>')
@@ -254,6 +330,37 @@ function determineResponse( event) {
   if (compareText.includes("http")) {
     processHttpRequest(event);
   } // end of if http
+
+
+// get wit.ai try to understand what the user wants
+// Let's forward the message to the Wit.ai Bot Engine
+            // This will run all actions until our bot has nothing left to do
+            wit.runActions(
+              sessionId, // the user's current session
+              text, // the user's message
+              sessions[sessionId].context // the user's current session state
+            ).then((context) => {
+              // Our bot did everything it has to do.
+              // Now it's waiting for further messages to proceed.
+              console.log('Waiting for next user messages');
+
+              // Based on the session state, you might want to reset the session.
+              // This depends heavily on the business logic of your bot.
+              // Example:
+              // if (context['done']) {
+              //   delete sessions[sessionId];
+              // }
+
+              // Updating the user's current session state
+              sessions[sessionId].context = context;
+            })
+            .catch((err) => {
+              console.error('Oops! Got an error from Wit: ', err.stack || err);
+            })
+
+
+
+
 } // end function determineResponse
 
 // MUST PASS ROOT TO BrowseNodes
@@ -413,10 +520,11 @@ function processHttpRequest(event) {
       console.log("resp first_name:", resp.first_name);
       console.log("resp last_name:", resp.last_name);
       console.log("resp last_name:", resp.locale);
+        console.log("resp last_name:", resp.gender);
       if (resp.locale && resp.locale.toLowerCase().includes("en")) {
-        sendTextMessage(senderID, "Hello!");
+        sendTextMessage(senderID, "Hello ",resp.first_name);
       } else {
-        sendTextMessage(senderID, "مرحبا");
+        sendTextMessage(senderID, resp.first_name,  " مرحبا ");
       }
     }
   });
