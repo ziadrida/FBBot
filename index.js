@@ -1,4 +1,5 @@
 
+var Wit = require("node-wit")
 // FB api
 //var FB = require('fb');
   //  fb = new FB.Facebook(options);
@@ -22,13 +23,14 @@ var amazon = require('amazon-product-api');
 
 // get token from the environment
 const token = process.env.FB_VERIFY_TOKEN
-const my_access_token = process.env.FB_ACCESS_TOKEN
-
+const fb_access_token = process.env.FB_ACCESS_TOKEN
+const wit_access_token = process.env.WIT_TOKEN
 app.set('port', (process.env.PORT || 5000))
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
+console.log("WIT_TOKEN:",wit_access_token);
 
 // Wit.ai bot specific code
 
@@ -455,7 +457,7 @@ Result:
 function callSendAPI(messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: my_access_token },
+    qs: { access_token: fb_access_token },
 
     method: 'POST',
     json: messageData
@@ -797,7 +799,7 @@ function getUserPublicInfo(fbId,callback){
 var data ;
  console.log('In getUserPublicInfo - fbId:',fbId);
  var url = 'https://graph.facebook.com/v2.6/' + fbId;
-var qs = {fields:'first_name,last_name,gender,locale,timezone',access_token:my_access_token};
+var qs = {fields:'first_name,last_name,gender,locale,timezone',access_token:fb_access_token};
 
 request({
 
