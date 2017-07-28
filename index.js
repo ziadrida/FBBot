@@ -340,29 +340,30 @@ function determineResponse( event,sessionId) {
 
   // check greeting is here and is confident
    const greeting = firstEntity(message.nlp, 'greetings');
-   if (greeting && greeting.confidence > 0.8) {
+   if (greeting && greeting.confidence > 0.9) {
      sendTextMessage(senderID,'Hi there!');
    } else {
      console.log ("Not a greeting ************ ");
    }
 
+   const greetings_ar = firstEntity(message.nlp, 'greetings_ar');
+   if (greetings_ar && greetings_ar.confidence > 0.9) {
+     if (greetings_ar.value == 'islamic') {
+        sendTextMessage(senderID,'وعليكم السلام');
+     } else {
+       sendTextMessage(senderID,'اهلا وسهلا');
+   }
+   } else {
+     console.log ("Not a greetings_ar  ************ ");
+   }
+
    const bye = firstEntity(message.nlp, 'bye');
-   if (bye && bye.confidence > 0.8) {
+   if (bye && bye.confidence > 0.9) {
      sendTextMessage(senderID,'see you soon!');
    } else {
      console.log ("Not a bye  ************ ");
    }
 
-   const greetings_ar = firstEntity(message.nlp, 'greetings_ar');
-   if (greetings_ar && greetings_ar.confidence > 0.8) {
-     if (greetings_ar.value == 'islamic') {
-        sendTextMessage(senderID,'وعليكم السلام');
-     } else {
-     sendTextMessage(senderID,'اهلا وسهلا');
-   }
-   } else {
-     console.log ("Not a greetings_ar  ************ ");
-   }
 
 
 
