@@ -24,7 +24,7 @@ var amazon = require('amazon-product-api');
 // get token from the environment
 const token = process.env.FB_VERIFY_TOKEN
 const fb_access_token = process.env.FB_ACCESS_TOKEN
-const wit_access_token = process.env.WIT_TOKEN
+const wit_access_token = process.env.WIT_ACCESS_TOKEN
 app.set('port', (process.env.PORT || 5000))
 
 app.use(bodyParser.urlencoded({extended: false}))
@@ -234,7 +234,7 @@ function handleEvent(senderID, event) {
               insertOrderRequest(db, function() {
                   db.close();
                 });
-            }); 
+            });
 
             // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
             var insertOrderRequest = function(db, callback) {
