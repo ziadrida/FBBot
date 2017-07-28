@@ -353,6 +353,13 @@ function determineResponse( event,sessionId) {
      console.log ("Not a bye  ************ ");
    }
 
+   const greetings_ar = firstEntity(message.nlp, 'greetings_ar');
+   if (bye && greetings_ar.confidence > 0.8) {
+     sendTextMessage(senderID,'اهلا وسهلا');
+   } else {
+     console.log ("Not a greetings_ar  ************ ");
+   }
+
 
 
 
