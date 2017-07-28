@@ -1,5 +1,5 @@
 
-var Wit = require("node-wit")
+
 // FB api
 //var FB = require('fb');
   //  fb = new FB.Facebook(options);
@@ -87,12 +87,16 @@ const actions = {
   // See https://wit.ai/docs/quickstart
 };
 
-var logger = require('logger');
-
+// var logger = require('logger');
+// var Wit = require("node-wit").Wit
+//const Logger = require('node-wit').Logger;
+//const levels = require('node-wit').logLevels;
+const { Wit, log } = require('node-wit')
 // Setting up our bot
 const wit = new Wit({
   accessToken: wit_access_token,
-  actions //,  logger: new log.Logger(log.INFO)
+  actions ,
+  logger: new log.Logger(log.INFO)
 });
 
 
