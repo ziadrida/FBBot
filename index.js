@@ -135,10 +135,10 @@ app.post('/webhook', function (req, res) {
            receivedMessage(event);
         } else if (event.postback) {
           // postback
-            console.log("Webhook received postback event: ");
+            console.log("Webhook received postback event");
            receivedMessage(event);
         } else {
-          console.log("Webhook received unknown event: ", event);
+          console.log("Webhook received unknown event: "); // event.message);
         }
       });
     });
