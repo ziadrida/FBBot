@@ -366,7 +366,7 @@ function determineResponse( event,sessionId) {
 
    const company_location = firstEntity(message.nlp, 'company_location');
    if (company_location && company_location.confidence > 0.9) {
-     if (company_location.value = 'aqaba') {
+     if (company_location.value == 'aqaba location') {
        sendTextMessage(senderID,'inside Dream Mall');
    } else {
         sendTextMessage(senderID,'86 Gardens street ');
