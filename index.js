@@ -92,8 +92,7 @@ var logger = require('logger');
 // Setting up our bot
 const wit = new Wit({
   accessToken: wit_access_token,
-  actions,
-  logger: new log.Logger(log.INFO)
+  actions //,  logger: new log.Logger(log.INFO)
 });
 
 
