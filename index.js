@@ -339,7 +339,7 @@ function determineResponse( event,sessionId) {
   } // end of if http
 
   // check greeting is here and is confident
-   const greeting = firstEntity(message.nlp, 'greeting');
+   const greeting = firstEntity(message.nlp, 'greetings');
    if (greeting && greeting.confidence > 0.8) {
      sendTextMessage(senderID,'Hi there!');
    } else {
