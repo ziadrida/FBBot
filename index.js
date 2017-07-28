@@ -354,8 +354,12 @@ function determineResponse( event,sessionId) {
    }
 
    const greetings_ar = firstEntity(message.nlp, 'greetings_ar');
-   if (bye && greetings_ar.confidence > 0.8) {
+   if (greetings_ar && greetings_ar.confidence > 0.8) {
+     if (greetings_ar.value == 'islamic') {
+        sendTextMessage(senderID,'وعليكم السلام');
+     } else {
      sendTextMessage(senderID,'اهلا وسهلا');
+   }
    } else {
      console.log ("Not a greetings_ar  ************ ");
    }
