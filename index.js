@@ -168,8 +168,8 @@ function receivedMessage(event) {
     senderID, recipientID, timeOfMessage);
 
     // We retrieve the user's current session, or create one if it doesn't exist
-              // This is needed for our bot to figure out the conversation history
-              const sessionId = findOrCreateSession(senderID);
+    // This is needed for our bot to figure out the conversation history
+    const sessionId = findOrCreateSession(senderID);
 
     if (typeof event == 'undefined' ) {
           console.log(" EVENT is Undefined <><>")
@@ -202,7 +202,7 @@ function receivedMessage(event) {
 
   if (messageText) {
     //  call function to determine what response to give based on messagae text
-    determineResponse(event);
+    determineResponse(event,sessionId);
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
@@ -268,7 +268,7 @@ function handleEvent(senderID, event) {
 Function determineResponse
 *********************************/
 
-function determineResponse( event) {
+function determineResponse( event,sessionId) {
   console.log("IN determineResponse:--->");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -344,7 +344,7 @@ function determineResponse( event) {
             // This will run all actions until our bot has nothing left to do
             wit.runActions(
               sessionId, // the user's current session
-              text, // the user's message
+              messageText, // the user's message
               sessions[sessionId].context // the user's current session state
             ).then((context) => {
               // Our bot did everything it has to do.
