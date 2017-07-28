@@ -338,37 +338,25 @@ function determineResponse( event,sessionId) {
     processHttpRequest(event);
   } // end of if http
 
-
-// get wit.ai try to understand what the user wants
-// Let's forward the message to the Wit.ai Bot Engine
-            // This will run all actions until our bot has nothing left to do
-            wit.runActions(
-              sessionId, // the user's current session
-              messageText, // the user's message
-              sessions[sessionId].context // the user's current session state
-            ).then((context) => {
-              // Our bot did everything it has to do.
-              // Now it's waiting for further messages to proceed.
-              console.log('Waiting for next user messages');
-
-              // Based on the session state, you might want to reset the session.
-              // This depends heavily on the business logic of your bot.
-              // Example:
-              // if (context['done']) {
-              //   delete sessions[sessionId];
-              // }
-
-              // Updating the user's current session state
-              sessions[sessionId].context = context;
-            })
-            .catch((err) => {
-              console.error('Oops! Got an error from Wit: ', err.stack || err);
-            })
+  // check greeting is here and is confident
+   const greeting = firstEntity(message.nlp, 'greeting');
+   if (greeting && greeting.confidence > 0.8) {
+     sendTextMessage(senderID,'Hi there!');
+   } else {
+     console.log ("Not a greeting ************ ");
+   }
 
 
 
 
 } // end function determineResponse
+
+function firstEntity(nlp, name) {
+  console.log("In firstEntity");
+  console.log("NLP:",nlp);
+  console.log("***** <><>return from firstEntity: ",nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0]);
+  return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
+}
 
 // MUST PASS ROOT TO BrowseNodes
 function iterate(node, obj, stack) {
