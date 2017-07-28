@@ -366,10 +366,11 @@ function determineResponse( event,sessionId) {
 
    const company_location = firstEntity(message.nlp, 'company_location');
    if (company_location && company_location.confidence > 0.9) {
-     if (company_location.value = 'amman') {
-     sendTextMessage(senderID,'86 Gardens street ');
+     if (company_location.value = 'aqaba') {
+       sendTextMessage(senderID,'inside Dream Mall');
    } else {
-        sendTextMessage(senderID,'inside Dream Mall');
+        sendTextMessage(senderID,'86 Gardens street ');
+
    }
    } else {
      console.log ("Not a company_location  ************ ");
