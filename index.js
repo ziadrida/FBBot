@@ -234,7 +234,7 @@ function handleEvent(senderID, event) {
               insertOrderRequest(db, function() {
                   db.close();
                 });
-            });
+            }); 
 
             // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
             var insertOrderRequest = function(db, callback) {
