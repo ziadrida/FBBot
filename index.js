@@ -387,7 +387,7 @@ function determineResponse( event,sessionId) {
 if (message.nlp) {
   var entities = message.nlp;
 
-  queryWit(message.text, N).then(({entities})  => {
+  queryWit(message.text, N).then((entities)  => {
     console.log("** entities:",entities);
     const greet = firstEntity(entities, 'greetings');
     console.log("*** greet:",greet);
