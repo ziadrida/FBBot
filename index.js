@@ -388,7 +388,7 @@ function determineResponse( event,sessionId) {
    if (greeting && greeting.confidence > 0.75) {
      sendTextMessage(senderID,'Hi there!');
    } else {
-     console.log ("Not a greeting ************ ");
+     console.log ("Not a greeting ************ greeting:",greeting);
    }
 
 
@@ -583,6 +583,11 @@ function validateSamples(samples) {
 function firstEntity(entities, name) {
   console.log("in firstEntity entities:",entities);
   console.log("in firstEntity name:",name);
+  try {
+    console.log("first entity:",entities[name][0]);
+  } catch(e) {
+     console.log("error:",e);
+}
   return entities &&
     entities[name] &&
     Array.isArray(entities[name]) &&
