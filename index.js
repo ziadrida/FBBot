@@ -466,7 +466,14 @@ function determineResponse( event,sessionId) {
 
 } // end function determineResponse
 
-
+const firebase = require('firebase');
+firebase.initializeApp({
+  // apiKey: "AIza....",                             // Auth / General Use
+//  authDomain: "YOUR_APP.firebaseapp.com",         // Auth with popup/redirect
+  databaseURL: "https://fbbot-aaa15.firebaseio.com" // Realtime Database
+//  storageBucket: "YOUR_APP.appspot.com",          // Storage
+  // messagingSenderId: "123456789"                  // Cloud Messaging
+});
 
 function handleMessage(question, readline) {
   return queryWit(question, N).then(({entities}) => {
