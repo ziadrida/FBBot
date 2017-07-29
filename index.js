@@ -340,14 +340,14 @@ function determineResponse( event,sessionId) {
 
   // check greeting is here and is confident
    const greeting = firstEntity(message.nlp, 'greetings');
-   if (greeting && greeting.confidence > 0.9) {
+   if (greeting && greeting.confidence > 0.75) {
      sendTextMessage(senderID,'Hi there!');
    } else {
      console.log ("Not a greeting ************ ");
    }
 
    const greetings_ar = firstEntity(message.nlp, 'greetings_ar');
-   if (greetings_ar && greetings_ar.confidence > 0.9) {
+   if (greetings_ar && greetings_ar.confidence > 0.75) {
      if (greetings_ar.value == 'islamic') {
         sendTextMessage(senderID,'وعليكم السلام');
      } else {
@@ -358,19 +358,35 @@ function determineResponse( event,sessionId) {
    }
 
    const bye = firstEntity(message.nlp, 'bye');
-   if (bye && bye.confidence > 0.9) {
+   if (bye && bye.confidence > 0.75) {
+     if (bye.value == 'true') {
      sendTextMessage(senderID,'see you soon!');
    } else {
      console.log ("Not a bye  ************ ");
    }
 
+   const goodbye = firstEntity(message.nlp, 'goodbye');
+   if (goodbye && goodbye.confidence > 0.75) {
+     if (goodbye.value == 'true') {
+     sendTextMessage(senderID,'see you soon!');
+   } else if (goodbye.value == 'formal') {
+     sendTextMessage(senderID,'take care');
+   } else if (goodbye.value == 'formal_ar') {
+      sendTextMessage(senderID,'سلامات اهلا وسهلا');
+   } else {
+     console.log ("Not a goodbye  ************ ");
+   }
+
    const company_location = firstEntity(message.nlp, 'company_location');
-   if (company_location && company_location.confidence > 0.9) {
+   if (company_location && company_location.confidence > 0.75) {
      if (company_location.value == 'aqaba') {
        sendTextMessage(senderID,'inside Dream Mall');
-   } else {
+   } else if (company_location.value == 'amman') {
         sendTextMessage(senderID,'86 Gardens street ');
 
+   } else {
+     sendTextMessage(senderID,'Aqaba: inside Dream Mall');
+     sendTextMessage(senderID,'Amman: 86 Gardens street ');
    }
    } else {
      console.log ("Not a company_location  ************ ");
