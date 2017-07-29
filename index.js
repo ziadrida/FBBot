@@ -524,7 +524,7 @@ function queryWit(text, n = 1) {
 f
 
 
-unction interactive(handler) {
+function interactive(handler) {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
