@@ -366,6 +366,17 @@ function determineResponse( event,sessionId) {
      console.log ("Not a greetings_ar  ************ ");
    }
 
+   const thanks_ar = firstEntity(message.nlp, 'thanks_ar');
+   if (thanks_ar && thanks_ar.confidence > 0.75) {
+     if (thanks_ar.value == 'islamic') {
+        sendTextMessage(senderID,'وجزاك خيرا');
+     } else {
+       sendTextMessage(senderID,'اهلا وسهلا');
+    }
+   } else {
+     console.log ("Not a greetings_ar  ************ ");
+   }
+
 
    const company_hours = firstEntity(message.nlp, 'company_hours');
    if (company_hours && company_hours.confidence > 0.75) {
