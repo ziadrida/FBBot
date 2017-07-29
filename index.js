@@ -388,13 +388,14 @@ if (message.nlp) {
   var entities = message.nlp;
 
   queryWit(message.text, N).then(({entities})  => {
-    const intent = firstEntity(entities, 'intent');
-    console.log("*** intent:",intent);
+    console.log("** entities:",entities);
+    const greet = firstEntity(entities, 'greetings');
+    console.log("*** greet:",greet);
 
-    const dateTime = firstEntity(entities, 'datetime') || {};
-    console.log("*** dateTime:",dateTime);
-    const intentValue = (intent && intent.value) || 'unknown';
-    console.log("*** intentValue:",intentValue);
+    const gbye = firstEntity(entities, 'goodbye') || {};
+    console.log("*** gbye:",gbye);
+    const greetVal = (greet && greet.value) || 'unknown';
+    console.log("*** greetVal:",greetVal);
   });
 
 
@@ -515,7 +516,7 @@ if (message.nlp) {
      console.log ("Not a company_location  ************" );
    }
 } // if message.nlp
-else { consle.log("NOT NLP message"); }
+else { console.log("NOT NLP message"); }
 
    console.log ("handleMessage for:",message.text);
    //interactive(handleMessage);
