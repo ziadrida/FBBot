@@ -266,6 +266,7 @@ function handleEvent(senderID, event) {
 }
 
 
+const readline = require('readline');
 
 function handleMessage(question, readline) {
   return queryWit(question, N).then(({entities}) => {
@@ -500,7 +501,6 @@ function determineResponse( event,sessionId) {
    }
 
 
-   const readline = require('readline');
 
    console.log ("handleMessage for:",message.text);
    interactive(handleMessage);
