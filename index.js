@@ -503,7 +503,7 @@ function determineResponse( event,sessionId) {
 
 
    console.log ("handleMessage for:",message.text);
-   interactive(handleMessage);
+   //interactive(handleMessage);
   // handleMessage(message.text,readline);
 
 } // end function determineResponse
@@ -535,6 +535,7 @@ function queryWit(text, n = 1) {
 
 
 function interactive(handler) {
+  console.log("**inside interactive **");;
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -580,6 +581,8 @@ function validateSamples(samples) {
 
 
 function firstEntity(entities, name) {
+  console.log("in firstEntity entities:",entities);
+  console.log("in firstEntity name:",name);
   return entities &&
     entities[name] &&
     Array.isArray(entities[name]) &&
