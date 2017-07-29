@@ -374,7 +374,18 @@ function determineResponse( event,sessionId) {
        sendTextMessage(senderID,'اهلا وسهلا');
     }
    } else {
-     console.log ("Not a greetings_ar  ************ ");
+     console.log ("Not a thanks_ar  ************ ");
+   }
+
+   const order_status = firstEntity(message.nlp, 'order_status');
+   if (order_status && order_status.confidence > 0.75) {
+     if (order_status.value == 'arabic') {
+        sendTextMessage(senderID,'سيتم الرد قريبا');
+     } else {
+       sendTextMessage(senderID,'we will get back to you soon!');
+    }
+   } else {
+     console.log ("Not a order_status  ************ ");
    }
 
 
