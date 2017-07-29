@@ -459,7 +459,9 @@ function determineResponse( event,sessionId) {
 
    const readline = require('readline');
 
-   handleMessage(message.text,readline);
+   console.log ("handleMessage for:",message.text);
+   interactive(handleMessage);
+  // handleMessage(message.text,readline);
 
 } // end function determineResponse
 const N = 3;
@@ -481,7 +483,7 @@ function handleMessage(question, readline) {
     const dateTime = firstEntity(entities, 'datetime') || {};
 
     if (!bestIntent || bestIntent.confidence < THRESHOLD) {
-      console.log('🤖  what would you like to do?');
+      console.log('** what would you like to do?');
       intents.forEach(intent => console.log(`\n -- ${intent.value}`));
       readline.question('choice > ', choice => {
         validateSamples([
@@ -497,7 +499,7 @@ function handleMessage(question, readline) {
             ],
           },
         ]).then(({n}) => console.log(`validated ${n}!`));
-        console.log(`🤖  okay, running > ${choice}`);
+        console.log(`**  okay, running > ${choice}`);
       });
       return;
     }
@@ -507,7 +509,7 @@ function handleMessage(question, readline) {
       .once('value')
       .then(snapshot => {
         const val = snapshot.val();
-        console.log(`🤖  ${val || bestIntent.value}`, dateTime);
+        console.log(`**  ${val || bestIntent.value}`, dateTime);
       });
   });
 }
