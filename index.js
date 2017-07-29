@@ -385,7 +385,7 @@ function determineResponse( event,sessionId) {
 
 //
   var entities = message.nlp.entities;
-  queryWit(question, N).then(({entities})  => {
+  queryWit(message.text, N).then(({entities})  => {
     const intent = firstEntity(entities, 'intent');
     console.log("*** intent:",intent);
 
