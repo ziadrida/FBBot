@@ -372,14 +372,14 @@ function determineResponse( event,sessionId) {
      console.log ("Not a phone_number  ************ "  );
    }
 
-   const phone_number = firstEntity(message.nlp, 'phone_number');
-   if (phone_number && phone_number.confidence > 0.75) {
-     if (phone_number.value == 'true') {
+   const company_phone = firstEntity(message.nlp, 'company_phone');
+   if (company_phone && company_phone.confidence > 0.75) {
+     if (company_phone.value == 'true') {
      sendTextMessage(senderID,'amman: 0785000010');
       sendTextMessage(senderID,'aqaba: 0785000032 ');
      }
    } else {
-     console.log ("Not a phone_number  ************ "  );
+     console.log ("Not a company_phone  ************ "  );
    }
 
    const bye = firstEntity(message.nlp, 'bye');
