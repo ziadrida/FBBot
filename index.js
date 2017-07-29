@@ -374,9 +374,13 @@ function determineResponse( event,sessionId) {
 
    const company_phone = firstEntity(message.nlp, 'company_phone');
    if (company_phone && company_phone.confidence > 0.75) {
-     if (company_phone.value == 'true') {
-     sendTextMessage(senderID,'amman: 0785000010');
-      sendTextMessage(senderID,'aqaba: 0785000032 ');
+     if (company_phone.value == 'amman') {
+           sendTextMessage(senderID,'amman: 0785000010');
+     } else if (company_phone.value == 'aqaba') {
+         sendTextMessage(senderID,'aqaba: 0785000032 ');
+     }  else  {
+       sendTextMessage(senderID,'amman: 0785000010');
+       sendTextMessage(senderID,'aqaba: 0785000032 ');
      }
    } else {
      console.log ("Not a company_phone  ************ "  );
