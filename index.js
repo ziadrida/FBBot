@@ -459,14 +459,13 @@ function determineResponse( event,sessionId) {
 
    const readline = require('readline');
 
-   const N = 3;
-   const THRESHOLD = 0.7;
-
    handleMessage(message.text,readline);
 
 } // end function determineResponse
-
+const N = 3;
+const THRESHOLD = 0.7;
 const firebase = require('firebase');
+
 firebase.initializeApp({
   // apiKey: "AIza....",                             // Auth / General Use
 //  authDomain: "YOUR_APP.firebaseapp.com",         // Auth with popup/redirect
