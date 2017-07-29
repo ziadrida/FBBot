@@ -352,7 +352,7 @@ function determineResponse( event,sessionId) {
         sendTextMessage(senderID,'وعليكم السلام');
      } else {
        sendTextMessage(senderID,'اهلا وسهلا');
-   }
+    }
    } else {
      console.log ("Not a greetings_ar  ************ ");
    }
@@ -361,18 +361,21 @@ function determineResponse( event,sessionId) {
    if (bye && bye.confidence > 0.75) {
      if (bye.value == 'true') {
      sendTextMessage(senderID,'see you soon!');
+     }
    } else {
      console.log ("Not a bye  ************ ");
    }
 
    const goodbye = firstEntity(message.nlp, 'goodbye');
    if (goodbye && goodbye.confidence > 0.75) {
-     if (goodbye.value == 'true') {
-     sendTextMessage(senderID,'see you soon!');
-   } else if (goodbye.value == 'formal') {
+    if (goodbye.value == 'formal') {
      sendTextMessage(senderID,'take care');
    } else if (goodbye.value == 'formal_ar') {
       sendTextMessage(senderID,'سلامات اهلا وسهلا');
+    } else { // unknown value
+      sendTextMessage(senderID,'اهلا وسهلا');
+    }
+
    } else {
      console.log ("Not a goodbye  ************ ");
    }
@@ -381,19 +384,16 @@ function determineResponse( event,sessionId) {
    if (company_location && company_location.confidence > 0.75) {
      if (company_location.value == 'aqaba') {
        sendTextMessage(senderID,'inside Dream Mall');
-   } else if (company_location.value == 'amman') {
+     } else if (company_location.value == 'amman') {
         sendTextMessage(senderID,'86 Gardens street ');
 
-   } else {
+    } else {
      sendTextMessage(senderID,'Aqaba: inside Dream Mall');
      sendTextMessage(senderID,'Amman: 86 Gardens street ');
    }
    } else {
      console.log ("Not a company_location  ************ ");
    }
-
-
-
 
 
 } // end function determineResponse
