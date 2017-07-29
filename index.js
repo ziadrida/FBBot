@@ -354,6 +354,7 @@ function determineResponse( event,sessionId) {
      console.log ("Not a thanks ************ ");
    }
 
+
    const greetings_ar = firstEntity(message.nlp, 'greetings_ar');
    if (greetings_ar && greetings_ar.confidence > 0.75) {
      if (greetings_ar.value == 'islamic') {
