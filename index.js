@@ -579,7 +579,10 @@ function validateSamples(samples) {
 
 
 
-
+function firstEntity(nlp, name) {
+  return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
+}
+/*
 function firstEntity(entities, name) {
   console.log("in firstEntity entities:",entities);
   console.log("in firstEntity name:",name);
@@ -594,7 +597,7 @@ function firstEntity(entities, name) {
     entities[name] &&
     entities[name][0];
 } // end firstEntity
-
+*/
 
 
 // MUST PASS ROOT TO BrowseNodes
