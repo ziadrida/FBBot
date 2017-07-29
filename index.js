@@ -365,7 +365,7 @@ function determineResponse( event,sessionId) {
       sendTextMessage(senderID,'aqaba: 0785000032 ');
      }
    } else {
-     console.log ("Not a phone_number  ************ confidence:",phone_number.confidence );
+     console.log ("Not a phone_number  ************ "  );
    }
 
    const bye = firstEntity(message.nlp, 'bye');
@@ -374,7 +374,7 @@ function determineResponse( event,sessionId) {
      sendTextMessage(senderID,'see you soon!');
      }
    } else {
-     console.log ("Not a bye  ************ confidence:",bye.confidence);
+     console.log ("Not a bye  ************ confidence:");
    }
 
    const goodbye = firstEntity(message.nlp, 'goodbye');
@@ -388,7 +388,7 @@ function determineResponse( event,sessionId) {
     }
 
    } else {
-     console.log ("Not a goodbye  ************ confidence:",goodbye.confidence );
+     console.log ("Not a goodbye  ************ ");
    }
 
    const company_location = firstEntity(message.nlp, 'company_location');
@@ -403,7 +403,7 @@ function determineResponse( event,sessionId) {
      sendTextMessage(senderID,'Amman: 86 Gardens street ');
    }
    } else {
-     console.log ("Not a company_location  ************confidence: ",company_location.confidence );
+     console.log ("Not a company_location  ************" );
    }
 
 
