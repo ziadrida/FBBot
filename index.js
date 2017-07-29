@@ -22,6 +22,7 @@ var amazon = require('amazon-product-api');
 
 
 // get token from the environment
+const firebase_auth_uri = process.env.FIREBASE_AUTH_URI
 const token = process.env.FB_VERIFY_TOKEN
 const fb_access_token = process.env.FB_ACCESS_TOKEN
 const wit_access_token = process.env.WIT_ACCESS_TOKEN
@@ -456,14 +457,127 @@ function determineResponse( event,sessionId) {
    }
 
 
+   const readline = require('readline');
+
+   const N = 3;
+   const THRESHOLD = 0.7;
+
+   handleMessage(message.text,readline);
+
 } // end function determineResponse
 
-function firstEntity(nlp, name) {
-  console.log("In firstEntity");
-  console.log("NLP:",nlp);
-  console.log("***** <><>return from firstEntity: ",nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0]);
-  return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
+
+
+function handleMessage(question, readline) {
+  return queryWit(question, N).then(({entities}) => {
+    const intents = entities['intent'] || [];
+    const bestIntent = intents[0];
+    const dateTime = firstEntity(entities, 'datetime') || {};
+
+    if (!bestIntent || bestIntent.confidence < THRESHOLD) {
+      console.log('🤖  what would you like to do?');
+      intents.forEach(intent => console.log(`\n -- ${intent.value}`));
+      readline.question('choice > ', choice => {
+        validateSamples([
+          {
+            text: question,
+            entities: [
+              {
+                entity: 'intent',
+                value: choice,
+
+
+              },
+            ],
+          },
+        ]).then(({n}) => console.log(`validated ${n}!`));
+        console.log(`🤖  okay, running > ${choice}`);
+      });
+      return;
+    }
+    return firebase
+      .database()
+      .ref(`answers/${bestIntent.value}`)
+      .once('value')
+      .then(snapshot => {
+        const val = snapshot.val();
+        console.log(`🤖  ${val || bestIntent.value}`, dateTime);
+      });
+  });
 }
+
+
+
+function queryWit(text, n = 1) {
+  return fetch(
+    `https://api.wit.ai/message?v=20170307&n=${n}&q=${encodeURIComponent(text)}`,
+    {
+      headers: {
+        Authorization: `Bearer ${WIT_ACCESS_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  ).then(res => res.json());
+} // end queryWit
+
+
+f
+
+
+unction interactive(handler) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  rl.setPrompt('> ');
+  const prompt = () => {
+    rl.prompt();
+    rl.write(null, {ctrl: true, name: 'e'});
+  };
+  rl
+    .on('line', line => {
+      line = line.trim();
+      if (!line) {
+        prompt();
+        return;
+      }
+      if (line === 'q') {
+        rl.close();
+        return;
+      }
+      handler(line, rl).then(prompt);
+    })
+    .on('close', () => {
+      console.log('good bye! :)');
+    });
+  prompt();
+} // end interactive function
+
+function validateSamples(samples) {
+  return fetch('https://api.wit.ai/samples?v=20170307', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${NEW_ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(samples),
+  })
+    .then(res => res.json())
+}
+
+
+
+
+function firstEntity(entities, name) {
+  return entities &&
+    entities[name] &&
+    Array.isArray(entities[name]) &&
+    entities[name] &&
+    entities[name][0];
+} // end firstEntity
+
+
 
 // MUST PASS ROOT TO BrowseNodes
 function iterate(node, obj, stack) {
