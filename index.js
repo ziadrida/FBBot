@@ -358,6 +358,20 @@ function determineResponse( event,sessionId) {
    }
 
 
+   const company_hours = firstEntity(message.nlp, 'company_hours');
+   if (company_hours && company_hours.confidence > 0.75) {
+     if (company_hours.value == 'general') {
+     sendTextMessage(senderID,'amman: 9am-8pm Sat-Thu Friday 4pm-8pm');
+      sendTextMessage(senderID,'aqaba: 10am-11pm Sat-Thu Friday: closed ');
+    } else if (company_hours.value == 'amman') {
+       sendTextMessage(senderID,'amman: 9am-8pm Sat-Thu Friday 4pm-8pm');
+    } else if (company_hours.value == 'aqaba') {
+      sendTextMessage(senderID,'aqaba: 10am-11pm Sat-Thu Friday: closed ');
+    }
+   } else {
+     console.log ("Not a phone_number  ************ "  );
+   }
+
    const phone_number = firstEntity(message.nlp, 'phone_number');
    if (phone_number && phone_number.confidence > 0.75) {
      if (phone_number.value == 'true') {
