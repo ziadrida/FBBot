@@ -384,7 +384,7 @@ function determineResponse( event,sessionId) {
   } // end of if http
 
 //
-
+if (message.nlp) {
   var entities = message.nlp;
 
   queryWit(message.text, N).then(({entities})  => {
@@ -514,8 +514,8 @@ function determineResponse( event,sessionId) {
    } else {
      console.log ("Not a company_location  ************" );
    }
-
-
+} // if message.nlp
+else { consle.log("NOT NLP message"); }
 
    console.log ("handleMessage for:",message.text);
    //interactive(handleMessage);
@@ -536,7 +536,7 @@ firebase.initializeApp({
 
 
 function queryWit(text, n = 1) {
-  console.log("in queryWit text:",text);
+  console.log("************ in queryWit text:",text);
 
   return fetch(
     `https://api.wit.ai/message?v=20170307&n=${n}&q=${encodeURIComponent(text)}`,
