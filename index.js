@@ -521,8 +521,6 @@ function queryWit(text, n = 1) {
 } // end queryWit
 
 
-f
-
 
 function interactive(handler) {
   const rl = readline.createInterface({
