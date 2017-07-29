@@ -519,7 +519,7 @@ function queryWit(text, n = 1) {
     `https://api.wit.ai/message?v=20170307&n=${n}&q=${encodeURIComponent(text)}`,
     {
       headers: {
-        Authorization: `Bearer ${WIT_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${wit_access_token}`,
         'Content-Type': 'application/json',
       },
     }
