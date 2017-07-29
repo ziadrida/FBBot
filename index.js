@@ -383,6 +383,19 @@ function determineResponse( event,sessionId) {
     processHttpRequest(event);
   } // end of if http
 
+//
+  var entities = message.nlp.entities;
+  queryWit(question, N).then(({entities})  => {
+    const intent = firstEntity(entities, 'intent');
+    console.log("*** intent:",intent);
+
+    const dateTime = firstEntity(entities, 'datetime') || {};
+    console.log("*** dateTime:",dateTime);
+    const intentValue = (intent && intent.value) || 'unknown';
+    console.log("*** intentValue:",intentValue);
+  });
+
+
   // check greeting is here and is confident
    const greeting = firstEntity(message.nlp, 'greetings');
    if (greeting && greeting.confidence > 0.75) {
@@ -521,6 +534,8 @@ firebase.initializeApp({
 
 
 function queryWit(text, n = 1) {
+  console.log("in queryWit text:",text);
+
   return fetch(
     `https://api.wit.ai/message?v=20170307&n=${n}&q=${encodeURIComponent(text)}`,
     {
