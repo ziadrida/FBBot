@@ -171,6 +171,7 @@ function receivedMessage(event) {
     // We retrieve the user's current session, or create one if it doesn't exist
     // This is needed for our bot to figure out the conversation history
     const sessionId = findOrCreateSession(senderID);
+    console.log("********** SessionID:",sessionId);
 
     if (typeof event == 'undefined' ) {
           console.log(" EVENT is Undefined <><>")
@@ -387,6 +388,10 @@ function determineResponse( event,sessionId) {
 if (message.nlp) {
   var entities = message.nlp;
 
+
+  let res = matchEntity('company_phone','aqaba');
+  console.log("m>>>>>>>>> matchEntity response:",res);
+
   queryWit(message.text, N).then((entities)  => {
     console.log("** entities:",entities);
     const greet = firstEntity(entities, 'greetings');
@@ -434,7 +439,7 @@ if (message.nlp) {
      } else {
        sendTextMessage(senderID,'اهلا وسهلا');
     }
-   } else {
+  } else {
      console.log ("Not a thanks_ar  ************ ");
    }
 
@@ -461,7 +466,7 @@ if (message.nlp) {
       sendTextMessage(senderID,'aqaba: 10am-11pm Sat-Thu Friday: closed ');
     }
    } else {
-     console.log ("Not a phone_number  ************ "  );
+     console.log ("Not a company_hours  ************ "  );
    }
 
    const company_phone = firstEntity(message.nlp, 'company_phone');
@@ -1081,4 +1086,27 @@ request({
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
           }
       });
+}
+
+
+function matchEntity(entity_name,value) {
+
+
+  MongoClient.connect(mongodbUrl, function(err, db) {
+        assert.equal(null, err);
+        // Create a collection we want to drop later
+        var collection = db.collection('witentities');
+
+
+
+          // Peform a simple find and return all the documents
+          collection.find({"entity_name" : $entity_name, "value" : $value }).limit(1).toArray().then(function(docs) {
+
+            console.log("*** docs:", docs);
+  assert.equal(3, docs.length);
+            db.close();
+
+      });
+
+});
 }
