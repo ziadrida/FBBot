@@ -387,10 +387,11 @@ function determineResponse( event,sessionId) {
 //
 if (message.nlp) {
   var entities = message.nlp;
+  /*
   JSON.parse(JSON.stringify(entities)).forEach(function (ent) {
     console.log("entities: ent",ent);
   });
-
+*/
   console.log("<><> --> Entities:",entities);
 
   matchEntity('company_phone','amman',function(doc) {
