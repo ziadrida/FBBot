@@ -393,7 +393,7 @@ if (message.nlp) {
     console.log("m>>>>>>>>> matchEntity response:",msg);
     sendTextMessage(senderID,msg);
   });
-  console.log("m>>>>>>>>> matchEntity response:",res);
+
 
   queryWit(message.text, N).then((entities)  => {
     console.log("** entities:",entities);
@@ -1102,7 +1102,7 @@ function matchEntity(entity_name,value,callback) {
 
 
           // Peform a simple find and return all the documents
-          collection.find({"entity_name" : entity_name, "value" : value }).limit(1).then(function(docs) {
+          collection.find({"entity_name" : entity_name, "value" : value }).limit(1).toArray().then(function(docs) {
 
             console.log("*** docs:", docs);
             assert.equal(null, err);
