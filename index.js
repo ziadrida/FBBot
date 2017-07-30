@@ -389,7 +389,7 @@ if (message.nlp) {
   var entities = message.nlp;
 
 
-  matchEntity('company_phone','aqaba').then((msg) => {
+  matchEntity('company_phone','aqaba',function(msg) {
     console.log("m>>>>>>>>> matchEntity response:",msg);
     sendTextMessage(senderID,msg);
   });
@@ -1092,8 +1092,7 @@ request({
 }
 
 
-function matchEntity(entity_name,value) {
-
+function matchEntity(entity_name,value,callback) {
 
   MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
@@ -1107,11 +1106,9 @@ function matchEntity(entity_name,value) {
 
             console.log("*** docs:", docs);
             assert.equal(null, err);
-            return docs;
-//  assert.equal(3, docs.length);
+            callback(docs);
+            //  assert.equal(3, docs.length);
             db.close();
-
       });
-
 });
 }
