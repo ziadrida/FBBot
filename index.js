@@ -387,13 +387,13 @@ function determineResponse( event,sessionId) {
 //
 if (message.nlp) {
   var entities = message.nlp;
-  entities.forEach(function (ent) {
+  JSON.parse(entities).forEach(function (ent) {
     console.log("entities: ent",ent);
   });
 
   console.log("<><> --> Entities:",entities);
 
-  matchEntity('greetings','true',function(doc) {
+  matchEntity('company_phone','amman',function(doc) {
     console.log(">>>>>>>>> matchEntity response:",doc.msg);
     sendTextMessage(senderID,doc[0].msg);
   });
