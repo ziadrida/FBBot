@@ -389,9 +389,9 @@ if (message.nlp) {
   var entities = message.nlp;
 
 
-  matchEntity('company_phone','aqaba',function(msg) {
-    console.log("m>>>>>>>>> matchEntity response:",msg);
-    sendTextMessage(senderID,msg);
+  matchEntity('company_phone','aqaba',function(doc) {
+    console.log(">>>>>>>>> matchEntity response:",doc.msg);
+    sendTextMessage(senderID,doc.msg);
   });
 
 
@@ -731,9 +731,9 @@ function callSendAPI(messageData) {
       console.log("Successfully sent generic message with id %s to recipient %s",
         messageId, recipientId);
     } else {
-      console.error("Unable to send message.");
-      console.error(response);
-      console.error(error);
+      console.error("<><><> Unable to send message. <><><>");
+      //console.error(response);
+      //console.error(error);
     }
   });
 }
@@ -1093,7 +1093,7 @@ request({
 
 
 function matchEntity(entity_name,value,callback) {
-
+console.log("*** in matchEntity:",entity_name)
   MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
         // Create a collection we want to drop later
