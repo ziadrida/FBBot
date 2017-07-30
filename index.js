@@ -387,9 +387,13 @@ function determineResponse( event,sessionId) {
 //
 if (message.nlp) {
   var entities = message.nlp;
+  entities.forEach(function (ent) {
+    console.log("entities: ent",ent);
+  });
 
+  console.log("<><> --> Entities:",entities);
 
-  matchEntity('company_phone','aqaba',function(doc) {
+  matchEntity('greetings','true',function(doc) {
     console.log(">>>>>>>>> matchEntity response:",doc.msg);
     sendTextMessage(senderID,doc[0].msg);
   });
@@ -402,6 +406,7 @@ if (message.nlp) {
 
     const gbye = firstEntity(entities, 'goodbye') || {};
     console.log("*** gbye:",gbye);
+
     const greetVal = (greet && greet.value) || 'unknown';
     console.log("*** greetVal:",greetVal);
   });
