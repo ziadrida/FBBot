@@ -387,7 +387,7 @@ function determineResponse( event,sessionId) {
 //
 if (message.nlp) {
   var entities = message.nlp;
-  JSON.parse(entities).forEach(function (ent) {
+  JSON.parse(JSON.stringify(entities)).forEach(function (ent) {
     console.log("entities: ent",ent);
   });
 
