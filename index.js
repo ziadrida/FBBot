@@ -391,7 +391,7 @@ if (message.nlp) {
 
   matchEntity('company_phone','aqaba',function(doc) {
     console.log(">>>>>>>>> matchEntity response:",doc.msg);
-    sendTextMessage(senderID,doc.msg);
+    sendTextMessage(senderID,doc[0].msg);
   });
 
 
