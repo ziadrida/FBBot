@@ -1100,7 +1100,7 @@ function matchEntity(entity_name,value) {
 
 
           // Peform a simple find and return all the documents
-          collection.find({"entity_name" : $entity_name, "value" : $value }).limit(1).toArray().then(function(docs) {
+          collection.find({"entity_name" : entity_name, "value" : value }).limit(1).toArray().then(function(docs) {
 
             console.log("*** docs:", docs);
   assert.equal(3, docs.length);
