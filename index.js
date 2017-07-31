@@ -257,7 +257,7 @@ function handleEvent(senderID, event) {
                 console.log("Inserted a document into the order_request collection.");
                 callback();
               });
-            };
+            }; // end of insertOrderRequest
             // "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
           } else if (typeof myText != 'undefined' && myText == 'not_now')  {
             sendTextMessage(senderID,"WHY WHY WHY???!!!");
@@ -1154,10 +1154,31 @@ console.log("*** in matchEntity:",entity_name)
             if (docs) {
               console.log("*** docs:", docs);
               assert.equal(null, err);
+              db.close();
               callback(docs);
+
+            } else { // no match for entity_name
+              // how about creating an entry for it and let someone or figure a way later set the message? great idea!
+              insertNewEntity(entity_name,value,db,function() {
+                  db.close();
+                });
             }
-            //  assert.equal(3, docs.length);
-            db.close();
+
+
       });
 });
 }
+
+var insertNewEntity = function(entity_name,value,db, callback) {
+  console.log(">>> inside insertNewEntity");
+   db.collection('witentities').insertOne( {
+      "entity_name" : entity_name,
+      "value" : value,
+      "threshold" : .75,
+      "msg": "not sure what you mean!"
+   }, function(err, result) {
+    assert.equal(err, null);
+    console.log("Inserted a document into the witentities collection.");
+    callback();
+  });
+}; // end of insertNewEntity
