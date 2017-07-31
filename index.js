@@ -331,7 +331,7 @@ function determineResponse( event,sessionId) {
 
   if (message.text) {
     // store all text messages
-  console.log("<<<<<<< insert message:",message_text);
+  console.log("<<<<<<< insert message:",message.text);
 
     MongoClient.connect(mongodbUrl, function(err, db) {
       assert.equal(null, err);
