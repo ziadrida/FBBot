@@ -388,17 +388,21 @@ if (message.nlp) {
 
 
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
-  matchEntity(intent,intentValue,function(doc) {
-      console.log(">>>>>>>>> matchEntity response:",doc);
-  //  console.log(">>>>>>>>> matchEntity response text:",doc[0].messageText);
-    // send message only if highConfidence is higher than the stored entity THRESHOLD
-    if (highConfidence > doc[0].threshold) {
+   console.log("-- Intent:",intent);
+  if (intent != '' ) {
+      matchEntity(intent,intentValue,function(doc) {
+          console.log(">>>>>>>>> matchEntity response:",doc);
+        // send message only if highConfidence is higher than the stored entity THRESHOLD
+        console.log( "storedThreshold <> highConfidence => ",doc[0].threshold + " <> ", highConfidence )
+        if (highConfidence > doc[0].threshold) {
 
-          sendTextMessage(senderID,doc[0].messageText);
-    } else {
-      console.log(" Found entity but threshold is lower: storedThreshold <> highConfidence => ",doc[0].messageText + " <> ", highConfidence );
-    }
+              sendTextMessage(senderID,doc[0].messageText);
+        } else if (doc[0].entity_name != '') {
+          console.log(" Found entity but threshold is lower.");
+        }
+
   });
+  } // intent != ''
  }); // end findHighestConfidence
 
 
@@ -1039,6 +1043,11 @@ request({
 
 var matchEntity = function(entity_name,value,callback) {
 console.log("*** in matchEntity:",entity_name)
+var docs;
+if (entity_name == '' ) {
+  console.log("****** entity_name is blank");
+   callback(docs);
+ } else {
   MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
         // Create a collection we want to drop later
@@ -1060,11 +1069,10 @@ console.log("*** in matchEntity:",entity_name)
                   db.close();
                 });
             }
-
-
       });
 });
-}
+} // if entity_name == ''
+} // end matchEntity
 
 var insertNewEntity = function(entity_name,value,db, callback) {
   console.log(">>> inside insertNewEntity");
