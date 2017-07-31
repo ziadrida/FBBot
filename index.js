@@ -390,13 +390,27 @@ if (message.nlp) {
   var entities = message.nlp;
   var entList = message.nlp.entities;
   console.log("EntList______",entList)
+  // find entity with highest confidence
+  let intent = "";
+  let highConfidence = 0;
   for (var key in entList ) {
-    if (entList.hasOwnProperty(key)) {
-      // key is the entity
+    // key is the entity
+    if (entList.hasOwnProperty(key))
+     {
+
       console.log("key___________:",key + " -> " + entList[key]);
 
       console.log("confidence____________",entList[key][0].confidence);
       console.log("value__________",entList[key][0].value);
+
+
+      // find entity with highest confidence
+      if (entList[key][0].confidence > highConfidence) {
+        highConfidence = entList[key][0].confidence;
+        intent = key;
+        intentValue = entList[key][0].value
+      }
+
     }
   }
 /*
@@ -415,12 +429,12 @@ if (message.nlp) {
   });*/
   console.log("<><> --> Entities:",entities);
 
-  matchEntity('company_phone','amman',function(doc) {
+  matchEntity(intent,intentValue,function(doc) {
     console.log(">>>>>>>>> matchEntity response:",doc.msg);
     sendTextMessage(senderID,doc[0].msg);
   });
 
-
+/*
   queryWit(message.text, N).then((entities)  => {
     console.log("** entities:",entities);
     const greet = firstEntity(entities, 'greetings');
@@ -432,8 +446,8 @@ if (message.nlp) {
     const greetVal = (greet && greet.value) || 'unknown';
     console.log("*** greetVal:",greetVal);
   });
-
-
+*/
+/*
   // check greeting is here and is confident
    const greeting = firstEntity(message.nlp, 'greetings');
    if (greeting && greeting.confidence > 0.75) {
@@ -550,6 +564,8 @@ if (message.nlp) {
    } else {
      console.log ("Not a company_location  ************" );
    }
+*/
+
 } // if message.nlp
 else { console.log("NOT NLP message"); }
 
