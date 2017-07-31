@@ -430,7 +430,9 @@ if (message.nlp) {
   console.log("<><> --> Entities:",entities);
 
   matchEntity(intent,intentValue,function(doc) {
-    console.log(">>>>>>>>> matchEntity response:",doc.msg);
+      console.log(">>>>>>>>> matchEntity response:",doc);
+    console.log(">>>>>>>>> matchEntity response:",doc[0].msg);
+
     sendTextMessage(senderID,doc[0].msg);
   });
 
@@ -1145,11 +1147,15 @@ console.log("*** in matchEntity:",entity_name)
 
 
           // Peform a simple find and return all the documents
-          collection.find({"entity_name" : entity_name, "value" : value }).limit(1).toArray().then(function(docs) {
-
-            console.log("*** docs:", docs);
-            assert.equal(null, err);
-            callback(docs);
+          collection.find({"entity_name" : entity_name, "value" : value }).limit(1).next.then(function(err,docs) {
+            if (err) {
+                                console.log("******* ERROR *********: could not read from witentities");
+            }
+            if (docs) {
+              console.log("*** docs:", docs);
+              assert.equal(null, err);
+              callback(docs);
+            }
             //  assert.equal(3, docs.length);
             db.close();
       });
