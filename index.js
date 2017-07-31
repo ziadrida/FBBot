@@ -389,6 +389,14 @@ function determineResponse( event,sessionId) {
 if (message.nlp) {
   var entities = message.nlp;
 
+  for (var key in entities) {
+    if (entities.hasOwnProperty(key)) {
+      console.log("key___________:",key + " -> " + entities[key]);
+      console.log("confidence____________",entities[key][0].confidence);
+      console.log("value__________",entities[key][0].value);
+    }
+  }
+
   var allEnt = JSON.parse(JSON.stringify(message.nlp.entities));
   console.log("++++++ AllEnt:",allEnt);
   allEnt.forEach(function (ent) {
