@@ -25,13 +25,12 @@ var amazon = require('amazon-product-api');
 const firebase_auth_uri = process.env.FIREBASE_AUTH_URI
 const token = process.env.FB_VERIFY_TOKEN
 const fb_access_token = process.env.FB_ACCESS_TOKEN
-const wit_access_token = process.env.WIT_ACCESS_TOKEN
+//const wit_access_token = process.env.WIT_ACCESS_TOKEN
 app.set('port', (process.env.PORT || 5000))
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-console.log("WIT_TOKEN:",wit_access_token);
 
 // Wit.ai bot specific code
 
@@ -94,11 +93,13 @@ const actions = {
 //const levels = require('node-wit').logLevels;
 const { Wit, log } = require('node-wit')
 // Setting up our bot
+/*
 const wit = new Wit({
   accessToken: wit_access_token,
   actions ,
   logger: new log.Logger(log.INFO)
 });
+*/
 
 
 // test webpage CALL
@@ -423,6 +424,7 @@ if (message.nlp) {
   // find entity with highest confidence
   let intent = "";
   let highConfidence = 0;
+  let intentValue = "";
   for (var key in entList ) {
     // key is the entity
     if (entList.hasOwnProperty(key))
@@ -443,20 +445,8 @@ if (message.nlp) {
 
     }
   }
-/*
-  var allEnt = JSON.parse(JSON.stringify(message.nlp.entities));
-  console.log("++++++ AllEnt:",allEnt);
-  for (var key in allEnt ) {
-    if (allEnt.hasOwnProperty(key)) {
-      console.log(" allEnt key___________:",key + " -> " + allEnt[key]);
-      console.log(" allEnt confidence____________",allEnt[key][0].confidence);
-      console.log(" allEnt value__________",allEnt[key][0].value);
-    }
-  }
-*/
-/*  allEnt.forEach(function (ent) {
-    console.log("+++++++++++   entities: ent",ent);
-  });*/
+
+
   console.log("<><> --> Entities:",entities);
 
   matchEntity(intent,intentValue,function(doc) {
@@ -619,86 +609,10 @@ firebase.initializeApp({
 });
 
 
-function queryWit(text, n = 1) {
-  console.log("************ in queryWit text:",text);
-
-  return fetch(
-    `https://api.wit.ai/message?v=20170307&n=${n}&q=${encodeURIComponent(text)}`,
-    {
-      headers: {
-        Authorization: `Bearer ${wit_access_token}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  ).then(res => res.json());
-} // end queryWit
-
-
-
-function interactive(handler) {
-  console.log("**inside interactive **");;
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  rl.setPrompt('> ');
-  const prompt = () => {
-    rl.prompt();
-    rl.write(null, {ctrl: true, name: 'e'});
-  };
-  rl
-    .on('line', line => {
-      line = line.trim();
-      if (!line) {
-        prompt();
-        return;
-      }
-      if (line === 'q') {
-        rl.close();
-        return;
-      }
-      handler(line, rl).then(prompt);
-    })
-    .on('close', () => {
-      console.log('good bye! :)');
-    });
-  prompt();
-} // end interactive function
-
-function validateSamples(samples) {
-  return fetch('https://api.wit.ai/samples?v=20170307', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${NEW_ACCESS_TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(samples),
-  })
-    .then(res => res.json())
-}
-
-
 
 function firstEntity(nlp, name) {
   return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
 }
-/*
-function firstEntity(entities, name) {
-  console.log("in firstEntity entities:",entities);
-  console.log("in firstEntity name:",name);
-  try {
-    console.log("first entity:",entities[name][0]);
-  } catch(e) {
-     console.log("error:",e);
-}
-  return entities &&
-    entities[name] &&
-    Array.isArray(entities[name]) &&
-    entities[name] &&
-    entities[name][0];
-} // end firstEntity
-*/
 
 
 // MUST PASS ROOT TO BrowseNodes
