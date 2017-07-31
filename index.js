@@ -368,6 +368,7 @@ function determineResponse( event,sessionId) {
     getPricing();
   } //if action *pr
 
+
   if (typeof userObj != 'undefined' && userObj.action === "*report") {
     sendTextMessage(senderID, 'I understand that you want me to give you a PR report .. please wait');
     console.log("Report for days back:",userObj.days)
@@ -387,11 +388,11 @@ function determineResponse( event,sessionId) {
 //
 if (message.nlp) {
   var entities = message.nlp;
-  /*
-  JSON.parse(JSON.stringify(entities)).forEach(function (ent) {
-    console.log("entities: ent",ent);
+
+
+  JSON.parse(message.nlp.entities).forEach(function (ent) {
+    console.log("+++++++++++   entities: ent",ent);
   });
-*/
   console.log("<><> --> Entities:",entities);
 
   matchEntity('company_phone','amman',function(doc) {
