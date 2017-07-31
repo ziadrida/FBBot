@@ -392,12 +392,14 @@ if (message.nlp) {
   console.log("EntList______",entList)
   for (var key in entList ) {
     if (entList.hasOwnProperty(key)) {
+      // key is the entity
       console.log("key___________:",key + " -> " + entList[key]);
+
       console.log("confidence____________",entList[key][0].confidence);
       console.log("value__________",entList[key][0].value);
     }
   }
-
+/*
   var allEnt = JSON.parse(JSON.stringify(message.nlp.entities));
   console.log("++++++ AllEnt:",allEnt);
   for (var key in allEnt ) {
@@ -407,7 +409,7 @@ if (message.nlp) {
       console.log(" allEnt value__________",allEnt[key][0].value);
     }
   }
-
+*/
 /*  allEnt.forEach(function (ent) {
     console.log("+++++++++++   entities: ent",ent);
   });*/
