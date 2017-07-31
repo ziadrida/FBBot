@@ -389,6 +389,7 @@ function determineResponse( event,sessionId) {
 if (message.nlp) {
   var entities = message.nlp;
   var entList = message.nlp.entities;
+  console.log("EntList______",entList)
   for (var key in entList ) {
     if (entities.hasOwnProperty(key)) {
       console.log("key___________:",key + " -> " + entList[key]);
@@ -399,6 +400,14 @@ if (message.nlp) {
 
   var allEnt = JSON.parse(JSON.stringify(message.nlp.entities));
   console.log("++++++ AllEnt:",allEnt);
+  for (var key in allEnt ) {
+    if (entities.hasOwnProperty(key)) {
+      console.log(" allEnt key___________:",key + " -> " + allEnt[key]);
+      console.log(" allEnt confidence____________",allEnt[key][0].confidence);
+      console.log(" allEnt value__________",allEnt[key][0].value);
+    }
+  }
+
 /*  allEnt.forEach(function (ent) {
     console.log("+++++++++++   entities: ent",ent);
   });*/
