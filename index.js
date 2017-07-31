@@ -391,7 +391,7 @@ if (message.nlp) {
   var entList = message.nlp.entities;
   console.log("EntList______",entList)
   for (var key in entList ) {
-    if (entities.hasOwnProperty(key)) {
+    if (entList.hasOwnProperty(key)) {
       console.log("key___________:",key + " -> " + entList[key]);
       console.log("confidence____________",entList[key][0].confidence);
       console.log("value__________",entList[key][0].value);
@@ -401,7 +401,7 @@ if (message.nlp) {
   var allEnt = JSON.parse(JSON.stringify(message.nlp.entities));
   console.log("++++++ AllEnt:",allEnt);
   for (var key in allEnt ) {
-    if (entities.hasOwnProperty(key)) {
+    if (allEnt.hasOwnProperty(key)) {
       console.log(" allEnt key___________:",key + " -> " + allEnt[key]);
       console.log(" allEnt confidence____________",allEnt[key][0].confidence);
       console.log(" allEnt value__________",allEnt[key][0].value);
