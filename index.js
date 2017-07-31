@@ -346,7 +346,7 @@ function determineResponse( event,sessionId) {
           "senderId" : senderID,
           "recipientId" : recipientID,
           "sessionId" : "",
-          "messageText" : messageText,
+          "messageText" : message.text,
           "messageId": messageId,
           "timestamp" : new Date(timeOfMessage),
           "dateCreated": new Date()
