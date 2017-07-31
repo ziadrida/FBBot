@@ -392,16 +392,16 @@ if (message.nlp) {
   for (var key in entities) {
     if (entities.hasOwnProperty(key)) {
       console.log("key___________:",key + " -> " + entities[key]);
-      console.log("confidence____________",entities[key][0].confidence);
-      console.log("value__________",entities[key][0].value);
+      console.log("confidence____________",entities[key].confidence);
+      console.log("value__________",entities[key].value);
     }
   }
 
   var allEnt = JSON.parse(JSON.stringify(message.nlp.entities));
   console.log("++++++ AllEnt:",allEnt);
-  allEnt.forEach(function (ent) {
+/*  allEnt.forEach(function (ent) {
     console.log("+++++++++++   entities: ent",ent);
-  });
+  });*/
   console.log("<><> --> Entities:",entities);
 
   matchEntity('company_phone','amman',function(doc) {
