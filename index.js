@@ -1147,7 +1147,7 @@ console.log("*** in matchEntity:",entity_name)
 
 
           // Peform a simple find and return all the documents
-          collection.find({"entity_name" : entity_name, "value" : value }).limit(1).next.then(function(err,docs) {
+          collection.find({"entity_name" : entity_name, "value" : value }).limit(1).toArray().then(function(err,docs) {
             if (err) {
                                 console.log("******* ERROR *********: could not read from witentities");
             }
