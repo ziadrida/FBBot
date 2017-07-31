@@ -1144,12 +1144,12 @@ console.log("*** in matchEntity:",entity_name)
         // Create a collection we want to drop later
         var collection = db.collection('witentities');
 
-
-
           // Peform a simple find and return all the documents
           collection.find({"entity_name" : entity_name, "value" : value }).limit(1).toArray().then(function(err,docs) {
+            console.log("_______ docs:",docs);
             if (err) {
-                                console.log("******* ERROR *********: could not read from witentities");
+                                console.log("******* ERROR *********: could not read from witentities err: ",err);
+                                  db.close();
             }
             if (docs && docs.length > 0) {
               console.log("*** docs:", docs);
