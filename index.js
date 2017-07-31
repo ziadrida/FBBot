@@ -384,6 +384,28 @@ if (message.nlp) {
   var entList = message.nlp.entities;
   console.log("EntList______",entList)
 
+  var findHighestConfidence = function(entList,callback) {
+  // find entity with highest confidence
+  let intent = "";
+  let highConfidence = 0;
+  let intentValue = "";
+  for (var key in entList ) {
+    // key is the entity
+    if (entList.hasOwnProperty(key))
+     {
+      console.log("key___________:",key + " -> " + entList[key]);
+      console.log("confidence____________",entList[key][0].confidence);
+      console.log("value__________",entList[key][0].value);
+      // find entity with highest confidence
+      if (entList[key][0].confidence > highConfidence) {
+        highConfidence = entList[key][0].confidence;
+        intent = key;
+        intentValue = entList[key][0].value
+      }
+    }
+  } // for key in entlist
+   callback(intent,intentValue,highConfidence);
+  } // end findHighestConfidence
 
 
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
@@ -399,28 +421,6 @@ if (message.nlp) {
   });
  }); // end findHighestConfidence
 
- var findHighestConfidence = function(entList,callback) {
- // find entity with highest confidence
- let intent = "";
- let highConfidence = 0;
- let intentValue = "";
- for (var key in entList ) {
-   // key is the entity
-   if (entList.hasOwnProperty(key))
-    {
-     console.log("key___________:",key + " -> " + entList[key]);
-     console.log("confidence____________",entList[key][0].confidence);
-     console.log("value__________",entList[key][0].value);
-     // find entity with highest confidence
-     if (entList[key][0].confidence > highConfidence) {
-       highConfidence = entList[key][0].confidence;
-       intent = key;
-       intentValue = entList[key][0].value
-     }
-   }
- } // for key in entlist
-  callback(intent,intentValue,highConfidence);
- } // end findHighestConfidence
 
 /*
   queryWit(message.text, N).then((witNlp)  => {
