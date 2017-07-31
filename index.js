@@ -389,8 +389,9 @@ function determineResponse( event,sessionId) {
 if (message.nlp) {
   var entities = message.nlp;
 
-
-  JSON.parse(JSON.stringify(message.nlp.entities)).forEach(function (ent) {
+  var allEnt = JSON.parse(JSON.stringify(message.nlp.entities));
+  console.log("++++++ AllEnt:",allEnt);
+  allEnt.forEach(function (ent) {
     console.log("+++++++++++   entities: ent",ent);
   });
   console.log("<><> --> Entities:",entities);
