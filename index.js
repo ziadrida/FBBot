@@ -384,28 +384,7 @@ if (message.nlp) {
   var entList = message.nlp.entities;
   console.log("EntList______",entList)
 
-  var findHighestConfidence = function(entList,callback) {
-  // find entity with highest confidence
-  let intent = "";
-  let highConfidence = 0;
-  let intentValue = "";
-  for (var key in entList ) {
-    // key is the entity
-    if (entList.hasOwnProperty(key))
-     {
-      console.log("key___________:",key + " -> " + entList[key]);
-      console.log("confidence____________",entList[key][0].confidence);
-      console.log("value__________",entList[key][0].value);
-      // find entity with highest confidence
-      if (entList[key][0].confidence > highConfidence) {
-        highConfidence = entList[key][0].confidence;
-        intent = key;
-        intentValue = entList[key][0].value
-      }
-    }
-  } // for key in entlist
-   callback(intent,intentValue,highConfidence);
-  } // end findHighestConfidence
+
 
 
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
@@ -562,19 +541,30 @@ else { console.log("NOT NLP message"); }
   // handleMessage(message.text,readline);
 
 } // end function determineResponse
-const N = 3;
-const THRESHOLD = 0.7;
-const firebase = require('firebase');
-
-firebase.initializeApp({
-  // apiKey: "AIza....",                             // Auth / General Use
-//  authDomain: "YOUR_APP.firebaseapp.com",         // Auth with popup/redirect
-  databaseURL: "https://fbbot-aaa15.firebaseio.com" // Realtime Database
-//  storageBucket: "YOUR_APP.appspot.com",          // Storage
-  // messagingSenderId: "123456789"                  // Cloud Messaging
-});
 
 
+function findHighestConfidence(entList,callback) {
+// find entity with highest confidence
+let intent = "";
+let highConfidence = 0;
+let intentValue = "";
+for (var key in entList ) {
+  // key is the entity
+  if (entList.hasOwnProperty(key))
+   {
+    console.log("key___________:",key + " -> " + entList[key]);
+    console.log("confidence____________",entList[key][0].confidence);
+    console.log("value__________",entList[key][0].value);
+    // find entity with highest confidence
+    if (entList[key][0].confidence > highConfidence) {
+      highConfidence = entList[key][0].confidence;
+      intent = key;
+      intentValue = entList[key][0].value
+    }
+  }
+} // for key in entlist
+  callback(intent,intentValue,highConfidence);
+} // end findHighestConfidence
 
 function firstEntity(nlp, name) {
   return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
