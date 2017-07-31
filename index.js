@@ -388,12 +388,12 @@ function determineResponse( event,sessionId) {
 //
 if (message.nlp) {
   var entities = message.nlp;
-
-  for (var key in entities) {
+  var entList = message.nlp.entities;
+  for (var key in entList ) {
     if (entities.hasOwnProperty(key)) {
-      console.log("key___________:",key + " -> " + entities[key]);
-      console.log("confidence____________",entities[key].confidence);
-      console.log("value__________",entities[key].value);
+      console.log("key___________:",key + " -> " + entList[key]);
+      console.log("confidence____________",entList[key][0].confidence);
+      console.log("value__________",entList[key][0].value);
     }
   }
 
