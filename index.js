@@ -268,45 +268,6 @@ function handleEvent(senderID, event) {
 }
 
 
-const readline = require('readline');
-
-function handleMessage(question, readline) {
-  return queryWit(question, N).then(({entities}) => {
-    const intents = entities['intent'] || [];
-    const bestIntent = intents[0];
-    const dateTime = firstEntity(entities, 'datetime') || {};
-
-    if (!bestIntent || bestIntent.confidence < THRESHOLD) {
-      console.log('** what would you like to do?');
-      intents.forEach(intent => console.log(`\n -- ${intent.value}`));
-      readline.question('choice > ', choice => {
-        validateSamples([
-          {
-            text: question,
-            entities: [
-              {
-                entity: 'intent',
-                value: choice,
-
-
-              },
-            ],
-          },
-        ]).then(({n}) => console.log(`validated ${n}!`));
-        console.log(`**  okay, running > ${choice}`);
-      });
-      return;
-    }
-    return firebase
-      .database()
-      .ref(`answers/${bestIntent.value}`)
-      .once('value')
-      .then(snapshot => {
-        const val = snapshot.val();
-        console.log(`**  ${val || bestIntent.value}`, dateTime);
-      });
-  });
-}
 
 
 
@@ -418,9 +379,29 @@ function determineResponse( event,sessionId) {
 
 //
 if (message.nlp) {
-  var entities = message.nlp;
+  var witNlp = message.nlp;
+  console.log("<><> --> witNlp:",witNlp);
   var entList = message.nlp.entities;
   console.log("EntList______",entList)
+
+
+
+
+
+ findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
+  matchEntity(intent,intentValue,function(doc) {
+      console.log(">>>>>>>>> matchEntity response:",doc);
+    console.log(">>>>>>>>> matchEntity response:",doc[0].msg);
+    // send message only if highConfidence is higher than the stored entity THRESHOLD
+    if (highConfidence > doc[0].threshold) {
+          sendTextMessage(senderID,doc[0].msg);
+    } else {
+      console.log(" Found entity but threshold is lower: storedThreshold <> highConfidence => ",doc[0].msg + " <> ", highConfidence );
+    }
+  });
+ }); // end findHighestConfidence
+
+var findHighestConfidence = function(entList,callback) {
   // find entity with highest confidence
   let intent = "";
   let highConfidence = 0;
@@ -429,40 +410,27 @@ if (message.nlp) {
     // key is the entity
     if (entList.hasOwnProperty(key))
      {
-
       console.log("key___________:",key + " -> " + entList[key]);
-
       console.log("confidence____________",entList[key][0].confidence);
       console.log("value__________",entList[key][0].value);
-
-
       // find entity with highest confidence
       if (entList[key][0].confidence > highConfidence) {
         highConfidence = entList[key][0].confidence;
         intent = key;
         intentValue = entList[key][0].value
       }
-
     }
-  }
-
-
-  console.log("<><> --> Entities:",entities);
-
-  matchEntity(intent,intentValue,function(doc) {
-      console.log(">>>>>>>>> matchEntity response:",doc);
-    console.log(">>>>>>>>> matchEntity response:",doc[0].msg);
-
-    sendTextMessage(senderID,doc[0].msg);
-  });
+  } // for key in entlist
+  callback(intent,intentValue,highConfidence);
+} // end findHighestConfidence
 
 /*
-  queryWit(message.text, N).then((entities)  => {
-    console.log("** entities:",entities);
-    const greet = firstEntity(entities, 'greetings');
+  queryWit(message.text, N).then((witNlp)  => {
+    console.log("** witNlp:",witNlp);
+    const greet = firstEntity(witNlp, 'greetings');
     console.log("*** greet:",greet);
 
-    const gbye = firstEntity(entities, 'goodbye') || {};
+    const gbye = firstEntity(witNlp, 'goodbye') || {};
     console.log("*** gbye:",gbye);
 
     const greetVal = (greet && greet.value) || 'unknown';
@@ -794,6 +762,7 @@ function processHttpRequest(event) {
             });
         }); // connect
 
+
         // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
         var insertMesssageText = function(db, callback) {
            db.collection('pricing_request').insertOne( {
@@ -1079,7 +1048,8 @@ request({
 }
 
 
-function matchEntity(entity_name,value,callback) {
+
+var matchEntity = function(entity_name,value,callback) {
 console.log("*** in matchEntity:",entity_name)
   MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
