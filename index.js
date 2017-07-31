@@ -1151,13 +1151,13 @@ console.log("*** in matchEntity:",entity_name)
             if (err) {
                                 console.log("******* ERROR *********: could not read from witentities");
             }
-            if (docs) {
+            if (docs && docs.length > 0) {
               console.log("*** docs:", docs);
               assert.equal(null, err);
               db.close();
               callback(docs);
 
-            } else { // no match for entity_name
+            } else if (docs && docs.length == 0 ){ // no match for entity_name
               // how about creating an entry for it and let someone or figure a way later set the message? great idea!
               insertNewEntity(entity_name,value,db,function() {
                   db.close();
