@@ -390,12 +390,13 @@ if (message.nlp) {
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
   matchEntity(intent,intentValue,function(doc) {
       console.log(">>>>>>>>> matchEntity response:",doc);
-    console.log(">>>>>>>>> matchEntity response:",doc[0].msg);
+  //  console.log(">>>>>>>>> matchEntity response text:",doc[0].messageText);
     // send message only if highConfidence is higher than the stored entity THRESHOLD
     if (highConfidence > doc[0].threshold) {
-          sendTextMessage(senderID,doc[0].msg);
+
+          sendTextMessage(senderID,doc[0].messageText);
     } else {
-      console.log(" Found entity but threshold is lower: storedThreshold <> highConfidence => ",doc[0].msg + " <> ", highConfidence );
+      console.log(" Found entity but threshold is lower: storedThreshold <> highConfidence => ",doc[0].messageText + " <> ", highConfidence );
     }
   });
  }); // end findHighestConfidence
@@ -536,15 +537,13 @@ if (message.nlp) {
 } // if message.nlp
 else { console.log("NOT NLP message"); }
 
-   console.log ("handleMessage for:",message.text);
-   //interactive(handleMessage);
-  // handleMessage(message.text,readline);
 
 } // end function determineResponse
 
 
 function findHighestConfidence(entList,callback) {
 // find entity with highest confidence
+console.log (" in findHighestConfidence");
 let intent = "";
 let highConfidence = 0;
 let intentValue = "";
@@ -563,6 +562,7 @@ for (var key in entList ) {
     }
   }
 } // for key in entlist
+  console.log ("<><>  end of  findHighestConfidence intent,intentValue,highConfidence",intent+","+intentValue+",",highConfidence);
   callback(intent,intentValue,highConfidence);
 } // end findHighestConfidence
 
@@ -676,7 +676,7 @@ function callSendAPI(messageData) {
       console.log("Successfully sent generic message with id %s to recipient %s",
         messageId, recipientId);
     } else {
-      console.error("<><><> Unable to send message. <><><>");
+      console.error("<><><> Unable to send message. <><><>",error);
       //console.error(response);
       //console.error(error);
     }
@@ -1049,7 +1049,7 @@ console.log("*** in matchEntity:",entity_name)
             console.log("_______ docs:",docs);
 
             if (docs && docs.length > 0) {
-              console.log("*** docs:", docs);
+            //  console.log("*** docs:", docs);
               assert.equal(null, err);
               db.close();
               callback(docs);
@@ -1072,7 +1072,7 @@ var insertNewEntity = function(entity_name,value,db, callback) {
       "entity_name" : entity_name,
       "value" : value,
       "threshold" : .75,
-      "msg": "not sure what you mean!"
+      "messageText": "not sure what you mean!"
    }, function(err, result) {
     assert.equal(err, null);
     console.log("Inserted a document into the witentities collection.");
