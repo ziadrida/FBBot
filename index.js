@@ -390,7 +390,7 @@ if (message.nlp) {
   var entities = message.nlp;
 
 
-  JSON.parse(message.nlp.entities).forEach(function (ent) {
+  JSON.parse(JSON.stringify(message.nlp.entities)).forEach(function (ent) {
     console.log("+++++++++++   entities: ent",ent);
   });
   console.log("<><> --> Entities:",entities);
