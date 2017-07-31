@@ -329,6 +329,36 @@ function determineResponse( event,sessionId) {
   console.log("compareText ||||||||||||||||||||||:", compareText);
   var userObj;
 
+  if (message.text) {
+    // store all text messages
+  console.log("<<<<<<< insert message:",message_text);
+
+    MongoClient.connect(mongodbUrl, function(err, db) {
+      assert.equal(null, err);
+      insertuserMsg(db, function() {
+          db.close();
+        });
+    }); // connect
+
+    // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+    var insertuserMsg = function(db, callback) {
+       db.collection('user_messages').insertOne( {
+          "senderId" : senderID,
+          "recipientId" : recipientID,
+          "sessionId" : "",
+          "messageText" : messageText,
+          "messageId": messageId,
+          "timestamp" : new Date(timeOfMessage),
+          "dateCreated": new Date()
+       }, function(err, result) {
+        assert.equal(err, null);
+        console.log("Inserted a document into the user_messages");
+        callback();
+      });
+    };  // insertMesssageText
+
+  } // message.text
+
 // check is message from user is a JSON formatted message (i.e. Command)
   try {
     if (compareText) {
@@ -836,8 +866,6 @@ function processHttpRequest(event) {
       }
     }
   });
-
-
 
   let domainName =   parseDomain(compareText);
 
