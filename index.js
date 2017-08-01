@@ -201,7 +201,7 @@ function receivedMessage(event) {
 
     // create or get user
     var findOrCreateUser = function(senderID,fbprofile,db, callback) {
-      console.log("___ *******  in findOrCreateUser");
+      console.log("___ *******  in findOrCreateUser - senderID:",senderID);
       // Peform a simple find and return all the documents
       db.collection('user').find({"userId" : senderID }).limit(1).toArray().then(function(docs) {
         console.log("___user____ docs:",docs);
