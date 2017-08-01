@@ -134,7 +134,14 @@ function receivedMessage(event) {
       console.log("receivedMessage ---> POSTBACK:=====>");
         console.log("receivedMessage ---> event.postback" ,JSON.stringify(event.postback));
   }
+  sessionId = findOrCreateSession(senderID,function() {
 
+    if (sessions[sessionId].context == "set_entity") {
+      // user already known and is admin
+      console.log("   ++++++++++++++++  conext says set_entity")
+        console.log("   ++++++++++++++++  session userObj",sessions[sessionId].userObj)
+      return;
+    }
 
     // get user public profile
      userObj = getUserPublicInfo(senderID, function(fbprofile) {
@@ -177,10 +184,13 @@ function receivedMessage(event) {
           });
       }); // connect
     } //  if (typeof fbprofile != 'undefined' && fbprofile)
+      sessions[sessionId].userObj = userObj;
       return userObj;
     }); // end getUserPublicInfo
+  }); // end findOrCreateSession
 
     const findOrCreateSession = (fbid) => {
+      console.log("========> in findOrCreateSession ");
       let sessionId;
       // Let's see if we already have a session for the user fbid
       Object.keys(sessions).forEach(k => {
@@ -193,12 +203,10 @@ function receivedMessage(event) {
       if (!sessionId) {
         // No session found for user fbid, let's create a new one
         sessionId = new Date().toISOString();
-        sessions[sessionId] = {fbid: fbid, context: {}};
+        sessions[sessionId] = {fbid: fbid, context: {}, userObj: {} };
       }
       return sessionId;
     };
-
-    sessionId = findOrCreateSession(senderID);
 
 
 
