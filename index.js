@@ -39,67 +39,8 @@ app.use(bodyParser.json())
 // sessionId -> {fbid: facebookUserId, context: sessionState}
 const sessions = {};
 
-const findOrCreateSession = (fbid) => {
-  let sessionId;
-  // Let's see if we already have a session for the user fbid
-  Object.keys(sessions).forEach(k => {
-    if (sessions[k].fbid === fbid) {
-      // Yep, got it!
-      sessionId = k;
-    }
-  });
-  if (!sessionId) {
-    // No session found for user fbid, let's create a new one
-    sessionId = new Date().toISOString();
-    sessions[sessionId] = {fbid: fbid, context: {}};
-  }
-  return sessionId;
-};
 
 
-// Our bot actions
-const actions = {
-  send({sessionId}, {text}) {
-    // Our bot has something to say!
-    // Let's retrieve the Facebook user whose session belongs to
-    const recipientId = sessions[sessionId].fbid;
-    if (recipientId) {
-      // Yay, we found our recipient!
-      // Let's forward our bot response to her.
-      // We return a promise to let our bot know when we're done sending
-      return sendTextMessage(recipientId, text)
-      .then(() => null)
-      .catch((err) => {
-        console.error(
-          'Oops! An error occurred while forwarding the response to',
-          recipientId,
-          ':',
-          err.stack || err
-        );
-      });
-    } else {
-      console.error('Oops! Couldn\'t find user for session:', sessionId);
-      // Giving the wheel back to our bot
-      return Promise.resolve()
-    }
-  },
-  // You should implement your custom actions here
-  // See https://wit.ai/docs/quickstart
-};
-
-// var logger = require('logger');
-// var Wit = require("node-wit").Wit
-//const Logger = require('node-wit').Logger;
-//const levels = require('node-wit').logLevels;
-const { Wit, log } = require('node-wit')
-// Setting up our bot
-/*
-const wit = new Wit({
-  accessToken: wit_access_token,
-  actions ,
-  logger: new log.Logger(log.INFO)
-});
-*/
 
 
 // test webpage CALL
@@ -169,10 +110,66 @@ function receivedMessage(event) {
   console.log("==>>> Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
 
-    // We retrieve the user's current session, or create one if it doesn't exist
-    // This is needed for our bot to figure out the conversation history
-    const sessionId = findOrCreateSession(senderID);
-    console.log("********** SessionID:",sessionId);
+    // get user public profile
+    getUserPublicInfo(senderID, function(fbprofile) {
+      console.log("fbprofile:", fbprofile);
+
+      if (typeof fbprofile != 'undefined' && fbprofile) {
+        console.log("fbprofile first_name:", fbprofile.first_name);
+        console.log("fbprofile last_name:", fbprofile.last_name);
+        console.log("fbprofile last_name:", fbprofile.locale);
+          console.log("fbprofile last_name:", fbprofile.gender);
+        if (fbprofile.locale && fbprofile.locale.toLowerCase().includes("en")) {
+          sendTextMessage(senderID, "Hello ",fbprofile.first_name);
+        } else {
+          sendTextMessage(senderID, fbprofile.first_name,  " مرحبا ");
+        }
+      }
+    });
+
+    const findOrCreateSession = (fbid) => {
+      let sessionId;
+      // Let's see if we already have a session for the user fbid
+      Object.keys(sessions).forEach(k => {
+        if (sessions[k].fbid === fbid) {
+          // Yep, got it!
+          sessionId = k;
+        }
+      });
+      if (!sessionId) {
+        // No session found for user fbid, let's create a new one
+        sessionId = new Date().toISOString();
+        sessions[sessionId] = {fbid: fbid, context: {}};
+      }
+      return sessionId;
+    };
+
+    // create user if new
+    MongoClient.connect(mongodbUrl, function(err, db) {
+      assert.equal(null, err);
+      createOrGetUser(fbprofile,db, function() {
+        
+          db.close();
+        });
+    }); // connect
+
+    // create or get user
+    var createOrGetUser = function(fbprofile,db, callback) {
+       db.collection('users').insertOne( {
+          "userId" : senderID,
+          "first_name" : fbprofile.first_name,
+          "last_name" : fbprofile.last_name,
+          "locale": fbprofile.locale,
+            "gender": fbprofile.gender,
+            "role" : "",
+          "dateCreated": new Date()
+       }, function(err, result) {
+        assert.equal(err, null);
+        console.log("Inserted a document into the users table");
+        callback();
+      });
+    };  // insertMesssageText
+
 
     if (typeof event == 'undefined' ) {
           console.log(" EVENT is Undefined <><>")
@@ -205,7 +202,7 @@ function receivedMessage(event) {
 
   if (messageText) {
     //  call function to determine what response to give based on messagae text
-    determineResponse(event,sessionId);
+    determineResponse(event);
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
@@ -276,7 +273,7 @@ function handleEvent(senderID, event) {
 Function determineResponse
 *********************************/
 
-function determineResponse( event,sessionId) {
+function determineResponse( event) {
   console.log("IN determineResponse:--->");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -290,6 +287,7 @@ function determineResponse( event,sessionId) {
   let compareText = messageText.toLowerCase();
   console.log("compareText ||||||||||||||||||||||:", compareText);
   var userObj;
+
 
   if (message.text) {
     // store all text messages
@@ -307,7 +305,6 @@ function determineResponse( event,sessionId) {
        db.collection('user_messages').insertOne( {
           "senderId" : senderID,
           "recipientId" : recipientID,
-          "sessionId" : "",
           "messageText" : message.text,
           "messageId": messageId,
           "timestamp" : new Date(timeOfMessage),
@@ -448,27 +445,6 @@ if (message.nlp) {
      console.log ("Not a greetings_ar  ************ ");
    }
 
-   const thanks_ar = firstEntity(message.nlp, 'thanks_ar');
-   if (thanks_ar && thanks_ar.confidence > 0.75) {
-     if (thanks_ar.value == 'islamic') {
-        sendTextMessage(senderID,'وجزاك خيرا');
-     } else {
-       sendTextMessage(senderID,'اهلا وسهلا');
-    }
-  } else {
-     console.log ("Not a thanks_ar  ************ ");
-   }
-
-   const order_status = firstEntity(message.nlp, 'order_status');
-   if (order_status && order_status.confidence > 0.75) {
-     if (order_status.value == 'arabic') {
-        sendTextMessage(senderID,'سيتم الرد قريبا');
-     } else {
-       sendTextMessage(senderID,'we will get back to you soon!');
-    }
-   } else {
-     console.log ("Not a order_status  ************ ");
-   }
 
 
    const company_hours = firstEntity(message.nlp, 'company_hours');
@@ -652,17 +628,7 @@ function sendTextMessage(recipientId, messageText) {
 } // sendTextMessage
 
 
-/**********
-// get user *** body from user id
-GET https://graph.facebook.com/v2.6/<USER_ID>?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=<PAGE_ACCESS_TOKEN>
-Result:
-{
-  : 'Philipp',
-  last_name: 'Holly',
-  profile_pic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/13177091_10209330090191529_6260308789231765xx_n.jpg?oh=83704b11843eef0e2b590943532e3cxx&oe=57AA83xx',
-  ...
-}
-*/
+
 
 function callSendAPI(messageData) {
   request({
@@ -673,7 +639,8 @@ function callSendAPI(messageData) {
     json: messageData
 
   }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
+    if
+     (!error && response.statusCode == 200) {
       var recipientId = body.recipient_id;
       var messageId = body.message_id;
 
@@ -724,22 +691,7 @@ function processHttpRequest(event) {
 
 
 
-  // get user public profile
-  getUserPublicInfo(senderID, function(resp) {
-    console.log("resp:", resp);
 
-    if (typeof resp != 'undefined' && resp) {
-      console.log("resp first_name:", resp.first_name);
-      console.log("resp last_name:", resp.last_name);
-      console.log("resp last_name:", resp.locale);
-        console.log("resp last_name:", resp.gender);
-      if (resp.locale && resp.locale.toLowerCase().includes("en")) {
-        sendTextMessage(senderID, "Hello ",resp.first_name);
-      } else {
-        sendTextMessage(senderID, resp.first_name,  " مرحبا ");
-      }
-    }
-  });
 
   let domainName =   parseDomain(compareText);
 
