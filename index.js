@@ -111,7 +111,7 @@ function receivedMessage(event) {
     senderID, recipientID, timeOfMessage);
 
     // get user public profile
-    getUserPublicInfo(senderID, function(fbprofile) {
+    var pfprofile = getUserPublicInfo(senderID, function(fbprofile) {
       console.log("fbprofile:", fbprofile);
 
       if (typeof fbprofile != 'undefined' && fbprofile) {
@@ -125,7 +125,11 @@ function receivedMessage(event) {
           sendTextMessage(senderID, fbprofile.first_name,  " مرحبا ");
         }
       }
+
+      return fbprofile;
     });
+
+    var sessionId = findOrCreateSession(senderID);
 
     const findOrCreateSession = (fbid) => {
       let sessionId;
@@ -147,14 +151,15 @@ function receivedMessage(event) {
     // create user if new
     MongoClient.connect(mongodbUrl, function(err, db) {
       assert.equal(null, err);
-      createOrGetUser(fbprofile,db, function() {
-        
+      createOrGetUser(db, function() {
+
           db.close();
         });
     }); // connect
 
     // create or get user
-    var createOrGetUser = function(fbprofile,db, callback) {
+    var createOrGetUser = function(db, callback) {
+      console.log("*******  in createOrGetUser");
        db.collection('users').insertOne( {
           "userId" : senderID,
           "first_name" : fbprofile.first_name,
