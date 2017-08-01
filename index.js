@@ -126,6 +126,14 @@ function receivedMessage(event) {
           sendTextMessage(senderID, fbprofile.first_name,  " مرحبا ");
         }
       }
+      // create user if new
+      MongoClient.connect(mongodbUrl, function(err, db) {
+        assert.equal(null, err);
+        createOrGetUser(fbprofile,db, function() {
+
+            db.close();
+          });
+      }); // connect
 
       return fbprofile;
     });
@@ -149,17 +157,10 @@ function receivedMessage(event) {
 
     var sessionId = findOrCreateSession(senderID);
 
-    // create user if new
-    MongoClient.connect(mongodbUrl, function(err, db) {
-      assert.equal(null, err);
-      createOrGetUser(db, function() {
 
-          db.close();
-        });
-    }); // connect
 
     // create or get user
-    var createOrGetUser = function(db, callback) {
+    var createOrGetUser = function(fbprofile,db, callback) {
       console.log("*******  in createOrGetUser");
        db.collection('users').insertOne( {
           "userId" : senderID,
