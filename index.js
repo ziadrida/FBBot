@@ -74,7 +74,7 @@ app.post('/webhook', function (req, res) {
 
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
-        if (event.message ) {
+        if (event.message && event.message.is_echo!= "true") {
            receivedMessage(event);
         } else if (event.postback) {
           // postback
@@ -106,7 +106,10 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
-
+  console.log("receivedMessage  event.message.is_echo?",event.message.is_echo);
+  if (event.message.is_echo == 'true') {
+    return;
+  }
   console.log("==>>> Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
     if (typeof event == 'undefined' ) {
@@ -986,14 +989,14 @@ request({
               callback(null);
           }else{
             //  console.log("**** response:",response);
-            console.log("**** body:",body);
+            //  console.log("**** body:",body);
 
               data = JSON.parse( JSON.stringify(body) );
-                console.log("******* data:",data);
-              console.log("******* first_name:",data.first_name);
-                console.log("******* last_name:",data.last_name);
-                  console.log("******* gender:",data.gender);
-                  console.log("******* locale:",data.locale);
+              //  console.log("******* data:",data);
+              //console.log("******* first_name:",data.first_name);
+                //console.log("******* last_name:",data.last_name);
+                  //console.log("******* gender:",data.gender);
+                  //console.log("******* locale:",data.locale);
               callback(data);
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
           }
