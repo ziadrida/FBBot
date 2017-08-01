@@ -38,6 +38,7 @@ app.use(bodyParser.json())
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
 const sessions = {};
+var sessionId = ""
 var userObj ;
 
 
@@ -185,6 +186,7 @@ function receivedMessage(event) {
       Object.keys(sessions).forEach(k => {
         if (sessions[k].fbid === fbid) {
           // Yep, got it!
+          console.log(" ******* context:",sessions[k].context);
           sessionId = k;
         }
       });
@@ -196,7 +198,7 @@ function receivedMessage(event) {
       return sessionId;
     };
 
-    var sessionId = findOrCreateSession(senderID);
+    sessionId = findOrCreateSession(senderID);
 
 
 
@@ -423,6 +425,11 @@ if (message.nlp) {
           console.log(">>>>>>>>> matchEntity response:",doc);
         // send message only if highConfidence is higher than the stored entity THRESHOLD
         console.log( "storedThreshold <> highConfidence => ",doc[0].threshold + " <> ", highConfidence )
+        if (doc[0].messageText == "not sure") {
+          sendTextMessage(senderID,"how should i respond?");
+          // set session context to expect entity respose TODO
+          sessions[sessionId].context = "set_entity";
+        }
         if (highConfidence > doc[0].threshold) {
 
               sendTextMessage(senderID,doc[0].messageText);
@@ -434,20 +441,6 @@ if (message.nlp) {
   } // intent != ''
  }); // end findHighestConfidence
 
-
-/*
-  queryWit(message.text, N).then((witNlp)  => {
-    console.log("** witNlp:",witNlp);
-    const greet = firstEntity(witNlp, 'greetings');
-    console.log("*** greet:",greet);
-
-    const gbye = firstEntity(witNlp, 'goodbye') || {};
-    console.log("*** gbye:",gbye);
-
-    const greetVal = (greet && greet.value) || 'unknown';
-    console.log("*** greetVal:",greetVal);
-  });
-*/
 /*
   // check greeting is here and is confident
    const greeting = firstEntity(message.nlp, 'greetings');
@@ -1042,7 +1035,7 @@ if (entity_name == '' ) {
             console.log("_______ docs:",docs);
 
             if (docs && docs.length > 0) {
-            //  console.log("*** docs:", docs);
+               console.log("*** wit entity:", docs);
               assert.equal(null, err);
               db.close();
               callback(docs);
@@ -1064,7 +1057,7 @@ var insertNewEntity = function(entity_name,value,db, callback) {
       "entity_name" : entity_name,
       "value" : value,
       "threshold" : .75,
-      "messageText": "not sure what you mean!"
+      "messageText": "not sure"
    }, function(err, result) {
     assert.equal(err, null);
     console.log("Inserted a document into the witentities collection.");
