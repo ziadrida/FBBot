@@ -106,20 +106,16 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
-  console.log("receivedMessage  event.message.is_echo?",event.message.is_echo);
-  if (event.message.is_echo ) {
-    console.log("receivedMessage  ECHO ONLY - Return");
-    return;
-  }
+  if ( echoOnly(event)) {return; }
+
   console.log("==>>> Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
-    if (typeof event == 'undefined' ) {
-          console.log(" receivedMessage ---> EVENT is Undefined <><>")
-    } else {
-        console.log("-receivedMessage --->---------=> EVENT STRUCTURE:")
-        console.log(JSON.stringify(event));
-    }
-
+  if (typeof event == 'undefined') {
+    console.log(" receivedMessage ---> EVENT is Undefined <><>")
+  } else {
+    console.log("-receivedMessage --->---------=> EVENT STRUCTURE:")
+    console.log(JSON.stringify(event));
+  }
 
   if (typeof message == 'undefined') {
     console.log('receivedMessage ---> Message is undefined =====><><>')
@@ -135,35 +131,36 @@ function receivedMessage(event) {
   if (typeof event != 'undefined'  && event.postback) {
       console.log("receivedMessage ---> POSTBACK:=====>");
         console.log("receivedMessage ---> event.postback" ,JSON.stringify(event.postback));
-    }
+  }
 
 
     // get user public profile
-    var pfprofile = getUserPublicInfo(senderID, function(fbprofile) {
+    var userObj = getUserPublicInfo(senderID, function(fbprofile) {
       console.log("fbprofile:", fbprofile);
 
       if (typeof fbprofile != 'undefined' && fbprofile) {
         console.log("fbprofile first_name:", fbprofile.first_name);
         console.log("fbprofile last_name:", fbprofile.last_name);
         console.log("fbprofile last_name:", fbprofile.locale);
-          console.log("fbprofile last_name:", fbprofile.gender);
+        console.log("fbprofile last_name:", fbprofile.gender);
 
-        if (fbprofile.locale && fbprofile.locale.toLowerCase().includes("en")) {
+      /*  if (fbprofile.locale && fbprofile.locale.toLowerCase().includes("en")) {
           sendTextMessage(senderID, "Hello ",fbprofile.first_name);
         } else {
           sendTextMessage(senderID, fbprofile.first_name,  " مرحبا ");
-        }
+        }*/
 
       // create user if new
       MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
-        createOrGetUser(fbprofile,db, function() {
-
+        findOrCreateUser(fbprofile,db, function(userObj) {
+            // set user info
+            console.log("****** userObj:",userObj)
             db.close();
           });
       }); // connect
     } //  if (typeof fbprofile != 'undefined' && fbprofile)
-      return fbprofile;
+      return userObj;
     });
 
     const findOrCreateSession = (fbid) => {
@@ -188,25 +185,42 @@ function receivedMessage(event) {
 
 
     // create or get user
-    var createOrGetUser = function(fbprofile,db, callback) {
-      console.log("*******  in createOrGetUser");
-       db.collection('users').insertOne( {
-          "userId" : senderID,
-          "first_name" : fbprofile.first_name,
-          "last_name" : fbprofile.last_name,
-          "locale": fbprofile.locale,
-            "gender": fbprofile.gender,
-              "timezone": fbprofile.timezone,
-            "role" : "",
-          "dateCreated": new Date()
-       }, function(err, result) {
-        assert.equal(err, null);
-        console.log("Inserted a document into the users table");
-        callback();
-      });
+    var findOrCreateUser = function(fbprofile,db, callback) {
+      console.log("*******  in findOrCreateUser");
+      // Peform a simple find and return all the documents
+      db.collection('user').find({"userId" : senderID }).limit(1).toArray().then(function(docs) {
+        console.log("___user____ docs:",docs);
+
+        if (docs && docs.length > 0) {
+        //  console.log("*** docs:", docs);
+          assert.equal(null, err);
+          // user found
+          callback(docs);
+
+        } else if (docs && docs.length == 0 ){ // no match for entity_name
+          // how about creating an entry for it and let someone or figure a way later set the message? great idea!
+          docs = {
+             "userId" : senderID,
+             "first_name" : fbprofile.first_name,
+             "last_name" : fbprofile.last_name,
+             "locale": fbprofile.locale,
+               "gender": fbprofile.gender,
+                 "timezone": fbprofile.timezone,
+               "role" : "",
+             "dateCreated": new Date()
+          };
+          db.collection('users').insertOne(docs , function(err, result) {
+           assert.equal(err, null);
+           console.log("Inserted a document into the users table");
+           callback(docs);
+         });
+        }
+  });
+
     };  // insertMesssageText
 
 
+console.log("_________ user Object at this poinnt:",userObj);
 
  // check if event is a postback
  if (typeof event != 'undefined' && event.postback) {
@@ -1052,3 +1066,17 @@ var insertNewEntity = function(entity_name,value,db, callback) {
     callback();
   });
 }; // end of insertNewEntity
+
+
+function echoOnly(event) {
+  // return if this is a message echo (message that we sent to user)
+    if (event.message_is_echo) {
+        console.log("receivedMessage **** event.message.is_echo?",event.message.is_echo);
+
+      if ( event.message.is_echo == "true") {
+        console.log("receivedMessage  ECHO ONLY - Return");
+        return true;
+      }
+    }
+    return false;
+}
