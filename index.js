@@ -134,8 +134,8 @@ function receivedMessage(event) {
       console.log("receivedMessage ---> POSTBACK:=====>");
         console.log("receivedMessage ---> event.postback" ,JSON.stringify(event.postback));
   }
-  sessionId = findOrCreateSession(senderID,function() {
-
+   findOrCreateSession(senderID,function(thisSessionId) {
+    sessionId = thisSessionId;
     if (sessions[sessionId].context == "set_entity") {
       // user already known and is admin
       console.log("   ++++++++++++++++  conext says set_entity")
@@ -189,7 +189,7 @@ function receivedMessage(event) {
     }); // end getUserPublicInfo
   }); // end findOrCreateSession
 
-    const findOrCreateSession = (fbid) => {
+    const findOrCreateSession = (fbid,callback) => {
       console.log("========> in findOrCreateSession ");
       let sessionId;
       // Let's see if we already have a session for the user fbid
@@ -205,7 +205,7 @@ function receivedMessage(event) {
         sessionId = new Date().toISOString();
         sessions[sessionId] = {fbid: fbid, context: {}, userObj: {} };
       }
-      return sessionId;
+      callback(sessionId)
     };
 
 
