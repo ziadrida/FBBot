@@ -119,6 +119,7 @@ function receivedMessage(event) {
         console.log("fbprofile last_name:", fbprofile.last_name);
         console.log("fbprofile last_name:", fbprofile.locale);
           console.log("fbprofile last_name:", fbprofile.gender);
+
         if (fbprofile.locale && fbprofile.locale.toLowerCase().includes("en")) {
           sendTextMessage(senderID, "Hello ",fbprofile.first_name);
         } else {
@@ -128,8 +129,6 @@ function receivedMessage(event) {
 
       return fbprofile;
     });
-
-    var sessionId = findOrCreateSession(senderID);
 
     const findOrCreateSession = (fbid) => {
       let sessionId;
@@ -147,6 +146,8 @@ function receivedMessage(event) {
       }
       return sessionId;
     };
+
+    var sessionId = findOrCreateSession(senderID);
 
     // create user if new
     MongoClient.connect(mongodbUrl, function(err, db) {
@@ -166,6 +167,7 @@ function receivedMessage(event) {
           "last_name" : fbprofile.last_name,
           "locale": fbprofile.locale,
             "gender": fbprofile.gender,
+              "timezone": fbprofile.timezone,
             "role" : "",
           "dateCreated": new Date()
        }, function(err, result) {
