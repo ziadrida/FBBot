@@ -109,6 +109,30 @@ function receivedMessage(event) {
 
   console.log("==>>> Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
+    if (typeof event == 'undefined' ) {
+          console.log(" receivedMessage ---> EVENT is Undefined <><>")
+    } else {
+        console.log("-receivedMessage --->---------=> EVENT STRUCTURE:")
+        console.log(JSON.stringify(event));
+    }
+
+
+  if (typeof message == 'undefined') {
+    console.log('receivedMessage ---> Message is undefined =====><><>')
+  } else {
+    console.log("- receivedMessage --->-----> Message STRUCTURE:")
+    console.log(JSON.stringify(message));
+    var messageId = message.mid;
+
+    var messageText = message.text;
+    var messageAttachments = message.attachments;
+  }
+
+  if (typeof event != 'undefined'  && event.postback) {
+      console.log("receivedMessage ---> POSTBACK:=====>");
+        console.log("receivedMessage ---> event.postback" ,JSON.stringify(event.postback));
+    }
+
 
     // get user public profile
     var pfprofile = getUserPublicInfo(senderID, function(fbprofile) {
@@ -125,7 +149,7 @@ function receivedMessage(event) {
         } else {
           sendTextMessage(senderID, fbprofile.first_name,  " مرحبا ");
         }
-      }
+
       // create user if new
       MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
@@ -134,7 +158,7 @@ function receivedMessage(event) {
             db.close();
           });
       }); // connect
-
+    } //  if (typeof fbprofile != 'undefined' && fbprofile)
       return fbprofile;
     });
 
@@ -179,29 +203,6 @@ function receivedMessage(event) {
     };  // insertMesssageText
 
 
-    if (typeof event == 'undefined' ) {
-          console.log(" EVENT is Undefined <><>")
-    } else {
-        console.log("----------=> EVENT STRUCTURE:")
-        console.log(JSON.stringify(event));
-    }
-
-
-  if (typeof message == 'undefined') {
-    console.log('Message is undefined =====><><>')
-  } else {
-    console.log("------> Message STRUCTURE:")
-    console.log(JSON.stringify(message));
-    var messageId = message.mid;
-
-    var messageText = message.text;
-    var messageAttachments = message.attachments;
-}
-
-  if (typeof event != 'undefined'  && event.postback) {
-      console.log("POSTBACK:=====>");
-        console.log(JSON.stringify(event.postback));
-    }
 
  // check if event is a postback
  if (typeof event != 'undefined' && event.postback) {
