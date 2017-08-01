@@ -38,7 +38,7 @@ app.use(bodyParser.json())
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
 const sessions = {};
-
+var userObj ;
 
 
 
@@ -135,8 +135,8 @@ function receivedMessage(event) {
 
 
     // get user public profile
-    var userObj = getUserPublicInfo(senderID, function(fbprofile) {
-      console.log("fbprofile:", fbprofile);
+     userObj = getUserPublicInfo(senderID, function(fbprofile) {
+      console.log("_____ after getUserPublicInfo - fbprofile:", fbprofile);
 
       if (typeof fbprofile != 'undefined' && fbprofile) {
         console.log("fbprofile first_name:", fbprofile.first_name);
@@ -153,15 +153,30 @@ function receivedMessage(event) {
       // create user if new
       MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
-        findOrCreateUser(fbprofile,db, function(userObj) {
+        findOrCreateUser(senderID,fbprofile,db, function(userObj) {
             // set user info
             console.log("****** userObj:",userObj)
+
             db.close();
+            console.log("_________ user Object at this poinnt:",userObj);
+
+            // at this point we have user information.
+             // check if event is a postback
+             if (typeof event != 'undefined' && event.postback) {
+                handleEvent(senderID,event)  ;
+             }
+
+              if (messageText) {
+                //  call function to determine what response to give based on messagae text
+                determineResponse(event);
+              } else if (messageAttachments) {
+                sendTextMessage(senderID, "Message with attachment received");
+              }
           });
       }); // connect
     } //  if (typeof fbprofile != 'undefined' && fbprofile)
       return userObj;
-    });
+    }); // end getUserPublicInfo
 
     const findOrCreateSession = (fbid) => {
       let sessionId;
@@ -185,8 +200,8 @@ function receivedMessage(event) {
 
 
     // create or get user
-    var findOrCreateUser = function(fbprofile,db, callback) {
-      console.log("*******  in findOrCreateUser");
+    var findOrCreateUser = function(senderID,fbprofile,db, callback) {
+      console.log("___ *******  in findOrCreateUser");
       // Peform a simple find and return all the documents
       db.collection('user').find({"userId" : senderID }).limit(1).toArray().then(function(docs) {
         console.log("___user____ docs:",docs);
@@ -209,6 +224,7 @@ function receivedMessage(event) {
                "role" : "",
              "dateCreated": new Date()
           };
+          console.log(" ************** Insert new User:",fbprofile.first_name);
           db.collection('users').insertOne(docs , function(err, result) {
            assert.equal(err, null);
            console.log("Inserted a document into the users table");
@@ -220,19 +236,7 @@ function receivedMessage(event) {
     };  // insertMesssageText
 
 
-console.log("_________ user Object at this poinnt:",userObj);
 
- // check if event is a postback
- if (typeof event != 'undefined' && event.postback) {
-    handleEvent(senderID,event)  ;
- }
-
-  if (messageText) {
-    //  call function to determine what response to give based on messagae text
-    determineResponse(event);
-  } else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
-  }
 }
 
 /**************************************************************
@@ -301,7 +305,7 @@ Function determineResponse
 *********************************/
 
 function determineResponse( event) {
-  console.log("IN determineResponse:--->");
+  console.log("*******<><><> IN determineResponse:--->");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -312,8 +316,8 @@ function determineResponse( event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-  console.log("compareText ||||||||||||||||||||||:", compareText);
-  var userObj;
+  console.log("<><><><><>   compareText:", compareText);
+  var userMsg;
 
 
   if (message.text) {
@@ -349,19 +353,19 @@ function determineResponse( event) {
   try {
     if (compareText) {
       console.log("do JSON parse of compareText");
-      userObj = JSON.parse(compareText);
+      userMsg = JSON.parse(compareText);
       console.log("after JSON parse of compareText");
-      if (typeof userObj != 'undefined' && userObj.action) {
-        console.log('action = ', userObj.action);
+      if (typeof userMsg != 'undefined' && userMsg.action) {
+        console.log('action = ', userMsg.action);
       }
-      if (typeof userObj != 'undefined' && userObj.price) {
-        console.log('price in USD:', userObj.price)
+      if (typeof userMsg != 'undefined' && userMsg.price) {
+        console.log('price in USD:', userMsg.price)
       }
-      if (typeof userObj != 'undefined' && userObj.weight) {
-        console.log('weight in lbs:', userObj.weight)
+      if (typeof userMsg != 'undefined' && userMsg.weight) {
+        console.log('weight in lbs:', userMsg.weight)
       }
-      if (typeof userObj != 'undefined' && userObj.category) {
-        console.log('category:', userObj.category)
+      if (typeof userMsg != 'undefined' && userMsg.category) {
+        console.log('category:', userMsg.category)
       }
     }
   } catch (e) {
@@ -380,17 +384,17 @@ function determineResponse( event) {
   /*---------------------------------
    check if this is a pricing request
    ---------------------------------*/
-  if (typeof userObj != 'undefined' && userObj.action === "*pr") {
+  if (typeof userMsg != 'undefined' && userMsg.action === "*pr") {
     getPricing();
   } //if action *pr
 
 
-  if (typeof userObj != 'undefined' && userObj.action === "*report") {
+  if (typeof userMsg != 'undefined' && userMsg.action === "*report") {
     sendTextMessage(senderID, 'I understand that you want me to give you a PR report .. please wait');
-    console.log("Report for days back:",userObj.days)
+    console.log("Report for days back:",userMsg.days)
     daysBack = 1;
-    if (userObj.days) {
-       daysBack = userObj.days
+    if (userMsg.days) {
+       daysBack = userMsg.days
      };
 
     genPrReport(senderID,daysBack);
@@ -975,10 +979,10 @@ getPricing
 **************************/
 function getPricing() {
   sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
-  let itemPrice = userObj.price;
-  let itemWeight = userObj.weight
-  let shipping = userObj.shipping
-  let category = userObj.category;
+  let itemPrice = userMsg.price;
+  let itemWeight = userMsg.weight
+  let shipping = userMsg.shipping
+  let category = userMsg.category;
   sendTextMessage(senderID, getRegularAmmanPrice(itemPrice, itemWeight, shipping, category));
 }
 
