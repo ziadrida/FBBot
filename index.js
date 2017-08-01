@@ -107,7 +107,8 @@ function receivedMessage(event) {
   var message = event.message;
 
   console.log("receivedMessage  event.message.is_echo?",event.message.is_echo);
-  if (event.message.is_echo == 'true') {
+  if (event.message.is_echo ) {
+    console.log("receivedMessage  ECHO ONLY - Return");
     return;
   }
   console.log("==>>> Received message for user %d and page %d at %d with message:",
