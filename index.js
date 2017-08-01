@@ -128,6 +128,7 @@ function receivedMessage(event) {
     var messageAttachments = message.attachments;
   }
 
+
   if (typeof event != 'undefined'  && event.postback) {
       console.log("receivedMessage ---> POSTBACK:=====>");
         console.log("receivedMessage ---> event.postback" ,JSON.stringify(event.postback));
@@ -203,7 +204,7 @@ function receivedMessage(event) {
     var findOrCreateUser = function(senderID,fbprofile,db, callback) {
       console.log("___ *******  in findOrCreateUser - senderID:",senderID);
       // Peform a simple find and return all the documents
-      db.collection('user').find({"userId" : senderID }).limit(1).toArray().then(function(docs) {
+      db.collection('users').find({"userId" : senderID }).limit(1).toArray().then(function(docs) {
         console.log("___user____ docs:",docs);
 
         if (docs && docs.length > 0) {
