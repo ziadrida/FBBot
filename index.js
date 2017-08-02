@@ -151,7 +151,7 @@ function receivedMessage(event) {
         console.log(" ****findOrCreateSession*** session not found");
       // No session found for user fbid, let's create a new one
       sessionId = new Date().toISOString();
-      sessions[sessionId] = {fbid: fbid, context: {}, userObj: {} };
+      sessions[sessionId] = {fbid: fbid, fbprofile: {}, context: {}, userObj: {} };
     }
     callback(sessionId)
   }; //  enf findOrCreateSession
@@ -162,16 +162,14 @@ function receivedMessage(event) {
     if (sessions[sessionId].context.action == "set_entity_msg") {
       // user already known and is admin
       console.log("   ++++++++++++++++  user already known and is admin - conext says set_entity_msg")
-        console.log("   ++++++++++++++++  session userObj context ",sessions[sessionId].context);
-      console.log("   ++++++++++++++++  session userObj",sessions[sessionId].context.userObj);
+        console.log("   ++++++++++++++++  session  content: ",sessions[sessionId]);
+
         // update entity message to what the user just sent TODO
         action = "set_entity_msg";
-
-
-      return;
     } // sessions[sessionId].context == "set_entity"
 
     // get user public profile
+
      userObj = getUserPublicInfo(senderID, function(fbprofile) {
       console.log("_____ after getUserPublicInfo - fbprofile:", fbprofile);
 
@@ -180,6 +178,7 @@ function receivedMessage(event) {
         console.log("fbprofile last_name:", fbprofile.last_name);
         console.log("fbprofile last_name:", fbprofile.locale);
         console.log("fbprofile last_name:", fbprofile.gender);
+        sessions[sessionId].fbprofile = fbprofile;
 
       /*  if (fbprofile.locale && fbprofile.locale.toLowerCase().includes("en")) {
           sendTextMessage(senderID, "Hello ",fbprofile.first_name);
@@ -188,12 +187,12 @@ function receivedMessage(event) {
         }*/
 
       // create user if new
+
       MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
         findOrCreateUser(senderID,fbprofile,db, function(userObj) {
             // set user info
             console.log("****** userObj:",userObj)
-
             db.close();
             console.log("_________ user Object at this poinnt:",userObj);
 
@@ -214,7 +213,10 @@ function receivedMessage(event) {
     } //  if (typeof fbprofile != 'undefined' && fbprofile)
       sessions[sessionId].userObj = userObj;
       return userObj;
+
     }); // end getUserPublicInfo
+
+
   }); // end findOrCreateSession
 
 
@@ -224,6 +226,9 @@ function receivedMessage(event) {
     // create or get user
     var findOrCreateUser = function(senderID,fbprofile,db, callback) {
       console.log("___ *******  in findOrCreateUser - senderID:",senderID);
+      if (!sessions[sessionId].userObj ) {
+        callback(sessions[sessionId].userObj);
+      }
       // Peform a simple find and return all the documents
       db.collection('users').find({"userId" : senderID }).limit(1).toArray().then(function(docs) {
         console.log("___user____ docs:",docs);
@@ -466,7 +471,8 @@ if (message.nlp) {
           // set session context to expect entity respose TODO
           console.log(" &&&&&&&&&& ASK how to respond. UserObj:",userObj)
           sessions[sessionId].context = {"action": "set_entity_msg",
-            "intent" : intent , "intentValue" : intentValue, "userObj": userObj} ;
+            "intent" : intent , "intentValue" : intentValue} ;
+          sessions[sessionId].userObj = userObj;
         }
         if (highConfidence > doc[0].threshold) {
 
@@ -1022,6 +1028,9 @@ function getPricing() {
 
 function getUserPublicInfo(fbId,callback){
 var data ;
+if (sessions[sessionId].fbprofile) {
+  callback(sessions[sessionId].fbprofile);
+}
  console.log('In getUserPublicInfo - fbId:',fbId);
  var url = 'https://graph.facebook.com/v2.6/' + fbId;
 var qs = {fields:'first_name,last_name,gender,locale,timezone',access_token:fb_access_token};
