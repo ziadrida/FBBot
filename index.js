@@ -158,7 +158,7 @@ function receivedMessage(event) {
     sessionId = thisSessionId;
     if (sessions[sessionId].context.action == "set_entity_msg") {
       // user already known and is admin
-      console.log("   ++++++++++++++++  conext says set_entity")
+      console.log("   ++++++++++++++++  conext says set_entity_msg")
         console.log("   ++++++++++++++++  session userObj",sessions[sessionId].userObj)
         // update entity message to what the user just sent TODO
         action = "set_entity_msg";
@@ -431,18 +431,21 @@ if (message.nlp) {
   var entList = message.nlp.entities;
   console.log("EntList______",entList)
 
-  console.log("+++++++++++++ action:",action);
-  console.log("+++++++++++++ sessions[sessionId].context",sessions[sessionId].context);
+  console.log("??????????????????   action:",action);
+  console.log(" ?????????????????? sessions[sessionId].context",sessions[sessionId].context);
   console.log("+++++++++++++ sessions[sessionId].context.action",sessions[sessionId].context.action);
 
   if ( action == 'set_entity_msg' || sessions[sessionId].context.action == "set_entity_msg") {
     // update witentities table and return
     // TODO updateEntity(intent,intentValue)
-    console.log("+++++++++++++ Call updateEntity here")
+    // clear context
+    sessions[sessionId].context = {}
+    action = ""
+    console.log("+++++++++++++++++++++++++++++ Call updateEntity here")
   }
 
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
-   console.log("-- Intent:",intent);
+   console.log("--after findHighestConfidence ---- Intent:",intent);
   if (intent != '' ) {
       matchEntity(intent,intentValue,function(doc) {
           console.log(">>>>>>>>> matchEntity response:",doc);
