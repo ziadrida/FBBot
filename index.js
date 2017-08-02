@@ -157,6 +157,7 @@ function receivedMessage(event) {
     callback(sessionId)
   }; //  enf findOrCreateSession
 
+
 // call findOrCreateSession
    findOrCreateSession(senderID,function(thisSessionId) {
     sessionId = thisSessionId;
@@ -202,36 +203,32 @@ function receivedMessage(event) {
             // at this point we have user information.
              // check if event is a postback
              if (typeof event != 'undefined' && event.postback) {
-                handleEvent(senderID,event)  ;
-             }
+               handleEvent(senderID, event);
+             } // if (typeof event != 'undefined' && event.postback)
 
-              if (messageText) {
-                //  call function to determine what response to give based on messagae text
-                console.log("-------------- Call determineResponse ", callCount)
+             if (messageText) {
+               //  call function to determine what response to give based on messagae text
+               console.log("-------------- Call determineResponse ", callCount)
 
-                determineResponse(event);
-              } else if (messageAttachments) {
-                sendTextMessage(senderID, "Message with attachment received");
-              }
-          });
+               determineResponse(event);
+             } else if (messageAttachments) {
+               sendTextMessage(senderID, "Message with attachment received");
+             } // (messageText)
+          }); // findOrCreateUser
       }); // connect
+
     } //  if (typeof fbprofile != 'undefined' && fbprofile)
 
     }); // end getUserPublicInfo
 
-
   }); // end findOrCreateSession
-
-
-
-
 
     // create or get user
     var findOrCreateUser = function(senderID,fbprofile,db, callback) {
       console.log("=====>   in findOrCreateUser - senderID:",senderID);
       if (!sessions[sessionId].userObj ) {
         console.log("**** findOrCreateUser -  user already known")
-        callback(sessions[sessionId].userObj);
+        return callback(sessions[sessionId].userObj);
       }
       // Peform a simple find and return all the documents
       db.collection('users').find({"userId" : senderID }).limit(1).toArray().then(function(docs) {
