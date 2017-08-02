@@ -459,7 +459,7 @@ if (message.nlp) {
             // clear context
             sessions[sessionId].context = {}
             action = ""
-            sendTextMessage(senderID,sessions[sessionId].context.intent + " " + updated);
+            sendTextMessage(senderID,sessions[sessionId].context.intent +  " updated");
             return;
           });
 
