@@ -9,6 +9,7 @@ var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 
+var callCount = 0;
 // parse URL
   var parseDomain = require("parse-domain");
 //add all of code
@@ -190,6 +191,7 @@ function receivedMessage(event) {
 
       MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
+        console.log("------ call findOrCreateUser");
         findOrCreateUser(senderID,fbprofile,db, function(newUserObj) {
             // set user info
             userObj = newUserObj;
@@ -205,7 +207,8 @@ function receivedMessage(event) {
 
               if (messageText) {
                 //  call function to determine what response to give based on messagae text
-                console.log("-------------- Call determineResponse ")
+                console.log("-------------- Call determineResponse ", callCount)
+
                 determineResponse(event);
               } else if (messageAttachments) {
                 sendTextMessage(senderID, "Message with attachment received");
@@ -336,6 +339,7 @@ Function determineResponse
 
 function determineResponse( event) {
   console.log("================================> IN determineResponse:--->");
+  callCount = callCount + 1;
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -1113,13 +1117,13 @@ if (entity_name == '' ) {
    callback(docs);
  } else {
   MongoClient.connect(mongodbUrl, function(err, db) {
-        assert.equal(null, err);
+        //assert.equal(null, err);
         // Create a collection we want to drop later
         var collection = db.collection('witentities');
 
           // Peform a simple find and return all the documents
           collection.findAndModify({"entity_name" : entity_name, "value" : value },
-        {$set: {messageText: newMessage}},{new: true}).then(function(err,docs) {
+        {$set: {messageText: newMessage}},{new: true}).then(function(docs) {
             console.log("&&&&&&&& __updateEntity_____findAndModify __docs:",docs);
 
             if (docs && docs.length > 0) {
