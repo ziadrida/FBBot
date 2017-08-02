@@ -1122,8 +1122,11 @@ if (entity_name == '' ) {
         var collection = db.collection('witentities');
 
           // Peform a simple find and return all the documents
-          collection.findAndModify({"entity_name" : entity_name, "value" : value },
-        {$set: {messageText: newMessage}},{new: true}).then(function(docs) {
+          collection.findAndModify(
+            {"entity_name" : entity_name, "value" : value },
+             [['_id','asc']],
+             {$set: {messageText: newMessage}},
+        {new: true}).then(function(docs) {
             console.log("&&&&&&&& __updateEntity_____findAndModify __docs:",docs);
 
             if (docs && docs.length > 0) {
