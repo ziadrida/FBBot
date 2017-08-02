@@ -1123,23 +1123,14 @@ if (entity_name == '' ) {
             {"entity_name" : entity_name, "value" : value },
              [['_id','asc']],
              {$set: {messageText: newMessage}},
-        {new: true}).then(function(docs) {
-            console.log("&&&&&&&& __updateEntity_____findAndModify __docs:",docs);
-
-            if (docs && docs.length > 0) {
-               console.log("*&&&&&&&&&** updateEntity wit entity findAndModify:", docs);
-              //assert.equal(null, err);
+             {},function(err, docs) {
+               if (err) {
+                   console.log(" +++++==== findAndModify NOT FOUND! ")
+               } else {
+                 console.log("&&&&&&&& __updateEntity_____findAndModify __docs found and updated:",docs);
+               }
               db.close();
-              callback(docs);
-
-            } else if (docs && docs.length == 0 ){ // no match for entity_name
-              // how about creating an entry for it and let someone or figure a way later set the message? great idea!
-                console.log(" +++++==== findAndModify NOT FOUND! ")
-              //  assert.equal(0,docs.length);
-              //insertNewEntity(entity_name,value,db,function() {
-              db.close();
-              //  });
-            }
+             return callback(docs);
       });
 });
 } // if entity_name == ''
