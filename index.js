@@ -456,6 +456,8 @@ if (message.nlp) {
             console.log("+++++++++++++++++++++++++++++  updateEntity done  doc updated:",doc)
             sessions[sessionId].context = {}
             action = ""
+            sendTextMessage(senderID,sessions[sessionId].context.intent + " " + updated);
+            return;
           });
 
   }
@@ -474,6 +476,7 @@ if (message.nlp) {
           sessions[sessionId].context = {"action": "set_entity_msg",
             "intent" : intent , "intentValue" : intentValue} ;
           sessions[sessionId].userObj = userObj;
+          return;
         }
         if (highConfidence > doc[0].threshold) {
 
