@@ -133,7 +133,26 @@ function receivedMessage(event) {
   if (typeof event != 'undefined'  && event.postback) {
       console.log("receivedMessage ---> POSTBACK:=====>");
         console.log("receivedMessage ---> event.postback" ,JSON.stringify(event.postback));
-  }
+  } // if typeof event != 'undefined'  && event.postback
+  const findOrCreateSession = (fbid,callback) => {
+    console.log("========> in findOrCreateSession ");
+    let sessionId;
+    // Let's see if we already have a session for the user fbid
+    Object.keys(sessions).forEach(k => {
+      if (sessions[k].fbid === fbid) {
+        // Yep, got it!
+        console.log(" ******* context:",sessions[k].context);
+        sessionId = k;
+      }
+    });
+    if (!sessionId) {
+      // No session found for user fbid, let's create a new one
+      sessionId = new Date().toISOString();
+      sessions[sessionId] = {fbid: fbid, context: {}, userObj: {} };
+    }
+    callback(sessionId)
+  }; //  enf findOrCreateSession
+   
    findOrCreateSession(senderID,function(thisSessionId) {
     sessionId = thisSessionId;
     if (sessions[sessionId].context == "set_entity") {
@@ -141,7 +160,7 @@ function receivedMessage(event) {
       console.log("   ++++++++++++++++  conext says set_entity")
         console.log("   ++++++++++++++++  session userObj",sessions[sessionId].userObj)
       return;
-    }
+    } // sessions[sessionId].context == "set_entity"
 
     // get user public profile
      userObj = getUserPublicInfo(senderID, function(fbprofile) {
@@ -189,24 +208,7 @@ function receivedMessage(event) {
     }); // end getUserPublicInfo
   }); // end findOrCreateSession
 
-    const findOrCreateSession = (fbid,callback) => {
-      console.log("========> in findOrCreateSession ");
-      let sessionId;
-      // Let's see if we already have a session for the user fbid
-      Object.keys(sessions).forEach(k => {
-        if (sessions[k].fbid === fbid) {
-          // Yep, got it!
-          console.log(" ******* context:",sessions[k].context);
-          sessionId = k;
-        }
-      });
-      if (!sessionId) {
-        // No session found for user fbid, let's create a new one
-        sessionId = new Date().toISOString();
-        sessions[sessionId] = {fbid: fbid, context: {}, userObj: {} };
-      }
-      callback(sessionId)
-    };
+
 
 
 
