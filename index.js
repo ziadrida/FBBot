@@ -377,7 +377,7 @@ function determineResponse( event) {
           "timestamp" : new Date(timeOfMessage),
           "dateCreated": new Date()
        }, function(err, result) {
-        assert.equal(err, null);
+      //  assert.equal(err, null);
         console.log("Inserted a document into the user_messages");
         callback();
       });
@@ -780,7 +780,7 @@ function processHttpRequest(event) {
     // valid domainName
         // insert all http request in the database
         MongoClient.connect(mongodbUrl, function(err, db) {
-          assert.equal(null, err);
+          //assert.equal(null, err);
           insertMesssageText(db, function() {
               db.close();
             });
@@ -798,7 +798,7 @@ function processHttpRequest(event) {
               "timestamp" : new Date(timeOfMessage),
               "dateCreated": new Date()
            }, function(err, result) {
-            assert.equal(err, null);
+             //assert.equal(err, null);
             console.log("Inserted a document into the pricing_request collection.");
             callback();
           });
@@ -962,7 +962,7 @@ function genPrReport(senderID,daysBack) {
   console.log("In genPrReport daysBack:",daysBack);
 
   MongoClient.connect(mongodbUrl, (err, db) => {
-    assert.equal(null, err);
+  //  assert.equal(null, err);
 
     pricingRequestSummary(db, () => {
 
@@ -1005,7 +1005,7 @@ function genPrReport(senderID,daysBack) {
     var out = [];
     var cursor = db.collection('pricing_request').aggregate(agr).toArray((err, res) => {
 
-      assert.equal(err, null);
+    //  assert.equal(err, null);
       console.log(JSON.stringify(res));
       var obj = JSON.parse(JSON.stringify(res));
       obj.forEach(function(a) {
@@ -1084,7 +1084,7 @@ if (entity_name == '' ) {
    callback(docs);
  } else {
   MongoClient.connect(mongodbUrl, function(err, db) {
-        assert.equal(null, err);
+      //  assert.equal(null, err);
         // Create a collection we want to drop later
         var collection = db.collection('witentities');
 
@@ -1094,7 +1094,7 @@ if (entity_name == '' ) {
 
             if (docs && docs.length > 0) {
                console.log("*** wit entity:", docs);
-              assert.equal(null, err);
+          //    assert.equal(null, err);
               db.close();
               callback(docs);
 
