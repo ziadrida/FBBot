@@ -468,7 +468,7 @@ if (message.nlp) {
 
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
    console.log("--after findHighestConfidence ---- Intent:",intent);
-  if (intent == "change intent" && intentValue == "message" && sessions[sessionId].context.intent) {
+  if (intent == "change_intent" && intentValue == "message" && sessions[sessionId].context.intent) {
     // update intent message
     sendTextMessage(senderID,"how should i respond to "+ sessions[sessionId].context.intent + "?");
     sessions[sessionId].context = {"action": "set_entity_msg",
