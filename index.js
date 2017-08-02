@@ -452,7 +452,7 @@ if (message.nlp) {
       console.log("+++++++++++++++++++++++++++++  updateEntity now ");
      updateEntity(sessions[sessionId].context.intent,sessions[sessionId].context.intentValue,messageText,
           function(doc) {
-            console.log("+++++++++++++++++++++++++++++  updateEntity done ")
+            console.log("+++++++++++++++++++++++++++++  updateEntity done  doc updated:",doc)
             sessions[sessionId].context = {}
             action = ""
           });
@@ -1100,7 +1100,7 @@ if (entity_name == '' ) {
 } // end matchEntity
 
 var updateEntity = function(entity_name,value,newMessage,callback) {
-console.log("====> in updateEntity:",entity_name +" value:"+value)
+console.log("==========> in updateEntity:",entity_name +" value:"+value)
 var docs;
 if (entity_name == '' ) {
   console.log("****** entity_name is blank");
