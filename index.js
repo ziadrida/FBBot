@@ -1140,7 +1140,7 @@ if (entity_name == '' ) {
                 console.log(" +++++==== findAndModify NOT FOUND! ")
               //  assert.equal(0,docs.length);
               //insertNewEntity(entity_name,value,db,function() {
-              //    db.close();
+              db.close();
               //  });
             }
       });
