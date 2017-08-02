@@ -468,7 +468,13 @@ if (message.nlp) {
 
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
    console.log("--after findHighestConfidence ---- Intent:",intent);
-  if (intent != '' ) {
+  if (intent == "change intent" && intentValue == "message" && sessions[sessionId].context.intent) {
+    // update intent message
+    sendTextMessage(senderID,"how should i respond to "+ sessions[sessionId].context.intent + "?");
+    sessions[sessionId].context = {"action": "set_entity_msg",
+      "intent" : sessions[sessionId].context.intent , "intentValue" : sessions[sessionId].context.intentValue} ;
+  }
+  else if (intent != '' ) {
       matchEntity(intent,intentValue,function(doc) {
           console.log(">>>>>>>>> matchEntity response:",doc);
         // send message only if highConfidence is higher than the stored entity THRESHOLD
