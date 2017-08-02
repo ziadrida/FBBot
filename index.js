@@ -110,7 +110,7 @@ function receivedMessage(event) {
   action = "";
   if ( echoOnly(event)) {return; }
 
-  console.log("==>>> Received message for user %d and page %d at %d with message:",
+  console.log("==========================>>> in Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
   if (typeof event == 'undefined') {
     console.log(" receivedMessage ---> EVENT is Undefined <><>")
@@ -205,6 +205,7 @@ function receivedMessage(event) {
 
               if (messageText) {
                 //  call function to determine what response to give based on messagae text
+                console.log("-------------- Call determineResponse ")
                 determineResponse(event);
               } else if (messageAttachments) {
                 sendTextMessage(senderID, "Message with attachment received");
@@ -224,8 +225,9 @@ function receivedMessage(event) {
 
     // create or get user
     var findOrCreateUser = function(senderID,fbprofile,db, callback) {
-      console.log("___ *******  in findOrCreateUser - senderID:",senderID);
+      console.log("=====>   in findOrCreateUser - senderID:",senderID);
       if (!sessions[sessionId].userObj ) {
+        console.log("**** findOrCreateUser -  user already known")
         callback(sessions[sessionId].userObj);
       }
       // Peform a simple find and return all the documents
@@ -333,7 +335,7 @@ Function determineResponse
 *********************************/
 
 function determineResponse( event) {
-  console.log("*******<><><> IN determineResponse:--->");
+  console.log("================================> IN determineResponse:--->");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -442,25 +444,25 @@ if (message.nlp) {
   var entList = message.nlp.entities;
   console.log("EntList______",entList)
 
-  console.log("??????????????????   action:",action);
-  console.log(" ?????????????????? sessions[sessionId].context",sessions[sessionId].context);
-  console.log("????/ sessions[sessionId].context.action",sessions[sessionId].context.action);
+  console.log("**********  action:",action);
+  console.log(" ********** sessions[sessionId].context",sessions[sessionId].context);
+  console.log("*********** sessions[sessionId].context.action",sessions[sessionId].context.action);
 
   if ( action == 'set_entity_msg' || sessions[sessionId].context.action == "set_entity_msg") {
     // update witentities table and return
-    // TODO updateEntity(intent,intentValue)
-    // clear context
+
       console.log("+++++++++++++++++++++++++++++  updateEntity now ");
      updateEntity(sessions[sessionId].context.intent,sessions[sessionId].context.intentValue,messageText,
           function(doc) {
             console.log("+++++++++++++++++++++++++++++  updateEntity done  doc updated:",doc)
+            // clear context
             sessions[sessionId].context = {}
             action = ""
             sendTextMessage(senderID,sessions[sessionId].context.intent + " " + updated);
             return;
           });
 
-  }
+  } else {
 
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
    console.log("--after findHighestConfidence ---- Intent:",intent);
@@ -489,7 +491,7 @@ if (message.nlp) {
   });
   } // intent != ''
  }); // end findHighestConfidence
-
+}
 /*
   // check greeting is here and is confident
    const greeting = firstEntity(message.nlp, 'greetings');
@@ -597,7 +599,7 @@ else { console.log("NOT NLP message"); }
 
 function findHighestConfidence(entList,callback) {
 // find entity with highest confidence
-console.log (" in findHighestConfidence");
+console.log (" =============> in findHighestConfidence");
 let intent = "";
 let highConfidence = 0;
 let intentValue = "";
@@ -1104,7 +1106,7 @@ if (entity_name == '' ) {
 } // end matchEntity
 
 var updateEntity = function(entity_name,value,newMessage,callback) {
-console.log("==========> in updateEntity:",entity_name +" value:"+value)
+console.log("===================> in updateEntity:",entity_name +" value:"+value)
 var docs;
 if (entity_name == '' ) {
   console.log("****** updateEntity entity_name is blank");
