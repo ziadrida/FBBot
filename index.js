@@ -473,7 +473,7 @@ if (message.nlp) {
           console.log(">>>>>>>>> matchEntity response:",doc);
         // send message only if highConfidence is higher than the stored entity THRESHOLD
         console.log( "storedThreshold <> highConfidence => ",doc[0].threshold + " <> ", highConfidence )
-        if (doc[0].messageText.includes("not sure")) {
+        if (doc && doc[0] && doc[0].messageText && doc[0].messageText.includes("not sure")) {
           sendTextMessage(senderID,"how should i respond?");
           // set session context to expect entity respose TODO
           console.log(" &&&&&&&&&& ASK how to respond. UserObj:",userObj)
@@ -1131,7 +1131,7 @@ var insertNewEntity = function(entity_name,value,db, callback) {
    db.collection('witentities').insertOne( {
       "entity_name" : entity_name,
       "value" : value,
-      "threshold" : .75,
+      "threshold" : 0.51,
       "messageText": "not sure"
    }, function(err, result) {
     assert.equal(err, null);
