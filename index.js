@@ -40,6 +40,7 @@ app.use(bodyParser.json())
 const sessions = {};
 var sessionId = ""
 var userObj ;
+var action = "";
 
 
 
@@ -106,7 +107,7 @@ function receivedMessage(event) {
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
-
+  action = "";
   if ( echoOnly(event)) {return; }
 
   console.log("==>>> Received message for user %d and page %d at %d with message:",
@@ -155,10 +156,13 @@ function receivedMessage(event) {
 
    findOrCreateSession(senderID,function(thisSessionId) {
     sessionId = thisSessionId;
-    if (sessions[sessionId].context == "set_entity") {
+    if (sessions[sessionId].context.action == "set_entity_msg") {
       // user already known and is admin
       console.log("   ++++++++++++++++  conext says set_entity")
         console.log("   ++++++++++++++++  session userObj",sessions[sessionId].userObj)
+        // update entity message to what the user just sent TODO
+        action = "set_entity_msg";
+
       return;
     } // sessions[sessionId].context == "set_entity"
 
@@ -342,6 +346,8 @@ function determineResponse( event) {
       insertuserMsg(db, function() {
           db.close();
         });
+
+
     }); // connect
 
     // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
@@ -425,8 +431,15 @@ if (message.nlp) {
   var entList = message.nlp.entities;
   console.log("EntList______",entList)
 
+  console.log("+++++++++++++ action:",action);
+  console.log("+++++++++++++ sessions[sessionId].context",sessions[sessionId].context);
+  console.log("+++++++++++++ sessions[sessionId].context.action",sessions[sessionId].context.action);
 
-
+  if ( action == 'set_entity_msg' || sessions[sessionId].context.action == "set_entity_msg") {
+    // update witentities table and return
+    // TODO updateEntity(intent,intentValue)
+    console.log("+++++++++++++ Call updateEntity here")
+  }
 
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
    console.log("-- Intent:",intent);
@@ -438,13 +451,14 @@ if (message.nlp) {
         if (doc[0].messageText == "not sure") {
           sendTextMessage(senderID,"how should i respond?");
           // set session context to expect entity respose TODO
-          sessions[sessionId].context = "set_entity";
+          sessions[sessionId].context = {"action": "set_entity_msg", "intent" : intent , "intentValue" : intentValue} ;
         }
         if (highConfidence > doc[0].threshold) {
 
               sendTextMessage(senderID,doc[0].messageText);
         } else if (doc[0].entity_name != '') {
-          console.log(" Found entity but threshold is lower.");
+          console.log(" Found entity but threshold is lower.  ");
+          console.log(" ++ user intent was:",intent);
         }
 
   });
@@ -1029,7 +1043,7 @@ request({
 
 
 var matchEntity = function(entity_name,value,callback) {
-console.log("*** in matchEntity:",entity_name)
+console.log("====> in matchEntity:",entity_name)
 var docs;
 if (entity_name == '' ) {
   console.log("****** entity_name is blank");
@@ -1060,6 +1074,44 @@ if (entity_name == '' ) {
 });
 } // if entity_name == ''
 } // end matchEntity
+
+var updateEntity = function(entity_name,value,newMessage,callback) {
+console.log("====> in updateEntity:",entity_name +" value:"+value)
+var docs;
+if (entity_name == '' ) {
+  console.log("****** entity_name is blank");
+   callback(docs);
+ } else {
+  MongoClient.connect(mongodbUrl, function(err, db) {
+        assert.equal(null, err);
+        // Create a collection we want to drop later
+        var collection = db.collection('witentities');
+
+          // Peform a simple find and return all the documents
+          collection.findAndModify({"entity_name" : entity_name, "value" : value },
+        {$set: {messageText: newMessage}},{new: true}).then(function(err,docs) {
+            console.log("_______findAndModify __docs:",docs);
+
+            if (docs && docs.length > 0) {
+               console.log("*** wit entity findAndModify:", docs);
+              assert.equal(null, err);
+              db.close();
+              callback(docs);
+
+            } else if (docs && docs.length == 0 ){ // no match for entity_name
+              // how about creating an entry for it and let someone or figure a way later set the message? great idea!
+                console.log(" +++++==== findAndModify NOT FOUND! ")
+                assert.equal(0,docs.length);
+              //insertNewEntity(entity_name,value,db,function() {
+              //    db.close();
+              //  });
+            }
+      });
+});
+} // if entity_name == ''
+} // end matchEntity
+
+
 
 var insertNewEntity = function(entity_name,value,db, callback) {
   console.log(">>> inside insertNewEntity");
