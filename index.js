@@ -457,9 +457,10 @@ if (message.nlp) {
           function(doc) {
             console.log("+++++++++++++++++++++++++++++  updateEntity done  doc updated:",doc)
             // clear context
-            sessions[sessionId].context = {}
+
             action = ""
             sendTextMessage(senderID,sessions[sessionId].context.intent +  " updated");
+            sessions[sessionId].context = {}
             return;
           });
 
@@ -472,7 +473,7 @@ if (message.nlp) {
           console.log(">>>>>>>>> matchEntity response:",doc);
         // send message only if highConfidence is higher than the stored entity THRESHOLD
         console.log( "storedThreshold <> highConfidence => ",doc[0].threshold + " <> ", highConfidence )
-        if (doc[0].messageText == "not sure") {
+        if (doc[0].messageText.includes("not sure")) {
           sendTextMessage(senderID,"how should i respond?");
           // set session context to expect entity respose TODO
           console.log(" &&&&&&&&&& ASK how to respond. UserObj:",userObj)
@@ -494,21 +495,8 @@ if (message.nlp) {
  }); // end findHighestConfidence
 }
 /*
-  // check greeting is here and is confident
-   const greeting = firstEntity(message.nlp, 'greetings');
-   if (greeting && greeting.confidence > 0.75) {
-     sendTextMessage(senderID,'Hi there!');
-   } else {
-     console.log ("Not a greeting ************ greeting:",greeting);
-   }
 
 
-   const thanks = firstEntity(message.nlp, 'thanks');
-   if (thanks && thanks.confidence > 0.75) {
-     sendTextMessage(senderID,'welcome!');
-   } else {
-     console.log ("Not a thanks ************ ");
-   }
 
 
    const greetings_ar = firstEntity(message.nlp, 'greetings_ar');
