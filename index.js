@@ -449,7 +449,7 @@ if (message.nlp) {
   console.log(" ********** sessions[sessionId].context",sessions[sessionId].context);
   console.log("*********** sessions[sessionId].context.action",sessions[sessionId].context.action);
 
-  if ( action == 'set_entity_msg' || sessions[sessionId].context.action == "set_entity_msg") {
+  if ( sessions[sessionId].context.action == "set_entity_msg") {
     // update witentities table and return
 
       console.log("+++++++++++++++++++++++++++++  updateEntity now ");
@@ -712,7 +712,7 @@ function callSendAPI(messageData) {
       console.log("Successfully sent generic message with id %s to recipient %s",
         messageId, recipientId);
     } else {
-      console.error("<><><> Unable to send message. <><><>",error);
+      console.error("<><><> Unable to send message. <><><>statusCode:",response.statusCode);
       //console.error(response);
       //console.error(error);
     }
@@ -1081,6 +1081,7 @@ if (entity_name == '' ) {
                console.log("*** wit entity:", docs);
           //    assert.equal(null, err);
               db.close();
+              sessions[sessionId].context = { "action" : "matched_response", "intent" : entity_name, "intentValue" : value }
               callback(docs);
 
             } else if (docs && docs.length == 0 ){ // no match for entity_name
