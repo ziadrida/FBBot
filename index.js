@@ -1036,7 +1036,7 @@ function getPricing() {
 function getUserPublicInfo(fbId,callback){
 var data ;
 if (sessions[sessionId].fbprofile) {
-  callback(sessions[sessionId].fbprofile);
+  return callback(sessions[sessionId].fbprofile);
 }
  console.log('In getUserPublicInfo - fbId:',fbId);
  var url = 'https://graph.facebook.com/v2.6/' + fbId;
@@ -1078,7 +1078,7 @@ console.log("====> in matchEntity:",entity_name)
 var docs;
 if (entity_name == '' ) {
   console.log("****** entity_name is blank");
-   callback(docs);
+   return callback(docs);
  } else {
   MongoClient.connect(mongodbUrl, function(err, db) {
       //  assert.equal(null, err);
@@ -1111,7 +1111,7 @@ console.log("===================> in updateEntity:",entity_name +" value:"+value
 var docs;
 if (entity_name == '' ) {
   console.log("****** updateEntity entity_name is blank");
-   callback(docs);
+   return callback(docs);
  } else {
   MongoClient.connect(mongodbUrl, function(err, db) {
         //assert.equal(null, err);
