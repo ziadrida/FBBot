@@ -152,7 +152,7 @@ function receivedMessage(event) {
     }
     callback(sessionId)
   }; //  enf findOrCreateSession
-   
+
    findOrCreateSession(senderID,function(thisSessionId) {
     sessionId = thisSessionId;
     if (sessions[sessionId].context == "set_entity") {
@@ -221,7 +221,7 @@ function receivedMessage(event) {
 
         if (docs && docs.length > 0) {
         //  console.log("*** docs:", docs);
-          assert.equal(null, err);
+        //  assert.equal(null, err);
           // user found
           callback(docs);
 
@@ -239,7 +239,7 @@ function receivedMessage(event) {
           };
           console.log(" ************** Insert new User:",fbprofile.first_name);
           db.collection('users').insertOne(docs , function(err, result) {
-           assert.equal(err, null);
+          // assert.equal(err, null);
            console.log("Inserted a document into the users table");
            callback(docs);
          });
