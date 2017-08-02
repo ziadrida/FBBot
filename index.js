@@ -135,6 +135,7 @@ function receivedMessage(event) {
       console.log("receivedMessage ---> POSTBACK:=====>");
         console.log("receivedMessage ---> event.postback" ,JSON.stringify(event.postback));
   } // if typeof event != 'undefined'  && event.postback
+
   const findOrCreateSession = (fbid,callback) => {
     console.log("========> in findOrCreateSession ");
     let sessionId;
@@ -142,11 +143,12 @@ function receivedMessage(event) {
     Object.keys(sessions).forEach(k => {
       if (sessions[k].fbid === fbid) {
         // Yep, got it!
-        console.log(" ******* context:",sessions[k].context);
+        console.log(" ****findOrCreateSession*** context:",sessions[k].context);
         sessionId = k;
       }
     });
     if (!sessionId) {
+        console.log(" ****findOrCreateSession*** session not found");
       // No session found for user fbid, let's create a new one
       sessionId = new Date().toISOString();
       sessions[sessionId] = {fbid: fbid, context: {}, userObj: {} };
@@ -154,14 +156,17 @@ function receivedMessage(event) {
     callback(sessionId)
   }; //  enf findOrCreateSession
 
+// call findOrCreateSession
    findOrCreateSession(senderID,function(thisSessionId) {
     sessionId = thisSessionId;
     if (sessions[sessionId].context.action == "set_entity_msg") {
       // user already known and is admin
-      console.log("   ++++++++++++++++  conext says set_entity_msg")
-        console.log("   ++++++++++++++++  session userObj",sessions[sessionId].userObj)
+      console.log("   ++++++++++++++++  user already known and is admin - conext says set_entity_msg")
+        console.log("   ++++++++++++++++  session userObj context ",sessions[sessionId].context);
+      console.log("   ++++++++++++++++  session userObj",sessions[sessionId].context.userObj);
         // update entity message to what the user just sent TODO
         action = "set_entity_msg";
+
 
       return;
     } // sessions[sessionId].context == "set_entity"
@@ -433,15 +438,20 @@ if (message.nlp) {
 
   console.log("??????????????????   action:",action);
   console.log(" ?????????????????? sessions[sessionId].context",sessions[sessionId].context);
-  console.log("+++++++++++++ sessions[sessionId].context.action",sessions[sessionId].context.action);
+  console.log("????/ sessions[sessionId].context.action",sessions[sessionId].context.action);
 
   if ( action == 'set_entity_msg' || sessions[sessionId].context.action == "set_entity_msg") {
     // update witentities table and return
     // TODO updateEntity(intent,intentValue)
     // clear context
-    sessions[sessionId].context = {}
-    action = ""
-    console.log("+++++++++++++++++++++++++++++ Call updateEntity here")
+      console.log("+++++++++++++++++++++++++++++  updateEntity now ");
+     updateEntity(sessions[sessionId].context.intent,sessions[sessionId].context.intentValue,messageText,
+          function(doc) {
+            console.log("+++++++++++++++++++++++++++++  updateEntity done ")
+            sessions[sessionId].context = {}
+            action = ""
+          });
+
   }
 
  findHighestConfidence(message.nlp.entities, function(intent,intentValue,highConfidence) {
@@ -454,7 +464,9 @@ if (message.nlp) {
         if (doc[0].messageText == "not sure") {
           sendTextMessage(senderID,"how should i respond?");
           // set session context to expect entity respose TODO
-          sessions[sessionId].context = {"action": "set_entity_msg", "intent" : intent , "intentValue" : intentValue} ;
+          console.log(" &&&&&&&&&& ASK how to respond. UserObj:",userObj)
+          sessions[sessionId].context = {"action": "set_entity_msg",
+            "intent" : intent , "intentValue" : intentValue, "userObj": userObj} ;
         }
         if (highConfidence > doc[0].threshold) {
 
