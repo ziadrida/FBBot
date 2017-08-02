@@ -170,7 +170,7 @@ function receivedMessage(event) {
 
     // get user public profile
 
-     userObj = getUserPublicInfo(senderID, function(fbprofile) {
+      getUserPublicInfo(senderID, function(fbprofile) {
       console.log("_____ after getUserPublicInfo - fbprofile:", fbprofile);
 
       if (typeof fbprofile != 'undefined' && fbprofile) {
@@ -190,11 +190,12 @@ function receivedMessage(event) {
 
       MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
-        findOrCreateUser(senderID,fbprofile,db, function(userObj) {
+        findOrCreateUser(senderID,fbprofile,db, function(newUserObj) {
             // set user info
-            console.log("****** userObj:",userObj)
+            userObj = newUserObj;
+            console.log("***after findOrCreateUser *** userObj:",userObj)
             db.close();
-            console.log("_________ user Object at this poinnt:",userObj);
+
 
             // at this point we have user information.
              // check if event is a postback
@@ -211,8 +212,6 @@ function receivedMessage(event) {
           });
       }); // connect
     } //  if (typeof fbprofile != 'undefined' && fbprofile)
-      sessions[sessionId].userObj = userObj;
-      return userObj;
 
     }); // end getUserPublicInfo
 
@@ -237,6 +236,8 @@ function receivedMessage(event) {
         //  console.log("*** docs:", docs);
         //  assert.equal(null, err);
           // user found
+          userObj = docs;
+          sessions[sessionId].userObj = docs;
           callback(docs);
 
         } else if (docs && docs.length == 0 ){ // no match for entity_name
@@ -1103,7 +1104,7 @@ var updateEntity = function(entity_name,value,newMessage,callback) {
 console.log("==========> in updateEntity:",entity_name +" value:"+value)
 var docs;
 if (entity_name == '' ) {
-  console.log("****** entity_name is blank");
+  console.log("****** updateEntity entity_name is blank");
    callback(docs);
  } else {
   MongoClient.connect(mongodbUrl, function(err, db) {
@@ -1114,18 +1115,18 @@ if (entity_name == '' ) {
           // Peform a simple find and return all the documents
           collection.findAndModify({"entity_name" : entity_name, "value" : value },
         {$set: {messageText: newMessage}},{new: true}).then(function(err,docs) {
-            console.log("_______findAndModify __docs:",docs);
+            console.log("&&&&&&&& __updateEntity_____findAndModify __docs:",docs);
 
             if (docs && docs.length > 0) {
-               console.log("*** wit entity findAndModify:", docs);
-              assert.equal(null, err);
+               console.log("*&&&&&&&&&** updateEntity wit entity findAndModify:", docs);
+              //assert.equal(null, err);
               db.close();
               callback(docs);
 
             } else if (docs && docs.length == 0 ){ // no match for entity_name
               // how about creating an entry for it and let someone or figure a way later set the message? great idea!
                 console.log(" +++++==== findAndModify NOT FOUND! ")
-                assert.equal(0,docs.length);
+              //  assert.equal(0,docs.length);
               //insertNewEntity(entity_name,value,db,function() {
               //    db.close();
               //  });
