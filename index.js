@@ -418,8 +418,9 @@ if(sessions[sessionId].newUser) {
   }
 
     matchEntity("how_to_order",lang,function(doc) {
+        sendWatchVideoButton(senderID);
       sendTextMessage(senderID,doc[0].messageText);
-      sendWatchVideoButton();
+
 
     });
 }
@@ -671,6 +672,7 @@ function sendGenericMessage(recipientId, messageText) {
 }
 
 function sendWatchVideoButton(recipientId, btnText) {
+  console.log("=================> In   sendWatchVideoButton() ");
   let messageData = {
       "recipient":{
       "id":recipientId
@@ -680,7 +682,7 @@ function sendWatchVideoButton(recipientId, btnText) {
         "type":"template",
         "payload":{
           "template_type":"button",
-        //  "text":"Watch video on how to order?",
+             "text":"Need help on how to order?",
           "buttons":[
             {
               "type":"web_url",
