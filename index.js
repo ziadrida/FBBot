@@ -687,7 +687,7 @@ function sendWatchVideoButton(recipientId, btnText) {
             {
               "type":"web_url",
               "url":"http://techtownjo.com/import/TechtownMailOrder-720p.mp4",
-            "title":"Watch video on how to order"
+            "title":"How to order Video"
             }
           ]
         }
