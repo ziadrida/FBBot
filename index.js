@@ -226,8 +226,8 @@ function receivedMessage(event) {
     // create or get user
     var findOrCreateUser = function(senderID,fbprofile,db, callback) {
       console.log("=====>   in findOrCreateUser - senderID:",senderID);
-      if (!sessions[sessionId].userObj ) {
-        console.log("**** findOrCreateUser -  user already known")
+      if (sessions[sessionId].userObj ) {
+        console.log("**** findOrCreateUser -  user already known:",sessions[sessionId].userObj)
         return callback(sessions[sessionId].userObj);
       }
       // Peform a simple find and return one  documents
