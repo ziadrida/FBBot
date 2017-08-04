@@ -411,8 +411,13 @@ function determineResponse( event) {
 console.log("sessions[sessionId];:",sessions[sessionId])
 if(sessions[sessionId].newUser) {
   // follow welcome protocol for newUser
-    sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name,", welcome to TechTown MailOrder Service");
-    matchEntity("how_to_order","arabic",function(doc) {
+    //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
+    lang = "arabic" ;
+  if (doc[0] && doc[0].userObj && doc[0].userObj.language.toUpperCase().includes("EN")) {
+    lang = "english" ;
+  }
+
+    matchEntity("how_to_order",lang,function(doc) {
       sendTextMessage(senderID,doc[0].messageText);
 
     });
