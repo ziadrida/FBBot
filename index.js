@@ -413,12 +413,18 @@ if(sessions[sessionId].newUser) {
   // follow welcome protocol for newUser
     //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
     lang = "arabic" ;
+    text = "";
+
+    title = "فيديو - كيف اطلب"
   if (sessions[sessionId] && sessions[sessionId].userObj && sessions[sessionId].userObj.locale.toUpperCase().includes("EN")) {
     lang = "english" ;
+    text  = "";
+      title = "How to order Video"
   }
 
     matchEntity("how_to_order",lang,function(doc) {
-        sendWatchVideoButton(senderID);
+      sessions[sessionId].newUser = false; // welcome message sent
+        sendWatchVideoButton(senderID,text,title);
       sendTextMessage(senderID,doc[0].messageText);
 
 
@@ -671,7 +677,7 @@ function sendGenericMessage(recipientId, messageText) {
   // To be expanded in later sections
 }
 
-function sendWatchVideoButton(recipientId, btnText) {
+function sendWatchVideoButton(recipientId, btnText,title) {
   console.log("=================> In   sendWatchVideoButton() ");
   let messageData = {
       "recipient":{
@@ -682,12 +688,12 @@ function sendWatchVideoButton(recipientId, btnText) {
         "type":"template",
         "payload":{
           "template_type":"button",
-             "text":"Need help on how to order?",
+             "text":btnText,
           "buttons":[
             {
               "type":"web_url",
               "url":"http://techtownjo.com/import/TechtownMailOrder-720p.mp4",
-            "title":"How to order Video"
+            "title":title
             }
           ]
         }
