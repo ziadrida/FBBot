@@ -193,9 +193,9 @@ function receivedMessage(event) {
       MongoClient.connect(mongodbUrl, function(err, db) {
         assert.equal(null, err);
         console.log("------ call findOrCreateUser");
-        findOrCreateUser(senderID,fbprofile,db, function(newUserObj) {
+        findOrCreateUser(senderID,fbprofile,db, function(dbUserObj) {
             // set user info
-            userObj = newUserObj;
+            userObj = dbUserObj;
             console.log("***after findOrCreateUser *** userObj:",userObj)
             db.close();
 
