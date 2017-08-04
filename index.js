@@ -230,7 +230,7 @@ function receivedMessage(event) {
         console.log("**** findOrCreateUser -  user already known")
         return callback(sessions[sessionId].userObj);
       }
-      // Peform a simple find and return all the documents
+      // Peform a simple find and return one  documents
       db.collection('users').find({"userId" : senderID }).limit(1).toArray().then(function(docs) {
         console.log("___user____ docs:",docs);
 
@@ -239,11 +239,13 @@ function receivedMessage(event) {
         //  assert.equal(null, err);
           // user found
           userObj = docs;
+          sessions[sessionId].newUser = false;
           sessions[sessionId].userObj = docs;
-          callback(docs);
+          return callback(docs);
 
-        } else if (docs && docs.length == 0 ){ // no match for entity_name
-          // how about creating an entry for it and let someone or figure a way later set the message? great idea!
+
+        } else if (docs && docs.length == 0 ){ // no match for user name
+          //add new user
           docs = {
              "userId" : senderID,
              "first_name" : fbprofile.first_name,
@@ -251,14 +253,16 @@ function receivedMessage(event) {
              "locale": fbprofile.locale,
                "gender": fbprofile.gender,
                  "timezone": fbprofile.timezone,
-               "role" : "",
+               "role" : "user",
              "dateCreated": new Date()
           };
           console.log(" ************** Insert new User:",fbprofile.first_name);
           db.collection('users').insertOne(docs , function(err, result) {
           // assert.equal(err, null);
            console.log("Inserted a document into the users table");
-           callback(docs);
+           sessions[sessionId].newUser = true;
+           sessions[sessionId].userObj = docs;
+           return callback(docs);
          });
         }
   });
@@ -382,7 +386,7 @@ function determineResponse( event) {
 
   } // message.text
 
-// check is message from user is a JSON formatted message (i.e. Command)
+// check if message from user is a JSON formatted message (i.e. Command)
   try {
     if (compareText) {
       console.log("do JSON parse of compareText");
@@ -405,7 +409,13 @@ function determineResponse( event) {
     console.log("compareText not a JSON string - not a problem");
   } // end function determineResponse
 
-
+if(sessions[sessionId].newUser) {
+  // follow welcome protocol for newUser
+    sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name,", welcome to TechTown MailOrder Service");
+    matchEntity("how_to_order","arabic",function(doc) {
+      sendTextMessage(senderID,doc[0].messageText);
+    });
+}
 
   // If we receive a text message, check to see if it matches a keyword
   // and send back the example. Otherwise, just echo the text we received.
@@ -485,7 +495,7 @@ if (message.nlp) {
           console.log(" &&&&&&&&&& ASK how to respond. UserObj:",userObj)
           sessions[sessionId].context = {"action": "set_entity_msg",
             "intent" : intent , "intentValue" : intentValue} ;
-          sessions[sessionId].userObj = userObj;
+
           return;
         }
         if (highConfidence > doc[0].threshold) {
