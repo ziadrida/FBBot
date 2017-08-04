@@ -408,12 +408,13 @@ function determineResponse( event) {
   } catch (e) {
     console.log("compareText not a JSON string - not a problem");
   } // end function determineResponse
-
+console.log("sessions[sessionId];:",sessions[sessionId])
 if(sessions[sessionId].newUser) {
   // follow welcome protocol for newUser
     sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name,", welcome to TechTown MailOrder Service");
     matchEntity("how_to_order","arabic",function(doc) {
       sendTextMessage(senderID,doc[0].messageText);
+
     });
 }
 
