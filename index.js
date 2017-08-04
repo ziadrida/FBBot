@@ -180,7 +180,7 @@ function receivedMessage(event) {
         console.log("fbprofile last_name:", fbprofile.last_name);
         console.log("fbprofile last_name:", fbprofile.locale);
         console.log("fbprofile last_name:", fbprofile.gender);
-        sessions[sessionId].fbprofile = fbprofile;
+      //  sessions[sessionId].fbprofile = fbprofile;
 
       /*  if (fbprofile.locale && fbprofile.locale.toLowerCase().includes("en")) {
           sendTextMessage(senderID, "Hello ",fbprofile.first_name);
@@ -1039,10 +1039,12 @@ function getPricing() {
 
 function getUserPublicInfo(fbId,callback){
 var data ;
+ console.log('In getUserPublicInfo - fbId:',fbId);
 if (sessions[sessionId].fbprofile) {
+   console.log('In getUserPublicInfo - fbprofile already defined:',sessions[sessionId].fbprofile);
   return callback(sessions[sessionId].fbprofile);
 }
- console.log('In getUserPublicInfo - fbId:',fbId);
+
  var url = 'https://graph.facebook.com/v2.6/' + fbId;
 var qs = {fields:'first_name,last_name,gender,locale,timezone',access_token:fb_access_token};
 
@@ -1054,21 +1056,22 @@ request({
           json: true
       }, function(error, response, body) {
           if (error) {
-            callback(null);
               console.log('Error getUserPublicInfo: ', error);
+            return callback(null);
+
           } else if (response.body.error) {
               console.log('Body Error getUserPublicInfo: ', response.body.error);
-              callback(null);
+              return callback(null);
           }else{
             //  console.log("**** response:",response);
             //  console.log("**** body:",body);
-
-              data = JSON.parse( JSON.stringify(body) );
-              //  console.log("******* data:",data);
+                data = JSON.parse( JSON.stringify(body) );
+                console.log("***getUserPublicInfo**** data:",data);
               //console.log("******* first_name:",data.first_name);
                 //console.log("******* last_name:",data.last_name);
                   //console.log("******* gender:",data.gender);
                   //console.log("******* locale:",data.locale);
+                  sessions[sessionId].fbprofile = data;
               callback(data);
             //  sendTextMessage(recipientId, "Hello "+ name.first_name+", how can i help you ? ")
           }
