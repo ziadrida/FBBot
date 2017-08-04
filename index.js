@@ -152,7 +152,7 @@ function receivedMessage(event) {
         console.log(" ****findOrCreateSession*** session not found");
       // No session found for user fbid, let's create a new one
       sessionId = new Date().toISOString();
-      sessions[sessionId] = {fbid: fbid, fbprofile: {}, context: {}, userObj: {} };
+      sessions[sessionId] = {fbid: fbid, context: {} };
     }
     callback(sessionId)
   }; //  enf findOrCreateSession
