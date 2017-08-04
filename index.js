@@ -419,6 +419,7 @@ if(sessions[sessionId].newUser) {
 
     matchEntity("how_to_order",lang,function(doc) {
       sendTextMessage(senderID,doc[0].messageText);
+      sendWatchVideoButton();
 
     });
 }
@@ -669,6 +670,31 @@ function sendGenericMessage(recipientId, messageText) {
   // To be expanded in later sections
 }
 
+function sendWatchVideoButton(recipientId, btnText) {
+  let messageData = {
+      "recipient":{
+      "id":recipientId
+    },
+    "message":{
+      "attachment":{
+        "type":"template",
+        "payload":{
+          "template_type":"button",
+        //  "text":"Watch video on how to order?",
+          "buttons":[
+            {
+              "type":"web_url",
+              "url":"http://techtownjo.com/import/TechtownMailOrder-720p.mp4",
+            "title":"Watch video on how to order"
+            }
+          ]
+        }
+      }
+    }
+}
+  callSendAPI(messageData);
+} // sendWatchVideoButton
+
 function sendButton(recipientId, btnText) {
   let messageData = {
       "recipient":{
@@ -697,7 +723,7 @@ function sendButton(recipientId, btnText) {
     }
 }
   callSendAPI(messageData);
-}
+} // sendButton
 
 
 function sendTextMessage(recipientId, messageText) {
