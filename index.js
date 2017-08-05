@@ -442,7 +442,9 @@ function determineResponse(event) {
   // and send back the example. Otherwise, just echo the text we received.
 
   if (compareText.includes("button")) {
-    insertAllCats;
+      console.log("before insertAllCats")
+    let n = insertAllCats();
+    console.log("after insertAllCats:",n)
     //console.log("*************************cat ",allcats[0]);
     sendButton(senderID, 'Would you like to confirm order?');
   }
@@ -1334,23 +1336,23 @@ console.log("allCats Count:",allCats.length);
 
     insertCats(db, function() {
       db.close();
+      return 1;
     });
   }); // connect
 
 
   // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
   var insertCats = function(db, callback) {
-for (var cat in allCags ) {
-  console.log("*********** cat:",cat)
-  if (allCags.hasOwnProperty(cat)) {
-    db.collection('categories').insertOne(cat, function(err, result) {
-      //assert.equal(err, null);
-      console.log("Inserted a category into the categories collection.");
+    for (var cat in allCags) {
+      console.log("*********** cat:", cat)
+      if (allCags.hasOwnProperty(cat)) {
+        db.collection('categories').insertOne(cat, function(err, result) {
+          //assert.equal(err, null);
+          console.log("Inserted a category into the categories collection.");
 
-    });
-  }
-  }
-      callback();
-  }; // insertMesssageText
-
+        });
+      }
+    }
+    callback();
+  }; // insertCats
 }
