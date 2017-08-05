@@ -124,8 +124,8 @@ getCatArabic: function() {
     {"category_name" : "Watch (Mechanical display only)","category_name_ar" : "ساعة غير إلكترونية"},
     {"category_name" : "Watch/Sports watches/wearable gear","category_name_ar" : "ساعة / ساعات الرياضة / يمكن ارتداؤها والعتاد"}
   ]
-return cats;
-}
+  return cats;
+},
 
 getCategories: function () {
 var cats = [
