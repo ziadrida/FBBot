@@ -1398,20 +1398,23 @@ var updateCatArabicName = function() {
   var docs;
   var allCat = categories.getCatArabic();
     for (var i=0; i < allCat.length; i++) {
+        console.log("********* update:",allCat[i].category_name);
+        var cat_name = allCat[i].category_name;
+        var cat_ar = allCat[i].category_name_ar;
     MongoClient.connect(mongodbUrl, function(err, db) {
       //assert.equal(null, err);
       // Create a collection we want to drop later
       var collection = db.collection('categories');
 
-        console.log("********* update:",allCat[i].category_name);
+
       // Peform a simple find and return all the documents
       collection.findAndModify({
-        "category_name": allCat[i].category_name
+        "category_name": cat_name
       }, [
         ['_id', 'asc']
       ], {
         $set: {
-          "category_name_ar": allCat[i].category_name_ar
+          "category_name_ar": cat_ar
         }
       }, {}, function(err, docs) {
         if (err) {
