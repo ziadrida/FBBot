@@ -1406,7 +1406,7 @@ var updateCatArabicName = function() {
       // Create a collection we want to drop later
       var collection = db.collection('categories');
 
-
+     console.log("*** update english cat:",cat_name);
       // Peform a simple find and return all the documents
       collection.findAndModify({
         "category_name": cat_name
