@@ -1329,7 +1329,7 @@ function echoOnly(event) {
 
 function insertAllCats() {
   console.log("=======> in insertAllCats");
-  var allCats = getCategories();
+  var allCats = categories.getCategories();
 console.log("allCats Count:",allCats.length);
   MongoClient.connect(mongodbUrl, function(err, db) {
     //assert.equal(null, err);
