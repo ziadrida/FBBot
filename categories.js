@@ -116,7 +116,7 @@ getCatArabic: function() {
   {"category_name" : "ToothBrush","category_name_ar" : "فرشاة الأسنان "},
   {"category_name" : "Toys","category_name_ar" : "ألعاب"},
   {"category_name" : "Trays, dishes, plates, cups and the like","category_name_ar" : "ـ صواني وأطباق وأكواب وما يماثلها"},
-  {"category_name" : "T-shirts, singlets and other vests, knitted or crocheted.","category_name_ar" : "قمصان من نوع "تي شيرت" وقمصان قصيرة بأكمام أو بدونها وما يماثلها ، من مصنرات أو كروشيه"},
+  {"category_name" : "T-shirts, singlets and other vests, knitted or crocheted.","category_name_ar" : "قمصان من نوع تي شيرت وقمصان قصيرة بأكمام أو بدونها وما يماثلها ، من مصنرات أو كروشيه"},
   {"category_name" : "TV ","category_name_ar" : "شاشة تلفاز "},
   {"category_name" : "US Made Cosmetics","category_name_ar" : "منتجات الأمريكية مكياج|عناية شخصية"},
   {"category_name" : "US Made Products","category_name_ar" : "منتجات الأمريكية "},
