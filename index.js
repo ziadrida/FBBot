@@ -445,7 +445,8 @@ function determineResponse(event) {
       console.log("before insertAllCats")
     //let n = insertAllCats();
   //  let n = insertAllCatsArabic();
-    console.log("after insertAllCats:",n)
+  updateCatArabicName();
+  //  console.log("after insertAllCats:",n)
     //console.log("*************************cat ",allcats[0]);
     sendButton(senderID, 'Would you like to confirm order?');
   }
@@ -1391,3 +1392,36 @@ console.log("allCats Count:",allCats.length);
     callback();
   }; // insertAllCatsArabic
 }
+
+var updateCatArabicName = function() {
+  console.log("===================> in updateCatArabicName:")
+  var docs;
+  var allCat = categories.getCatArabic();
+    MongoClient.connect(mongodbUrl, function(err, db) {
+      //assert.equal(null, err);
+      // Create a collection we want to drop later
+      var collection = db.collection('categories');
+      for (var i=0; i < allCat.length; i++) {
+
+      // Peform a simple find and return all the documents
+      collection.findAndModify({
+        "category_name": allCat.category_name[i]
+      }, [
+        ['_id', 'asc']
+      ], {
+        $set: {
+          "category_name_ar": allCat.category_name_ar[i]
+        }
+      }, {}, function(err, docs) {
+        if (err) {
+          console.log(" +++++==== updateCatArabicName findAndModify NOT FOUND! ")
+        } else {
+          console.log("&&&&&&&& __updateCatArabicName_____findAndModify __docs found and updated:", docs);
+        }
+
+      });
+    } // for
+    db.close();
+
+    }); // connect
+} // end updateCatArabicName
