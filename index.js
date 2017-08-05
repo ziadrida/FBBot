@@ -1397,15 +1397,17 @@ var updateCatArabicName = function() {
   console.log("===================> in updateCatArabicName:")
   var docs;
   var allCat = categories.getCatArabic();
-    for (var i=0; i < allCat.length; i++) {
-        console.log("********* update:",allCat[i].category_name);
-        var cat_name = allCat[i].category_name;
-        var cat_ar = allCat[i].category_name_ar;
+  var cat_name;
+    var cat_ar ;
+    var i;
     MongoClient.connect(mongodbUrl, function(err, db) {
       //assert.equal(null, err);
       // Create a collection we want to drop later
       var collection = db.collection('categories');
-
+      for ( i=0; i < allCat.length; i++) {
+          console.log("********* update:",allCat[i].category_name);
+           cat_name = allCat[i].category_name;
+           cat_ar = allCat[i].category_name_ar;
      console.log("*** update english cat:",cat_name);
       // Peform a simple find and return all the documents
       collection.findAndModify({
@@ -1424,8 +1426,10 @@ var updateCatArabicName = function() {
         }
 
       });
+        } // for
+        }); // connect
       db.close();
 
-      }); // connect
-    } // for
+
+
 } // end updateCatArabicName
