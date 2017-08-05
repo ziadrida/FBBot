@@ -1405,12 +1405,12 @@ var updateCatArabicName = function() {
 
       // Peform a simple find and return all the documents
       collection.findAndModify({
-        "category_name": allCat.category_name[i]
+        "category_name": allCat[i].category_name
       }, [
         ['_id', 'asc']
       ], {
         $set: {
-          "category_name_ar": allCat.category_name_ar[i]
+          "category_name_ar": allCat[i].category_name_ar
         }
       }, {}, function(err, docs) {
         if (err) {
