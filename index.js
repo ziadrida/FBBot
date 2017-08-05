@@ -1037,7 +1037,7 @@ function genNewUserReport(senderID, daysBack,callback) {
     console.log(" in newUsersSummary ");
     var agr = [{
         $match: {
-          'timestamp': {
+          'dateCreated': {
             $gte: (new Date((new Date()).getTime() - (daysBack * 24 * 60 * 60 * 1000)))
           }
         }
@@ -1046,16 +1046,16 @@ function genNewUserReport(senderID, daysBack,callback) {
         '$group': {
           '_id': {
             "year": {
-              '$year': '$timestamp'
+              '$year': '$dateCreated'
             },
             "month": {
-              '$month': '$timestamp'
+              '$month': '$dateCreated'
             },
             "day": {
-              '$dayOfMonth': '$timestamp'
+              '$dayOfMonth': '$dateCreated'
             },
             "hour": {
-              "$hour": "$timestamp"
+              "$hour": "$dateCreated"
             }
           },
           'totalrequests': {
