@@ -1343,7 +1343,7 @@ console.log("allCats Count:",allCats.length);
 
   // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
   var insertCats = function(db, callback) {
-    for (var cat in allCags) {
+    for (var cat in allCats) {
       console.log("*********** cat:", cat)
       if (allCags.hasOwnProperty(cat)) {
         db.collection('categories').insertOne(cat, function(err, result) {
