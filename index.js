@@ -728,6 +728,23 @@ function sendButton(recipientId, btnText) {
     "message": {
       "attachment": {
         "type": "template",
+        payload: {
+                    template_type: 'generic',
+                    elements: [
+                        {
+                            title: '24th Street',
+                            'subtitle': '43 mins, 9 cars. 58 mins, 9 cars. 73 mins, 9 cars.'
+                        },
+                        {
+                            title: 'Daly City',
+                            'subtitle': '43 mins, 9 cars. 58 mins, 9 cars. 73 mins, 9 cars. 1 min, 9 cars. 4 mins, 9 cars.'
+                        },
+                        {
+                            title: 'Millbrae',
+                            'subtitle': '8 mins, 4 cars. 23 mins, 4 cars. 38 mins, 4 cars. 13 mins, 5 cars.'
+                        }
+                    ]
+                },
         "payload": {
           "template_type": "button",
           "text": btnText,
@@ -756,29 +773,9 @@ function sendTextMessage(recipientId, messageText) {
     recipient: {
       id: recipientId
     },
-  /**  message: {
+    message: {
       text: messageText
-    },*/
-    attachment: {
-       type: 'template',
-       payload: {
-           template_type: 'generic',
-           elements: [
-               {
-                   title: '24th Street',
-                   'subtitle': '43 mins, 9 cars. 58 mins, 9 cars. 73 mins, 9 cars.'
-               },
-               {
-                   title: 'Daly City',
-                   'subtitle': '43 mins, 9 cars. 58 mins, 9 cars. 73 mins, 9 cars. 1 min, 9 cars. 4 mins, 9 cars.'
-               },
-               {
-                   title: 'Millbrae',
-                   'subtitle': '8 mins, 4 cars. 23 mins, 4 cars. 38 mins, 4 cars. 13 mins, 5 cars.'
-               }
-           ]
-       }
-   }
+    }
   };
 
   callSendAPI(messageData);
