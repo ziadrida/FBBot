@@ -443,7 +443,7 @@ function determineResponse(event) {
 
   if (compareText.includes("button")) {
       console.log("before insertAllCats")
-    let n = insertAllCats();
+    //let n = insertAllCats();
     console.log("after insertAllCats:",n)
     //console.log("*************************cat ",allcats[0]);
     sendButton(senderID, 'Would you like to confirm order?');
