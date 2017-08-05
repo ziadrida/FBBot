@@ -1078,7 +1078,7 @@ function genNewUserReport(senderID, daysBack,callback) {
 
       //  sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
       });
-      sendTextMessage(senderID,out);
+      sendTextMessage(senderID,JSON.stringify(out));
       console.log(out);
 
 
@@ -1149,7 +1149,7 @@ function genPrReport(senderID, daysBack,callback) {
       });
 
       console.log(out);
-      sendTextMessage(senderID,out);
+      sendTextMessage(senderID,JSON.stringify(out));
       // sendTextMessage(senderID, out);
       callback(out);
     }); // aggregate
