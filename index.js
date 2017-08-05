@@ -744,7 +744,7 @@ function sendButton(recipientId, btnText) {
                             'subtitle': '8 mins, 4 cars. 23 mins, 4 cars. 38 mins, 4 cars. 13 mins, 5 cars.'
                         }
                     ]
-                },
+                } /*,
         "payload": {
           "template_type": "button",
           "text": btnText,
@@ -759,7 +759,7 @@ function sendButton(recipientId, btnText) {
               "payload": "not_now"
             }
           ]
-        }
+        }*/
       }
     }
   }
