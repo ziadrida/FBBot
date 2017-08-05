@@ -444,6 +444,7 @@ function determineResponse(event) {
   if (compareText.includes("button")) {
       console.log("before insertAllCats")
     //let n = insertAllCats();
+    let n = insertAllCatsArabic();
     console.log("after insertAllCats:",n)
     //console.log("*************************cat ",allcats[0]);
     sendButton(senderID, 'Would you like to confirm order?');
@@ -1357,4 +1358,36 @@ console.log("allCats Count:",allCats.length);
 
     callback();
   }; // insertCats
+}
+
+function insertAllCatsArabic() {
+  console.log("=======> in insertAllCatsArabic");
+  var allCats = categories.getCatArabic();
+console.log("allCats Count:",allCats.length);
+  MongoClient.connect(mongodbUrl, function(err, db) {
+    //assert.equal(null, err);
+
+    insertCats(db, function() {
+      db.close();
+      return 1;
+    });
+  }); // connect
+
+
+  // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+  var insertCats = function(db, callback) {
+    for(var i = 0; i < allCats.length; i++) {
+
+
+    console.log(allCats[i]);
+
+        db.collection('categories_arabic').insertOne(allCats[i], function(err, result) {
+          //assert.equal(err, null);
+          console.log("Inserted a category into the categories collection.");
+
+        });
+      }
+
+    callback();
+  }; // insertAllCatsArabic
 }
