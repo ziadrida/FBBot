@@ -459,9 +459,10 @@ function determineResponse(event) {
     if (userMsg.days) {
       daysBack = userMsg.days
     };
+    genNewUserReport(senderID, daysBack);
 
     genPrReport(senderID, daysBack);
-    genNewUserReport(senderID, daysBack);
+
   } // if *report action
 
   // if message contains http, then it is a pricing request
@@ -1066,6 +1067,8 @@ function genNewUserReport(senderID, daysBack) {
       obj.forEach(function(a) {
 
         out.push(a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
+        sendTextMessage(senderID, "New users report for the last "+daysBack + " days back");
+
         sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
       });
 
@@ -1132,6 +1135,7 @@ function genPrReport(senderID, daysBack) {
       obj.forEach(function(a) {
 
         out.push(a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
+sendTextMessage(senderID, "Pricing Request report for the last "+daysBack + " days back");
         sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
       });
 
