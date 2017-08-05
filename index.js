@@ -444,7 +444,7 @@ function determineResponse(event) {
   if (compareText.includes("button")) {
       console.log("before insertAllCats")
     let n = insertAllCats();
-    let n = insertAllCatsArabic();
+  //  let n = insertAllCatsArabic();
   updateCatArabicName();
   //  console.log("after insertAllCats:",n)
     //console.log("*************************cat ",allcats[0]);
