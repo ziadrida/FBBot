@@ -757,14 +757,28 @@ function sendTextMessage(recipientId, messageText) {
       id: recipientId
     },
     message: {
-      text: messageText,
-      help: "Yes",
-      NewUser: 0 ,
-      struc: {
-        test: 1,
-        test: 2
-      }
-    }
+      text: messageText
+    },
+    attachment: {
+       type: 'template',
+       payload: {
+           template_type: 'generic',
+           elements: [
+               {
+                   title: '24th Street',
+                   'subtitle': '43 mins, 9 cars. 58 mins, 9 cars. 73 mins, 9 cars.'
+               },
+               {
+                   title: 'Daly City',
+                   'subtitle': '43 mins, 9 cars. 58 mins, 9 cars. 73 mins, 9 cars. 1 min, 9 cars. 4 mins, 9 cars.'
+               },
+               {
+                   title: 'Millbrae',
+                   'subtitle': '8 mins, 4 cars. 23 mins, 4 cars. 38 mins, 4 cars. 13 mins, 5 cars.'
+               }
+           ]
+       }
+   }
   };
 
   callSendAPI(messageData);
