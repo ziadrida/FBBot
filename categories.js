@@ -74,7 +74,7 @@ getCatArabic: function() {
   {"category_name" : "Magazines","category_name_ar" : "مجلات "},
   {"category_name" : "Medical Apparatus 9022","category_name_ar" : "أجهزة طبية "},
   {"category_name" : "Memory","category_name_ar" : "ذاكرة "},
-  {"category_name" : "microphone and one or more loudspeakers","category_name_ar" : "أطقم مؤلفة من مذياع صوت " ميكرفون " وواحد أو أكثر من مكبرات الصوت "},
+  {"category_name" : "microphone and one or more loudspeakers","category_name_ar" : "أطقم مؤلفة من مذياع صوت  ميكرفون  وواحد أو أكثر من مكبرات الصوت "},
   {"category_name" : "Microscope","category_name_ar" : "مجهر "},
   {"category_name" : "Mobile Accessory","category_name_ar" : "ملحقات الهاتف النقال "},
   {"category_name" : "Mobile Phone","category_name_ar" : "الهاتف المحمول "},
