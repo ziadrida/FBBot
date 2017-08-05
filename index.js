@@ -459,9 +459,12 @@ function determineResponse(event) {
     if (userMsg.days) {
       daysBack = userMsg.days
     };
-    genNewUserReport(senderID, daysBack);
+    genNewUserReport(senderID, daysBack, function(imsg) {
+      console.log("++++++++++++++++ message fro genNewUserReport:",imsg)
+      genPrReport(senderID, daysBack);
+    });
 
-    genPrReport(senderID, daysBack);
+
 
   } // if *report action
 
@@ -1013,16 +1016,17 @@ function processHttpRequest(event) {
   } // valid domainName
 }
 
-/* genPrReport */
-function genNewUserReport(senderID, daysBack) {
+/* genNewUserReport */
+function genNewUserReport(senderID, daysBack,callback) {
   console.log("In genNewUserReport daysBack:", daysBack);
 
   MongoClient.connect(mongodbUrl, (err, db) => {
     //  assert.equal(null, err);
 
-    newUsersSummary(db, () => {
+    newUsersSummary(db, (out) => {
 
       db.close();
+      callback(out)
     }); // CALL pricingRequestSummary
   }); // db connect
 
@@ -1064,18 +1068,20 @@ function genNewUserReport(senderID, daysBack) {
       //  assert.equal(err, null);
       console.log(JSON.stringify(res));
       var obj = JSON.parse(JSON.stringify(res));
+      out.push("New users report for the last "+daysBack + " days back");
       obj.forEach(function(a) {
 
         out.push(a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
-        sendTextMessage(senderID, "New users report for the last "+daysBack + " days back");
 
-        sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
+
+      //  sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
       });
-
+      sendTextMessage(senderID,out);
       console.log(out);
 
+
       // sendTextMessage(senderID, out);
-      callback(res);
+      callback(out);
     }); // aggregate
   }; // DB callback , pricingRequestSummary
 
@@ -1135,7 +1141,7 @@ function genPrReport(senderID, daysBack) {
       obj.forEach(function(a) {
 
         out.push(a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
-sendTextMessage(senderID, "Pricing Request report for the last "+daysBack + " days back");
+sendTextMessage(senderID, "Pricing Request report for the last "+daysBack + " days");
         sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
       });
 
