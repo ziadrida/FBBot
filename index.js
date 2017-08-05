@@ -442,7 +442,7 @@ function determineResponse(event) {
   // and send back the example. Otherwise, just echo the text we received.
 
   if (compareText.includes("button")) {
-    var allcats = categories.getCategories();
+    insertAllCats;
     //console.log("*************************cat ",allcats[0]);
     sendButton(senderID, 'Would you like to confirm order?');
   }
