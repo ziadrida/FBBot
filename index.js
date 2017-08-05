@@ -1345,7 +1345,7 @@ console.log("allCats Count:",allCats.length);
   var insertCats = function(db, callback) {
     for (var cat in allCats) {
       console.log("*********** cat:", cat)
-      if (allCags.hasOwnProperty(cat)) {
+      if (allCats.hasOwnProperty(cat)) {
         db.collection('categories').insertOne(cat, function(err, result) {
           //assert.equal(err, null);
           console.log("Inserted a category into the categories collection.");
