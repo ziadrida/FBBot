@@ -453,7 +453,7 @@ function determineResponse(event) {
 
 
   if (typeof userMsg != 'undefined' && userMsg.action === "*report") {
-    sendTextMessage(senderID, 'I understand that you want me to give you a PR report .. please wait');
+  //  sendTextMessage(senderID, 'I understand that you want me to give you a PR report .. please wait');
     console.log("Report for days back:", userMsg.days)
     daysBack = 1;
     if (userMsg.days) {
@@ -461,7 +461,9 @@ function determineResponse(event) {
     };
     genNewUserReport(senderID, daysBack, function(imsg) {
       console.log("++++++++++++++++ message fro genNewUserReport:",imsg)
-      genPrReport(senderID, daysBack);
+      genPrReport(senderID, daysBack,function(pmsg) {
+          console.log("++++++++++++++++ message fro genPrReport:",pmsg)
+      });
     });
 
 
@@ -1088,15 +1090,16 @@ function genNewUserReport(senderID, daysBack,callback) {
 } //end function genNewReport
 
 /* genPrReport */
-function genPrReport(senderID, daysBack) {
+function genPrReport(senderID, daysBack,callback) {
   console.log("In genPrReport daysBack:", daysBack);
 
   MongoClient.connect(mongodbUrl, (err, db) => {
     //  assert.equal(null, err);
 
-    pricingRequestSummary(db, () => {
+    pricingRequestSummary(db, (msg) => {
 
       db.close();
+      callback(msg);
     }); // CALL pricingRequestSummary
   }); // db connect
 
@@ -1138,17 +1141,17 @@ function genPrReport(senderID, daysBack) {
       //  assert.equal(err, null);
       console.log(JSON.stringify(res));
       var obj = JSON.parse(JSON.stringify(res));
+      out.push("Pricing Request report for the last "+daysBack + " days");
       obj.forEach(function(a) {
 
         out.push(a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
-sendTextMessage(senderID, "Pricing Request report for the last "+daysBack + " days");
-        sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
+        //sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
       });
 
       console.log(out);
-
+      sendTextMessage(senderID,out);
       // sendTextMessage(senderID, out);
-      callback(res);
+      callback(out);
     }); // aggregate
   }; // DB callback , pricingRequestSummary
 
