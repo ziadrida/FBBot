@@ -1343,16 +1343,18 @@ console.log("allCats Count:",allCats.length);
 
   // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
   var insertCats = function(db, callback) {
-    for (var cat in allCats) {
-      console.log("*********** cat:", cat)
-      if (allCats.hasOwnProperty(cat)) {
-        db.collection('categories').insertOne(cat, function(err, result) {
+    for(var i = 0; i < allCats.length; i++) {
+
+
+    console.log(allCats[i]);
+
+        db.collection('categories').insertOne(allCats[i], function(err, result) {
           //assert.equal(err, null);
           console.log("Inserted a category into the categories collection.");
 
         });
       }
-    }
+
     callback();
   }; // insertCats
 }
