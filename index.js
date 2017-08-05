@@ -1427,9 +1427,7 @@ var updateCatArabicName = function() {
 
       });
         } // for
+          db.close();
         }); // connect
-      db.close();
-
-
 
 } // end updateCatArabicName
