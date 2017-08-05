@@ -757,7 +757,13 @@ function sendTextMessage(recipientId, messageText) {
       id: recipientId
     },
     message: {
-      text: messageText
+      text: messageText,
+      help: Yes,
+      NewUser: 0 ,
+      struc: {
+        test: 1,
+        test: 2
+      }
     }
   };
 
