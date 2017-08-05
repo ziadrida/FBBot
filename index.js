@@ -726,25 +726,6 @@ function sendButton(recipientId, btnText) {
       "id": recipientId
     },
     "message": {
-      "attachment": {
-        "type": "template",
-        payload: {
-                    template_type: 'generic',
-                    elements: [
-                        {
-                            title: '24th Street',
-                            'subtitle': '43 mins, 9 cars. 58 mins, 9 cars. 73 mins, 9 cars.'
-                        },
-                        {
-                            title: 'Daly City',
-                            'subtitle': '43 mins, 9 cars. 58 mins, 9 cars. 73 mins, 9 cars. 1 min, 9 cars. 4 mins, 9 cars.'
-                        },
-                        {
-                            title: 'Millbrae',
-                            'subtitle': '8 mins, 4 cars. 23 mins, 4 cars. 38 mins, 4 cars. 13 mins, 5 cars.'
-                        }
-                    ]
-                } /*,
         "payload": {
           "template_type": "button",
           "text": btnText,
@@ -759,10 +740,10 @@ function sendButton(recipientId, btnText) {
               "payload": "not_now"
             }
           ]
-        }*/
+        }
       }
     }
-  }
+
   callSendAPI(messageData);
 } // sendButton
 
@@ -1087,16 +1068,16 @@ function genNewUserReport(senderID, daysBack,callback) {
       //  assert.equal(err, null);
       console.log(JSON.stringify(res));
       var obj = JSON.parse(JSON.stringify(res));
-      out.push("New users report for the last "+daysBack + " days back\n");
+      out.push("New users report for the last "+daysBack + " days back");
       obj.forEach(function(a) {
 
         out.push(a._id.day + "/" + a._id.month + "/" +
-          a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests + '\n');
+          a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests );
 
 
       //  sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
       });
-      sendTextMessage(senderID,JSON.stringify(out));
+      sendTextMessage(senderID,JSON.parse(JSON.stringify(out)));
       console.log(out);
 
 
@@ -1159,16 +1140,16 @@ function genPrReport(senderID, daysBack,callback) {
       //  assert.equal(err, null);
       console.log(JSON.stringify(res));
       var obj = JSON.parse(JSON.stringify(res));
-      out.push("Pricing Request report for the last "+daysBack + " days\n");
+      out.push("Pricing Request report for the last "+daysBack + " days");
       obj.forEach(function(a) {
 
         out.push(a._id.day + "/" + a._id.month + "/" + a._id.year +
-          "-" + a._id.hour + ": PR=" + a.totalrequests+ '\n');
+          "-" + a._id.hour + ": PR=" + a.totalrequests);
         //sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
       });
 
       console.log(out);
-      sendTextMessage(senderID,JSON.stringify(out));
+      sendTextMessage(senderID,JSON.parse(JSON.stringify(out)));
       // sendTextMessage(senderID, out);
       callback(out);
     }); // aggregate
