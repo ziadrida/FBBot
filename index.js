@@ -2,7 +2,7 @@
 //var FB = require('fb');
 //  fb = new FB.Facebook(options);
 // mongodb
-require('./categories.js').getCategories();
+var categories = require('./categories.js');
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
@@ -442,7 +442,7 @@ function determineResponse(event) {
   // and send back the example. Otherwise, just echo the text we received.
 
   if (compareText.includes("button")) {
-    var allcats = getCategories();
+    var allcats = categories.getCategories();
     console.log("*************************cat ",allcats[0]);
     sendButton(senderID, 'Would you like to confirm order?');
   }

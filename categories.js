@@ -1,6 +1,6 @@
-
-function getCategories() {
-
+module.exports =
+{
+getCategories: function () {
 var cats = [
   {
    "category_name": " Accessories (General) ",
@@ -1700,5 +1700,4 @@ var cats = [
 
 return cats;
 }
-
-module.exports.getCategories = getCategories;
+};
