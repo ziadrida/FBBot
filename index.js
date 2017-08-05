@@ -1070,10 +1070,11 @@ function genNewUserReport(senderID, daysBack,callback) {
       //  assert.equal(err, null);
       console.log(JSON.stringify(res));
       var obj = JSON.parse(JSON.stringify(res));
-      out.push("New users report for the last "+daysBack + " days back");
+      out.push("New users report for the last "+daysBack + " days back\n");
       obj.forEach(function(a) {
 
-        out.push(a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
+        out.push(a._id.day + "/" + a._id.month + "/" +
+          a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests + '\n');
 
 
       //  sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
@@ -1141,10 +1142,11 @@ function genPrReport(senderID, daysBack,callback) {
       //  assert.equal(err, null);
       console.log(JSON.stringify(res));
       var obj = JSON.parse(JSON.stringify(res));
-      out.push("Pricing Request report for the last "+daysBack + " days");
+      out.push("Pricing Request report for the last "+daysBack + " days\n");
       obj.forEach(function(a) {
 
-        out.push(a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
+        out.push(a._id.day + "/" + a._id.month + "/" + a._id.year +
+          "-" + a._id.hour + ": PR=" + a.totalrequests+ '\n');
         //sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": PR=" + a.totalrequests);
       });
 
