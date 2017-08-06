@@ -885,7 +885,7 @@ function getRegularAmmanPrice(item) {
   }
   });
 
-  quickReply(senderID,"Which category best matches this item?");
+
 
 
 }
@@ -1241,8 +1241,8 @@ getPricing
 **************************/
 function getPricing() {
   sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
-
-  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
+quickReply(senderID,"Which category best matches this item?");
+//  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
 }
 
 
