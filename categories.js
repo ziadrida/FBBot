@@ -1961,7 +1961,7 @@ findMatchingCategory: function(findVal,callback) {
 
       //var searchCat = '\*'+findVal+'\.';
       var query = { category_name : new RegExp('' + findVal + '') };
-      console.log("  ************ FindVal:",searchCat);
+      console.log("  ************ FindVal:",query);
         // Peform a simple find and return all the documents
         // {"category_name": {$regex: ".*abc.", $options:"i"}}
         //{"category_name" :{'$regex' : 'watch', '$options' : 'i'}}
