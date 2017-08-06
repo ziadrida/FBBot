@@ -1936,7 +1936,7 @@ updateCatArabicName: function() {
 
 findMatchingCategory: function(findVal,callback) {
 
-    console.log("====================> in findMatchingCategory:", findVal)
+    console.log("=========+++++++++++++++===========> in findMatchingCategory:", findVal)
     var docs;
 
         // Create a collection we want to drop later
@@ -1951,11 +1951,11 @@ findMatchingCategory: function(findVal,callback) {
       findVal = '/' + findVal + '/i'
       var searchCat = { "category_name": {
         "$in": [
-          findVal
+          findVal,"/comp/i"
         ]
       }
       }
-      console.log("**** FindVal:",searchCat);
+      console.log("  ************ FindVal:",searchCat);
         // Peform a simple find and return all the documents
         collection.find(searchCat).limit(10).toArray().then(function(docs) {
           console.log("_______ docs:", docs);
