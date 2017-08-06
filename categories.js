@@ -1,5 +1,5 @@
-var mongoUtil = require( 'mongoUtil' );
-var db = mongoUtil.getDb();
+var mongoUtil = require( './mongoUtil.js' );
+
 
 module.exports =
 {
@@ -1940,6 +1940,12 @@ findMatchingCategory: function(findVal,callback) {
     var docs;
   if (findVal) {
         // Create a collection we want to drop later
+        db = mongoUtil.getDb(function(err) {
+          if (err) {
+            console.log("*** ERROR*** no connection");
+            return callback(docs);
+          }
+        //  db = mongoUtil.getDb();
         var collection = db.collection('categories');
 
       findVal = '/' + findVal + '/i'

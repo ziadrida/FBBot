@@ -8,7 +8,7 @@ var mongoUtil = require( './mongoUtil.js' );
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
-
+var db;
 var callCount = 0;
 // parse URL
 var parseDomain = require("parse-domain");
@@ -116,6 +116,19 @@ function receivedMessage(event) {
 
   console.log("==========================>>> in Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
+
+// connect do db
+db = mongoUtil.getDb(function(err) {
+  if (!err) {
+    console.log(" ++++++++++++ :) ++++++  CONNECTED TO DB +++ :) ++++++++++++")
+    db = mongoUtil.getDb()
+  } else {
+    console.log(" -------------------------- ERROR CONNECTING TO DB -------------------")
+  }
+});
+
+
+
   if (typeof event == 'undefined') {
     console.log(" receivedMessage ---> EVENT is Undefined <><>")
   } else {
