@@ -484,7 +484,7 @@ function determineResponse(event) {
    check if this is a pricing request
    ---------------------------------*/
   if (typeof userMsg != 'undefined' && userMsg.action === "*pr") {
-    getPricing();
+    getPricing(senderID);
   } //if action *pr
 
 
@@ -1239,8 +1239,9 @@ function genPrReport(senderID, daysBack,callback) {
 /*************************
 getPricing
 **************************/
-function getPricing() {
-  sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
+function getPricing(senderID) {
+  console.log(" =========> in getPricing");
+//  sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
 quickReply(senderID,"Which category best matches this item?");
 //  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
 }
