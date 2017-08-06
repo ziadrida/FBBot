@@ -4,6 +4,7 @@
 // mongodb
 var categories = require('./categories.js');
 var MongoClient = require('mongodb').MongoClient;
+var mongoUtil = require( './mongoUtil.js' );
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
@@ -443,11 +444,24 @@ function determineResponse(event) {
 
   if (compareText.includes("button")) {
       console.log("before insertAllCats")
-  //  let n = insertAllCats();
-  //  let n = insertAllCatsArabic();
-  updateCatArabicName();
+  //  let n = categories.insertAllCats();
+  //  let n = categories.insertAllCatsArabic();
+  //categories.updateCatArabicName();
   //  console.log("after insertAllCats:",n)
     //console.log("*************************cat ",allcats[0]);
+    var searchCat = "watch";
+    findMatchingCategory(searchCat,function(cats) {
+      if(!cats) {
+          console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
+      } else if (cat && cats.length == 0 ) {
+        console.log("***************** NO CATEGORIES MATCH:",searchCat)
+      }  else {
+      for (i=0 ; i < cats.length ; i++) {
+        console.log("+++++++++++++= ",cats[0])
+      }
+    }
+    });
+
     sendButton(senderID, 'Would you like to confirm order?');
   }
 
@@ -1328,106 +1342,3 @@ function echoOnly(event) {
   }
   return false;
 }
-
-function insertAllCats() {
-  console.log("=======> in insertAllCats");
-  var allCats = categories.getCategories();
-console.log("allCats Count:",allCats.length);
-  MongoClient.connect(mongodbUrl, function(err, db) {
-    //assert.equal(null, err);
-
-    insertCats(db, function() {
-      db.close();
-      return 1;
-    });
-  }); // connect
-
-
-  // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
-  var insertCats = function(db, callback) {
-    for(var i = 0; i < allCats.length; i++) {
-
-
-    console.log(allCats[i]);
-
-        db.collection('categories').insertOne(allCats[i], function(err, result) {
-          //assert.equal(err, null);
-          console.log("Inserted a category into the categories collection.");
-
-        });
-      }
-
-    callback();
-  }; // insertCats
-}
-
-function insertAllCatsArabic() {
-  console.log("=======> in insertAllCatsArabic");
-  var allCats = categories.getCatArabic();
-console.log("allCats Count:",allCats.length);
-  MongoClient.connect(mongodbUrl, function(err, db) {
-    //assert.equal(null, err);
-
-    insertCats(db, function() {
-      db.close();
-      return 1;
-    });
-  }); // connect
-
-
-  // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
-  var insertCats = function(db, callback) {
-    for(var i = 0; i < allCats.length; i++) {
-
-
-    console.log(allCats[i]);
-
-        db.collection('categories_arabic').insertOne(allCats[i], function(err, result) {
-          //assert.equal(err, null);
-          console.log("Inserted a category into the categories collection.");
-
-        });
-      }
-
-    callback();
-  }; // insertAllCatsArabic
-}
-
-var updateCatArabicName = function() {
-  console.log("===================> in updateCatArabicName:")
-  var docs;
-  var allCat = categories.getCatArabic();
-  var cat_name;
-    var cat_ar ;
-    var i;
-    MongoClient.connect(mongodbUrl, function(err, db) {
-      //assert.equal(null, err);
-      // Create a collection we want to drop later
-      var collection = db.collection('categories');
-      for ( i=0; i < allCat.length; i++) {
-          console.log("********* update:",allCat[i].category_name);
-           cat_name = allCat[i].category_name;
-           cat_ar = allCat[i].category_name_ar;
-     console.log("*** update english cat:",cat_name);
-      // Peform a simple find and return all the documents
-      collection.findAndModify({
-        "category_name": cat_name
-      }, [
-        ['_id', 'asc']
-      ], {
-        $set: {
-          "category_name_ar": cat_ar
-        }
-      }, {}, function(err, docs) {
-        if (err) {
-          console.log(" +++++==== updateCatArabicName findAndModify NOT FOUND! ")
-        } else {
-          console.log("&&&&&&&& __updateCatArabicName_____findAndModify __docs found and updated:", docs);
-        }
-
-      });
-        } // for
-          db.close();
-        }); // connect
-
-} // end updateCatArabicName

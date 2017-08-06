@@ -1,3 +1,6 @@
+var mongoUtil = require( 'mongoUtil' );
+var db = mongoUtil.getDb();
+
 module.exports =
 {
 getCatArabic: function() {
@@ -1826,5 +1829,147 @@ var cats = [
 ]
 
 return cats;
-}
+},
+
+insertAllCats: function() {
+  console.log("=======> in insertAllCats");
+  var allCats = categories.getCategories();
+console.log("allCats Count:",allCats.length);
+  MongoClient.connect(mongodbUrl, function(err, db) {
+    //assert.equal(null, err);
+
+    insertCats(db, function() {
+      db.close();
+      return 1;
+    });
+  }); // connect
+
+
+  // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+  var insertCats = function(db, callback) {
+    for(var i = 0; i < allCats.length; i++) {
+
+
+    console.log(allCats[i]);
+
+        db.collection('categories').insertOne(allCats[i], function(err, result) {
+          //assert.equal(err, null);
+          console.log("Inserted a category into the categories collection.");
+
+        });
+      }
+
+    callback();
+  }; // insertCats
+},
+
+insertAllCatsArabic: function() {
+  console.log("=======> in insertAllCatsArabic");
+  var allCats = categories.getCatArabic();
+console.log("allCats Count:",allCats.length);
+  MongoClient.connect(mongodbUrl, function(err, db) {
+    //assert.equal(null, err);
+
+    insertCats(db, function() {
+      db.close();
+      return 1;
+    });
+  }); // connect
+
+
+  // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+  var insertCats = function(db, callback) {
+    for(var i = 0; i < allCats.length; i++) {
+
+
+    console.log(allCats[i]);
+
+        db.collection('categories_arabic').insertOne(allCats[i], function(err, result) {
+          //assert.equal(err, null);
+          console.log("Inserted a category into the categories collection.");
+
+        });
+      }
+
+    callback();
+  }; // insertAllCatsArabic
+},
+
+updateCatArabicName: function() {
+  console.log("===================> in updateCatArabicName:")
+  var docs;
+  var allCat = categories.getCatArabic();
+  var cat_name;
+    var cat_ar ;
+    var i;
+    MongoClient.connect(mongodbUrl, function(err, db) {
+      //assert.equal(null, err);
+      // Create a collection we want to drop later
+      var collection = db.collection('categories');
+      for ( i=0; i < allCat.length; i++) {
+          console.log("********* update:",allCat[i].category_name);
+           cat_name = allCat[i].category_name;
+           cat_ar = allCat[i].category_name_ar;
+     console.log("*** update english cat:",cat_name);
+      // Peform a simple find and return all the documents
+      collection.findAndModify({
+        "category_name": cat_name
+      }, [
+        ['_id', 'asc']
+      ], {
+        $set: {
+          "category_name_ar": cat_ar
+        }
+      }, {}, function(err, docs) {
+        if (err) {
+          console.log(" +++++==== updateCatArabicName findAndModify NOT FOUND! ")
+        } else {
+          console.log("&&&&&&&& __updateCatArabicName_____findAndModify __docs found and updated:", docs);
+        }
+
+      });
+        } // for
+          db.close();
+        }); // connect
+
+}, // end updateCatArabicName
+
+findMatchingCategory: function(findVal,callback) {
+
+    console.log("====================> in findMatchingCategory:", findVal)
+    var docs;
+  if (findVal) {
+        // Create a collection we want to drop later
+        var collection = db.collection('categories');
+
+      findVal = '/' + findVal + '/i'
+      var searchCat = { "category_name": {
+        "$in": [
+          findVal
+        ]
+      }
+      }
+      console.log("**** FindVal:",findVal);
+        // Peform a simple find and return all the documents
+        collection.find(searchCat).limit(10).toArray().then(function(docs) {
+          console.log("_______ docs:", docs);
+
+          if (docs && docs.length > 0) {
+            console.log("*** cats found:", docs);
+            //    assert.equal(null, err);
+          //  db.close();
+
+            callback(docs);
+
+          } else if (docs && docs.length == 0) { // no match for findVal
+            // how about creating an entry for it and let someone or figure a way later set the message? great idea!
+          console.log("******* no categories found")
+          } // else if
+        });
+
+    } // if findVal == ''
+
+
+} // findMatchingCategory
+
 };
