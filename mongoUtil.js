@@ -23,12 +23,13 @@ module.exports = {
 
     if (!_db) {
       module.exports.connectToDB(function(err) {
-        callback(err);
+         console.log("in getDB - after connectToDB")
+      //  callback(err);
       });
     } else {
         console.log("====>  getDb - already connected");
     }
-
+    callback(err);
     return _db;
   }
 };

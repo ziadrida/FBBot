@@ -1941,6 +1941,7 @@ findMatchingCategory: function(findVal,callback) {
 
         // Create a collection we want to drop later
         db = mongoUtil.getDb(function(err) {
+          console.log("*** after getDB ***");
           if (err) {
             console.log("*** ERROR*** no connection");
             return callback(docs);
