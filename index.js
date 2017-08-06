@@ -795,22 +795,22 @@ function quickReply(recipientId, titleText) {
       "quick_replies":[
         {
           "content_type":"text",
-          "title":"cat 1",
+          "title":"Trays, dishes, plates, cups and the like",
           "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
         },
         {
           "content_type":"text",
-          "title":"cat 2",
+          "title":"Notebooks and Accessory",
           "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
         },
         {
           "content_type":"text",
-          "title":"cat 3",
+          "title":"Watch (Mechanical display only)",
           "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
         },
         {
           "content_type":"text",
-          "title":"cat 4",
+          "title":"US Made Cosmetics",
           "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
         }
       ]
