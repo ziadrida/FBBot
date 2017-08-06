@@ -1958,11 +1958,11 @@ findMatchingCategory: function(findVal,callback) {
         //  db = mongoUtil.getDb();
         var collection = db.collection('categories');
 
-      findVal = '/' + findVal + '/i'
-      var searchCat = { "category_name": {   "$regex":    findVal  }      }
+
+      var searchCat = '\*'+findVal+'\.';
       console.log("  ************ FindVal:",searchCat);
         // Peform a simple find and return all the documents
-        collection.find(searchCat).limit(10).toArray().then(function(docs) {
+        collection.find({'category_name' : { "$regex" : "*watch*", "$options" : "i" } }).limit(10).toArray().then(function(docs) {
           console.log("_______ docs:", docs);
 
           if (docs && docs.length > 0) {
