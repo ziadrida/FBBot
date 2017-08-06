@@ -24,9 +24,9 @@ module.exports = {
     if (!_db) {
       connectToDB(function(err) {
         callback(err);
-      } else {
-          console.log("====>  getDb - already connected");
       }
+    } else {
+        console.log("====>  getDb - already connected");
     }
     return _db;
   }
