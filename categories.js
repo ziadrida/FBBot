@@ -1959,13 +1959,13 @@ findMatchingCategory: function(findVal,callback) {
         var collection = db.collection('categories');
 
 
-      //var searchCat = '\*'+findVal+'\.';
+      searchCat = findVal+'|comp';
       var query = { category_name : new RegExp('' + findVal + '|comp' + '') };
       console.log("  ************ FindVal:",query);
         // Peform a simple find and return all the documents
         // {"category_name": {$regex: ".*abc.", $options:"i"}}
         //{"category_name" :{'$regex' : 'watch', '$options' : 'i'}}
-        collection.find({"category_name": {$regex: findVal, $options:"i"}}).limit(10).toArray().then(function(docs) {
+        collection.find({"category_name": {$regex: searchCat, $options:"i"}}).limit(10).toArray().then(function(docs) {
           console.log("_______ docs:", docs);
 
           if (docs && docs.length > 0) {
