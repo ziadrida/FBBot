@@ -118,10 +118,10 @@ function receivedMessage(event) {
     senderID, recipientID, timeOfMessage);
 
 // connect do db
-db = mongoUtil.getDb(function(err) {
-  if (!err) {
+db = mongoUtil.getDb(function() {
+  if (db) {
     console.log(" ++++++++++++ :) ++++++  CONNECTED TO DB +++ :) ++++++++++++")
-    db = mongoUtil.getDb()
+  //  db = mongoUtil.getDb()
   } else {
     console.log(" -------------------------- ERROR CONNECTING TO DB -------------------")
   }
@@ -196,9 +196,9 @@ db = mongoUtil.getDb(function(err) {
 
       if (typeof fbprofile != 'undefined' && fbprofile) {
         console.log("fbprofile first_name:", fbprofile.first_name);
-        console.log("fbprofile last_name:", fbprofile.last_name);
-        console.log("fbprofile last_name:", fbprofile.locale);
-        console.log("fbprofile last_name:", fbprofile.gender);
+      //  console.log("fbprofile last_name:", fbprofile.last_name);
+        //console.log("fbprofile last_name:", fbprofile.locale);
+        //console.log("fbprofile last_name:", fbprofile.gender);
         //  sessions[sessionId].fbprofile = fbprofile;
 
         /*  if (fbprofile.locale && fbprofile.locale.toLowerCase().includes("en")) {
@@ -211,7 +211,7 @@ db = mongoUtil.getDb(function(err) {
 
         MongoClient.connect(mongodbUrl, function(err, db) {
           assert.equal(null, err);
-          console.log("------ call findOrCreateUser");
+          //console.log("------ call findOrCreateUser");
           findOrCreateUser(senderID, fbprofile, db, function(dbUserObj) {
             // set user info
             userObj = dbUserObj;
@@ -464,18 +464,20 @@ function determineResponse(event) {
     //console.log("*************************cat ",allcats[0]);
     var searchCat = "watch";
     categories.findMatchingCategory(searchCat,function(cats) {
+      console.log("***************** List all CATEGORIES MATCH:",cats);
       if(!cats) {
           console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
       } else if (cat && cats.length == 0 ) {
         console.log("***************** NO CATEGORIES MATCH:",searchCat)
       }  else {
+
       for (i=0 ; i < cats.length ; i++) {
         console.log("+++++++++++++= ",cats[0])
       }
     }
     });
 
-    sendButton(senderID, 'Would you like to confirm order?');
+  //  sendButton(senderID, 'Would you like to confirm order?');
   }
 
   /*---------------------------------
