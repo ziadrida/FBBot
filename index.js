@@ -784,6 +784,78 @@ function sendButton(recipientId, btnText) {
   callSendAPI(messageData);
 } // sendButton
 
+function compactList(recipientId, titleText) {
+  console.log("=====> compactList");
+  let messageData = {
+    "recipient": {
+      "id": recipientId
+    },
+    "message": {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "list",
+          "top_element_style": "compact",
+          "elements": [{
+              "title": "Classic White T-Shirt",
+              "subtitle": "100% Cotton, 200% Comfortable",
+
+              "buttons": [{
+                "title": "Select",
+                "type": "postback",
+                "payload": "Select0"
+
+              }]
+            },
+            {
+              "title": "Classic Blue T-Shirt",
+              "image_url": "https://peterssendreceiveapp.ngrok.io/img/blue-t-shirt.png",
+              "subtitle": "100% Cotton, 200% Comfortable",
+
+              "buttons": [{
+                "title": "Select",
+                "type": "postback",
+                "payload": "Select1"
+
+              }]
+            },
+            {
+              "title": "Classic Black T-Shirt",
+              "image_url": "https://peterssendreceiveapp.ngrok.io/img/black-t-shirt.png",
+              "subtitle": "100% Cotton, 200% Comfortable",
+
+              "buttons": [{
+                "title": "Select",
+                "type": "postback",
+                "payload": "Select2"
+
+              }]
+            },
+            {
+              "title": "Classic Gray T-Shirt",
+              "image_url": "https://peterssendreceiveapp.ngrok.io/img/gray-t-shirt.png",
+              "subtitle": "100% Cotton, 200% Comfortable",
+
+              "buttons": [{
+                "title": "Buy",
+                "type": "postback",
+                "payload": "payload"
+
+              }]
+            }
+          ],
+          "buttons": [{
+            "title": "View More",
+            "type": "postback",
+            "payload": "View"
+          }]
+        }
+      }
+    }
+  }
+  callSendAPI(messageData);
+}
+
 function quickReply(recipientId, titleText) {
   console.log("=====> quickReply");
   let messageData = {
@@ -1253,7 +1325,7 @@ getPricing
 function getPricing(senderID) {
   console.log(" =========> in getPricing");
 //  sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
-quickReply(senderID,"Which category best matches this item?");
+compactList(senderID,"Which category best matches this item?");
 
 //  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
 }
