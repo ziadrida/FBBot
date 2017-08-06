@@ -463,7 +463,7 @@ function determineResponse(event) {
   //  console.log("after insertAllCats:",n)
     //console.log("*************************cat ",allcats[0]);
     var searchCat = "watch";
-    findMatchingCategory(searchCat,function(cats) {
+    categories.findMatchingCategory(searchCat,function(cats) {
       if(!cats) {
           console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
       } else if (cat && cats.length == 0 ) {
