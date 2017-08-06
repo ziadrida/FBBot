@@ -8,18 +8,19 @@ module.exports = {
   connectToDB: function( callback ) {
       console.log("====> in connectToDB");
     MongoClient.connect( mongodbUrl, function( err, db ) {
+
       if(!err) {
-        console.log("  DB CONNECTED");
+        console.log("  DB CONNECTED", db);
       } else {
         console.log("  ERROR DURING DB CONNECTED");
       }
-      _db = db;
+        _db = db;
       return callback( err );
     } );
   },
 
   getDb: function(callback) {
-    console.log("====> in getDb");
+    console.log("====> in getDb,db:",_db);
     var err = null;
     if (!_db) {
       module.exports.connectToDB(function(err) {
@@ -29,7 +30,8 @@ module.exports = {
     } else {
         console.log("====>  getDb - already connected");
     }
-    callback(err);
+    callback(_db);
+      console.log("====> before return getDb,db:",_db);
     return _db;
   }
 };
