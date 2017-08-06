@@ -1938,7 +1938,7 @@ findMatchingCategory: function(findVal,callback) {
 
     console.log("====================> in findMatchingCategory:", findVal)
     var docs;
-  if (findVal) {
+
         // Create a collection we want to drop later
         db = mongoUtil.getDb(function(err) {
           if (err) {
@@ -1955,7 +1955,7 @@ findMatchingCategory: function(findVal,callback) {
         ]
       }
       }
-      console.log("**** FindVal:",findVal);
+      console.log("**** FindVal:",searchCat);
         // Peform a simple find and return all the documents
         collection.find(searchCat).limit(10).toArray().then(function(docs) {
           console.log("_______ docs:", docs);
@@ -1973,7 +1973,7 @@ findMatchingCategory: function(findVal,callback) {
           } // else if
         });
    });
-    } // if findVal == ''
+
 
 
 } // findMatchingCategory

@@ -6,14 +6,28 @@ var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.
 module.exports = {
 
   connectToDB: function( callback ) {
+      console.log("====> in connectToDB");
     MongoClient.connect( mongodbUrl, function( err, db ) {
-      console.log("  DB CONNECTED");
+      if(!err) {
+        console.log("  DB CONNECTED");
+      } else {
+        console.log("  ERROR DURING DB CONNECTED");
+      }
       _db = db;
       return callback( err );
     } );
   },
 
-  getDb: function() {
+  getDb: function(callback) {
+    console.log("====> in getDb");
+
+    if (!_db) {
+      connectToDB(function(err) {
+        callback(err);
+      } else {
+          console.log("====>  getDb - already connected");
+      }
+    }
     return _db;
   }
 };
