@@ -485,6 +485,7 @@ function determineResponse(event) {
    ---------------------------------*/
   if (typeof userMsg != 'undefined' && userMsg.action === "*pr") {
     getPricing(senderID);
+    return;
   } //if action *pr
 
 
@@ -794,12 +795,22 @@ function quickReply(recipientId, titleText) {
       "quick_replies":[
         {
           "content_type":"text",
-          "title":"Option 1",
+          "title":"cat 1",
           "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
         },
         {
           "content_type":"text",
-          "title":"Option  2",
+          "title":"cat 2",
+          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+        },
+        {
+          "content_type":"text",
+          "title":"cat 3",
+          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+        },
+        {
+          "content_type":"text",
+          "title":"cat 4",
           "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
         }
       ]
@@ -1243,6 +1254,7 @@ function getPricing(senderID) {
   console.log(" =========> in getPricing");
 //  sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
 quickReply(senderID,"Which category best matches this item?");
+
 //  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
 }
 
