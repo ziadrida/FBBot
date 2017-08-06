@@ -7,7 +7,7 @@ module.exports = {
 
   connectToDB: function( callback ) {
     MongoClient.connect( mongodbUrl, function( err, db ) {
-      console.log("  DB CONNECTED")''
+      console.log("  DB CONNECTED");
       _db = db;
       return callback( err );
     } );
