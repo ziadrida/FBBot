@@ -1941,8 +1941,8 @@ findMatchingCategory: function(findVal,callback) {
 
         // Create a collection we want to drop later
         var db = mongoUtil.getDb(function(myDb) {
-          console.log("*** after getDB *** myDb:",myDb);
-            console.log("*** after getDB *** db:",db);
+        //  console.log("*** after getDB *** myDb:",myDb);
+          //  console.log("*** after getDB *** db:",db);
           if (typeof db != 'undefined' && db ) {
             console.log("*** got connection db");
           } else if (typeof myDb != 'undefined' && myDb ) {
@@ -1959,12 +1959,7 @@ findMatchingCategory: function(findVal,callback) {
         var collection = db.collection('categories');
 
       findVal = '/' + findVal + '/i'
-      var searchCat = { "category_name": {
-        "$in": [
-          findVal,"/comp/i"
-        ]
-      }
-      }
+      var searchCat = { "category_name": {   "$regex":    findVal  }      }
       console.log("  ************ FindVal:",searchCat);
         // Peform a simple find and return all the documents
         collection.find(searchCat).limit(10).toArray().then(function(docs) {

@@ -10,7 +10,7 @@ module.exports = {
     MongoClient.connect( mongodbUrl, function( err, db ) {
 
       if(!err) {
-        console.log("  DB CONNECTED", db);
+        console.log("  DB CONNECTED");//, db);
       } else {
         console.log("  ERROR DURING DB CONNECTED");
       }
@@ -20,7 +20,7 @@ module.exports = {
   },
 
   getDb: function(callback) {
-    console.log("====> in getDb,db:",_db);
+  //  console.log("====> in getDb,db:",_db);
     var err = null;
     if (!_db) {
       module.exports.connectToDB(function(err) {
@@ -31,7 +31,7 @@ module.exports = {
         console.log("====>  getDb - already connected");
     }
     callback(_db);
-      console.log("====> before return getDb,db:",_db);
+      console.log("====> before return getDb,db:");//,_db);
     return _db;
   }
 };
