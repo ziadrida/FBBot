@@ -4,8 +4,12 @@ var _db;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 
 module.exports = {
+  connectToDB: connectToDB,
+  getDb: getDb
+}
 
-  connectToDB: function( callback ) {
+  var connectToDB = function (callback) {
+//  connectToDB: function( callback ) {
       console.log("====> in connectToDB");
     MongoClient.connect( mongodbUrl, function( err, db ) {
       if(!err) {
@@ -16,19 +20,20 @@ module.exports = {
       _db = db;
       return callback( err );
     } );
-  },
+  }
 
-  getDb: function(callback) {
+  var getDb = function (callback) {
+//  getDb: function(callback) {
     console.log("====> in getDb");
 
     if (!_db) {
-      connectToDB(function(err) {
+      module.exports.connectToDB(function(err) {
         callback(err);
       });
     } else {
         console.log("====>  getDb - already connected");
     }
-  
+
     return _db;
   }
-};
+//};
