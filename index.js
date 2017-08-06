@@ -467,7 +467,7 @@ function determineResponse(event) {
       console.log("***************** List all CATEGORIES MATCH:",cats);
       if(!cats) {
           console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
-      } else if (cat && cats.length == 0 ) {
+      } else if (cats && cats.length == 0 ) {
         console.log("***************** NO CATEGORIES MATCH:",searchCat)
       }  else {
 
@@ -783,6 +783,32 @@ function sendButton(recipientId, btnText) {
   callSendAPI(messageData);
 } // sendButton
 
+function quickReply(recipientId, titleText) {
+  console.log("=====> quickReply");
+  let messageData = {
+    "recipient": {
+      "id": recipientId
+    },
+    "message":{
+      "text":titleText,
+      "quick_replies":[
+        {
+          "content_type":"text",
+          "title":"Option 1",
+          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+        },
+        {
+          "content_type":"text",
+          "title":"Option  2",
+          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
+        }
+      ]
+    }
+    }
+
+  callSendAPI(messageData);
+} // sendButton
+
 
 function sendTextMessage(recipientId, messageText) {
   console.log("in sendTextMessage function --> recipentID:", recipientId);
@@ -835,16 +861,33 @@ app.listen(app.get('port'), function() {
 /*******************************************
   This is hte pricing MODULE
 **********************************************/
-function getRegularAmmanPrice(price, weight, shipping, category) {
+function getRegularAmmanPrice(item) {
   // input price is in USD
   // return price in JD
+  console.log("item price:",item.price);
+   console.log("item price:",item.weight);
+   console.log("item price:", item.shipping);
+   console.log("item price:", item.category);
   console.log('in getRegularAmmanPrice *********** ')
-  let tax = 0;
-  if (category && category.toLowerCase() == "notebook") {
-    tax = .16;
+
+
+  categories.findMatchingCategory(category,function(cats) {
+    console.log("***************** List all CATEGORIES MATCH:",cats);
+    if(!cats) {
+        console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
+    } else if (cats && cats.length == 0 ) {
+      console.log("***************** NO CATEGORIES MATCH:",searchCat)
+    }  else {
+
+    for (i=0 ; i < cats.length ; i++) {
+      console.log("+++++++++++++= ",cats[0])
+    }
   }
-  console.log('tax=', tax);
-  return price * (1 + tax) + weight * 5 + shipping
+  });
+
+  quickReply(senderID,"Which category best matches this item?");
+
+
 }
 
 
@@ -1198,11 +1241,8 @@ getPricing
 **************************/
 function getPricing() {
   sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
-  let itemPrice = userMsg.price;
-  let itemWeight = userMsg.weight
-  let shipping = userMsg.shipping
-  let category = userMsg.category;
-  sendTextMessage(senderID, getRegularAmmanPrice(itemPrice, itemWeight, shipping, category));
+
+  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
 }
 
 
