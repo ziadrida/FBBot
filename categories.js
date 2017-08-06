@@ -1,6 +1,6 @@
 var mongoUtil = require( './mongoUtil.js' );
 
-
+var db;
 module.exports =
 {
 getCatArabic: function() {
@@ -1940,12 +1940,21 @@ findMatchingCategory: function(findVal,callback) {
     var docs;
 
         // Create a collection we want to drop later
-        db = mongoUtil.getDb(function(err) {
-          console.log("*** after getDB ***");
-          if (err) {
+        var db = mongoUtil.getDb(function(myDb) {
+          console.log("*** after getDB *** myDb:",myDb);
+            console.log("*** after getDB *** db:",db);
+          if (typeof db != 'undefined' && db ) {
+            console.log("*** got connection db");
+          } else if (typeof myDb != 'undefined' && myDb ) {
+              console.log("*** got connection myDb");
+              db=myDb;
+          } else {
             console.log("*** ERROR*** no connection");
-            return callback(docs);
+
+              return callback(docs);
           }
+
+
         //  db = mongoUtil.getDb();
         var collection = db.collection('categories');
 
