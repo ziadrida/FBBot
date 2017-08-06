@@ -1972,7 +1972,7 @@ findMatchingCategory: function(findVal,callback) {
           console.log("******* no categories found")
           } // else if
         });
-
+   });
     } // if findVal == ''
 
 
