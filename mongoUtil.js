@@ -20,7 +20,7 @@ module.exports = {
 
   getDb: function(callback) {
     console.log("====> in getDb");
-
+    var err = null;
     if (!_db) {
       module.exports.connectToDB(function(err) {
          console.log("in getDB - after connectToDB")
