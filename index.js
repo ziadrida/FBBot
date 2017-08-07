@@ -797,7 +797,7 @@ function compactList(recipientId, titleText) {
           "template_type": "list",
           "top_element_style": "compact",
           "elements": [{
-              "title": "Classic White T-Shirt",
+              "title": "Trays, dishes, plates, cups and the like",
           //    "subtitle": "100% Cotton, 200% Comfortable",
               "buttons": [{
                 "title": "Select",
@@ -806,7 +806,7 @@ function compactList(recipientId, titleText) {
               }]
             },
             {
-              "title": "Classic Blue T-Shirt",
+              "title": "T-shirts, singlets and other vests, knitted or crocheted.",
       //        "subtitle": "100% Cotton, 200% Comfortable",
               "buttons": [{
                 "title": "Select",
@@ -815,7 +815,7 @@ function compactList(recipientId, titleText) {
               }]
             },
             {
-              "title": "Classic Black T-Shirt",
+              "title": "Polyacetals, other polyethers and epoxide resins, in primary forms; polycarbonates, alkyd resins",
         //      "subtitle": "100% Cotton, 200% Comfortable",
 
               "buttons": [{
@@ -826,7 +826,7 @@ function compactList(recipientId, titleText) {
               }]
             },
             {
-              "title": "Classic Gray T-Shirt",
+              "title": "Protein concentrates and textured protein substances, other",
             //  "subtitle": "100% Cotton, 200% Comfortable",
 
               "buttons": [{
