@@ -416,19 +416,11 @@ function determineResponse(event) {
       if (typeof userMsg != 'undefined' && userMsg.action) {
         console.log('action = ', userMsg.action);
       }
-      if (typeof userMsg != 'undefined' && userMsg.price) {
-        console.log('price in USD:', userMsg.price)
-      }
-      if (typeof userMsg != 'undefined' && userMsg.weight) {
-        console.log('weight in lbs:', userMsg.weight)
-      }
-      if (typeof userMsg != 'undefined' && userMsg.category) {
-        console.log('category:', userMsg.category)
-      }
     }
   } catch (e) {
     console.log("compareText not a JSON string - not a problem");
-  } // end function determineResponse
+  } // end  of try block if compareMessage
+
   console.log("sessions[sessionId];:", sessions[sessionId])
   if (sessions[sessionId].newUser) {
     // follow welcome protocol for newUser
@@ -477,6 +469,8 @@ function determineResponse(event) {
     }
     });
 
+
+
   //  sendButton(senderID, 'Would you like to confirm order?');
   }
 
@@ -484,7 +478,10 @@ function determineResponse(event) {
    check if this is a pricing request
    ---------------------------------*/
   if (typeof userMsg != 'undefined' && userMsg.action === "*pr") {
-    getPricing(senderID);
+
+
+
+    getPricing(senderID,userMsg);
     return;
   } //if action *pr
 
@@ -815,7 +812,7 @@ function compactList(recipientId, titleText) {
               }]
             },
             {
-              "title": "Polyacetals, other polyethers and epoxide resins, \nin primary forms; polycarbonates, alkyd resins",
+          //    "title": "Polyacetals, other polyethers and epoxide resins, \nin primary forms; polycarbonates, alkyd resins",
            "subtitle": "Polyacetals, other polyethers and epoxide resins, \nin primary forms; polycarbonates, alkyd resins",
 
 
@@ -948,19 +945,7 @@ function getRegularAmmanPrice(item) {
   console.log('in getRegularAmmanPrice *********** ')
 
 
-  categories.findMatchingCategory(category,function(cats) {
-    console.log("***************** List all CATEGORIES MATCH:",cats);
-    if(!cats) {
-        console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
-    } else if (cats && cats.length == 0 ) {
-      console.log("***************** NO CATEGORIES MATCH:",searchCat)
-    }  else {
 
-    for (i=0 ; i < cats.length ; i++) {
-      console.log("+++++++++++++= ",cats[0])
-    }
-  }
-  });
 
 
 
@@ -1316,10 +1301,43 @@ function genPrReport(senderID, daysBack,callback) {
 /*************************
 getPricing
 **************************/
-function getPricing(senderID) {
+function getPricing(senderID,item) {
   console.log(" =========> in getPricing");
-//  sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
-compactList(senderID,"Which category best matches this item?");
+
+  if (typeof item != 'undefined' && item.price) {
+    console.log('price in USD:', item.price)
+  }
+  if (typeof item != 'undefined' && item.weight) {
+    console.log('weight in lbs:', userMsg.weight)
+  }
+  if (typeof item != 'undefined' && item.category) {
+    console.log('category:', item.category)
+  }
+
+  // find category
+  categories.findMatchingCategory(item.category,function(cats) {
+    console.log("***************** List all CATEGORIES MATCH:",cats);
+    if(!cats) {
+        console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
+    } else if (cats && cats.length == 0 ) {
+      console.log("***************** NO CATEGORIES MATCH:",searchCat)
+    }  if (cats && cats.length == 1 ) {
+      // got one match - use it
+      console.log(" ***> selected category:",cats[0],category_name)
+    }
+    else {
+      // more than one - let user select the valid category
+
+    for (i=0 ; i < cats.length ; i++) {
+      console.log("+++++++++++++= ",cats[0])
+    }
+   }
+    // build List template
+  });
+
+
+  //  sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
+  compactList(senderID,"Which category best matches this item?");
 
 //  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
 }
