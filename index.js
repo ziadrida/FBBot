@@ -815,9 +815,9 @@ function compactList(recipientId, titleText) {
               }]
             },
             {
-              "title": "Polyacetals, other polyethers and epoxide resins, in primary forms; polycarbonates, alkyd resins",
-           "subtitle": "Polyacetals, other polyethers and epoxide resins, in primary forms; polycarbonates, alkyd resins",
-   
+              "title": "Polyacetals, other polyethers and epoxide resins, \nin primary forms; polycarbonates, alkyd resins",
+           "subtitle": "Polyacetals, other polyethers and epoxide resins, \nin primary forms; polycarbonates, alkyd resins",
+
 
               "buttons": [{
                 "title": "Select",
