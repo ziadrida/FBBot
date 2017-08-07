@@ -1944,7 +1944,7 @@ findMatchingCategory: function(findVal,callback) {
         var collection = db.collection('categories');
 
 
-      searchCat = findVal+'|comp';
+      searchCat = findVal+'|Notebooks';
       var query = { category_name : new RegExp('' + findVal + '|comp' + '') };
       console.log("  ************ FindVal:",query);
         // Peform a simple find and return all the documents
