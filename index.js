@@ -1395,7 +1395,7 @@ function getPricing(senderID,item) {
     }
     else {
       // more than one - let user select the valid category
-    console.log("number of cats:":cats.length);
+    console.log("number of cats:",cats.length);
     /*
     for (i=0 ; i < cats.length ; i++) {
       console.log("+++++++++++++= ",cats[0])
