@@ -816,7 +816,8 @@ function compactList(recipientId, titleText) {
             },
             {
               "title": "Polyacetals, other polyethers and epoxide resins, in primary forms; polycarbonates, alkyd resins",
-        //      "subtitle": "100% Cotton, 200% Comfortable",
+           "subtitle": "Polyacetals, other polyethers and epoxide resins, in primary forms; polycarbonates, alkyd resins",
+   
 
               "buttons": [{
                 "title": "Select",

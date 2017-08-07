@@ -97,7 +97,7 @@ getCatArabic: function() {
     {"category_name":"Perfume","category_name_ar":"عطر"},
     {"category_name":"Perfume - US Made","category_name_ar":"عطر"},
     {"category_name":"Playstation","category_name_ar":"بلاي ستيشن"},
-    {"category_name":"Polyacetals, other polyethers and epoxide resins, in primary forms; polycarbonates, alkyd resins","category_name_ar":"بولى اسيتالات وبولى إيثرات أخر وراتنجات أيبوكسيدية ، بأشكالها الأولية ؛ بولى كربونات"},
+    {"category_name":"Production inputs","category_name_ar":"مدخلات انتاج"},
     {"category_name":"Power Suppy","category_name_ar":"مغذي كهرباء"},
     {"category_name":"Printer","category_name_ar":"طابعة"},
     {"category_name":"Projectors","category_name_ar":"عارض ضوئي"},
@@ -1421,8 +1421,8 @@ var cats = [
  "min_side_length": 1
  },
  {
- "category_name":"Polyacetals, other polyethers and epoxide resins, in primary forms; polycarbonates, alkyd resins",
- "category_name_ar":"???? ???????? ????? ?????? ??? ???????? ?????????? ? ???????? ??????? ? ???? ???????",
+ "category_name":"Production inputs",
+ "category_name_ar":"مدخلات انتاج",
  "customs": 0,
  "tax_aqaba": 0,
  "tax_amm": 0.16,
