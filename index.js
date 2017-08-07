@@ -844,7 +844,7 @@ var compactListElements = [];
   }
 messageData.message =  compactListMessage;
 
-console.log("******************** beore callSendAPI: messageData:",messageData);
+console.log("******************** beore callSendAPI: messageData:",JSON.stringify(messageData));
   callSendAPI(messageData);
 }
 
@@ -1370,7 +1370,7 @@ function genPrReport(senderID, daysBack,callback) {
 getPricing
 **************************/
 function getPricing(senderID,item) {
-  console.log(" =========> in getPricing");
+  console.log(" =========> in getPricing, senderID",senderID);
 
   if (typeof item != 'undefined' && item.price) {
     console.log('price in USD:', item.price)
@@ -1401,13 +1401,14 @@ function getPricing(senderID,item) {
       console.log("+++++++++++++= ",cats[0])
     }*/
    }
+  // compactList(senderID,"Which category best matches this item?");
     // build List template
+
     compactListBuilder(senderID,"Category List");
   });
 
 
-  //  sendTextMessage(senderID, 'I understand that you want me to give you a price .. please wait');
-  compactList(senderID,"Which category best matches this item?");
+
 
 //  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
 }
