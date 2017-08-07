@@ -862,7 +862,7 @@ function compactList(recipientId, titleText) {
           "top_element_style": "compact",
           "elements": [{
               "title": "Trays, dishes, plates, cups and the like",
-          //    "subtitle": "100% Cotton, 200% Comfortable",
+              "subtitle": "100% Cotton, 200% Comfortable",
               "buttons": [{
                 "title": "Select",
                 "type": "postback",
@@ -871,7 +871,7 @@ function compactList(recipientId, titleText) {
             },
             {
               "title": "T-shirts, singlets and other vests, knitted or crocheted.",
-      //        "subtitle": "100% Cotton, 200% Comfortable",
+              "subtitle": "100% Cotton, 200% Comfortable",
               "buttons": [{
                 "title": "Select",
                 "type": "postback",
@@ -879,7 +879,7 @@ function compactList(recipientId, titleText) {
               }]
             },
             {
-          //    "title": "Polyacetals, other polyethers and epoxide resins, \nin primary forms; polycarbonates, alkyd resins",
+              "title": "Polyacetals, other polyethers and epoxide resins, \nin primary forms; polycarbonates, alkyd resins",
            "subtitle": "Polyacetals, other polyethers and epoxide resins, \nin primary forms; polycarbonates, alkyd resins",
 
 
@@ -892,8 +892,7 @@ function compactList(recipientId, titleText) {
             },
             {
               "title": "Protein concentrates and textured protein substances, other",
-            //  "subtitle": "100% Cotton, 200% Comfortable",
-
+              "subtitle": "100% Cotton, 200% Comfortable",
               "buttons": [{
                 "title": "Buy",
                 "type": "postback",
@@ -1402,8 +1401,8 @@ function getPricing(senderID,item) {
    }
   // compactList(senderID,"Which category best matches this item?");
     // build List template
-    sendTextMessage(senderID,"Pricing now...");
-    //compactList(senderID,"Category List");
+    //sendTextMessage(senderID,"Pricing now...");
+    compactList(senderID,"Category List");
   });
 
 
