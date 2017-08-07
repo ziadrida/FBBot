@@ -782,7 +782,7 @@ function sendButton(recipientId, btnText) {
 } // sendButton
 
 function compactListBuilder(recipientId, titleText) {
-  console.log("=====> compactListBuilder");
+  console.log("=====> in compactListBuilder");
 /*
 following is the template of an Element in a compactList
   var compactListElements = {
@@ -844,7 +844,7 @@ var compactListElements = [];
   }
 messageData.message =  compactListMessage;
 
-
+console.log("******************** beore callSendAPI: messageData:",messageData);
   callSendAPI(messageData);
 }
 
@@ -969,6 +969,7 @@ function sendTextMessage(recipientId, messageText) {
 
 
 function callSendAPI(messageData) {
+  console.log("===========> in callSendAPI")
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {
@@ -1394,10 +1395,11 @@ function getPricing(senderID,item) {
     }
     else {
       // more than one - let user select the valid category
-
+    console.log("number of cats:":cats.length);
+    /*
     for (i=0 ; i < cats.length ; i++) {
       console.log("+++++++++++++= ",cats[0])
-    }
+    }*/
    }
     // build List template
     compactListBuilder(senderID,"Category List");
