@@ -781,7 +781,7 @@ function sendButton(recipientId, btnText) {
   callSendAPI(messageData);
 } // sendButton
 
-function compactListBuilder(recipientId, titleText) {
+function compactListBuilder(recipientId, compactListElements) {
   console.log("=====> in compactListBuilder:",recipientId);
 /*
 following is the template of an Element in a compactList
@@ -798,35 +798,8 @@ following is the template of an Element in a compactList
     }]
   };
 */
-var compactListElements = [];
 
-   var item = {
-     "title": "testTitle",
-     "subtitle"  : "testsubtitle",
-       "btnTitle": "test btn Title",
-       "payload": "test payload"
-   }
 
-    compactListElements.push({
-        "title" : item.title,
-        "subtitle"  : item.subtitle,
-        buttons : [{
-          "title": item.btnTitle,
-          "type": "postback",
-          "payload": item.payload
-        }]
-    });
-    /*
-    compactListElements.push({
-        "title" : item.title ,
-        "subtitle"  : item.subtitle,
-        buttons : [{
-          "title": item.btnTitle,
-          "type": "postback",
-          "payload": item.payload
-        }]
-    });
-*/
     var compactListMessage = {
 
       "attachment": {
@@ -1404,15 +1377,26 @@ function getPricing(senderID,item) {
     else {
       // more than one - let user select the valid category
     console.log("number of cats:",cats.length);
-    /*
+    var catList = [];
     for (i=0 ; i < cats.length ; i++) {
-      console.log("+++++++++++++= ",cats[0])
-    }*/
+      console.log("+++++++++++++= ",cats[0]);
+        catList.push({
+          "title" : cats.category_name,
+          "subtitle"  : cats.category_name_ar,
+          buttons : [{
+            "title": "Select أختار",
+            "type": "postback",
+            "payload": cats.category_name
+          }]
+      });
    }
+ }
   // compactList(senderID,"Which category best matches this item?");
     // build List template
     //sendTextMessage(senderID,"Pricing now...");
-    compactListBuilder(senderID,"Category List");
+
+
+    compactListBuilder(senderID,catList);
   });
 
 
