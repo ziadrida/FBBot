@@ -1351,8 +1351,9 @@ function genPrReport(senderID, daysBack,callback) {
 getPricing
 **************************/
 function getPricing(senderID,item) {
-  console.log(" =========> in getPricing, senderID",senderID);
 
+  console.log(" =========> in getPricing, senderID",senderID);
+  var catList = [];
   if (typeof item != 'undefined' && item.price) {
     console.log('price in USD:', item.price)
   }
@@ -1377,7 +1378,7 @@ function getPricing(senderID,item) {
     else {
       // more than one - let user select the valid category
     console.log("number of cats:",cats.length);
-    var catList = [];
+
     for (i=0 ; i < cats.length ; i++) {
       console.log("+++++++++++++= ",cats[0]);
         catList.push({
@@ -1395,8 +1396,11 @@ function getPricing(senderID,item) {
     // build List template
     //sendTextMessage(senderID,"Pricing now...");
 
-
+  if(catList.length  > 1 ) {
     compactListBuilder(senderID,catList);
+  } else {
+    console.log("************88 Only one category:",catList[0].category_name);
+  }
   });
 
 
