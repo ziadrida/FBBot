@@ -474,6 +474,7 @@ function determineResponse(event) {
   //  sendButton(senderID, 'Would you like to confirm order?');
   }
 
+
   /*---------------------------------
    check if this is a pricing request
    ---------------------------------*/
@@ -1382,12 +1383,12 @@ function getPricing(senderID,item) {
     for (i=0 ; i < cats.length ; i++) {
       console.log("+++++++++++++= ",cats[0]);
         catList.push({
-          "title" : cats.category_name,
-          "subtitle"  : cats.category_name_ar,
+          "title" : cats[i].category_name,
+          "subtitle"  : cats[i].category_name_ar,
           buttons : [{
             "title": "Select أختار",
             "type": "postback",
-            "payload": cats.category_name
+            "payload": cats[i].category_name
           }]
       });
    }
