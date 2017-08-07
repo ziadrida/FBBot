@@ -900,8 +900,7 @@ function compactList(recipientId, titleText) {
                 "payload": "payload"
 
               }]
-            }
-          ],
+            }],
           "buttons": [{
             "title": "View More",
             "type": "postback",
@@ -1404,7 +1403,7 @@ function getPricing(senderID,item) {
   // compactList(senderID,"Which category best matches this item?");
     // build List template
 
-    compactListBuilder(senderID,"Category List");
+    compactList(senderID,"Category List");
   });
 
 
