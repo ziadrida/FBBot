@@ -816,6 +816,15 @@ var compactListElements = [];
           "payload": item.payload
         }]
     });
+    compactListElements.push({
+        "title" : item.title ,
+        "subtitle"  : item.subtitle,
+        buttons : [{
+          "title": item.btnTitle,
+          "type": "postback",
+          "payload": item.payload
+        }]
+    });
 
     var compactListMessage = {
 
@@ -1402,7 +1411,7 @@ function getPricing(senderID,item) {
   // compactList(senderID,"Which category best matches this item?");
     // build List template
     //sendTextMessage(senderID,"Pricing now...");
-    compactList(senderID,"Category List");
+    compactListBuilder(senderID,"Category List");
   });
 
 
