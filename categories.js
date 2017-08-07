@@ -1954,9 +1954,10 @@ findMatchingCategory: function(findVal,callback) {
           console.log("_______ docs:", docs);
 
           if (docs && docs.length > 0) {
-            console.log("*** cats found:", docs);
+          //  console.log("*** cats found:", docs);
             //    assert.equal(null, err);
           //  db.close();
+          console.log("# of categories matched:",docs.length);
 
             callback(docs);
 
