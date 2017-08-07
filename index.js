@@ -798,31 +798,25 @@ function compactList(recipientId, titleText) {
           "top_element_style": "compact",
           "elements": [{
               "title": "Classic White T-Shirt",
-              "subtitle": "100% Cotton, 200% Comfortable",
-
+          //    "subtitle": "100% Cotton, 200% Comfortable",
               "buttons": [{
                 "title": "Select",
                 "type": "postback",
                 "payload": "Select0"
-
               }]
             },
             {
               "title": "Classic Blue T-Shirt",
-              "image_url": "https://peterssendreceiveapp.ngrok.io/img/blue-t-shirt.png",
-              "subtitle": "100% Cotton, 200% Comfortable",
-
+      //        "subtitle": "100% Cotton, 200% Comfortable",
               "buttons": [{
                 "title": "Select",
                 "type": "postback",
                 "payload": "Select1"
-
               }]
             },
             {
               "title": "Classic Black T-Shirt",
-              "image_url": "https://peterssendreceiveapp.ngrok.io/img/black-t-shirt.png",
-              "subtitle": "100% Cotton, 200% Comfortable",
+        //      "subtitle": "100% Cotton, 200% Comfortable",
 
               "buttons": [{
                 "title": "Select",
@@ -833,8 +827,7 @@ function compactList(recipientId, titleText) {
             },
             {
               "title": "Classic Gray T-Shirt",
-              "image_url": "https://peterssendreceiveapp.ngrok.io/img/gray-t-shirt.png",
-              "subtitle": "100% Cotton, 200% Comfortable",
+            //  "subtitle": "100% Cotton, 200% Comfortable",
 
               "buttons": [{
                 "title": "Buy",
