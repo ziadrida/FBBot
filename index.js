@@ -782,7 +782,7 @@ function sendButton(recipientId, btnText) {
 } // sendButton
 
 function compactListBuilder(recipientId, titleText) {
-  console.log("=====> in compactListBuilder");
+  console.log("=====> in compactListBuilder:",recipientId);
 /*
 following is the template of an Element in a compactList
   var compactListElements = {
@@ -849,7 +849,7 @@ console.log("******************** beore callSendAPI: messageData:",JSON.stringif
 }
 
 function compactList(recipientId, titleText) {
-  console.log("=====> compactList");
+  console.log("=====> compactList",recipientId);
   let messageData = {
     "recipient": {
       "id": recipientId
@@ -1402,15 +1402,15 @@ function getPricing(senderID,item) {
    }
   // compactList(senderID,"Which category best matches this item?");
     // build List template
-
-    compactList(senderID,"Category List");
+    sendTextMessage(senderID,"Pricing now...");
+    //compactList(senderID,"Category List");
   });
 
 
 
 
 //  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
-}
+} // end function getPricing
 
 
 function getUserPublicInfo(fbId, callback) {
