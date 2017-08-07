@@ -817,8 +817,8 @@ var compactListElements = [];
         }]
     });
 
-    var compactListMessage: {
-    "message": {
+    var compactListMessage = {
+
       "attachment": {
         "type": "template",
         "payload": {
@@ -834,15 +834,15 @@ var compactListElements = [];
             }]
           }
           }
-        }
+
       };
 
   let messageData = {
     "recipient": {
       "id": recipientId
     },
-    compactListMessage
   }
+messageData.message =  compactListMessage;
 
 
   callSendAPI(messageData);
