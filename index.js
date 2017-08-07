@@ -781,6 +781,73 @@ function sendButton(recipientId, btnText) {
   callSendAPI(messageData);
 } // sendButton
 
+function compactListBuilder(recipientId, titleText) {
+  console.log("=====> compactListBuilder");
+/*
+following is the template of an Element in a compactList
+  var compactListElements = {
+    elements : [{
+      title: "title",
+      subtitle : "sub",
+      buttons : [{
+        "title": "Select",
+        "type": "postback",
+        "payload": "Select0"
+      }]
+
+    }]
+  };
+*/
+var compactListElements = [];
+
+   var item = {
+     "title": "testTitle",
+     "subtitle"  : "testsubtitle",
+       "btnTitle": "test btn Title",
+       "payload": "test payload"
+   }
+
+    compactListElements.push({
+        "title" : item.title,
+        "subtitle"  : item.subtitle,
+        buttons : [{
+          "title": item.btnTitle,
+          "type": "postback",
+          "payload": item.payload
+        }]
+    });
+
+    var compactListMessage: {
+    "message": {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "list",
+          "top_element_style": "compact",
+          // add elements here
+          "elements": compactListElements,
+          // next is the more button
+            "buttons": [{
+              "title": "View More",
+              "type": "postback",
+              "payload": "View"
+            }]
+          }
+          }
+        }
+      };
+
+  let messageData = {
+    "recipient": {
+      "id": recipientId
+    },
+    compactListMessage
+  }
+
+
+  callSendAPI(messageData);
+}
+
 function compactList(recipientId, titleText) {
   console.log("=====> compactList");
   let messageData = {
@@ -1333,6 +1400,7 @@ function getPricing(senderID,item) {
     }
    }
     // build List template
+    compactListBuilder(senderID,"Category List");
   });
 
 
