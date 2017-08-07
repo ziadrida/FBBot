@@ -816,6 +816,7 @@ var compactListElements = [];
           "payload": item.payload
         }]
     });
+    /*
     compactListElements.push({
         "title" : item.title ,
         "subtitle"  : item.subtitle,
@@ -825,7 +826,7 @@ var compactListElements = [];
           "payload": item.payload
         }]
     });
-
+*/
     var compactListMessage = {
 
       "attachment": {
