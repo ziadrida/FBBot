@@ -1345,7 +1345,7 @@ function getPricing(senderID,item) {
   }
 
   // find category
-  categories.findMatchingCategory(item.category,function(cats) {
+  categories.findCategory(item.category,function(cats) {
     console.log("***************** List all CATEGORIES MATCH:",cats);
     if(!cats) {
         console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
