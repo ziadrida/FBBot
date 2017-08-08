@@ -1949,13 +1949,13 @@ findCategory: function(findVal,callback) {
       if (findVal instanceof Array) {
          // build find expression for array
          for (var j =0 ; j<findVal.length  ; j++){
-              findExp.push( {category_name:{$regex:findVal[j], $options:"i"}}});
+              findExp.push( {category_name:{$regex:findVal[j], $options:"i"}});
 
          }
          console.log("------- findVal is an array findExp:",findExp);
        }  else {
 
-           findExp.push( {category_name:{$regex:findVal,$options:"i"}}});
+           findExp.push( {category_name:{$regex:findVal,$options:"i"}});
             console.log("--------- findVal not an array findExp:",findExp);
        }
 
