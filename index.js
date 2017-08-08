@@ -1150,7 +1150,9 @@ function processHttpRequest(event) {
         cat.forEach(function(a) {
           for (var n =0 ; n<a.length; n++) {
               console.log("add category:",a[n]);
-              itemToCheck.category.push(a[n]);
+              if (typeof a[n] != 'undefined' && a[n]) {
+                itemToCheck.category.push(a[n]);
+              }
           }
           try {
           itemToCheck.category.push(object[0].ItemAttributes[0].title);
