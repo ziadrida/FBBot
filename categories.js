@@ -1923,7 +1923,7 @@ findCategory: function(findVal,callback) {
 
     console.log("=========+++++++++++++++===========> in findCategory:", findVal)
     var docs=[];
-
+     var allCatsString = "";
         // Create a collection we want to drop later
         var db = mongoUtil.getDb(function(myDb) {
         //  console.log("*** after getDB *** myDb:",myDb);
@@ -1974,18 +1974,22 @@ function cleanupCat(cat) {
       if (findVal instanceof Array) {
          // build find expression for array
          for (var j =0 ; j<findVal.length  ; j++){
+             allCatsString = allCatsString + findVal[j];
               searchCat = cleanupCat(findVal[j]);
               if (searchCat.length > 0 ) {
-              console.log("Search Val:",searchCat);
-              findExp.push( {keywords:{$regex:searchCat, $options:"i"}});
+
+                console.log("Search Val:",searchCat);
+                findExp.push( {keywords:{$regex:searchCat, $options:"i"}});
             }
 
          }
          console.log("------- findVal is an array findExp:",findExp);
        }  else {
-          searchCat = cleanupCat(findVal[j]);
+         allCatsString = findVal;
+          searchCat = cleanupCat(findVal);
           if (searchCat.length > 0 ) {
           console.log("Search Val:",searchCat);
+
            findExp.push( {keywords:{$regex:searchCat,$options:"i"}});
             console.log("--------- findVal not an array findExp:",findExp);
           }
@@ -2004,9 +2008,13 @@ function cleanupCat(cat) {
         // {"category_name": {$regex: ".*abc.", $options:"i"}}
         //{"category_name" :{'$regex' : 'watch', '$options' : 'i'}}
       //  collection.find({"category_name": {$regex: searchCat, $options:"i"}}).limit(10).toArray().then(function(docs) {
-      collection.find({
+  /*    collection.find({
             $or: findExp
-          }).limit(10).toArray().then(function(docs) {
+          })*/
+          console.log("^^^^^^^^^ allCatsString",allCatsString)
+          db.categories.find( { $text: { $search: allCatsString } },
+            { score: { $meta: "textScore" }} ).sort({score:{ $meta : "textScore"}})
+          .limit(10).toArray().then(function(docs) {
 
           console.log("_______ docs:", docs);
 
