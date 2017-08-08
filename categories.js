@@ -1919,9 +1919,9 @@ updateCatArabicName: function() {
 
 }, // end updateCatArabicName
 
-findMatchingCategory: function(findVal,callback) {
+findCategory: function(findVal,callback) {
 
-    console.log("=========+++++++++++++++===========> in findMatchingCategory:", findVal)
+    console.log("=========+++++++++++++++===========> in findCategory:", findVal)
     var docs;
 
         // Create a collection we want to drop later
@@ -1943,15 +1943,39 @@ findMatchingCategory: function(findVal,callback) {
         //  db = mongoUtil.getDb();
         var collection = db.collection('categories');
 
+      findExp = [] ;//{category_name:{$regex:'t'}},
 
       //searchCat = findVal+'|comp';
+      if (findVal instanceof Array) {
+         // build find expression for array
+         for (var j =0 ; j<findVal.length  ; j++){
+              findExp.push( {category_name:{$regex:findVal[j]}});
+              console.log("------- findVal is an array findExp:",findExp);
+         }
+       }  else {
+
+           findExp.push( {category_name:{$regex:findVal}});
+            console.log("--------- findVal not an array findExp:",findExp);
+       }
+
+        /* find({
+    $and: [
+        {title:{$regex:'aa'}},
+        {title:{$regex:'t'}},
+        {title:{$not:/wel/}}
+    ]
+})*/
       searchCat = findVal;
       var query = { category_name : new RegExp('' + findVal + '|comp' + '') };
       console.log("  ************ FindVal:",query);
         // Peform a simple find and return all the documents
         // {"category_name": {$regex: ".*abc.", $options:"i"}}
         //{"category_name" :{'$regex' : 'watch', '$options' : 'i'}}
-        collection.find({"category_name": {$regex: searchCat, $options:"i"}}).limit(10).toArray().then(function(docs) {
+      //  collection.find({"category_name": {$regex: searchCat, $options:"i"}}).limit(10).toArray().then(function(docs) {
+      collection.find({
+            $and: findExp
+          }).limit(10).toArray().then(function(docs) {
+
           console.log("_______ docs:", docs);
 
           if (docs && docs.length > 0) {
@@ -1971,6 +1995,6 @@ findMatchingCategory: function(findVal,callback) {
 
 
 
-} // findMatchingCategory
+} // findCategory
 
 };

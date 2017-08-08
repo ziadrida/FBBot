@@ -489,6 +489,7 @@ function determineResponse(event) {
 
   // if message contains http, then it is a pricing request
   if (compareText.includes("http")) {
+    console.log("got HTTP message");
     processHttpRequest(event);
   } // end of if http
 
