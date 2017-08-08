@@ -1943,9 +1943,14 @@ function cleanupCat(cat) {
 
     cat = cat.replace(/  /, " "); // two spaces to one
     cat = cat.replace(/Categories/i,"");
+    cat = cat.trim();
+    cat = cat.replace(/Featured/i,"");
+      cat = cat.trim();
     cat = cat.replace(/Products/i,"");
+      cat = cat.trim();
     cat = cat.replace(/ , /, " ");
     cat = cat.replace(/,/, " ");
+      cat = cat.trim();
     cat = cat.replace(/ies$/i, "");
     cat = cat.replace(/ & /, " ");
     cat = cat.replace(/&/, " ");
@@ -1953,6 +1958,7 @@ function cleanupCat(cat) {
     cat = cat.replace(/ /, "|"); // space to or
     cat = cat.replace(/es$/i, "");
     cat = cat.replace(/s$/i, "");
+      cat = cat.trim();
     console.log("Search cat:",cat);
     return cat;
 }
