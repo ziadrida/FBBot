@@ -1939,23 +1939,38 @@ findCategory: function(findVal,callback) {
               return callback(docs);
           }
 
+function cleanupCat(cat) {
+    var val;
+    val = cat.replace(/ies$/, "");
+    val = val.replace(/&/, "|");
+    val = val.replace(/ /, "|");
+    val = val.replace(/es$/, "");
+    val = val.replace(/s$/, "");
+    console.log("Search Val:",val);
+    return val;
+}
 
         //  db = mongoUtil.getDb();
         var collection = db.collection('categories');
 
       findExp = [] ;//{category_name:{$regex:'t'}},
 
+      // remove ies from work endings
+      var val;
       //searchCat = findVal+'|comp';
       if (findVal instanceof Array) {
          // build find expression for array
          for (var j =0 ; j<findVal.length  ; j++){
-              findExp.push( {category_name:{$regex:findVal[j], $options:"i"}});
+              searchCat = cleanupCat(findVal[j]);
+              console.log("Search Val:",searchCat);
+              findExp.push( {category_name:{$regex:searchCat, $options:"i"}});
 
          }
          console.log("------- findVal is an array findExp:",findExp);
        }  else {
-
-           findExp.push( {category_name:{$regex:findVal,$options:"i"}});
+          searchCat = cleanupCat(findVal[j]);
+          console.log("Search Val:",searchCat);
+           findExp.push( {category_name:{$regex:val,$options:"i"}});
             console.log("--------- findVal not an array findExp:",findExp);
        }
 
