@@ -828,7 +828,7 @@ following is the template of an Element in a compactList
   }
 messageData.message =  compactListMessage;
 
-console.log("******************** beore callSendAPI: messageData:",JSON.stringify(messageData));
+console.log("******************** before callSendAPI: messageData:",JSON.stringify(messageData));
   callSendAPI(messageData);
 }
 
@@ -843,7 +843,7 @@ function compactList(recipientId, titleText) {
         "type": "template",
         "payload": {
           "template_type": "list",
-          "top_element_style": "compact",
+        //  "top_element_style": "compact",
           "elements": [{
               "title": "Trays, dishes, plates, cups and the like",
               "subtitle": "100% Cotton, 200% Comfortable",
@@ -1401,11 +1401,6 @@ function getPricing(senderID,item) {
     // build List template
     //sendTextMessage(senderID,"Pricing now...");
 
-  if(catList.length  > 1 ) {
-
-  } else {
-    console.log("************88 Only one category:",catList[0].category_name);
-  }
   });
 
 
