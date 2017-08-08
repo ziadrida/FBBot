@@ -1971,7 +1971,7 @@ function cleanupCat(cat) {
               searchCat = cleanupCat(findVal[j]);
               if (searchCat.length > 0 ) {
               console.log("Search Val:",searchCat);
-              findExp.push( {category_name:{$regex:searchCat, $options:"i"}});
+              findExp.push( {keywords:{$regex:searchCat, $options:"i"}});
             }
 
          }
@@ -1980,7 +1980,7 @@ function cleanupCat(cat) {
           searchCat = cleanupCat(findVal[j]);
           if (searchCat.length > 0 ) {
           console.log("Search Val:",searchCat);
-           findExp.push( {category_name:{$regex:searchCat,$options:"i"}});
+           findExp.push( {keywords:{$regex:searchCat,$options:"i"}});
             console.log("--------- findVal not an array findExp:",findExp);
           }
        }
