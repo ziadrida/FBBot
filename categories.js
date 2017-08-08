@@ -2012,7 +2012,7 @@ function cleanupCat(cat) {
             $or: findExp
           })*/
           console.log("^^^^^^^^^ allCatsString",allCatsString)
-          db.categories.find( { $text: { $search: allCatsString } },
+          collection.find({ $text: { $search: allCatsString } },
             { score: { $meta: "textScore" }} ).sort({score:{ $meta : "textScore"}})
           .limit(10).toArray().then(function(docs) {
 
