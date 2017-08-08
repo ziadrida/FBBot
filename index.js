@@ -1061,7 +1061,12 @@ function processHttpRequest(event) {
         console.log(JSON.stringify(results));
         var res = JSON.stringify(results)
         object = JSON.parse(res);
-        var prime = object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0]
+          var prime;
+        try {
+         prime = object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0]
+      } catch(e) {
+        prime="0";
+      }
         shippingCost = -1; // unknown
         if (prime && prime == "1") {
           shippingCost = 0;
