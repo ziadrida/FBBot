@@ -1109,7 +1109,11 @@ function processHttpRequest(event) {
         console.log("x chargableWt:", chargableWt.toFixed(2));
 
         // part#
+        try {
         var MPN = object[0].ItemAttributes[0].MPN[0]
+      } catch(e) {
+        MPN="";
+      }
         console.log("MPN:", MPN);
         var available = object[0].Offers[0].Offer[0].OfferListing[0].AvailabilityAttributes[0].AvailabilityType[0]
         console.log("Availability:", available);
