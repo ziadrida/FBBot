@@ -807,7 +807,7 @@ following is the template of an Element in a compactList
         "type": "template",
         "payload": {
           "template_type": "list",
-      //    "top_element_style": "compact",
+          "top_element_style": "compact",
           // add elements here
           "elements": compactListElements,
           // next is the more button
@@ -1383,7 +1383,7 @@ function getPricing(senderID,item) {
       // more than one - let user select the valid category
     console.log("number of cats:",cats.length);
 
-    for (i=0 ; i < cats.length ; i++) {
+    for (i=0 ; i < cats.length && i<4 ; i++) {
       console.log("+++++++++++++= ",cats[i]);
         catList.push({
           "title" : cats[i].category_name,
