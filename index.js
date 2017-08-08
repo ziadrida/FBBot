@@ -439,8 +439,6 @@ function determineResponse(event) {
       sessions[sessionId].newUser = false; // welcome message sent
       sendWatchVideoButton(senderID, text, title);
       sendTextMessage(senderID, doc[0].messageText);
-
-
     });
   }
 
