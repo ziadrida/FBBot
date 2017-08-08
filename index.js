@@ -1144,23 +1144,27 @@ function processHttpRequest(event) {
         iterate("Name", object[0].BrowseNodes[0], cat)
         console.log("cat", cat);
         // find Matching categories
-          var priceItem = {
+          var itemToCheck = {
             category: []
           };
         cat.forEach(function(a) {
           for (var n =0 ; n<a.length; n++) {
               console.log("add category:",a[n]);
-              priceItem.category.push(a[n]);
+              itemToCheck.category.push(a[n]);
           }
-
+          try {
+          itemToCheck.category.push(object[0].ItemAttributes[0].title);
+        } catch(e) { console.log("____________ NO TITLE!!");
+        }
         });
 
 
-        var msg = "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
+        var msg = object[0].ItemAttributes[0].title+"\n"+
+          "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
 
 
-          getPricing(senderID,priceItem);
+          getPricing(senderID,itemToCheck);
         sendTextMessage(senderID, msg);
       }).catch(function(err) {
         console.log(err);
