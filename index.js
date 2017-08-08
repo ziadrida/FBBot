@@ -1127,7 +1127,9 @@ function processHttpRequest(event) {
         iterate("Name", object[0].BrowseNodes[0], cat)
         console.log("cat", cat);
         // find Matching categories
-        priceItem.category = []
+          var priceItem = {
+            category: []
+          };
         cat.forEach(function(a) {
           priceItem.category.push(a);
         });
@@ -1135,8 +1137,8 @@ function processHttpRequest(event) {
 
         var msg = "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
-          var priceItem = {};
-          
+
+
           getPricing(senderID,priceItem);
         sendTextMessage(senderID, msg);
       }).catch(function(err) {
