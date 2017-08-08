@@ -1370,18 +1370,21 @@ function getPricing(senderID,item) {
     console.log("***************** List all CATEGORIES MATCH:",cats);
     if(!cats) {
         console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
+        sendTextMessage(senderID,"Could not find matching category")
     } else if (cats && cats.length == 0 ) {
       console.log("***************** NO CATEGORIES MATCH:",searchCat)
+      sendTextMessage(senderID,"No matching category");
     }  if (cats && cats.length == 1 ) {
       // got one match - use it
       console.log(" ***> selected category:",cats[0],category_name)
+      sendTextMessage(senderID,"Category:"+cats[0].category_name+"  arabic:"+cats[0].category_name_ar)
     }
     else {
       // more than one - let user select the valid category
     console.log("number of cats:",cats.length);
 
     for (i=0 ; i < cats.length ; i++) {
-      console.log("+++++++++++++= ",cats[0]);
+      console.log("+++++++++++++= ",cats[i]);
         catList.push({
           "title" : cats[i].category_name,
           "subtitle"  : cats[i].category_name_ar,
@@ -1392,13 +1395,14 @@ function getPricing(senderID,item) {
           }]
       });
    }
+     compactListBuilder(senderID,catList);
  }
   // compactList(senderID,"Which category best matches this item?");
     // build List template
     //sendTextMessage(senderID,"Pricing now...");
 
   if(catList.length  > 1 ) {
-    compactListBuilder(senderID,catList);
+
   } else {
     console.log("************88 Only one category:",catList[0].category_name);
   }
