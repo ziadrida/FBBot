@@ -1154,16 +1154,16 @@ function processHttpRequest(event) {
                 itemToCheck.category.push(a[n]);
               }
           }
-          try {
-            console.log("Title:",object[0].ItemAttributes[0].title);
-          itemToCheck.category.push(object[0].ItemAttributes[0].title);
+        try {
+            console.log("Title:",object[0].ItemAttributes[0].title[0]);
+          itemToCheck.category.push(object[0].ItemAttributes[0].title[0]);
         } catch(e) { console.log("____________ NO TITLE!!");
         }
         });
 
 
-        var msg = object[0].ItemAttributes[0].title+"\n"+
-          "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
+        var msg =object[0].ItemAttributes[0].title[0] + "\n"+
+           "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
 
 
