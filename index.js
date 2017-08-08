@@ -1375,7 +1375,7 @@ function getPricing(senderID,item) {
       sendTextMessage(senderID,"No matching category");
     }  if (cats && cats.length == 1 ) {
       // got one match - use it
-      console.log(" ***> selected category:",cats[0],category_name)
+      console.log(" ***> selected category:",cats[0].category_name)
       sendTextMessage(senderID,"Category:"+cats[0].category_name+"  arabic:"+cats[0].category_name_ar)
     }
     else {

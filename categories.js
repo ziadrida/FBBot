@@ -1922,7 +1922,7 @@ updateCatArabicName: function() {
 findCategory: function(findVal,callback) {
 
     console.log("=========+++++++++++++++===========> in findCategory:", findVal)
-    var docs;
+    var docs=[];
 
         // Create a collection we want to drop later
         var db = mongoUtil.getDb(function(myDb) {
@@ -2014,7 +2014,8 @@ function cleanupCat(cat) {
 
           } else if (docs && docs.length == 0) { // no match for findVal
             // how about creating an entry for it and let someone or figure a way later set the message? great idea!
-          console.log("******* no categories found")
+          console.log("******* no categories found");
+          callback(docs);
           } // else if
         });
    });
