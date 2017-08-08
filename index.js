@@ -1071,8 +1071,9 @@ function processHttpRequest(event) {
         if (prime && prime == "1") {
           shippingCost = 0;
         }
-
+        try {
         console.log("formattedPrice:", object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]);
+      } catch (e) {}
         var itemPrice = 1 * object[0].OfferSummary[0].LowestNewPrice[0].Amount[0] / 100.00;
         console.log("itemPrice:", itemPrice);
         var category = object[0].BrowseNodes[0].BrowseNode[0].Name[0]

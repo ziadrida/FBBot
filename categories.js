@@ -1943,6 +1943,7 @@ function cleanupCat(cat) {
 
     cat = cat.replace(/  /, " "); // two spaces to one
     cat = cat.replace(/Categories/i,"");
+    cat = cat.replace(/Products/i,"");
     cat = cat.replace(/ , /, " ");
     cat = cat.replace(/,/, " ");
     cat = cat.replace(/ies$/i, "");
@@ -1985,7 +1986,7 @@ function cleanupCat(cat) {
        }
 
         /* find({
-    $and: [
+    $or: [
         {title:{$regex:'aa'}},
         {title:{$regex:'t'}},
         {title:{$not:/wel/}}
