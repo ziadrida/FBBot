@@ -1940,20 +1940,20 @@ findCategory: function(findVal,callback) {
           }
 
 function cleanupCat(cat) {
-    var val;
-    val = val.replace(/  /, " "); // two spaces to one
-    val = cat.replace(/Categories/i,"");
-    val = val.replace(/ , /, " ");
-    val = val.replace(/,/, " ");
-    val = val.replace(/ies$/i, "");
-    val = val.replace(/ & /, " ");
-    val = val.replace(/&/, " ");
-      val = val.replace(/  /, " "); // two spaces to one
-    val = val.replace(/ /, "|"); // space to or
-    val = val.replace(/es$/i, "");
-    val = val.replace(/s$/i, "");
-    console.log("Search Val:",val);
-    return val;
+
+    cat = cat.replace(/  /, " "); // two spaces to one
+    cat = cat.replace(/Categories/i,"");
+    cat = cat.replace(/ , /, " ");
+    cat = cat.replace(/,/, " ");
+    cat = cat.replace(/ies$/i, "");
+    cat = cat.replace(/ & /, " ");
+    cat = cat.replace(/&/, " ");
+      cat = cat.replace(/  /, " "); // two spaces to one
+    cat = cat.replace(/ /, "|"); // space to or
+    cat = cat.replace(/es$/i, "");
+    cat = cat.replace(/s$/i, "");
+    console.log("Search cat:",cat);
+    return cat;
 }
 
         //  db = mongoUtil.getDb();
@@ -1962,7 +1962,7 @@ function cleanupCat(cat) {
       findExp = [] ;//{category_name:{$regex:'t'}},
 
       // remove ies from work endings
-      var val;
+
       //searchCat = findVal+'|comp';
       if (findVal instanceof Array) {
          // build find expression for array
@@ -1979,7 +1979,7 @@ function cleanupCat(cat) {
           searchCat = cleanupCat(findVal[j]);
           if (searchCat.length > 0 ) {
           console.log("Search Val:",searchCat);
-           findExp.push( {category_name:{$regex:val,$options:"i"}});
+           findExp.push( {category_name:{$regex:searchCat,$options:"i"}});
             console.log("--------- findVal not an array findExp:",findExp);
           }
        }
