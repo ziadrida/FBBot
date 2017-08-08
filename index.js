@@ -454,24 +454,8 @@ function determineResponse(event) {
   //categories.updateCatArabicName();
   //  console.log("after insertAllCats:",n)
     //console.log("*************************cat ",allcats[0]);
-    var searchCat = "watch";
-    categories.findMatchingCategory(searchCat,function(cats) {
-      console.log("***************** List all CATEGORIES MATCH:",cats);
-      if(!cats) {
-          console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
-      } else if (cats && cats.length == 0 ) {
-        console.log("***************** NO CATEGORIES MATCH:",searchCat)
-      }  else {
 
-      for (i=0 ; i < cats.length ; i++) {
-        console.log("+++++++++++++= ",cats[0])
-      }
-    }
-    });
-
-
-
-  //  sendButton(senderID, 'Would you like to confirm order?');
+     sendButton(senderID, 'Would you like to confirm order?');
   }
 
 
@@ -563,7 +547,7 @@ function determineResponse(event) {
                 "intentValue": intentValue
               };
 
-              return;
+
             }
             if (highConfidence > doc[0].threshold) {
 
@@ -578,10 +562,6 @@ function determineResponse(event) {
       }); // end findHighestConfidence
     }
     /*
-
-
-
-
        const greetings_ar = firstEntity(message.nlp, 'greetings_ar');
        if (greetings_ar && greetings_ar.confidence > 0.75) {
          if (greetings_ar.value == 'islamic') {
