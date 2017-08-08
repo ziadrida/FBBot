@@ -1142,19 +1142,20 @@ function processHttpRequest(event) {
         console.log("<> size of item:", sizeofitem)
 
         iterate("Name", object[0].BrowseNodes[0], cat)
-        console.log("cat", cat);
+        console.log(" ^^^^^^^^ ", cat);
         // find Matching categories
           var itemToCheck = {
             category: []
           };
         cat.forEach(function(a) {
           for (var n =0 ; n<a.length; n++) {
-              console.log("add category:",a[n]);
               if (typeof a[n] != 'undefined' && a[n]) {
+                console.log("add category:",a[n]);
                 itemToCheck.category.push(a[n]);
               }
           }
           try {
+            console.log("Title:",object[0].ItemAttributes[0].title);
           itemToCheck.category.push(object[0].ItemAttributes[0].title);
         } catch(e) { console.log("____________ NO TITLE!!");
         }
