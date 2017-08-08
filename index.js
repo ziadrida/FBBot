@@ -1131,7 +1131,11 @@ function processHttpRequest(event) {
             category: []
           };
         cat.forEach(function(a) {
-          priceItem.category.push(a);
+          for (var n =0 ; n<a.length; n++) {
+              console.log("add category:",a[n]);
+              priceItem.category.push(a[n]);
+          }
+
         });
 
 
