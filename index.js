@@ -1129,11 +1129,14 @@ function processHttpRequest(event) {
 
         iterate("Name", object[0].BrowseNodes[0], cat)
         console.log("cat", cat);
-        cat.forEach(function(a) {
-          //  console.log(a);
-        });
+        // find Matching categories
+
+
         var msg = "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
+          var priceItem = {};
+          priceItem.category = cat;
+          getPricing(senderID,priceItem);
         sendTextMessage(senderID, msg);
       }).catch(function(err) {
         console.log(err);

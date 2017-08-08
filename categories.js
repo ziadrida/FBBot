@@ -1941,11 +1941,12 @@ findCategory: function(findVal,callback) {
 
 function cleanupCat(cat) {
     var val;
-    val = cat.replace(/ies$/, "");
+    val = cat.replace(/Categories/i,"");
+    val = val.replace(/ies$/i, "");
     val = val.replace(/&/, "|");
     val = val.replace(/ /, "|");
-    val = val.replace(/es$/, "");
-    val = val.replace(/s$/, "");
+    val = val.replace(/es$/i, "");
+    val = val.replace(/s$/i, "");
     console.log("Search Val:",val);
     return val;
 }
@@ -1962,16 +1963,20 @@ function cleanupCat(cat) {
          // build find expression for array
          for (var j =0 ; j<findVal.length  ; j++){
               searchCat = cleanupCat(findVal[j]);
+              if (searchCat.length > 0 ) {
               console.log("Search Val:",searchCat);
               findExp.push( {category_name:{$regex:searchCat, $options:"i"}});
+            }
 
          }
          console.log("------- findVal is an array findExp:",findExp);
        }  else {
           searchCat = cleanupCat(findVal[j]);
+          if (searchCat.length > 0 ) {
           console.log("Search Val:",searchCat);
            findExp.push( {category_name:{$regex:val,$options:"i"}});
             console.log("--------- findVal not an array findExp:",findExp);
+          }
        }
 
         /* find({
