@@ -1392,7 +1392,7 @@ function getPricing(senderID,item) {
     for (i=0 ; i < cats.length && i<4 ; i++) {
       console.log("+++++++++++++= ",cats[i]);
         catList.push({
-          "title" : cats[i].category_name,
+          "title" : cats[i].category_name + cats[i].score,
           "subtitle"  : cats[i].category_name_ar,
           buttons : [{
             "title": "Select أختار",
