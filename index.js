@@ -1154,15 +1154,17 @@ function processHttpRequest(event) {
                 itemToCheck.category.push(a[n]);
               }
           }
+
+        });
+        var title = "";
         try {
             console.log("Title:",object[0].ItemAttributes[0].title[0]);
           itemToCheck.category.push(object[0].ItemAttributes[0].title[0]);
+          title = object[0].ItemAttributes[0].title[0] + "\n";
         } catch(e) { console.log("____________ NO TITLE!!");
         }
-        });
 
-
-        var msg =object[0].ItemAttributes[0].title[0] + "\n"+
+        var msg = title +
            "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
 
