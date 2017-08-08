@@ -461,9 +461,6 @@ function determineResponse(event) {
    check if this is a pricing request
    ---------------------------------*/
   if (typeof userMsg != 'undefined' && userMsg.action === "*pr") {
-
-
-
     getPricing(senderID,userMsg);
     return;
   } //if action *pr
@@ -1130,12 +1127,16 @@ function processHttpRequest(event) {
         iterate("Name", object[0].BrowseNodes[0], cat)
         console.log("cat", cat);
         // find Matching categories
+        priceItem.category = []
+        cat.forEach(function(a) {
+          priceItem.category.push(a);
+        });
 
 
         var msg = "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
           var priceItem = {};
-          priceItem.category = cat;
+          
           getPricing(senderID,priceItem);
         sendTextMessage(senderID, msg);
       }).catch(function(err) {
