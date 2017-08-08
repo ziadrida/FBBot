@@ -807,7 +807,7 @@ following is the template of an Element in a compactList
         "type": "template",
         "payload": {
           "template_type": "list",
-          "top_element_style": "compact",
+      //    "top_element_style": "compact",
           // add elements here
           "elements": compactListElements,
           // next is the more button
@@ -843,7 +843,7 @@ function compactList(recipientId, titleText) {
         "type": "template",
         "payload": {
           "template_type": "list",
-        //  "top_element_style": "compact",
+          "top_element_style": "compact",
           "elements": [{
               "title": "Trays, dishes, plates, cups and the like",
               "subtitle": "100% Cotton, 200% Comfortable",
