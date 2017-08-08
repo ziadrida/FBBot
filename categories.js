@@ -1949,12 +1949,13 @@ findCategory: function(findVal,callback) {
       if (findVal instanceof Array) {
          // build find expression for array
          for (var j =0 ; j<findVal.length  ; j++){
-              findExp.push( {category_name:{$regex:findVal[j]}});
-              console.log("------- findVal is an array findExp:",findExp);
+              findExp.push( {category_name:{$regex:findVal[j], $options:"i"}}});
+
          }
+         console.log("------- findVal is an array findExp:",findExp);
        }  else {
 
-           findExp.push( {category_name:{$regex:findVal}});
+           findExp.push( {category_name:{$regex:findVal,$options:"i"}}});
             console.log("--------- findVal not an array findExp:",findExp);
        }
 
@@ -1966,8 +1967,7 @@ findCategory: function(findVal,callback) {
     ]
 })*/
       searchCat = findVal;
-      var query = { category_name : new RegExp('' + findVal + '|comp' + '') };
-      console.log("  ************ FindVal:",query);
+
         // Peform a simple find and return all the documents
         // {"category_name": {$regex: ".*abc.", $options:"i"}}
         //{"category_name" :{'$regex' : 'watch', '$options' : 'i'}}

@@ -409,16 +409,16 @@ function determineResponse(event) {
 
   // check if message from user is a JSON formatted message (i.e. Command)
   try {
-    if (compareText) {
-      console.log("do JSON parse of compareText");
-      userMsg = JSON.parse(compareText);
+    if (message.text) {
+      console.log("do JSON parse of message.text");
+      userMsg = JSON.parse(message.text);
       console.log("after JSON parse of compareText");
       if (typeof userMsg != 'undefined' && userMsg.action) {
         console.log('action = ', userMsg.action);
       }
     }
   } catch (e) {
-    console.log("compareText not a JSON string - not a problem");
+    console.log("message.text not a JSON string - not a problem");
   } // end  of try block if compareMessage
 
   console.log("sessions[sessionId];:", sessions[sessionId])
