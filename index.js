@@ -1098,12 +1098,19 @@ function processHttpRequest(event) {
         } catch (e) {
           itemWeight = -1;
         }
-
+      try {
         height = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Height[0]._;
 
         length = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Length[0]._;
         weight = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Weight[0]._ / 100.00;
         width = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Width[0]._;
+      } catch (e) {
+        height = 0;
+        length = 0;
+        weight = 0;
+        width = 0;
+      }
+
         console.log("package HxLxW", length, "x", width, "x", height, " wt", weight);
 
         console.log("item HxLxW", itemlength, "x", itemwidth, "x", itemheight, " itemWeight:", itemWeight);
