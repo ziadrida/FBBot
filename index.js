@@ -1137,12 +1137,12 @@ function processHttpRequest(event) {
           sizeofitem = object[0].ItemAttributes[0].Size[0];
           // sizeofitem = object[0].ItemAttributes[0].ClothingSize[0];
         } catch (e) {
-          console.log(e);
+
         }
         console.log("<> size of item:", sizeofitem)
 
         iterate("Name", object[0].BrowseNodes[0], cat)
-        console.log(" ^^^^^^^^ ", cat);
+        console.log(" Categories: ", cat);
         // find Matching categories
           var itemToCheck = {
             category: []
@@ -1158,9 +1158,10 @@ function processHttpRequest(event) {
         });
         var title = "";
         try {
-            console.log("Title:",object[0].ItemAttributes[0].title[0]);
-          itemToCheck.category.push(object[0].ItemAttributes[0].title[0]);
-          title = object[0].ItemAttributes[0].title[0] + "\n";
+
+            console.log("Title:",object[0].ItemAttributes[0].Title[0]);
+          itemToCheck.category.push(object[0].ItemAttributes[0].Title[0]);
+          title = object[0].ItemAttributes[0].Title[0] + "\n";
         } catch(e) { console.log("____________ NO TITLE!!");
         }
 
