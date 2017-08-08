@@ -1941,10 +1941,15 @@ findCategory: function(findVal,callback) {
 
 function cleanupCat(cat) {
     var val;
+    val = val.replace(/  /, " "); // two spaces to one
     val = cat.replace(/Categories/i,"");
+    val = val.replace(/ , /, " ");
+    val = val.replace(/,/, " ");
     val = val.replace(/ies$/i, "");
-    val = val.replace(/&/, "|");
-    val = val.replace(/ /, "|");
+    val = val.replace(/ & /, " ");
+    val = val.replace(/&/, " ");
+      val = val.replace(/  /, " "); // two spaces to one
+    val = val.replace(/ /, "|"); // space to or
     val = val.replace(/es$/i, "");
     val = val.replace(/s$/i, "");
     console.log("Search Val:",val);
@@ -1993,7 +1998,7 @@ function cleanupCat(cat) {
         //{"category_name" :{'$regex' : 'watch', '$options' : 'i'}}
       //  collection.find({"category_name": {$regex: searchCat, $options:"i"}}).limit(10).toArray().then(function(docs) {
       collection.find({
-            $and: findExp
+            $or: findExp
           }).limit(10).toArray().then(function(docs) {
 
           console.log("_______ docs:", docs);
