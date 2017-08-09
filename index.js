@@ -1397,7 +1397,7 @@ function getPricing(senderID,item) {
 
   // find category
   categories.findCategory(item.category,function(cats) {
-    console.log("***************** List all CATEGORIES MATCH:",cats);
+  //  console.log("***************** List all CATEGORIES MATCH:",cats);
     if(!cats) {
         console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
         sendTextMessage(senderID,"Could not find matching category")
@@ -1416,8 +1416,8 @@ function getPricing(senderID,item) {
     for (i=0 ; i < cats.length && i<4 ; i++) {
       console.log("+++++++++++++= ",cats[i]);
         catList.push({
-          "title" : cats[i].category_name + "/customs:"+cats[i].customs + "/tax amm,aq:"+cat[i].tax_amm+
-            ","+cat[i].tax_aqaba + " /"+ cats[i].score.toFixed(2),
+          "title" : cats[i].category_name + "/customs:"+cats[i].customs + "/tax amm,aq:"+cats[i].tax_amm+
+            ","+cats[i].tax_aqaba + " /"+ cats[i].score.toFixed(2),
           "subtitle"  : cats[i].category_name_ar,
           buttons : [{
             "title": "Select أختار",
