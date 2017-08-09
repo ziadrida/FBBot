@@ -1065,7 +1065,7 @@ function processHttpRequest(event) {
         itemId: asin[0],
         ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
       }).then(function(results) {
-        console.log("Resulting Message from Amazon");
+        console.log(">>>>>>>>>>>>  Resulting Message from Amazon >>>>>>>>>>>>>>>>");
         console.log(JSON.stringify(results));
         var res = JSON.stringify(results)
         object = JSON.parse(res);
@@ -1195,7 +1195,8 @@ function processHttpRequest(event) {
           getPricing(senderID,itemToCheck);
         sendTextMessage(senderID, msg);
       }).catch(function(err) {
-        console.log(err);
+        console.log("ERROR from itemLookup ********** ")
+        console.log(JSON.stringify(err));
       });
 
     } // if (asin)  price from amazon
