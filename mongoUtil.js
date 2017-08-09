@@ -1,3 +1,6 @@
+/*
+db.categories.createIndex( { category_name: "text", keywords: "text" }, {weights: { category_name: 5, keywords: 10}, name: "TextIndex" })
+*/
 var MongoClient = require( 'mongodb' ).MongoClient;
 
 var _db;

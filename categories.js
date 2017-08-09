@@ -1974,25 +1974,26 @@ function cleanupCat(cat) {
       if (findVal instanceof Array) {
          // build find expression for array
          for (var j =0 ; j<findVal.length  ; j++){
-             allCatsString = allCatsString + findVal[j];
-              searchCat = cleanupCat(findVal[j]);
+             allCatsString = allCatsString + " " + findVal[j];
+          /*    searchCat = cleanupCat(findVal[j]);
               if (searchCat.length > 0 ) {
 
                 console.log("Search Val:",searchCat);
                 findExp.push( {keywords:{$regex:searchCat, $options:"i"}});
-            }
+            }*/
 
          }
          console.log("------- findVal is an array findExp:",findExp);
        }  else {
          allCatsString = findVal;
-          searchCat = cleanupCat(findVal);
+          /*searchCat = cleanupCat(findVal);
           if (searchCat.length > 0 ) {
           console.log("Search Val:",searchCat);
 
            findExp.push( {keywords:{$regex:searchCat,$options:"i"}});
             console.log("--------- findVal not an array findExp:",findExp);
           }
+          */
        }
 
         /* find({
