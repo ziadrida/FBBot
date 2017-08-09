@@ -1076,18 +1076,13 @@ function processHttpRequest(event) {
         console.log("formattedPrice:", object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]);
 
         var itemPrice = 1 * object[0].OfferSummary[0].LowestNewPrice[0].Amount[0] / 100.00;
-      } catch (e) { console.log(" could not find the price Error code:",e)}
+      } catch (e) { console.log(" could not find the price Error code:")}
         console.log("itemPrice:", itemPrice);
-        var category = "";
 
-         try {
-           category = object[0].BrowseNodes[0].BrowseNode[0].Name[0]
-         } catch(e) { console.log("No category for this item! Info Error Code:",e);}
-        var cat = [];
 
         console.log("Prime eligible:", prime, " -  shippingCost:", shippingCost);
         console.log("itemPrice:", itemPrice.toFixed(2));
-        console.log("category:", category);
+
         try {
           itemheight = 1 * object[0].ItemAttributes[0].ItemDimensions[0].Height[0]._;
 
@@ -1146,8 +1141,18 @@ function processHttpRequest(event) {
 
         }
         console.log("<> size of item:", sizeofitem)
+/*
+        var category = "";
+         try {
+           category = object[0].BrowseNodes[0].BrowseNode[0].Name[0]
+           console.log("category:", category);
+         } catch(e) { console.log("No category for this item! ");}
 
-        iterate("Name", object[0].BrowseNodes[0], cat)
+        */
+        var cat = [];
+        try {
+          iterate("Name", object[0].BrowseNodes[0], cat)
+        } catch(e) { console.log("No category or this item"); }
         console.log(" Categories: ", cat);
         // find Matching categories
           var itemToCheck = {
