@@ -1129,7 +1129,10 @@ function processHttpRequest(event) {
         MPN="";
       }
         console.log("MPN:", MPN);
+        var available="";
+        try {
         var available = object[0].Offers[0].Offer[0].OfferListing[0].AvailabilityAttributes[0].AvailabilityType[0]
+      } catch (e) {}
         console.log("Availability:", available);
 
         // size of item
