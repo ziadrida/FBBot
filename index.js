@@ -1082,7 +1082,7 @@ function processHttpRequest(event) {
 
          try {
            category = object[0].BrowseNodes[0].BrowseNode[0].Name[0]
-         } catch(e) { console.log("No category for this item! Info Error Code:",err);}
+         } catch(e) { console.log("No category for this item! Info Error Code:",e);}
         var cat = [];
 
         console.log("Prime eligible:", prime, " -  shippingCost:", shippingCost);
