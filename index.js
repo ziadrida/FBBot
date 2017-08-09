@@ -487,7 +487,8 @@ function determineResponse(event) {
   // if message contains http, then it is a pricing request
   if (compareText.includes("http")) {
     console.log("got HTTP message");
-    processHttpRequest(event);
+    sendTextMessage(senderID,"Pricing now... moments please...!")
+    return processHttpRequest(event);
   } // end of if http
 
   //
@@ -495,7 +496,13 @@ function determineResponse(event) {
     var witNlp = message.nlp;
     console.log("<><> --> witNlp:", witNlp);
     var entList = message.nlp.entities;
-    console.log("EntList______", entList)
+    if (entList ) {
+      console.log("EntList______", entList);
+
+    } else {
+      console.log("EntList could not be determined")
+    }
+
 
     console.log("**********  action:", action);
     console.log(" ********** sessions[sessionId].context", sessions[sessionId].context);
@@ -555,6 +562,10 @@ function determineResponse(event) {
 
           });
         } // intent != ''
+        else {
+              // intent is blank
+              console.log(" ******** NO Intents Found  ***********");
+        }
       }); // end findHighestConfidence
     }
     /*
@@ -981,6 +992,7 @@ function getRegularAmmanPrice(item) {
 
 // processHttpRequest function
 function processHttpRequest(event) {
+  console.log("===================> in processHttpRequest");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -991,10 +1003,6 @@ function processHttpRequest(event) {
   var messageAttachments = message.attachments;
 
   let compareText = messageText.toLowerCase();
-
-
-
-
 
   let domainName = parseDomain(compareText);
 
@@ -1040,19 +1048,19 @@ function processHttpRequest(event) {
     //messageText = "https://www.amazon.com/4pk-Assorted-colors-Pocket-T-Shirt/dp/B00WK0ST3S/ref=sr_1_1?ie=";
 
     var asin = messageText.match(regex);
-    console.log("ASIN:", asin);
+    console.log(">>>>>>>>>>>>>>>ASIN:", asin);
     // if ASIN is set then request if from amazon website
     // for now i will assume it is the USA AMAZON
     if (typeof asin != 'undefined' && asin) {
       // price from amazon
-      console.log("AMAZON:", asin[0]);
+      console.log(">>>>>>>>>> AMAZON:", asin[0]);
       var client = amazon.createClient({
         awsTag: "tech1",
         awsId: "AKIAIN3EIRW3VGI3UT2Q",
         awsSecret: "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"
       });
 
-
+      console.log("************* BEFORE itemLookup");
       client.itemLookup({
         itemId: asin[0],
         ResponseGroup: 'Offers,ItemAttributes,BrowseNodes'
@@ -1416,8 +1424,8 @@ function getPricing(senderID,item) {
     for (i=0 ; i < cats.length && i<4 ; i++) {
       console.log("+++++++++++++= ",cats[i]);
         catList.push({
-          "title" : cats[i].category_name + "/customs:"+cats[i].customs + "/tax_amm:"+cats[i].tax_amm+
-            + "/tax_aq:"+cats[i].tax_aqaba + " /"+ cats[i].score.toFixed(2),
+          "title" : cats[i].category_name + "/"+cats[i].customs + "/"+cats[i].tax_amm+
+            + "/"+cats[i].tax_aqaba + " /"+ cats[i].score.toFixed(2),
           "subtitle"  : cats[i].category_name_ar,
           buttons : [{
             "title": "Select أختار",
