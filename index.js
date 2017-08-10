@@ -1197,6 +1197,13 @@ function processHttpRequest(event) {
            "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
 
+          itemToCheck.title = title;
+          itemToCheck.price = itemPrice;
+          itemToCheck.shipping = shippingCost;
+          itemToCheck.weight = chargableWt;
+          itemToCheck.MPN = MPN;
+        // we do not know the category yet
+
 
           getPricing(senderID,itemToCheck);
         sendTextMessage(senderID, msg);
