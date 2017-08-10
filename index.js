@@ -1675,13 +1675,16 @@ function echoOnly(event) {
 
 
 function calculatePricing(senderID,item) {
-  console.log("===========> calculatePricing",item)
+  console.log("===========> calculatePricing:",item)
 
    var pricing_params =   {// get from DB.
     shippingCostPerKgJD: 5,  // JD
     O2_AmmanDeliveryJD: 1.5, // JD
     AI2_clearancePercent: 0.01,
-    handlingPerPackageUSD: 2.25 // USD
+    handlingPerPackageUSD: 2.25, // USD
+    heavyWeightSurcharge: 10, // USD
+    heavyWeightThreshold: 44, // pounds
+    J9_unerCostPercentage: 1 // percentage
   }
   // user pricing formula
 
@@ -1694,8 +1697,49 @@ function calculatePricing(senderID,item) {
   H2_seller = "";
   F2_numberOfSeller = 1;
   M2_AmmanCost = -1;
-  Z2_chargableWeight = item.weight;
+  Z2_chargableWeight = item.weight; // kg
   AA2_weightRateAdjust = 1; // no adjustment for now
   AB2_adjustedShippingCost = AA2_weightRateAdjust * pricing_params.shippingCostPerKgJD;
+  AD2_HandlingCostUSD = pricing_params.handlingPerPackageUSD * numberOfPackages;
+  if (Z2_chargableWeight*2.2 > pricing_params.heavyWeightThreshold) {
+    AD2_HandlingCostUSD = AD2_HandlingCostUSD + pricing_params.heavyWeightSurcharge;
+  }
+  T2_AmmanCatMargin = item.category_info.margin_amm;
+  U2_AqabaCatMargin = item.category_info.margin_aqaba;
+   B2_price = item.price;
+   C2_shipping = item.shipping;
+
+  V2_marginAdjBasedOnPrice = 1;
+  W2_marginAdjBasedOnWeight = 1;
+  X2_marginAdjBasedOnQty = 1;
+  Y2_volumnWeight=-1; // already have chargableWt
+  AC2_ShipAndHandCostUSD =((AB2_adjustedShippingCost*Z2_chargableWeight))+AD2_HandlingCostUSD;
+  // B2 is item.price
+  // C2 is item.shipping
+  AE2_itemCostUSD = item.price +  item.shipping + AC2_ShipAndHandCostUSD;
+  // AF2 is item.customs Percent
+  // customs USD =AF2*(B2+C2+AC2*0.5)*J9
+  AG2_customsUSD = item.category_info.customs *
+          (item.price + item.shipping +AC2_ShipAndHandCostUSD*.5)*pricing_params.J9_unerCostPercentage;
+// AH2 =AE2+AG2
+  AH2_costWithCustomsUSD = AE2_itemCostUSD + AG2_customsUSD;
+  // AJ2 = =AI2*AE2
+  AJ2_clearanceCost = AI2_clearancePercent * AE2_itemCostUSD;
+  // AK2 =AJ2+AH2
+  AK2_loadedCost = AJ2_clearanceCost + AH2_costWithCustomsUSD;
+  AL2_ammanSalesTax = item.category_info.tax_amm;
+  P2_netAmmanMargin = T2_AmmanCatMargin*W2_marginAdjBasedOnWeight*X2_marginAdjBasedOnQty*V2_marginAdjBasedOnPrice;
+  AN2_ammanSalePricewoTax = M2_AmmanCost/(1- P2_netAmmanMargin);
+  console.log("AN2_ammanSalePricewoTax:",AN2_ammanSalePricewoTax);
+  AO2_ammanPriceWTax = AN2_ammanSalePricewoTax*(1+AL2_ammanSalesTax);
+  AP2_capPrice = 9999999;
+  if (B2_price + C2_shipping > 10 ) {
+    AP2_capPrice = item.category_info.cap_amm * (B2_price + C2_shipping);
+  }
+  finalAmmanPrice = Math.min(AP2_capPrice,AO2_ammanPriceWTax).toFixed(2);
+  console.log("Final Amman Price:",finalAmmanPrice)
+  console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
+  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice);
+  console.log("************* send all itemInfo");
   sendTextMessage(senderID,JSON.stringify(item));
 }
