@@ -1116,7 +1116,7 @@ function processHttpRequest(event) {
 
 
         console.log("Prime eligible:", prime, " -  shippingCost:", shippingCost);
-        console.log("itemPrice:", itemPrice.toFixed(2));
+        console.log("itemPrice:", itemPrice);
 
         try {
           itemheight = 1 * object[0].ItemAttributes[0].ItemDimensions[0].Height[0]._;
