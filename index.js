@@ -300,25 +300,46 @@ function handleEvent(senderID, event) {
   var timeOfMessage = event.timestamp;
 
   let payloadText;
-  console.log('Check postback Text==>');
+  //console.log('Check postback Text==>');
   if (typeof event != 'undefined' && event.postback && event.postback.payload) {
 
     payloadText = event.postback.payload;
     console.log('-------> postback payload Text::', payloadText);
-    // at this point we know user send a postback with a paylaod
-    // we need to know what was the context of this payload and take proper action
-    // i would like the payload to contain the action (i.e. setCategory) and the context
-    // (i.e. user was pricing an item)
-    // should the context be in the payload of the session? If in session then session may expire.
-    // if in payload, user can click on the response and we have all the informaiton needed there and then
-    // Lets hope the payload can take enough informaiton to do what is needed.
-    // for now let me design a pricing payload.
-    // payload: { action:getPrice, item: { price: val, categor_name: val, weight:val etc}}
+  } else {
+    // not a postback - return
+    return;
+  }
 
+  // at this point we know user send a postback with a paylaod
+  // we need to know what was the context of this payload and take proper action
+  // i would like the payload to contain the action (i.e. setCategory) and the context
+  // (i.e. user was pricing an item)
+  // should the context be in the payload of the session? If in session then session may expire.
+  // if in payload, user can click on the response and we have all the informaiton needed there and then
+  // Lets hope the payload can take enough informaiton to do what is needed.
+  // for now let me design a pricing payload.
+  // payload: { action:getPrice, item: { price: val, categor_name: val, weight:val etc}}
 
-    }
+  // check if postback is JSON STRUCTURE
+  jsonpayload = false;
+  try {
+    payloadMsg = JSON.parse(payloadText);
+    jsonpayload = true;
+  } catch(e) {
+    console.log("Payload is not JSON structure");
+  }
 
-  // check if postback
+  if(jsonpayload && payloadMsg.action == 'getPricing') {
+    // this is a pricing payload. Need to check if all pricing data is available
+    // ignore check for now - just go ahead with pricing calculation
+    calculatePricing(senderID,payloadMsg.item);
+  }
+
+  // check the action from the postback if any
+  if (typeof payloadText != 'undefined' && payloadText == 'yes_confirm_order') {
+  }
+
+  // check if 'yes_confirm_order' postback
   if (typeof payloadText != 'undefined' && payloadText == 'yes_confirm_order') {
     //  let postbackText = JSON.stringify(event.postback);
     //  if (messageText.toLowerCase().includes("confirm order")) {
@@ -1649,4 +1670,9 @@ function echoOnly(event) {
     }
   }
   return false;
+}
+
+
+function calculatePricing(senderID,item) {
+  sendTextMessage(senderID,JSON.stringify(item));
 }
