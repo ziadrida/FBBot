@@ -1430,12 +1430,9 @@ function getPricing(senderID,item) {
 
     for (i=0 ; i < cats.length && i<4 ; i++) {
       console.log("+++++++++++++= ",cats[i]);
+      item.category = cats[i].category_name;
       var payload = {action: 'getPricing',
-          item: {title: 'this item',
-                price: 100,
-                category_name: cats[i].category_name,
-                weight: 3
-              }
+          item: item
             }
           payloadStr = JSON.stringify(payload);
         catList.push({
