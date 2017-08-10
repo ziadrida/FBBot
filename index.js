@@ -1437,7 +1437,7 @@ function getPricing(senderID,item) {
           buttons : [{
             "title": "Select إختر",
             "type": "postback",
-            "payload": {action: 'getPricing'}
+            "payload": "{action: 'getPricing'}"
 
           }]
       });
