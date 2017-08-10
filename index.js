@@ -154,7 +154,7 @@ db = mongoUtil.getDb(function() {
     Object.keys(sessions).forEach(k => {
       if (sessions[k].fbid === fbid) {
         // Yep, got it!
-        Console.log("Found Session");
+        console.log("Found Session");
         //console.log(" ****findOrCreateSession*** context:", sessions[k].context);
         sessionId = k;
       }
@@ -1437,7 +1437,13 @@ function getPricing(senderID,item) {
           buttons : [{
             "title": "Select إختر",
             "type": "postback",
-            "payload": {action: 'getPricing'}
+            "payload": {action: 'getPricing',
+                item: {title: 'this item',
+                      price: 100,
+                      category_name: cats[i].category_name,
+                      weight: 3
+                    }
+                  }
           }]
       });
    }
