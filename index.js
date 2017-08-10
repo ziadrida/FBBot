@@ -332,7 +332,7 @@ function handleEvent(senderID, event) {
   if(jsonpayload && payloadMsg.action == 'getPricing') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
-    calculatePricing(senderID,payloadMsg.item);
+    return calculatePricing(senderID,payloadMsg.item);
   }
 
   // check the action from the postback if any
@@ -1677,11 +1677,11 @@ function echoOnly(event) {
 function calculatePricing(senderID,item) {
   console.log("===========> calculatePricing",item)
 
-  pricing_params: {// get from DB.
-    shippingCostPerKgJD = 5,  // JD
-    O2_AmmanDeliveryJD = 1.5, // JD
-    AI2_clearancePercent = 0.01,
-    handlingPerPackageUSD = 2.25 // USD
+   var pricing_params =   {// get from DB.
+    shippingCostPerKgJD: 5,  // JD
+    O2_AmmanDeliveryJD: 1.5, // JD
+    AI2_clearancePercent: 0.01,
+    handlingPerPackageUSD: 2.25 // USD
   }
   // user pricing formula
 
