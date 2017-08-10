@@ -1677,6 +1677,7 @@ function echoOnly(event) {
 function calculatePricing(senderID,item) {
   console.log("===========> calculatePricing:",item)
 
+
    var pricing_params =   {// get from DB.
     shippingCostPerKgJD: 5,  // JD
     O2_AmmanDeliveryJD: 1.5, // JD
@@ -1737,11 +1738,21 @@ function calculatePricing(senderID,item) {
     AP2_capPrice = item.category_info.cap_amm * (B2_price + C2_shipping);
   }
 AR2_usSalesTax = item.category_info.us_tax;
-AQ2_usPriceWithUsTax = ((B2_price+C2_shipping) * (1+AR2_usSalesTax ))*toFixed(2);
-  finalAmmanPrice = Math.min(AP2_capPrice,AO2_ammanPriceWTax).toFixed(2);
+AQ2_usPriceWithUsTax = ((B2_price+C2_shipping) * (1+AR2_usSalesTax ));
+  finalAmmanPrice = Math.min(AP2_capPrice,AO2_ammanPriceWTax);
+
   console.log("Final Amman Price:",finalAmmanPrice)
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice);
   console.log("************* send all itemInfo");
   sendTextMessage(senderID,JSON.stringify(item));
+}
+
+
+function aramexShipRate(weightKG) {
+  var aramexFirst05 = 8.40;
+  var aramexMultiple = 6.80;
+  var price = aramexFirst05+(Math.ceil(1.91*2)/2-0.5)*aramexMultiple
+console.log("Calulcated Aramex price:",price);
+  return price;
 }
