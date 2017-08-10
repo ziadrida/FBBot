@@ -1437,13 +1437,7 @@ function getPricing(senderID,item) {
           buttons : [{
             "title": "Select إختر",
             "type": "postback",
-            "payload": {action: 'getPricing',
-                item: {title: 'this item',
-                      price: 100,
-                      category_name: cats[i].category_name,
-                      weight: 3
-                    }
-                  }
+            "payload": {action: 'getPricing'}
           }]
       });
    }
