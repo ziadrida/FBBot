@@ -210,7 +210,7 @@ db = mongoUtil.getDb(function() {
           findOrCreateUser(senderID, fbprofile, db, function(dbUserObj) {
             // set user info
             userObj = dbUserObj;
-            console.log("***after findOrCreateUser *** userObj:", userObj.first_name)
+            console.log("***after findOrCreateUser *** userObj:", userObj)
             db.close();
 
 
@@ -241,7 +241,7 @@ db = mongoUtil.getDb(function() {
   var findOrCreateUser = function(senderID, fbprofile, db, callback) {
     console.log("=====>   in findOrCreateUser - senderID:", senderID);
     if (sessions[sessionId].userObj) {
-      console.log("**** findOrCreateUser -  user already known:", sessions[sessionId].userObj.first_name)
+      console.log("**** findOrCreateUser -  user already known:", sessions[sessionId].userObj)
       return callback(sessions[sessionId].userObj);
     }
     // Peform a simple find and return one  documents
@@ -1437,13 +1437,8 @@ function getPricing(senderID,item) {
           buttons : [{
             "title": "Select إختر",
             "type": "postback",
-            "payload": {action: 'getPricing',
-                item: {title: 'this item',
-                      price: 100,
-                      category_name: cats[i].category_name,
-                      weight: 3
-                    }
-                  }
+            "payload": {action: 'getPricing'}
+
           }]
       });
    }
