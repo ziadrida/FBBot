@@ -1490,6 +1490,8 @@ function getPricing(senderID,item) {
     for (i=0 ; i < cats.length && i<4 ; i++) {
       console.log("+++++++++++++= ",cats[i]);
       item.category = cats[i].category_name;
+      item.category_info = cats[i];
+
       var payload = {action: 'getPricing',
           item: item
             }
@@ -1674,5 +1676,9 @@ function echoOnly(event) {
 
 
 function calculatePricing(senderID,item) {
+  console.log("===========> calculatePricing",item)
+
+  // user pricing formula
+
   sendTextMessage(senderID,JSON.stringify(item));
 }
