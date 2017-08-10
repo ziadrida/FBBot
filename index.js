@@ -147,12 +147,6 @@ db = mongoUtil.getDb(function() {
     var messageAttachments = message.attachments;
   }
 
-
-  if (typeof event != 'undefined' && event.postback) {
-    console.log("receivedMessage ---> POSTBACK:=====>");
-    console.log("receivedMessage ---> event.postback", JSON.stringify(event.postback));
-  } // if typeof event != 'undefined'  && event.postback
-
   const findOrCreateSession = (fbid, callback) => {
     console.log("========> in findOrCreateSession ");
     let sessionId;
@@ -160,7 +154,8 @@ db = mongoUtil.getDb(function() {
     Object.keys(sessions).forEach(k => {
       if (sessions[k].fbid === fbid) {
         // Yep, got it!
-        console.log(" ****findOrCreateSession*** context:", sessions[k].context);
+        Console.log("Found Session");
+        //console.log(" ****findOrCreateSession*** context:", sessions[k].context);
         sessionId = k;
       }
     });
@@ -215,7 +210,7 @@ db = mongoUtil.getDb(function() {
           findOrCreateUser(senderID, fbprofile, db, function(dbUserObj) {
             // set user info
             userObj = dbUserObj;
-            console.log("***after findOrCreateUser *** userObj:", userObj)
+            console.log("***after findOrCreateUser *** userObj:", userObj.first_name)
             db.close();
 
 
@@ -246,7 +241,7 @@ db = mongoUtil.getDb(function() {
   var findOrCreateUser = function(senderID, fbprofile, db, callback) {
     console.log("=====>   in findOrCreateUser - senderID:", senderID);
     if (sessions[sessionId].userObj) {
-      console.log("**** findOrCreateUser -  user already known:", sessions[sessionId].userObj)
+      console.log("**** findOrCreateUser -  user already known:", sessions[sessionId].userObj.first_name)
       return callback(sessions[sessionId].userObj);
     }
     // Peform a simple find and return one  documents
@@ -299,21 +294,32 @@ db = mongoUtil.getDb(function() {
   function to determine what response to give based on messagae text
 ****************************************************************/
 function handleEvent(senderID, event) {
-  console.log("IN handleEvent:--->");
+  console.log("==================> IN handleEvent:--->");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
 
-  let myText;
+  let payloadText;
   console.log('Check postback Text==>');
   if (typeof event != 'undefined' && event.postback && event.postback.payload) {
 
-    myText = event.postback.payload;
-    console.log('postback payload Text::', myText);
-  }
+    payloadText = event.postback.payload;
+    console.log('-------> postback payload Text::', payloadText);
+    // at this point we know user send a postback with a paylaod
+    // we need to know what was the context of this payload and take proper action
+    // i would like the payload to contain the action (i.e. setCategory) and the context
+    // (i.e. user was pricing an item)
+    // should the context be in the payload of the session? If in session then session may expire.
+    // if in payload, user can click on the response and we have all the informaiton needed there and then
+    // Lets hope the payload can take enough informaiton to do what is needed.
+    // for now let me design a pricing payload.
+    // payload: { action:getPrice, item: { price: val, categor_name: val, weight:val etc}}
+
+
+    }
 
   // check if postback
-  if (typeof myText != 'undefined' && myText == 'yes_confirm_order') {
+  if (typeof payloadText != 'undefined' && payloadText == 'yes_confirm_order') {
     //  let postbackText = JSON.stringify(event.postback);
     //  if (messageText.toLowerCase().includes("confirm order")) {
     sendTextMessage(senderID, "Thank You");
@@ -332,7 +338,7 @@ function handleEvent(senderID, event) {
       db.collection('order_request').insertOne({
         "senderId": senderID,
         "recipientId": recipientID,
-        "orderItem": myText,
+        "orderItem": payloadText,
         "messageId": messageId,
         "timestamp": new Date(timeOfMessage),
         "dateCreated": new Date()
@@ -343,7 +349,7 @@ function handleEvent(senderID, event) {
       });
     }; // end of insertOrderRequest
     // "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
-  } else if (typeof myText != 'undefined' && myText == 'not_now') {
+  } else if (typeof payloadText != 'undefined' && payloadText == 'not_now') {
     sendTextMessage(senderID, "WHY WHY WHY???!!!");
     // ask WHY
     // insert follow up to why user did not buy
@@ -1425,13 +1431,19 @@ function getPricing(senderID,item) {
     for (i=0 ; i < cats.length && i<4 ; i++) {
       console.log("+++++++++++++= ",cats[i]);
         catList.push({
-          "title" : cats[i].category_name + "/"+cats[i].customs + "/"+cats[i].tax_amm+
-            + "/"+cats[i].tax_aqaba + " /"+ cats[i].score.toFixed(2),
+          "title" : cats[i].category_name + "/"+cats[i].customs + "/"+cats[i].tax_amm
+            + "/"+ cats[i].tax_aqaba + "/"+ cats[i].score.toFixed(2),
           "subtitle"  : cats[i].category_name_ar,
           buttons : [{
-            "title": "Select أختار",
+            "title": "Select إختر",
             "type": "postback",
-            "payload": cats[i].category_name
+            "payload": {action: 'getPricing',
+                item: {title: 'this item',
+                      price: 100,
+                      category_name: cats[i].category_name,
+                      weight: 3
+                    }
+                  }
           }]
       });
    }
@@ -1454,7 +1466,7 @@ function getUserPublicInfo(fbId, callback) {
   var data;
   console.log('In getUserPublicInfo - fbId:', fbId);
   if (sessions[sessionId].fbprofile) {
-    console.log('In getUserPublicInfo - fbprofile already defined:', sessions[sessionId].fbprofile);
+    console.log('In getUserPublicInfo - fbprofile already defined:', sessions[sessionId].fbprofile.first_name);
     return callback(sessions[sessionId].fbprofile);
   }
 
@@ -1482,7 +1494,7 @@ function getUserPublicInfo(fbId, callback) {
       //  console.log("**** response:",response);
       //  console.log("**** body:",body);
       data = JSON.parse(JSON.stringify(body));
-      console.log("***getUserPublicInfo**** data:", data);
+      console.log("***getUserPublicInfo**** data:", data.first_name);
       //console.log("******* first_name:",data.first_name);
       //console.log("******* last_name:",data.last_name);
       //console.log("******* gender:",data.gender);
