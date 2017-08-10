@@ -1196,19 +1196,47 @@ function processHttpRequest(event) {
         var msg = title +
            "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
-
-          itemToCheck.title = title;
-          itemToCheck.price = itemPrice;
-          itemToCheck.shipping = shippingCost;
+          try {
+            itemToCheck.title = title;
+          } catch (e) {
+            itemToCheck.title = "unknown"
+          }
+          try {
+            itemToCheck.title = title;
+          } catch (e) {
+            itemToCheck.title = "unknown"
+          }
+          try {
+            itemToCheck.price = itemPrice;
+          } catch (e) {
+            itemToCheck.price = -1;
+          }
+          try {
+            itemToCheck.shipping = shippingCost;
+          } catch (e) {
+            itemToCheck.shipping = -1;
+          }
+          try {
           itemToCheck.weight = chargableWt;
-          itemToCheck.MPN = MPN;
+          } catch (e) {
+            itemToCheck.weight = -1;
+          }
+          try {
+            itemToCheck.MPN = MPN;
+          } catch (e) {
+              itemToCheck.MPN = "";
+          }
+          console.log("------> itemToCheck:",itemToCheck);
+
+
+
         // we do not know the category yet
 
 
           getPricing(senderID,itemToCheck);
         sendTextMessage(senderID, msg);
       }).catch(function(err) {
-        console.log("ERROR from itemLookup ********** ")
+        console.log("ERROR from itemLookup ********** ",err)
         console.log(JSON.stringify(err));
       });
 
