@@ -1724,7 +1724,7 @@ function calculatePricing(senderID,item) {
 // AH2 =AE2+AG2
   AH2_costWithCustomsUSD = AE2_itemCostUSD + AG2_customsUSD;
   // AJ2 = =AI2*AE2
-  AJ2_clearanceCost = AI2_clearancePercent * AE2_itemCostUSD;
+  AJ2_clearanceCost = pricing_params.AI2_clearancePercent * AE2_itemCostUSD;
   // AK2 =AJ2+AH2
   AK2_loadedCost = AJ2_clearanceCost + AH2_costWithCustomsUSD;
   AL2_ammanSalesTax = item.category_info.tax_amm;
@@ -1736,6 +1736,8 @@ function calculatePricing(senderID,item) {
   if (B2_price + C2_shipping > 10 ) {
     AP2_capPrice = item.category_info.cap_amm * (B2_price + C2_shipping);
   }
+AR2_usSalesTax = item.category_info.us_tax;
+AQ2_usPriceWithUsTax = ((B2_price+C2_shipping) * (1+AR2_usSalesTax ))*toFixed(2);
   finalAmmanPrice = Math.min(AP2_capPrice,AO2_ammanPriceWTax).toFixed(2);
   console.log("Final Amman Price:",finalAmmanPrice)
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
