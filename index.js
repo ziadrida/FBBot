@@ -1497,8 +1497,7 @@ function getPricing(senderID,item) {
             }
           payloadStr = JSON.stringify(payload);
         catList.push({
-          "title" : cats[i].category_name + "/"+cats[i].customs + "/"+cats[i].tax_amm
-            + "/"+ cats[i].tax_aqaba + "/"+ cats[i].score.toFixed(2),
+          "title" : cats[i].category_name + "/"+ cats[i].score.toFixed(2),
           "subtitle"  : cats[i].category_name_ar,
           buttons : [{
             "title": "Select إختر",
@@ -1678,7 +1677,25 @@ function echoOnly(event) {
 function calculatePricing(senderID,item) {
   console.log("===========> calculatePricing",item)
 
+  pricing_params: {// get from DB.
+    shippingCostPerKgJD = 5,  // JD
+    O2_AmmanDeliveryJD = 1.5, // JD
+    AI2_clearancePercent = 0.01,
+    handlingPerPackageUSD = 2.25 // USD
+  }
   // user pricing formula
 
+  I2_quantity = 1;
+  J2_unitCapacityPerBox = 1;
+  numberOfPackages = Math.ceil((I2_quantity/J2_unitCapacityPerBox)*100)/100;
+  console.log('numberOfPackages',numberOfPackages)
+  K2_localWarranty = false;
+  L2_Prime = false;
+  H2_seller = "";
+  F2_numberOfSeller = 1;
+  M2_AmmanCost = -1;
+  Z2_chargableWeight = item.weight;
+  AA2_weightRateAdjust = 1; // no adjustment for now
+  AB2_adjustedShippingCost = AA2_weightRateAdjust * pricing_params.shippingCostPerKgJD;
   sendTextMessage(senderID,JSON.stringify(item));
 }
