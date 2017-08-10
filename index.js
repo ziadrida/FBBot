@@ -1430,6 +1430,14 @@ function getPricing(senderID,item) {
 
     for (i=0 ; i < cats.length && i<4 ; i++) {
       console.log("+++++++++++++= ",cats[i]);
+      var payload = {action: 'getPricing',
+          item: {title: 'this item',
+                price: 100,
+                category_name: cats[i].category_name,
+                weight: 3
+              }
+            }
+          payloadStr = JSON.stringify(payload);
         catList.push({
           "title" : cats[i].category_name + "/"+cats[i].customs + "/"+cats[i].tax_amm
             + "/"+ cats[i].tax_aqaba + "/"+ cats[i].score.toFixed(2),
@@ -1437,8 +1445,7 @@ function getPricing(senderID,item) {
           buttons : [{
             "title": "Select إختر",
             "type": "postback",
-            "payload": "{action: 'getPricing'}"
-
+            "payload": payloadStr
           }]
       });
    }
