@@ -1224,16 +1224,19 @@ function processHttpRequest(event) {
           try {
             itemToCheck.MPN = MPN;
           } catch (e) {
-              itemToCheck.MPN = "";
+            itemToCheck.MPN = "";
           }
-          console.log("------> itemToCheck:",itemToCheck);
+          console.log("------> itemToCheck:", itemToCheck);
 
 
 
-        // we do not know the category yet
+          // we do not know the category yet
+          try {
+            getPricing(senderID, itemToCheck);
+          } catch (e) {
+            console.log("Error getting pricing");
 
-
-          getPricing(senderID,itemToCheck);
+          }
         sendTextMessage(senderID, msg);
       }).catch(function(err) {
         console.log("ERROR from itemLookup ********** ",err)
@@ -1439,7 +1442,7 @@ function getPricing(senderID,item) {
     console.log('price in USD:', item.price)
   }
   if (typeof item != 'undefined' && item.weight) {
-    console.log('weight in lbs:', userMsg.weight)
+    console.log('weight in lbs:', item.weight)
   }
   if (typeof item != 'undefined' && item.category) {
     console.log('category:', item.category)
