@@ -1088,7 +1088,7 @@ function processHttpRequest(event,callback) {
         awsSecret: "kLLUDrqHg3I+rmNyRK5pJV72AEbNb2pDc9075MPF"
       });
 
-      console.log("************* BEFORE itemLookup");
+
       var itemLookupOptions = {
         itemId: asin[0],
         MerchantId: 'Amazon',
@@ -1106,10 +1106,17 @@ function processHttpRequest(event,callback) {
         var itemPrice = -1;
         try {
             itemPrice = object[0].Offers[0].Offer[0].OfferListing[0].Price[0].Amount[0]*1.00/100.00;
-            console.log(" ******* after get ItemPrice =",itemPrice);
+            try {
+              salePrice = object[0].Offers[0].Offer[0].OfferListing[0].SalePrice[0].Amount[0]*1.00/100.00;
+            if (salePrice < itemPrice) {
+              itemPrice = salePrice
+              console.log("*** Using Sale Price salePrice:",salePrice)
+            }
+           } catch(e) { console.log("**** No sale price");}
+          console.log(" ******* after get ItemPrice =",itemPrice);
         } catch (e) {
           console.log("***********=> could not find the price in OfferListing:");
-            // do another item lookup for all merchants
+
         }
 
 
@@ -1363,26 +1370,28 @@ function amazonItemLookup(itemLookupOptions,callback) {
  }
 
 
-  console.log("************* BEFORE itemLookup");
+  console.log("************* BEFORE itemLookup 1");
    amazonClient.itemLookup(itemLookupOptions).then(function(results) {
-     console.log(">>>>>>>>>>>>  Resulting Message from Amazon >>>>>>>>>>>>>>>>");
+     console.log(">>>>>>>>>>>>  Resulting Message from Amazon lookup 1>>>>>>>>>>>>>>>>");
      console.log(JSON.stringify(results));
      var res = JSON.stringify(results)
      object = JSON.parse(res);
      var itemPrice = -1;
      try {
          itemPrice = object[0].Offers[0].Offer[0].OfferListing[0].Price[0].Amount[0]*1.00/100.00;
+
          console.log(" ******* after get ItemPrice =",itemPrice);
          return callback(results);
      } catch (e) {
-       console.log("***********=> could not find the price in OfferListing:");
+       console.log("***********=> could not find the price in OfferListing: itemPrice",itemPrice);
          // do another item lookup for all merchants
          var itemLookupOptions2 = {
            itemId: itemLookupOptions.itemId,
            ResponseGroup: 'OfferListings ,ItemAttributes,BrowseNodes'
          }
+         console.log("************* BEFORE itemLookup 2");
          amazonClient.itemLookup(itemLookupOptions2).then(function(results2) {
-           console.log(">>>>>>>>>>>>  Resulting Message from Amazon >>>>>>>>>>>>>>>>");
+           console.log(">>>>>>>>>>>>  Resulting Message from Amazon lookup2 >>>>>>>>>>>>>>>>");
            console.log(JSON.stringify(results2));
            var res = JSON.stringify(results2)
            object = JSON.parse(res);
