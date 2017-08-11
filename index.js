@@ -1106,7 +1106,10 @@ function processHttpRequest(event) {
 
         if (itemPrice < 0) {
           try {
+            console.log(" ******* get ItemPrice ",object[0].Offers[0].Offer[0].OfferListing[0]);
+
             itemPrice = object[0].Offers[0].Offer[0].OfferListing[0].Price[0].Amount[0]*1.00/100.00;
+                        console.log(" ******* after get ItemPrice =",itemPrice);
           } catch (e) {console.log("***********=> could not find the price in OfferListing:");}
         }
         if (prime == "") {
@@ -1128,6 +1131,7 @@ function processHttpRequest(event) {
         if (itemPrice < 0) {
           try {
             itemPrice = object[0].OfferSummary[0].LowestNewPrice[0].Amount[0] * 1.00 / 100.00;
+
           } catch (e) {
             console.log(" could not find the price in LowestNewPrice:")
           }
