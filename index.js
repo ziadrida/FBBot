@@ -1153,17 +1153,21 @@ function processHttpRequest(event) {
           itemwidth = -1;
           itemlength = -1;
         }
+
         try {
           itemWeight = 1 * object[0].ItemAttributes[0].ItemDimensions[0].Weight[0]._ / 100.00
         } catch (e) {
           itemWeight = -1;
         }
-      try {
-        height = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Height[0]._;
 
-        length = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Length[0]._;
-        weight = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Weight[0]._ / 100.00;
-        width = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Width[0]._;
+        try {
+         height = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Height[0]._;
+         length = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Length[0]._;
+         weight = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Weight[0]._ / 100.00;
+         width = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Width[0]._;
+
+         // apply min Dimensions
+
       } catch (e) {
         height = 0;
         length = 0;
@@ -1175,7 +1179,10 @@ function processHttpRequest(event) {
 
         console.log("item HxLxW", itemlength, "x", itemwidth, "x", itemheight, " itemWeight:", itemWeight);
 
-        var volWeightKG = length * width * height * Math.pow(2.54, 3) / (5000 * 1000000);
+        var volWeightKG = (Math.max(length*1.05,length + 1) *
+        Math.max(width*1.05,length + 1) *
+        Math.max(height*1.05,length + 1) *
+             Math.pow(2.54, 3)) / (5000 * 1000000);
         console.log("volWeightKG:", volWeightKG);
         var chargableWt = 1 * Math.max(volWeightKG * 1, weight * 1 / 2.20).toFixed(2);
         console.log("x volWeight:", volWeightKG.toFixed(2));
@@ -1267,6 +1274,17 @@ function processHttpRequest(event) {
             itemToCheck.MPN = MPN;
           } catch (e) {
             itemToCheck.MPN = "";
+          }
+          try {
+            itemToCheck.height = height;
+            itemToCheck.length = length;
+            itemToCheck.weight = weight;
+            itemToCheck.width = width;
+          } catch (e) {
+            itemToCheck.height = -1;
+            itemToCheck.length = -1;
+            itemToCheck.weight = -1;
+            itemToCheck.width = -1;
           }
           console.log("------> itemToCheck:", itemToCheck);
 
