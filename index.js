@@ -1114,18 +1114,16 @@ function processHttpRequest(event) {
         }
         if (prime == "") {
           try {
-            prime =     object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0];
+            prime =  object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0];
             if (prime == "0") {
               prime = object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForSuperSaverShipping[0];
             }
-            itemCondition = object[0].Offer[0].OfferAttributes[0].Condition[0];
           } catch (e) {console.log(" could not find IsEligibleForPrime/IsEligibleForSuperSaverShipping:");}
         }
 
         if (itemCondition == "") {
           try {
-
-            itemCondition = object[0].Offer[0].OfferAttributes[0].Condition[0];
+            itemCondition = object[0].Offers[0].Offer[0].OfferAttributes[0].Condition[0];
           } catch (e) {console.log(" could not find itemCondition");}
         }
         if (itemPrice < 0) {
@@ -1244,15 +1242,11 @@ function processHttpRequest(event) {
         var msg = title +
            "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
+
           try {
             itemToCheck.title = title;
           } catch (e) {
-            itemToCheck.title = "unknown"
-          }
-          try {
-            itemToCheck.title = title;
-          } catch (e) {
-            itemToCheck.title = "unknown"
+            itemToCheck.title = ""
           }
           try {
             itemToCheck.price = itemPrice;
@@ -1702,7 +1696,7 @@ function echoOnly(event) {
 
 
 function calculatePricing(senderID,item) {
-  console.log("===========> calculatePricing:",item)
+  console.log("=====================> calculatePricing:",item)
 
 
    var pricing_params =   {// get from DB.
@@ -1715,7 +1709,7 @@ function calculatePricing(senderID,item) {
     J9_unerCostPercentage: 1 // percentage
   }
   // user pricing formula
-
+  pricingMessage = "Notes:"
   I2_quantity = 1;
   J2_unitCapacityPerBox = 1;
   numberOfPackages = Math.ceil((I2_quantity/J2_unitCapacityPerBox)*100)/100;
@@ -1735,16 +1729,28 @@ function calculatePricing(senderID,item) {
   T2_AmmanCatMargin = item.category_info.margin_amm;
   U2_AqabaCatMargin = item.category_info.margin_aqaba;
    B2_price = item.price;
-   C2_shipping = item.shipping;
+   if (item.shipping < 0) {
+     // unknown shipping cost
+     C2_shipping = 0;
+     pricingMessage = pricingMessage + "/local shipping cost not included in price"
+   } else {
+     C2_shipping = item.shipping;
+   }
 
   V2_marginAdjBasedOnPrice = 1;
   W2_marginAdjBasedOnWeight = 1;
   X2_marginAdjBasedOnQty = 1;
   Y2_volumnWeight=-1; // already have chargableWt
+  console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',Z2_chargableWeight+'/'+AD2_HandlingCostUSD);
   AC2_ShipAndHandCostUSD =((AB2_adjustedShippingCost*Z2_chargableWeight))+AD2_HandlingCostUSD;
+  console.log("AC2_ShipAndHandCostUSD:",AC2_ShipAndHandCostUSD);
+
   // B2 is item.price
   // C2 is item.shipping
+  console.log("item.price +  item.shipping + AC2_ShipAndHandCostUSD:",
+    item.price + "/" + item.shipping +"/"+ AC2_ShipAndHandCostUSD);
   AE2_itemCostUSD = item.price +  item.shipping + AC2_ShipAndHandCostUSD;
+  console.log("AE2_itemCostUSD:",AE2_itemCostUSD)
   // AF2 is item.customs Percent
   // customs USD =AF2*(B2+C2+AC2*0.5)*J9
   AG2_customsUSD = item.category_info.customs *
@@ -1766,11 +1772,12 @@ function calculatePricing(senderID,item) {
   }
 AR2_usSalesTax = item.category_info.us_tax;
 AQ2_usPriceWithUsTax = ((B2_price+C2_shipping) * (1+AR2_usSalesTax ));
+console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice+'/'+AO2_ammanPriceWTax)
   finalAmmanPrice = Math.min(AP2_capPrice,AO2_ammanPriceWTax);
 
   console.log("Final Amman Price:",finalAmmanPrice)
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
-  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice);
+  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
   sendTextMessage(senderID,JSON.stringify(item));
 }
