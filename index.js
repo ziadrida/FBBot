@@ -1765,7 +1765,7 @@ function calculatePricing(senderID,item) {
   AL2_ammanSalesTax = item.category_info.tax_amm;
   P2_netAmmanMargin = T2_AmmanCatMargin*W2_marginAdjBasedOnWeight*X2_marginAdjBasedOnQty*V2_marginAdjBasedOnPrice;
   // M2_AmmanCost = =AK2*0.71+O2
-  M2_AmmanCost = AK2_loadedCost *0.71 + O2_AmmanDeliveryJD;
+  M2_AmmanCost = AK2_loadedCost *0.71 + pricing_params.O2_AmmanDeliveryJD;
   console.log("M2_AmmanCost/(1- P2_netAmmanMargin):",M2_AmmanCost+'/'+P2_netAmmanMargin);
   AN2_ammanSalePricewoTax = M2_AmmanCost/(1- P2_netAmmanMargin);
   console.log("AN2_ammanSalePricewoTax:",AN2_ammanSalePricewoTax);
