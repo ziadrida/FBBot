@@ -1099,34 +1099,46 @@ function processHttpRequest(event) {
         object = JSON.parse(res);
 
 
-        shippingCost = -1; // unknown
-        if (prime && prime == "1") {
-          shippingCost = 0;
-        }
+
         var itemPrice = -1;
-        var prime = "0";
+        var prime = "";
         var itemCondition=""
 
         if (itemPrice < 0) {
           try {
             itemPrice = object[0].Offers[0].Offer[0].OfferListing[0].Price[0].Amount[0]*1.00/100.00;
+          } catch (e) {console.log("***********=> could not find the price in OfferListing:");}
+        }
+        if (prime == "") {
+          try {
             prime =     object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0];
             if (prime == "0") {
               prime = object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForSuperSaverShipping[0];
             }
             itemCondition = object[0].Offer[0].OfferAttributes[0].Condition[0];
-          } catch (e) {console.log(" could not find the price in OfferListing:");}
+          } catch (e) {console.log(" could not find IsEligibleForPrime/IsEligibleForSuperSaverShipping:");}
         }
 
-        if (itemPrice < 0) {
-        try {
-           itemPrice = object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]*1.00 / 100.00;
-      } catch (e) { console.log(" could not find the price in LowestNewPrice:")}
-    }
+        if (itemCondition == "") {
+          try {
 
-        console.log("itemPrice:", itemPrice);
-        console.log("Prime eligible:", prime, " -  shippingCost:", shippingCost);
-        console.log("itemPrice:", itemPrice);
+            itemCondition = object[0].Offer[0].OfferAttributes[0].Condition[0];
+          } catch (e) {console.log(" could not find itemCondition");}
+        }
+        if (itemPrice < 0) {
+          try {
+            itemPrice = object[0].OfferSummary[0].LowestNewPrice[0].Amount[0] * 1.00 / 100.00;
+          } catch (e) {
+            console.log(" could not find the price in LowestNewPrice:")
+          }
+        }
+        shippingCost = -1; // unknown
+        if (prime == "1") {
+          shippingCost = 0;
+        }
+        console.log("***** itemPrice:", itemPrice);
+        console.log("******* Prime eligible:", prime);
+        console.log("****** itemPrice:", itemPrice);
 
         try {
           itemheight = 1 * object[0].ItemAttributes[0].ItemDimensions[0].Height[0]._;
