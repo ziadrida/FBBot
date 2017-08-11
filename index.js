@@ -1180,8 +1180,8 @@ function processHttpRequest(event) {
         console.log("item HxLxW", itemlength, "x", itemwidth, "x", itemheight, " itemWeight:", itemWeight);
 
         var volWeightKG = (Math.max(length*1.05,length + 1) *
-        Math.max(width*1.05,length + 1) *
-        Math.max(height*1.05,length + 1) *
+        Math.max(width*1.05,width + 1) *
+        Math.max(height*1.05,height + 1) *
              Math.pow(2.54, 3)) / (5000 * 1000000);
         console.log("volWeightKG:", volWeightKG);
         var chargableWt = 1 * Math.max(volWeightKG * 1, weight * 1 / 2.20).toFixed(2);
@@ -1805,7 +1805,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
-  sendTextMessage(senderID,JSON.stringify(item));
+  //sendTextMessage(senderID,JSON.stringify(item));
 }
 
 
