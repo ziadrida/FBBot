@@ -1266,9 +1266,9 @@ function processHttpRequest(event) {
             itemToCheck.shipping = -1;
           }
           try {
-          itemToCheck.weight = chargableWt;
+          itemToCheck.chargableWt = chargableWt;
           } catch (e) {
-            itemToCheck.weight = -1;
+            itemToCheck.chargableWt = -1;
           }
           try {
             itemToCheck.MPN = MPN;
@@ -1504,6 +1504,9 @@ function getPricing(senderID,item) {
   if (typeof item != 'undefined' && item.weight) {
     console.log('weight in lbs:', item.weight)
   }
+  if (typeof item != 'undefined' && item.chargableWt) {
+    console.log('chargableWt in KGs:', item.chargableWt)
+  }
   if (typeof item != 'undefined' && item.category) {
     console.log('category:', item.category)
   }
@@ -1738,7 +1741,7 @@ function calculatePricing(senderID,item) {
   F2_numberOfSeller = 1;
   M2_AmmanCost = -1;
 
-  Z2_chargableWeight = item.weight; // kg
+  Z2_chargableWeight = item.chargableWt; // kg
   AA2_weightRateAdjust = 1; // no adjustment for now
   AB2_adjustedShippingCost = AA2_weightRateAdjust * pricing_params.shippingCostPerKgJD/0.71;
   AD2_HandlingCostUSD = pricing_params.handlingPerPackageUSD * numberOfPackages;
@@ -1761,7 +1764,7 @@ function calculatePricing(senderID,item) {
   X2_marginAdjBasedOnQty = 1;
   Y2_volumnWeight=-1; // already have chargableWt
   console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',Z2_chargableWeight.toFixed(2)+'/'+AD2_HandlingCostUSD.toFixed(2));
-  AC2_ShipAndHandCostUSD =((AB2_adjustedShippingCost*Z2_chargableWeight))+AD2_HandlingCostUSD;
+  AC2_ShipAndHandCostUSD =((AB2_adjustedShippingCost * Z2_chargableWeight)) + AD2_HandlingCostUSD;
   console.log("AC2_ShipAndHandCostUSD:",AC2_ShipAndHandCostUSD.toFixed(2));
 
   // B2 is item.price
