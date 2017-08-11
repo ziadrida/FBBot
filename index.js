@@ -1176,7 +1176,6 @@ function processHttpRequest(event,callback) {
         try {
          height = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Height[0]._/ 100.00;
          length = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Length[0]._/ 100.00;
-         weight = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Weight[0]._ / 100.00;
          width = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Width[0]._/ 100.00;
 
          // apply min Dimensions
@@ -1184,9 +1183,13 @@ function processHttpRequest(event,callback) {
       } catch (e) {
         height = 0;
         length = 0;
-        weight = 0;
         width = 0;
       }
+       try {
+            weight = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Weight[0]._ / 100.00;
+       } catch (e) {
+           weight = 0;
+         }
 
         console.log("package HxLxW", length, "x", width, "x", height, " wt", weight);
 
