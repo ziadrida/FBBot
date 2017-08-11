@@ -1090,6 +1090,7 @@ function processHttpRequest(event) {
       console.log("************* BEFORE itemLookup");
       client.itemLookup({
         itemId: asin[0],
+        MerchantId: 'Amazon',
         ResponseGroup: 'OfferListings ,ItemAttributes,BrowseNodes'
       }).then(function(results) {
         console.log(">>>>>>>>>>>>  Resulting Message from Amazon >>>>>>>>>>>>>>>>");
