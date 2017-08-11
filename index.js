@@ -1161,10 +1161,10 @@ function processHttpRequest(event) {
         }
 
         try {
-         height = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Height[0]._;
-         length = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Length[0]._;
+         height = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Height[0]._/ 100.00;
+         length = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Length[0]._/ 100.00;
          weight = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Weight[0]._ / 100.00;
-         width = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Width[0]._;
+         width = 1 * object[0].ItemAttributes[0].PackageDimensions[0].Width[0]._/ 100.00;
 
          // apply min Dimensions
 
@@ -1179,12 +1179,12 @@ function processHttpRequest(event) {
 
         console.log("item HxLxW", itemlength, "x", itemwidth, "x", itemheight, " itemWeight:", itemWeight);
 
-        var volWeightKG = (Math.max(length*1.05,length + 1) *
-        Math.max(width*1.05,width + 1) *
-        Math.max(height*1.05,height + 1) *
-             Math.pow(2.54, 3)) / (5000 * 1000000);
+        var volWeightKG = (Math.max(length*1.05,length + 1.00) *
+        Math.max(width*1.05,width + 1.00) *
+        Math.max(height*1.05,height + 1.00) *
+             Math.pow(2.54, 3)) / (5000.00);
         console.log("volWeightKG:", volWeightKG);
-        var chargableWt = 1 * Math.max(volWeightKG * 1, weight * 1 / 2.20).toFixed(2);
+        var chargableWt = 1 * Math.max(volWeightKG * 1, weight/2.20).toFixed(2);
         console.log("x volWeight:", volWeightKG.toFixed(2));
         console.log("x chargableWt:", chargableWt.toFixed(2));
 
