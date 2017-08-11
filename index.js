@@ -1184,9 +1184,9 @@ function processHttpRequest(event) {
         Math.max(height*1.05,height + 1.00) *
              Math.pow(2.54, 3)) / (5000.00);
         console.log("volWeightKG:", volWeightKG);
-        var chargableWt = 1 * Math.max(volWeightKG * 1, weight/2.20).toFixed(2);
+        var chargableWeight = 1 * Math.max(volWeightKG * 1, weight/2.20).toFixed(2);
         console.log("x volWeight:", volWeightKG.toFixed(2));
-        console.log("x chargableWt:", chargableWt.toFixed(2));
+        console.log("x chargableWeight:", chargableWeight.toFixed(2));
 
         // part#
         try {
@@ -1247,7 +1247,7 @@ function processHttpRequest(event) {
 
 
         var msg = title +
-           "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
+           "Category:" + cat + " chargableWeight:" + chargableWeight + " Price:" + itemPrice + " available:" + available +
           " MPN:" + MPN;
 
           try {
@@ -1266,9 +1266,9 @@ function processHttpRequest(event) {
             itemToCheck.shipping = -1;
           }
           try {
-          itemToCheck.chargableWt = chargableWt;
+            itemToCheck.chargableWeight = chargableWeight;
           } catch (e) {
-            itemToCheck.chargableWt = -1;
+            itemToCheck.chargableWeight = -1;
           }
           try {
             itemToCheck.MPN = MPN;
@@ -1504,8 +1504,8 @@ function getPricing(senderID,item) {
   if (typeof item != 'undefined' && item.weight) {
     console.log('weight in lbs:', item.weight)
   }
-  if (typeof item != 'undefined' && item.chargableWt) {
-    console.log('chargableWt in KGs:', item.chargableWt)
+  if (typeof item != 'undefined' && item.chargableWeight) {
+    console.log('chargableWeight in KGs:', item.chargableWeight)
   }
   if (typeof item != 'undefined' && item.category) {
     console.log('category:', item.category)
@@ -1741,28 +1741,28 @@ function calculatePricing(senderID,item) {
   F2_numberOfSeller = 1;
   M2_AmmanCost = -1;
 
-  Z2_chargableWeight = item.chargableWt; // kg
-  AA2_weightRateAdjust = 1; // no adjustment for now
-  AB2_adjustedShippingCost = AA2_weightRateAdjust * pricing_params.shippingCostPerKgJD/0.71;
-  AD2_HandlingCostUSD = pricing_params.handlingPerPackageUSD * numberOfPackages;
+  var Z2_chargableWeight = item.chargableWeight * 1.00; // kg
+  var AA2_weightRateAdjust = 1; // no adjustment for now
+  var AB2_adjustedShippingCost = AA2_weightRateAdjust * pricing_params.shippingCostPerKgJD/0.71;
+  var AD2_HandlingCostUSD = pricing_params.handlingPerPackageUSD * numberOfPackages;
   if (Z2_chargableWeight*2.2 > pricing_params.heavyWeightThreshold) {
     AD2_HandlingCostUSD = AD2_HandlingCostUSD + pricing_params.heavyWeightSurcharge;
   }
-  T2_AmmanCatMargin = item.category_info.margin_amm;
-  U2_AqabaCatMargin = item.category_info.margin_aqaba;
-   B2_price = item.price;
+  var T2_AmmanCatMargin = item.category_info.margin_amm * 1.00;
+  U2_AqabaCatMargin = item.category_info.margin_aqaba * 1.00;
+   B2_price = item.price * 1.00;
    if (item.shipping < 0) {
      // unknown shipping cost
      C2_shipping = 0;
      pricingMessage = pricingMessage + "/local shipping cost not included in price"
    } else {
-     C2_shipping = item.shipping;
+     C2_shipping = item.shipping * 1.00;
    }
 
   V2_marginAdjBasedOnPrice = 1;
   W2_marginAdjBasedOnWeight = 1;
   X2_marginAdjBasedOnQty = 1;
-  Y2_volumnWeight=-1; // already have chargableWt
+  Y2_volumnWeight=-1; // already have chargableWeight
   console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',Z2_chargableWeight.toFixed(2)+'/'+AD2_HandlingCostUSD.toFixed(2));
   AC2_ShipAndHandCostUSD =((AB2_adjustedShippingCost * Z2_chargableWeight)) + AD2_HandlingCostUSD;
   console.log("AC2_ShipAndHandCostUSD:",AC2_ShipAndHandCostUSD.toFixed(2));
