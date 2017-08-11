@@ -10,6 +10,7 @@ var ObjectId = require('mongodb').ObjectID;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 var db;
 var callCount = 0;
+var amazonClient ;
 // parse URL
 var parseDomain = require("parse-domain");
 //add all of code
@@ -1018,7 +1019,7 @@ function getRegularAmmanPrice(item) {
 
 
 // processHttpRequest function
-function processHttpRequest(event) {
+function processHttpRequest(event,callback) {
   console.log("===================> in processHttpRequest");
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -1081,37 +1082,42 @@ function processHttpRequest(event) {
     if (typeof asin != 'undefined' && asin) {
       // price from amazon
       console.log(">>>>>>>>>> AMAZON:", asin[0]);
-      var client = amazon.createClient({
+       amazonClient = amazon.createClient({
         awsTag: "tech1",
         awsId: "AKIAIN3EIRW3VGI3UT2Q",
         awsSecret: "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"
       });
 
       console.log("************* BEFORE itemLookup");
-      client.itemLookup({
+      var itemLookupOptions = {
         itemId: asin[0],
         MerchantId: 'Amazon',
         ResponseGroup: 'OfferListings ,ItemAttributes,BrowseNodes'
-      }).then(function(results) {
+      }
+      amazonItemLookup(itemLookupOptions,function(results) {
         console.log(">>>>>>>>>>>>  Resulting Message from Amazon >>>>>>>>>>>>>>>>");
+        if (!results) {
+            console.log("********** No Results from Amazon!");
+            return callback(null);
+          }
         console.log(JSON.stringify(results));
         var res = JSON.stringify(results)
         object = JSON.parse(res);
-
-
-
         var itemPrice = -1;
+        try {
+            itemPrice = object[0].Offers[0].Offer[0].OfferListing[0].Price[0].Amount[0]*1.00/100.00;
+            console.log(" ******* after get ItemPrice =",itemPrice);
+        } catch (e) {
+          console.log("***********=> could not find the price in OfferListing:");
+            // do another item lookup for all merchants
+        }
+
+
+
         var prime = "";
         var itemCondition=""
 
-        if (itemPrice < 0) {
-          try {
-            console.log(" ******* get ItemPrice ",object[0].Offers[0].Offer[0].OfferListing[0]);
 
-            itemPrice = object[0].Offers[0].Offer[0].OfferListing[0].Price[0].Amount[0]*1.00/100.00;
-                        console.log(" ******* after get ItemPrice =",itemPrice);
-          } catch (e) {console.log("***********=> could not find the price in OfferListing:");}
-        }
         if (prime == "") {
           try {
             prime =  object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0];
@@ -1298,9 +1304,6 @@ function processHttpRequest(event) {
 
           }
         sendTextMessage(senderID, msg);
-      }).catch(function(err) {
-        console.log("ERROR from itemLookup ********** ",err)
-        console.log(JSON.stringify(err));
       });
 
     } // if (asin)  price from amazon
@@ -1350,6 +1353,52 @@ function processHttpRequest(event) {
   } // valid domainName
 }
 
+function amazonItemLookup(itemLookupOptions,callback) {
+  if (!amazonClient) {
+  amazonClient = amazon.createClient({
+   awsTag: "tech1",
+   awsId: "AKIAIN3EIRW3VGI3UT2Q",
+   awsSecret: "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"
+ });
+ }
+
+
+  console.log("************* BEFORE itemLookup");
+   amazonClient.itemLookup(itemLookupOptions).then(function(results) {
+     console.log(">>>>>>>>>>>>  Resulting Message from Amazon >>>>>>>>>>>>>>>>");
+     console.log(JSON.stringify(results));
+     var res = JSON.stringify(results)
+     object = JSON.parse(res);
+     var itemPrice = -1;
+     try {
+         itemPrice = object[0].Offers[0].Offer[0].OfferListing[0].Price[0].Amount[0]*1.00/100.00;
+         console.log(" ******* after get ItemPrice =",itemPrice);
+         return callback(results);
+     } catch (e) {
+       console.log("***********=> could not find the price in OfferListing:");
+         // do another item lookup for all merchants
+         var itemLookupOptions2 = {
+           itemId: itemLookupOptions.itemId,
+           ResponseGroup: 'OfferListings ,ItemAttributes,BrowseNodes'
+         }
+         amazonClient.itemLookup(itemLookupOptions2).then(function(results2) {
+           console.log(">>>>>>>>>>>>  Resulting Message from Amazon >>>>>>>>>>>>>>>>");
+           console.log(JSON.stringify(results2));
+           var res = JSON.stringify(results2)
+           object = JSON.parse(res);
+           return callback(results2);
+        }).catch(function(err) {
+          console.log("ERROR from itemLookup2 ********** ",err)
+          console.log(JSON.stringify(err));
+          return callback(null);
+        });
+     } // catch (e)
+  }).catch(function(err) {
+    console.log("ERROR from itemLookup1 ********** ",err)
+    console.log(JSON.stringify(err));
+    return callback(null);
+  });
+}
 /* genNewUserReport */
 function genNewUserReport(senderID, daysBack,callback) {
   console.log("In genNewUserReport daysBack:", daysBack);
