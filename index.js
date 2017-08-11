@@ -1762,7 +1762,7 @@ function calculatePricing(senderID,item) {
   Y2_volumnWeight=-1; // already have chargableWt
   console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',Z2_chargableWeight+'/'+AD2_HandlingCostUSD);
   AC2_ShipAndHandCostUSD =((AB2_adjustedShippingCost*Z2_chargableWeight))+AD2_HandlingCostUSD;
-  console.log("AC2_ShipAndHandCostUSD:",AC2_ShipAndHandCostUSD);
+  console.log("AC2_ShipAndHandCostUSD:",AC2_ShipAndHandCostUSD.toFixed(2));
 
   // B2 is item.price
   // C2 is item.shipping
@@ -1779,10 +1779,14 @@ function calculatePricing(senderID,item) {
   // AJ2 = =AI2*AE2
   AJ2_clearanceCost = pricing_params.AI2_clearancePercent * AE2_itemCostUSD;
   // AK2 =AJ2+AH2
+  console.log('AJ2_clearanceCost /AH2_costWithCustomsUSD',
+    AJ2_clearanceCost +'/'+ AH2_costWithCustomsUSD);
   AK2_loadedCost = AJ2_clearanceCost + AH2_costWithCustomsUSD;
   AL2_ammanSalesTax = item.category_info.tax_amm;
   P2_netAmmanMargin = T2_AmmanCatMargin*W2_marginAdjBasedOnWeight*X2_marginAdjBasedOnQty*V2_marginAdjBasedOnPrice;
   // M2_AmmanCost = =AK2*0.71+O2
+  console.log('AK2_loadedCost / pricing_params.O2_AmmanDeliveryJD:',
+    AK2_loadedCost+'/'+ pricing_params.O2_AmmanDeliveryJD)
   M2_AmmanCost = AK2_loadedCost *0.71 + pricing_params.O2_AmmanDeliveryJD;
   console.log("M2_AmmanCost/(1- P2_netAmmanMargin):",M2_AmmanCost+'/'+P2_netAmmanMargin);
   AN2_ammanSalePricewoTax = M2_AmmanCost/(1- P2_netAmmanMargin);
