@@ -1095,7 +1095,6 @@ function processHttpRequest(event,callback) {
         ResponseGroup: 'OfferListings ,ItemAttributes,BrowseNodes'
       }
       amazonItemLookup(itemLookupOptions,function(results) {
-        console.log(">>>>>>>>>>>>  Resulting Message from Amazon >>>>>>>>>>>>>>>>");
         if (!results) {
             console.log("********** No Results from Amazon!");
             return callback(null);
@@ -1867,6 +1866,8 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
 
   console.log("Final Amman Price:",finalAmmanPrice.toFixed(2))
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
+
+  pricingMessage = pricingMessage.replace('/:\//',':');
   sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
   //sendTextMessage(senderID,JSON.stringify(item));
