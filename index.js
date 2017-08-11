@@ -1740,7 +1740,7 @@ function calculatePricing(senderID,item) {
 
   Z2_chargableWeight = item.weight; // kg
   AA2_weightRateAdjust = 1; // no adjustment for now
-  AB2_adjustedShippingCost = AA2_weightRateAdjust * pricing_params.shippingCostPerKgJD;
+  AB2_adjustedShippingCost = AA2_weightRateAdjust * pricing_params.shippingCostPerKgJD/0.71;
   AD2_HandlingCostUSD = pricing_params.handlingPerPackageUSD * numberOfPackages;
   if (Z2_chargableWeight*2.2 > pricing_params.heavyWeightThreshold) {
     AD2_HandlingCostUSD = AD2_HandlingCostUSD + pricing_params.heavyWeightSurcharge;
@@ -1787,7 +1787,7 @@ function calculatePricing(senderID,item) {
   // M2_AmmanCost = =AK2*0.71+O2
   console.log('AK2_loadedCost / pricing_params.O2_AmmanDeliveryJD:',
     AK2_loadedCost.toFixed(2)+'/'+ pricing_params.O2_AmmanDeliveryJD.toFixed(2))
-  M2_AmmanCost = AK2_loadedCost *0.71 + pricing_params.O2_AmmanDeliveryJD;
+  M2_AmmanCost = AK2_loadedCost * 0.71 + pricing_params.O2_AmmanDeliveryJD;
   console.log("M2_AmmanCost/(1- P2_netAmmanMargin):",M2_AmmanCost.toFixed(2)+'/'+P2_netAmmanMargin.toFixed(2));
   AN2_ammanSalePricewoTax = M2_AmmanCost/(1- P2_netAmmanMargin);
   console.log("AN2_ammanSalePricewoTax:",AN2_ammanSalePricewoTax.toFixed(2));
