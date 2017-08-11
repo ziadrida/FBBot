@@ -1097,25 +1097,34 @@ function processHttpRequest(event) {
         console.log(JSON.stringify(results));
         var res = JSON.stringify(results)
         object = JSON.parse(res);
-          var prime;
-        try {
-         prime = object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0]
-      } catch(e) {
-        prime="0";
-      }
+
+
         shippingCost = -1; // unknown
         if (prime && prime == "1") {
           shippingCost = 0;
         }
-        itemPrice = 0;
+        var itemPrice = -1;
+        var prime = "0";
+        var itemCondition=""
+
+        if (itemPrice < 0) {
+          try {
+            itemPrice = object[0].Offers[0].Offer[0].OfferListing[0].Price[0].Amount[0]*1.00/100.00;
+            prime =     object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForPrime[0];
+            if (prime == "0") {
+              prime = object[0].Offers[0].Offer[0].OfferListing[0].IsEligibleForSuperSaverShipping[0];
+            }
+            itemCondition = object[0].Offer[0].OfferAttributes[0].Condition[0];
+          } catch (e) {console.log(" could not find the price in OfferListing:");}
+        }
+
+        if (itemPrice < 0) {
         try {
-        console.log("formattedPrice:", object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]);
+           itemPrice = object[0].OfferSummary[0].LowestNewPrice[0].Amount[0]*1.00 / 100.00;
+      } catch (e) { console.log(" could not find the price in LowestNewPrice:")}
+    }
 
-        var itemPrice = 1 * object[0].OfferSummary[0].LowestNewPrice[0].Amount[0] / 100.00;
-      } catch (e) { console.log(" could not find the price Error code:")}
         console.log("itemPrice:", itemPrice);
-
-
         console.log("Prime eligible:", prime, " -  shippingCost:", shippingCost);
         console.log("itemPrice:", itemPrice);
 
@@ -1211,9 +1220,10 @@ function processHttpRequest(event) {
 
             console.log("Title:",object[0].ItemAttributes[0].Title[0]);
           itemToCheck.category.push(object[0].ItemAttributes[0].Title[0]);
-          title = object[0].ItemAttributes[0].Title[0] + "\n";
+          title = object[0].ItemAttributes[0].Title[0] +"/" + itemCondition +"\n";
         } catch(e) { console.log("____________ NO TITLE!!");
         }
+
 
         var msg = title +
            "Category:" + cat + " weight:" + chargableWt + " Price:" + itemPrice + " available:" + available +
