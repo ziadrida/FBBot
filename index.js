@@ -1090,8 +1090,7 @@ function processHttpRequest(event) {
       console.log("************* BEFORE itemLookup");
       client.itemLookup({
         itemId: asin[0],
-        //MinimumPrice: 7,
-        ResponseGroup: 'Small'
+        ResponseGroup: 'OfferListings ,ItemAttributes,BrowseNodes'
       }).then(function(results) {
         console.log(">>>>>>>>>>>>  Resulting Message from Amazon >>>>>>>>>>>>>>>>");
         console.log(JSON.stringify(results));
