@@ -1916,7 +1916,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
       aqabaExpress: 0,
       aqabaStandard: 0
     },
-    pricingDetils: "Pricing Details",
+    pricingDetails: "Pricing Details",
     notes: pricingMessage
   }
 
@@ -1924,16 +1924,12 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   buttonList.push({
       "type": "postback",
       "title": "Price Details تفاصيل السعر",
-      "payload": { "action" : "priceDetails",
-                quotationObject
-              }
+      "payload": '{ "action" : "priceDetails",' +  quotationObject +'}'
         });
     buttonList.push({
         "type": "postback",
         "title": "prices from:"+lowestPrice,
-        "payload": { "action" : "morePrices",
-                  quotationObject
-                }
+        "payload": '{ "action" : "morePrices",' +  quotationObject +'}'
       });
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
   btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
