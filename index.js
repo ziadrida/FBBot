@@ -772,6 +772,7 @@ function sendWatchVideoButton(recipientId, btnText, title) {
 
 function sendPriceButton(recipientId, btnText,buttonList) {
   console.log("===============> in  sendPriceButton buttonList:",buttonList);
+    console.log("===============> in  sendPriceButton btnTxt:",btnText);
   let messageData = {
     "recipient": {
       "id": recipientId
@@ -782,7 +783,7 @@ function sendPriceButton(recipientId, btnText,buttonList) {
           "text": btnText, // item title
           "buttons": [{
               "type": "postback",
-              "title": "Price Details تفاصيل السعر",
+              "title": "Price Details",
               "payload": "priceDetails"
             }]
         }
