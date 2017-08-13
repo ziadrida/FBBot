@@ -300,8 +300,7 @@ function handleEvent(senderID, event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
-  var message = event.message;
-  var messageId = event.message.mid;
+
   let payloadText;
 
   //console.log('Check postback Text==>');
@@ -364,7 +363,7 @@ function handleEvent(senderID, event) {
         "senderId": senderID,
         "recipientId": recipientID,
         "orderItem": payloadText,
-        "messageId": messageId,
+        "messageId": "",
         "timestamp": new Date(timeOfMessage),
         "dateCreated": new Date()
       }, function(err, result) {
