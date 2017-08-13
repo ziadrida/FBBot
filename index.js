@@ -370,7 +370,8 @@ function handleEvent(senderID, event) {
           "payload": '{ "action" : "morePrices", "quotationObject" : ' +  quotationObject +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
-    btnTxt = quotationObject.pricingDetails;
+   var detailsMsg = pricingDetailMsg_en.replace("%P%",quotationObject.item.price);
+    btnTxt = detailsMsg;
 
 
     return sendPriceButton(senderID,btnTxt,buttonList)
@@ -1952,20 +1953,19 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
     quotationNumber: 0,
     quotationDate: new Date(),
     item: item,
-    priceJD: {
-      ammanExpress: finalAmmanPriceExpress.toFixed(2),
-      ammanStandard: 0,
-      aqabaExpress: 0,
-      aqabaStandard: 0
+    price: {
+      amm_exp: finalAmmanPriceExpress.toFixed(2),
+      amm_std: 0,
+      aq_exp: 0,
+      aq_std: 0
     },
-    pricingDetails: pricingDetailMsg_en,
     notes: pricingMessage
   }
   var getPricingDetailsPayload = {action: 'getPricingDetails',
       quotation: quotationObject
         }
           getPricingDetailsPayloadStr = JSON.stringify(getPricingDetailsPayload);
-        
+
 var  payloadPriceDetails = '{ "action" : "getPricingDetails", "quotationObject" :' +   quotationObject +'}'
 console.log("++++++++++++++++++ payloadPriceDetails:",payloadPriceDetails)
   var buttonList=[]
