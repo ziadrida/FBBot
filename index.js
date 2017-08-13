@@ -109,6 +109,7 @@ function receivedMessage(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
+
   var message = event.message;
   action = "";
   if (echoOnly(event)) {
@@ -299,7 +300,8 @@ function handleEvent(senderID, event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
-var messageId = message.mid;
+  var message = event.message;
+  var messageId = event.message.mid;
   let payloadText;
 
   //console.log('Check postback Text==>');
@@ -787,7 +789,8 @@ function sendPriceButton(recipientId, btnText,buttonList) {
           "buttons":buttonList
         }
       }
-      }}
+      }
+    }
 
   callSendAPI(messageData);
 } // sendButton
