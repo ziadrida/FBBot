@@ -1820,6 +1820,8 @@ function calculatePricing(senderID,item) {
     heavyWeightThreshold: 44, // pounds
     J9_unerCostPercentage: 1 // percentage
   }
+
+
   // user pricing formula
   pricingMessage = "Notes:"
   I2_quantity = 1;
@@ -1894,30 +1896,48 @@ function calculatePricing(senderID,item) {
 AR2_usSalesTax = item.category_info.us_tax;
 AQ2_usPriceWithUsTax = ((B2_price+C2_shipping) * (1+AR2_usSalesTax ));
 console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_ammanPriceWTax.toFixed(2))
-  finalAmmanPrice = Math.min(AP2_capPrice,AO2_ammanPriceWTax);
+  finalAmmanPriceExpress = Math.min(AP2_capPrice,AO2_ammanPriceWTax);
 
-  console.log("Final Amman Price:",finalAmmanPrice.toFixed(2))
+  console.log("Final Amman Price:",finalAmmanPriceExpress.toFixed(2))
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   pricingMessage = pricingMessage + packageDimensions;
   pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
   pricingMessage = pricingMessage.replace('/:\//g',':');
 
-  lowestPrice = finalAmmanPrice.toFixed(2);
+  lowestPrice = finalAmmanPriceExpress.toFixed(2);
   var buttonList=[]
   buttonList.push({
       "type": "postback",
       "title": "Price Details تفاصيل السعر",
-      "payload": "priceDetails"
-    });
+      "payload": { "action" : "priceDetails",
+                quotationObject
+              }
+        });
     buttonList.push({
         "type": "postback",
         "title": "prices from:"+lowestPrice,
-        "payload": "allPrices"
+        "payload": { "action" : "morePrices",
+                  quotationObject
+                }
       });
-//  btnTxt = "Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage;
-  btnTxt = "Amman Express 3-5 days:"+finalAmmanPrice.toFixed(2);
+//  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
+  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
+
+  var quotationObject = {
+    quotationNumber: 0,
+    quotationDate: new Date(),
+    item: item,
+    priceJD: {
+      ammanExpress: finalAmmanPriceExpress.toFixed(2),
+      ammanStandard: 0,
+      aqabaExpress: 0,
+      aqabaStandard: 0
+    },
+    pricingDetils: "Pricing Details",
+    notes: pricingMessage
+  }
   sendPriceButton(senderID,btnTxt,buttonList)
-//  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage);
+//  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
   //sendTextMessage(senderID,JSON.stringify(item));
 }
