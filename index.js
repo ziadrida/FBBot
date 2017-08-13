@@ -770,6 +770,34 @@ function sendWatchVideoButton(recipientId, btnText, title) {
   callSendAPI(messageData);
 } // sendWatchVideoButton
 
+function sendPriceButton(recipientId, btnText) {
+  let messageData = {
+    "recipient": {
+      "id": recipientId
+    },
+    "message": {
+        "payload": {
+          "template_type": "button",
+          "text": bt  nText, // item title
+          "buttons": [{
+              "type": "postback",
+              "title": "Yes",
+              "payload": "yes_confirm_order"
+            },
+            {
+              "type": "postback",
+              "title": "Not Now",
+              "payload": "not_now"
+            }
+          ]
+        }
+      }
+    }
+
+  callSendAPI(messageData);
+} // sendButton
+
+
 function sendButton(recipientId, btnText) {
   let messageData = {
     "recipient": {
@@ -1818,7 +1846,8 @@ function calculatePricing(senderID,item) {
    } else {
      C2_shipping = item.shipping * 1.00;
    }
-
+  packageDimensions = "chargableWeight/packageDimensions:"+ item.chargableWeight + 'KG/'+item.length +
+    'x'+item.width + 'x'+ item.height + 'inch' ;
   V2_marginAdjBasedOnPrice = 1;
   W2_marginAdjBasedOnWeight = 1;
   X2_marginAdjBasedOnQty = 1;
@@ -1866,8 +1895,8 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
 
   console.log("Final Amman Price:",finalAmmanPrice.toFixed(2))
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
-
-  pricingMessage = pricingMessage.replace('/:\//',':');
+  pricingMessage = pricingMessage + packageDimensions;
+  pricingMessage = pricingMessage.replace('/:\//g',':');
   sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
   //sendTextMessage(senderID,JSON.stringify(item));
