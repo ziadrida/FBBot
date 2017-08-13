@@ -22,7 +22,24 @@ const request = require('request');
 const app = express();
 var amazon = require('amazon-product-api');
 
-
+const pricingDetailMsg_ar = "  وزن الشحن المفترض بالكيلوغرام : 0.40 ملاحظة - وزن الشحن غالبا ما يكون أعلى من وزن القطعة. الرجاء التحقق أننا احتسبنا الوزن الصحيح.   			"+
+".  الكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0 			"+
+      " -------------------------------------------------------------------------------------- 			"+
+      " .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 			"+
+      " ----------------------------------------------------------------------------------- 			"+
+      "  ( تفاصيل السعر فى ما يلى: ( نضمن أفضل الأسعار عن أى منافس   			"+
+      "  السعر من المصدر: 149.99 $  يتضمن الشحن داخل بلد المصدر وقيمته   0.0$ 			"+
+      " الصنف - لعبة / اكس بوكس ​​بلاي ستيشن PC  : الجمرك فى عمان 35.0%  وضريبة  المبيعات فى عمان  16.0% --- الجمرك فى العقبة  0% و ضريبة المبيعات فى العقبة  7.0% 			"+
+      "  			 السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + التخليص 			"
+      const pricingDetailMsg_en = " Assumed Shipping  Weight in KG: %WT% - Note that shipping weight is usually higher than actual product weight (Please verify that we calculated the correct shipping weight)"+
+      +" Warranty is at source country (You can buy local warranty for  15.0% ) 			"+
+      " -------------------------------------------------------------------------------------- 			"+
+      " We guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage  			"+
+      " ----------------------------------------------------------------------------------- 			"+
+      " Pricing details as follows: 			"+
+      " Price at origin:$%P% - Including  Shipping at Origin of:$%SH% 			"+
+      "Category: Game Console -  Amman Customs of %AC% and Amman Tax:%AT%. Aqaba Customs %AQC% and Tax %AT% 			"+
+      "Price includes the actual item price + shipping + customs + taxes + clearance 			"
 // get token from the environment
 const firebase_auth_uri = process.env.FIREBASE_AUTH_URI
 const token = process.env.FB_VERIFY_TOKEN
@@ -336,6 +353,28 @@ function handleEvent(senderID, event) {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
     return calculatePricing(senderID,payloadMsg.item);
+  }
+
+  if(jsonpayload && payloadMsg.action == 'getPricingDetails') {
+    // this is a pricing payload. Need to check if all pricing data is available
+    // ignore check for now - just go ahead with pricing calculation
+    var buttonList=[]
+    buttonList.push({
+        "type": "postback",
+        "title": "Buy",
+        "payload": '{ "action" : "buy",' +  quotationObject +'}'
+          });
+      buttonList.push({
+          "type": "postback",
+          "title": "other prices from:"+lowestPrice,
+          "payload": '{ "action" : "morePrices",' +  quotationObject +'}'
+        });
+  //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
+    btnTxt = quotationObject.pricingDetails;
+
+
+    return sendPriceButton(senderID,btnTxt,buttonList)
+
   }
 
   // check the action from the postback if any
@@ -1906,6 +1945,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
 
   lowestPrice = finalAmmanPriceExpress.toFixed(2);
 
+  pricingDetailMsg_en = pricingDetailMsg_en.replace("%P%",item.price);
   var quotationObject = {
     quotationNumber: 0,
     quotationDate: new Date(),
@@ -1916,7 +1956,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
       aqabaExpress: 0,
       aqabaStandard: 0
     },
-    pricingDetails: "Pricing Details",
+    pricingDetails: pricingDetailMsg_en,
     notes: pricingMessage
   }
 
@@ -1924,7 +1964,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   buttonList.push({
       "type": "postback",
       "title": "Price Details تفاصيل السعر",
-      "payload": '{ "action" : "priceDetails",' +  quotationObject +'}'
+      "payload": '{ "action" : "getPricingDetails",' +  quotationObject +'}'
         });
     buttonList.push({
         "type": "postback",
