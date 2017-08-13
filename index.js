@@ -362,12 +362,12 @@ function handleEvent(senderID, event) {
     buttonList.push({
         "type": "postback",
         "title": "Buy",
-        "payload": '{ "action" : "buy", quotationObject: ' +  quotationObject +'}'
+        "payload": '{ "action" : "buy", "quotationObject": ' +  quotationObject +'}'
           });
       buttonList.push({
           "type": "postback",
           "title": "other prices from:"+lowestPrice,
-          "payload": '{ "action" : "morePrices", quotationObject:' +  quotationObject +'}'
+          "payload": '{ "action" : "morePrices", "quotationObject":' +  quotationObject +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
     btnTxt = quotationObject.pricingDetails;
@@ -1965,12 +1965,12 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   buttonList.push({
       "type": "postback",
       "title": "Price Details تفاصيل السعر",
-      "payload": '{ "action" : "getPricingDetails", quotationObject :' +   quotationObject +'}'
+      "payload": '{ "action" : "getPricingDetails", "quotationObject" :' +   quotationObject +'}'
         });
     buttonList.push({
         "type": "postback",
         "title": "prices from:"+lowestPrice,
-        "payload": '{ "action" : "morePrices",quotationObject :' +  quotationObject +'}'
+        "payload": '{ "action" : "morePrices","quotationObject" :' +  quotationObject +'}'
       });
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
   btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
