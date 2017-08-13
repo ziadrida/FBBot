@@ -780,7 +780,7 @@ function sendPriceButton(recipientId, btnText,buttonList) {
     "message": {
         "payload": {
           "template_type": "button",
-          "text": btnText,
+          "text": "btnText",
           "buttons": [{
               "type": "postback",
               "title": "Yes",
