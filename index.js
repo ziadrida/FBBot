@@ -1896,6 +1896,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   console.log("Final Amman Price:",finalAmmanPrice.toFixed(2))
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   pricingMessage = pricingMessage + packageDimensions;
+  pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
   pricingMessage = pricingMessage.replace('/:\//g',':');
   sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
