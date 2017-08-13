@@ -778,6 +778,8 @@ function sendPriceButton(recipientId, btnText,buttonList) {
       "id": recipientId
     },
     "message": {
+      "attachment":{
+        "type":"template",
         "payload": {
           "template_type": "button",
           "text": "btnText",
@@ -793,6 +795,7 @@ function sendPriceButton(recipientId, btnText,buttonList) {
             }
           ]
         }
+      }
       }}
 
   callSendAPI(messageData);
