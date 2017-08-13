@@ -39,7 +39,7 @@ var pricingDetailMsg_ar = "  وزن الشحن المفترض بالكيلوغر
       " Pricing details as follows: 			"+
       " Price at origin:$%P% - Including  Shipping at Origin of:$%SH% 			"+
       "Category: Game Console -  Amman Customs of %AC% and Amman Tax:%AT%. Aqaba Customs %AQC% and Tax %AT% 			"+
-      "Price includes the actual item price + shipping + customs + taxes + clearance 			"
+      "Price includes the actual item price + shipping + customs + taxes + clearance"
 // get token from the environment
 const firebase_auth_uri = process.env.FIREBASE_AUTH_URI
 const token = process.env.FB_VERIFY_TOKEN
@@ -362,12 +362,12 @@ function handleEvent(senderID, event) {
     buttonList.push({
         "type": "postback",
         "title": "Buy",
-        "payload": '{ "action" : "buy",' +  quotationObject +'}'
+        "payload": '{ "action" : "buy", quotationObject: ' +  quotationObject +'}'
           });
       buttonList.push({
           "type": "postback",
           "title": "other prices from:"+lowestPrice,
-          "payload": '{ "action" : "morePrices",' +  quotationObject +'}'
+          "payload": '{ "action" : "morePrices", quotationObject:' +  quotationObject +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
     btnTxt = quotationObject.pricingDetails;
@@ -1946,6 +1946,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   lowestPrice = finalAmmanPriceExpress.toFixed(2);
 
   pricingDetailMsg_en = pricingDetailMsg_en.replace("%P%",item.price);
+  console.log("*** pricingDetailMsg_en:",pricingDetailMsg_en)
   var quotationObject = {
     quotationNumber: 0,
     quotationDate: new Date(),
@@ -1964,12 +1965,12 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   buttonList.push({
       "type": "postback",
       "title": "Price Details تفاصيل السعر",
-      "payload": '{ "action" : "getPricingDetails",' +  quotationObject +'}'
+      "payload": '{ "action" : "getPricingDetails", quotationObject :' +   quotationObject +'}'
         });
     buttonList.push({
         "type": "postback",
         "title": "prices from:"+lowestPrice,
-        "payload": '{ "action" : "morePrices",' +  quotationObject +'}'
+        "payload": '{ "action" : "morePrices",quotationObject :' +  quotationObject +'}'
       });
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
   btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
