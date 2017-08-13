@@ -362,12 +362,12 @@ function handleEvent(senderID, event) {
     buttonList.push({
         "type": "postback",
         "title": "Buy",
-        "payload": '{ "action" : "buy", "quotationObject": ' +  quotationObject +'}'
+        "payload": "Buy" //'{ "action" : "buy", "quotationObject": ' +  quotation +'}'
           });
       buttonList.push({
           "type": "postback",
           "title": "other prices from:"+lowestPrice,
-          "payload": '{ "action" : "morePrices", "quotationObject" : ' +  quotationObject +'}'
+          "payload": "other" //'{ "action" : "morePrices", "quotationObject" : ' +  quotation +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
    var detailsMsg = pricingDetailMsg_en.replace("%P%",quotationObject.item.price);
