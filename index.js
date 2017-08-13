@@ -780,15 +780,20 @@ function sendPriceButton(recipientId, btnText,buttonList) {
     "message": {
         "payload": {
           "template_type": "button",
-          "text": btnText, // item title
+          "text": btnText,
           "buttons": [{
               "type": "postback",
-              "title": "Price Details",
-              "payload": "priceDetails"
-            }]
+              "title": "Yes",
+              "payload": "yes_confirm_order"
+            },
+            {
+              "type": "postback",
+              "title": "Not Now",
+              "payload": "not_now"
+            }
+          ]
         }
-      }
-    }
+      }}
 
   callSendAPI(messageData);
 } // sendButton
@@ -1907,7 +1912,8 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
         "title": "prices from:"+lowestPrice,
         "payload": "allPrices"
       });
-  btnTxt = "Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage;
+//  btnTxt = "Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage;
+  btnTxt = "Amman Express 3-5 days:"+finalAmmanPrice.toFixed(2);
   sendPriceButton(senderID,btnTxt,buttonList)
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
