@@ -299,8 +299,9 @@ function handleEvent(senderID, event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
-
+var messageId = message.mid;
   let payloadText;
+
   //console.log('Check postback Text==>');
   if (typeof event != 'undefined' && event.postback && event.postback.payload) {
 
@@ -782,18 +783,8 @@ function sendPriceButton(recipientId, btnText,buttonList) {
         "type":"template",
         "payload": {
           "template_type": "button",
-          "text": "btnText",
-          "buttons": [{
-              "type": "postback",
-              "title": "Yes",
-              "payload": "yes_confirm_order"
-            },
-            {
-              "type": "postback",
-              "title": "Not Now",
-              "payload": "not_now"
-            }
-          ]
+          "text": btnText,
+          "buttons":buttonList
         }
       }
       }}
