@@ -770,7 +770,7 @@ function sendWatchVideoButton(recipientId, btnText, title) {
   callSendAPI(messageData);
 } // sendWatchVideoButton
 
-function sendPriceButton(recipientId, btnText) {
+function sendPriceButton(recipientId, btnText,buttonList) {
   let messageData = {
     "recipient": {
       "id": recipientId
@@ -779,17 +779,7 @@ function sendPriceButton(recipientId, btnText) {
         "payload": {
           "template_type": "button",
           "text": btnText, // item title
-          "buttons": [{
-              "type": "postback",
-              "title": "Yes",
-              "payload": "yes_confirm_order"
-            },
-            {
-              "type": "postback",
-              "title": "Not Now",
-              "payload": "not_now"
-            }
-          ]
+          "buttons": buttonList
         }
       }
     }
@@ -855,9 +845,9 @@ following is the template of an Element in a compactList
           "elements": compactListElements,
           // next is the more button
             "buttons": [{
-              "title": "View More",
+              "title": "None of these!",
               "type": "postback",
-              "payload": "View"
+              "payload": "Accessories"
             }]
           }
           }
@@ -1635,7 +1625,7 @@ function getPricing(senderID,item) {
             "payload": payloadStr
           }]
       });
-   }
+}
      compactListBuilder(senderID,catList);
  }
   // compactList(senderID,"Which category best matches this item?");
@@ -1898,7 +1888,22 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   pricingMessage = pricingMessage + packageDimensions;
   pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
   pricingMessage = pricingMessage.replace('/:\//g',':');
-  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage);
+
+  lowestPrice = finalAmmanPrice.toFixed(2);
+  var buttonList=[]
+  buttonList.push({
+      "type": "postback",
+      "title": "Price Details تفاصيل السعر",
+      "payload": "priceDetails"
+    });
+    buttonList.push({
+        "type": "postback",
+        "title": "prices from:"+lowestPrice,
+        "payload": "allPrices"
+      });
+  btnTxt = "Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage;
+  sendPriceButton(senderID,btnTxt,buttonList)
+//  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPrice.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
   //sendTextMessage(senderID,JSON.stringify(item));
 }
