@@ -355,22 +355,22 @@ function handleEvent(senderID, event) {
     return calculatePricing(senderID,payloadMsg.item);
   }
 
-  if(jsonpayload && payloadMsg.action == 'getPricingDetails') {
+  if(jsonpayload && payloadMsg.action == 'getPrDet') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
     var buttonList=[]
     buttonList.push({
         "type": "postback",
         "title": "Buy",
-        "payload": "Buy" //'{ "action" : "buy", "quotationObject": ' +  quotation +'}'
+        "payload": "Buy" //'{ "action" : "buy", "quote_obj": ' +  quotation +'}'
           });
       buttonList.push({
           "type": "postback",
           "title": "other prices from:"+lowestPrice,
-          "payload": "other" //'{ "action" : "morePrices", "quotationObject" : ' +  quotation +'}'
+          "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  quotation +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
-   var detailsMsg = pricingDetailMsg_en.replace("%P%",quotationObject.item.price);
+   var detailsMsg = pricingDetailMsg_en.replace("%P%",quote_obj.item.price);
     btnTxt = detailsMsg;
 
 
@@ -1662,15 +1662,17 @@ function getPricing(senderID,item) {
 
     for (i=0 ; i < cats.length && i<4 ; i++) {
       console.log("+++++++++++++= ",cats[i]);
+       cats[i].score=  cats[i].score.toFixed(2);
       item.category = cats[i].category_name;
       item.category_info = cats[i];
+      item.category_info._id = ''; // save space in messages
 
       var payload = {action: 'getPricing',
           item: item
             }
           payloadStr = JSON.stringify(payload);
         catList.push({
-          "title" : cats[i].category_name + "/"+ cats[i].score.toFixed(2),
+          "title" : cats[i].category_name + "/"+ cats[i].score,
           "subtitle"  : cats[i].category_name_ar,
           buttons : [{
             "title": "Select إختر",
@@ -1949,7 +1951,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   pricingDetailMsg_en = pricingDetailMsg_en.replace("%P%",item.price);
   console.log("*** pricingDetailMsg_en:",pricingDetailMsg_en)
 
-  var quotationObject = {
+  var quote_obj = {
     quotationNumber: 0,
     quotationDate: new Date(),
     item: item,
@@ -1961,23 +1963,23 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
     },
     notes: pricingMessage
   }
-  var getPricingDetailsPayload = {action: 'getPricingDetails',
-      quotation: quotationObject
+  var getPrDetPayload = {action: 'getPrDet',
+      quotation: quote_obj
         }
-          getPricingDetailsPayloadStr = JSON.stringify(getPricingDetailsPayload);
+          getPrDetPayloadStr = JSON.stringify(getPrDetPayload);
 
-var  payloadPriceDetails = '{ "action" : "getPricingDetails", "quotationObject" :' +   quotationObject +'}'
+var  payloadPriceDetails = '{ "action" : "getPrDet", "quote_obj" :' +   quote_obj +'}'
 console.log("++++++++++++++++++ payloadPriceDetails:",payloadPriceDetails)
   var buttonList=[]
   buttonList.push({
       "type": "postback",
       "title": "Price Details تفاصيل السعر",
-      "payload": getPricingDetailsPayloadStr
+      "payload": getPrDetPayloadStr
         });
     buttonList.push({
         "type": "postback",
         "title": "prices from:"+lowestPrice,
-        "payload": '{ "action" : "morePrices","quotationObject" :' +  quotationObject +'}'
+        "payload": '{ "action" : "morePrices","quote_obj" :' +  quote_obj +'}'
       });
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
   btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
