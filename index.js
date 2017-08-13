@@ -1905,6 +1905,21 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   pricingMessage = pricingMessage.replace('/:\//g',':');
 
   lowestPrice = finalAmmanPriceExpress.toFixed(2);
+
+  var quotationObject = {
+    quotationNumber: 0,
+    quotationDate: new Date(),
+    item: item,
+    priceJD: {
+      ammanExpress: finalAmmanPriceExpress.toFixed(2),
+      ammanStandard: 0,
+      aqabaExpress: 0,
+      aqabaStandard: 0
+    },
+    pricingDetils: "Pricing Details",
+    notes: pricingMessage
+  }
+
   var buttonList=[]
   buttonList.push({
       "type": "postback",
@@ -1923,19 +1938,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
   btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
 
-  var quotationObject = {
-    quotationNumber: 0,
-    quotationDate: new Date(),
-    item: item,
-    priceJD: {
-      ammanExpress: finalAmmanPriceExpress.toFixed(2),
-      ammanStandard: 0,
-      aqabaExpress: 0,
-      aqabaStandard: 0
-    },
-    pricingDetils: "Pricing Details",
-    notes: pricingMessage
-  }
+
   sendPriceButton(senderID,btnTxt,buttonList)
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
