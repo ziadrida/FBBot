@@ -800,28 +800,34 @@ function sendPriceButton(recipientId, btnText,buttonList) {
 
 
 function sendButton(recipientId, btnText) {
+console.log("=====> in sendButton:",recipientId);
+console.log("=====> in sendButton:",btnText);
   let messageData = {
     "recipient": {
       "id": recipientId
     },
-    "message": {
-        "payload": {
-          "template_type": "button",
-          "text": btnText,
-          "buttons": [{
-              "type": "postback",
-              "title": "Yes",
-              "payload": "yes_confirm_order"
-            },
-            {
-              "type": "postback",
-              "title": "Not Now",
-              "payload": "not_now"
-            }
-          ]
-        }
+    "message":{
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        "text":"What do you want to do next?",
+        "buttons":[
+          {
+            "type":"web_url",
+            "url":"http://www.techtownjo.com",
+            "title":"Show Website"
+          },
+          {
+            "type":"postback",
+            "title":"Start Chatting",
+            "payload":"USER_DEFINED_PAYLOAD"
+          }
+        ]
       }
     }
+  }
+}
 
   callSendAPI(messageData);
 } // sendButton
@@ -995,13 +1001,12 @@ function sendTextMessage(recipientId, messageText) {
 
 
 function callSendAPI(messageData) {
-  console.log("===========> in callSendAPI")
+  console.log("===========> in callSendAPI messageData:",messageData)
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {
       access_token: fb_access_token
     },
-
     method: 'POST',
     json: messageData
 
@@ -1014,6 +1019,7 @@ function callSendAPI(messageData) {
         messageId, recipientId);
     } else {
       console.error("<><><> Unable to send message. <><><>statusCode:", response.statusCode);
+      console.error("<><><> Unable to send message. <><><>statusCode:", response);
       //console.error(response);
       //console.error(error);
     }
