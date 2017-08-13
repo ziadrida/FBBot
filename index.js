@@ -22,7 +22,7 @@ const request = require('request');
 const app = express();
 var amazon = require('amazon-product-api');
 
-const pricingDetailMsg_ar = "  وزن الشحن المفترض بالكيلوغرام : 0.40 ملاحظة - وزن الشحن غالبا ما يكون أعلى من وزن القطعة. الرجاء التحقق أننا احتسبنا الوزن الصحيح.   			"+
+var pricingDetailMsg_ar = "  وزن الشحن المفترض بالكيلوغرام : 0.40 ملاحظة - وزن الشحن غالبا ما يكون أعلى من وزن القطعة. الرجاء التحقق أننا احتسبنا الوزن الصحيح.   			"+
 ".  الكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0 			"+
       " -------------------------------------------------------------------------------------- 			"+
       " .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 			"+
@@ -31,7 +31,7 @@ const pricingDetailMsg_ar = "  وزن الشحن المفترض بالكيلوغ
       "  السعر من المصدر: 149.99 $  يتضمن الشحن داخل بلد المصدر وقيمته   0.0$ 			"+
       " الصنف - لعبة / اكس بوكس ​​بلاي ستيشن PC  : الجمرك فى عمان 35.0%  وضريبة  المبيعات فى عمان  16.0% --- الجمرك فى العقبة  0% و ضريبة المبيعات فى العقبة  7.0% 			"+
       "  			 السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + التخليص 			"
-      const pricingDetailMsg_en = " Assumed Shipping  Weight in KG: %WT% - Note that shipping weight is usually higher than actual product weight (Please verify that we calculated the correct shipping weight)"+
+      var pricingDetailMsg_en = " Assumed Shipping  Weight in KG: %WT% - Note that shipping weight is usually higher than actual product weight (Please verify that we calculated the correct shipping weight)"+
       +" Warranty is at source country (You can buy local warranty for  15.0% ) 			"+
       " -------------------------------------------------------------------------------------- 			"+
       " We guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage  			"+
