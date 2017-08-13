@@ -1947,6 +1947,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
 
   pricingDetailMsg_en = pricingDetailMsg_en.replace("%P%",item.price);
   console.log("*** pricingDetailMsg_en:",pricingDetailMsg_en)
+
   var quotationObject = {
     quotationNumber: 0,
     quotationDate: new Date(),
@@ -1960,13 +1961,18 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
     pricingDetails: pricingDetailMsg_en,
     notes: pricingMessage
   }
+  var getPricingDetailsPayload = {action: 'getPricingDetails',
+      quotation: quotationObject
+        }
+          getPricingDetailsPayloadStr = JSON.stringify(getPricingDetailsPayload);
+        
 var  payloadPriceDetails = '{ "action" : "getPricingDetails", "quotationObject" :' +   quotationObject +'}'
 console.log("++++++++++++++++++ payloadPriceDetails:",payloadPriceDetails)
   var buttonList=[]
   buttonList.push({
       "type": "postback",
       "title": "Price Details تفاصيل السعر",
-      "payload": '{ "action" : "getPricingDetails", "quotationObject" :' +   quotationObject +'}'
+      "payload": getPricingDetailsPayloadStr
         });
     buttonList.push({
         "type": "postback",
