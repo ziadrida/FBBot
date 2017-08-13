@@ -324,7 +324,7 @@ function handleEvent(senderID, event) {
   if (typeof event != 'undefined' && event.postback && event.postback.payload) {
 
     payloadText = event.postback.payload;
-    console.log('-------> postback payload Text::', payloadText);
+    console.log('-------> postback payload Text::', JSON.stringify(payloadText));
   } else {
     // not a postback - return
     return;
@@ -367,7 +367,7 @@ function handleEvent(senderID, event) {
       buttonList.push({
           "type": "postback",
           "title": "other prices from:"+lowestPrice,
-          "payload": '{ "action" : "morePrices", "quotationObject":' +  quotationObject +'}'
+          "payload": '{ "action" : "morePrices", "quotationObject" : ' +  quotationObject +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
     btnTxt = quotationObject.pricingDetails;
@@ -1960,7 +1960,8 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
     pricingDetails: pricingDetailMsg_en,
     notes: pricingMessage
   }
-
+var  payloadPriceDetails = '{ "action" : "getPricingDetails", "quotationObject" :' +   quotationObject +'}'
+console.log("++++++++++++++++++ payloadPriceDetails:",payloadPriceDetails)
   var buttonList=[]
   buttonList.push({
       "type": "postback",
