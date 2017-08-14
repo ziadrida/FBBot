@@ -1665,7 +1665,9 @@ function getPricing(senderID,item) {
        cats[i].score=  cats[i].score.toFixed(2);
       item.category = cats[i].category_name;
       item.category_info = cats[i];
+      // REDUCE ITEM SIZE
       item.category_info._id = ''; // save space in messages
+      item.category_info.keywords='';
 
       var payload = {action: 'getPricing',
           item: item
@@ -1944,7 +1946,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   pricingMessage = pricingMessage + packageDimensions;
   pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
-  pricingMessage = pricingMessage.replace('/:\//g',':');
+  pricingMessage = pricingMessage.replace('/: \//g',':');
 
   lowestPrice = finalAmmanPriceExpress.toFixed(2);
 
@@ -1952,8 +1954,8 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   console.log("*** pricingDetailMsg_en:",pricingDetailMsg_en)
 
   var quote_obj = {
-    quotationNumber: 0,
-    quotationDate: new Date(),
+    quote_no: 0,
+    quote_date: new Date(),
     item: item,
     price: {
       amm_exp: finalAmmanPriceExpress.toFixed(2),
@@ -1969,7 +1971,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
           getPrDetPayloadStr = JSON.stringify(getPrDetPayload);
 
 var  payloadPriceDetails = '{ "action" : "getPrDet", "quote_obj" :' +   quote_obj +'}'
-console.log("++++++++++++++++++ payloadPriceDetails:",payloadPriceDetails)
+console.log("++++++++++++++++++ payloadPriceDetails:",JSON.stringify(payloadPriceDetails));
   var buttonList=[]
   buttonList.push({
       "type": "postback",
