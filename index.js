@@ -369,7 +369,7 @@ function handleEvent(senderID, event) {
     chargableWeight: payloadMsg.quotation.item.chargableWeight,
     shipping: payloadMsg.quotation.item.shipping,
     shippingAtOriginMsg_ar: (payloadMsg.quotation.item.shipping <0?     "يتضمن الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
-      shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
+    shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
             'includes shipping at origin of:' +pricing.shipping +' USD'),
     price: payloadMsg.quotation.item.price,
     category_name: payloadMsg.quotation.item.category_info.category_name,
@@ -401,7 +401,7 @@ Our guarantee:
 var pricingDetailMsg_ar =
   pricing.title+
       "\n  السعر من المصدر:<سعر>$  "+
-$shippingAtOriginMsg_ar +
+   shippingAtOriginMsg_ar +
       "\nوزن الشحن: <وزن>.  وزن الشحن قد يكون أعلى من وزن القطعة"+
 
 "\n الصنف: <صنف>"+
