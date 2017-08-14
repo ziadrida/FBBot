@@ -372,9 +372,10 @@ function handleEvent(senderID, event) {
     shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
             'includes shipping at origin of:' +pricing.shipping +' USD'),
     price: payloadMsg.quotation.item.price,
-    category_name: payloadMsg.quotation.item.category_info.shippingAtOriginMsg_arcategory_name,
+    category_name: payloadMsg.quotation.item.category_info.category_name,
+    category_name_ar: payloadMsg.quotation.item.category_info.category_name_ar,
     amm_customs: (payloadMsg.quotation.item.category_info.customs * 100).toFixed(1),
-    tax_amm: (payloadMsg.quotation.item.category_info.tshippingAtOriginMsg_arax_amm * 100).toFixed(1),
+    tax_amm: (payloadMsg.quotation.item.category_info.tax_amm * 100).toFixed(1),
     tax_aqaba: (payloadMsg.quotation.item.category_info.tax_aqaba * 100).toFixed(1),
     aqaba_customs: "0"
   }
@@ -415,7 +416,7 @@ var detailsMsg_ar = pricingDetailMsg_ar;
 
 detailsMsg_ar = detailsMsg_ar.replace("<سعر>",pricing.chargableWeight);
 detailsMsg_ar = detailsMsg_ar.replace("<شحن>",pricing.shipping);
-detailsMsg_ar = detailsMsg_ar.replace("<صنف>",pricing.category_name);
+detailsMsg_ar = detailsMsg_ar.replace("<صنف>",pricing.category_name_ar);
 detailsMsg_ar = detailsMsg_ar.replace("<وزن>",pricing.chargableWeight);
 detailsMsg_ar = detailsMsg_ar.replace("<عمان جمرك>",pricing.chargableWeight);
 detailsMsg_ar = detailsMsg_ar.replace("<عمان مبيعات>",pricing.tax_amm);
