@@ -364,7 +364,6 @@ function handleEvent(senderID, event) {
           "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
-   var detailsMsg_ar = pricingDetailMsg_ar.replace("<سعر>",payloadMsg.quotation.item.price);
   var pricing = {
     title: payloadMsg.quotation.item.title.substing(0,10) + '...',
     chargableWeight: payloadMsg.quotation.item.chargableWeight,
@@ -408,16 +407,18 @@ var pricingDetailMsg_ar =
 			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
 "\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
 "\n .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 	";
+var detailsMsg_ar = pricingDetailMsg_ar;
 
-pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<وزن>",pricing.chargableWeight);
 
-pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<سعر>",pricing.chargableWeight);
+detailsMsg_ar = detailsMsg_ar.replace("<وزن>",pricing.chargableWeight);
 
-pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<عمان جمرك>",pricing.chargableWeight);
-pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<عمان مبيعات>",pricing.tax_amm);
+detailsMsg_ar = detailsMsg_ar.replace("<سعر>",pricing.chargableWeight);
 
-pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<عقبة جمرك>",pricing.aqaba_customs);
-pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqaba);
+detailsMsg_ar = detailsMsg_ar.replace("<عمان جمرك>",pricing.chargableWeight);
+detailsMsg_ar = detailsMsg_ar.replace("<عمان مبيعات>",pricing.tax_amm);
+
+detailsMsg_ar = detailsMsg_ar.replace("<عقبة جمرك>",pricing.aqaba_customs);
+detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqaba);
 
   //  btnTxt = JSON.stringify(detailsMsg_en);
 
