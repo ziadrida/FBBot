@@ -380,14 +380,14 @@ function handleEvent(senderID, event) {
     shipping: payloadMsg.quotation.item.shipping
   }
    var detailsMsg_en =
-   "Chargable weight: ${pricing.chargableWeight}kg. Shipping weight may be higher than actual product weight\n"+
-   "Price at origin:$<price> ;includes shipping at origin of:$${pricing.shipping}\n"+
-   "Category: <category_name>\n"+
-   "Amman customs of <amm_customs>% and tax:<amm_tax>%\n" +
-   "Aqaba customs 0% and tax <aqaba_customs>%\n"+
-   "Warranty is at source country (add ${warranty_price}% for local warranty)\n"+
-   "Prices include the actual item price + all shipping + all taxes and expenses.\n" +
-   "Our guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage";
+   `Chargable weight: ${pricing.chargableWeight}kg. Shipping weight may be higher than actual product weight\n`+
+   `Price at origin:$<price> ;includes shipping at origin of:$${pricing.shipping}\n`+
+   `Category: <category_name>\n`+
+   `Amman customs of <amm_customs>% and tax:<amm_tax>%\n` +
+   `Aqaba customs 0% and tax <aqaba_customs>%\n`+
+   `Warranty is at source country (add ${warranty_price}% for local warranty)\n`+
+   `Prices include the actual item price + all shipping + all taxes and expenses.\n` +
+   `Our guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage`;
    /*detailsMsg_en = pricingDetailMsg_en.replace("<price>",payloadMsg.quotation.item.price).
     replace(" <chargableWeight>",payloadMsg.quotation.item.chargableWeight).
     replace(" <shippping>",payloadMsg.quotation.item.shipping).
@@ -395,7 +395,7 @@ function handleEvent(senderID, event) {
       replace(" <amm_customs>",payloadMsg.quotation.item.category_info.category_name).
 */
 
-    btnTxt = detailsMsg_en;
+    btnTxt = JSON.stringify(detailsMsg_en);
 
 
     return sendPriceButton(senderID,btnTxt,buttonList)
