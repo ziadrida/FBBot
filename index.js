@@ -388,7 +388,7 @@ function handleEvent(senderID, event) {
   }
    var detailsMsg_en =
    `Chargable weight: ${pricing.chargableWeight} KG. Shipping weight may be higher than actual product weight
-   Price at origin:$<price> ;${pricing.shippingAtOriginMsg}
+   Price at origin:${pricing.price} ;${pricing.shippingAtOriginMsg}
    Category: ${pricing.category_name}
    Amman customs of ${pricing.amm_customs}% and tax:${pricing.tax_amm}%
    Aqaba customs 0% and tax ${pricing.aqaba_customs}%
@@ -402,10 +402,10 @@ function handleEvent(senderID, event) {
       replace(" <amm_customs>",payloadMsg.quotation.item.category_info.category_name).
 */
 
-    btnTxt = JSON.stringify(detailsMsg_en);
+  //  btnTxt = JSON.stringify(detailsMsg_en);
 
 
-    return sendPriceButton(senderID,btnTxt,buttonList)
+    return sendPriceButton(senderID,detailsMsg_en,buttonList)
 
   }
 
