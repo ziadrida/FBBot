@@ -199,6 +199,7 @@ db = mongoUtil.getDb(function() {
 
     // get user public profile
     // if already in session, this function will just return what in the session
+
     getUserPublicInfo(senderID, function(fbprofile) {
       //console.log("_____ after getUserPublicInfo - fbprofile:", fbprofile);
 
@@ -1773,6 +1774,13 @@ function getUserPublicInfo(fbId, callback) {
     console.log('In getUserPublicInfo - fbprofile already defined:', sessions[sessionId].fbprofile.first_name);
     return callback(sessions[sessionId].fbprofile);
   }
+  if (userObj && userObj.first_name) {
+    // we have a userObj - copy data from DB usr to fbprofile
+    // fbprofile may change - will need to change code to update with new data
+    sessions[sessionId].fbprofile.locale = sessions[sessionId].userObj.locale;
+    sessions[sessionId].fbprofile.first_name = sessions[sessionId].userObj.first_name;
+    return callback(sessions[sessionId].fbprofile);
+  }
 
   var url = 'https://graph.facebook.com/v2.6/' + fbId;
   var qs = {
@@ -2051,6 +2059,7 @@ console.log("++++++++++++++++++ getPrDetPayloadStr:",JSON.stringify(getPrDetPayl
   btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
 // TODO
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
+
 console.log("user locale:",sessions[sessionId].fbprofile.locale.toLowerCase());
 if (sessions[sessionId].fbprofile &&
   sessions[sessionId].fbprofile.locale.toLowerCase().includes("en")) {
