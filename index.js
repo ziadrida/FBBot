@@ -372,9 +372,9 @@ function handleEvent(senderID, event) {
     shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
             'includes shipping at origin of:' +pricing.shipping +' USD'),
     price: payloadMsg.quotation.item.price,
-    category_name: payloadMsg.quotation.item.category_info.category_name,
+    category_name: payloadMsg.quotation.item.category_info.shippingAtOriginMsg_arcategory_name,
     amm_customs: (payloadMsg.quotation.item.category_info.customs * 100).toFixed(1),
-    tax_amm: (payloadMsg.quotation.item.category_info.tax_amm * 100).toFixed(1),
+    tax_amm: (payloadMsg.quotation.item.category_info.tshippingAtOriginMsg_arax_amm * 100).toFixed(1),
     tax_aqaba: (payloadMsg.quotation.item.category_info.tax_aqaba * 100).toFixed(1),
     aqaba_customs: "0"
   }
@@ -401,7 +401,7 @@ Our guarantee:
 var pricingDetailMsg_ar =
   pricing.title+
       "\n  السعر من المصدر:<سعر>$  "+
-   shippingAtOriginMsg_ar +
+   pricing.shippingAtOriginMsg_ar +
       "\nوزن الشحن: <وزن>.  وزن الشحن قد يكون أعلى من وزن القطعة"+
 
 "\n الصنف: <صنف>"+
