@@ -365,7 +365,7 @@ function handleEvent(senderID, event) {
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
   var pricing = {
-    title: payloadMsg.quotation.item.title.substing(0,10) + '...',
+    title: payloadMsg.quotation.item.title.substring(0,10) + '...',
     chargableWeight: payloadMsg.quotation.item.chargableWeight,
     shipping: payloadMsg.quotation.item.shipping,
     shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
