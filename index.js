@@ -2050,6 +2050,8 @@ console.log("++++++++++++++++++ getPrDetPayloadStr:",JSON.stringify(getPrDetPayl
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
   btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
 // TODO
+console.log("user locale:",JSON.stringify(sessions[sessionId]));
+console.log("user locale:",sessions[sessionId].fbprofile.locale.toLowerCase());
 if (sessions[sessionId].fbprofile &&
   sessions[sessionId].fbprofile.locale.toLowerCase().includes("en")) {
   btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
