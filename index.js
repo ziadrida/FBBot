@@ -365,7 +365,7 @@ function handleEvent(senderID, event) {
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
   var pricing = {
-    title: payloadMsg.quotation.item.title.substring(0,10) + '...',
+    title: payloadMsg.quotation.item.title.substring(0,30) + '...',
     chargableWeight: payloadMsg.quotation.item.chargableWeight,
     shipping: payloadMsg.quotation.item.shipping,
     shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
@@ -402,18 +402,18 @@ var pricingDetailMsg_ar =
       "\nوزن الشحن: <وزن>.  وزن الشحن قد يكون أعلى من وزن القطعة"+
 
 "\n الصنف: <صنف>"+
-"\n الجمرك فى عمان <عمان جمرك> وضريبة  المبيعات فى عمان  <عمان مبيعات>" +
-"\n الجمرك فى العقبة <عقبة جمرك> وضريبة  المبيعات فى العقبة <عقبة مبيعات>" +
+"\n الجمرك فى عمان <عمان جمرك>% وضريبة  المبيعات فى عمان  <عمان مبيعات>%" +
+"\n الجمرك فى العقبة <عقبة جمرك>% وضريبة  المبيعات فى العقبة <عقبة مبيعات>%" +
 			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
 "\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
 "\n .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 	";
 var detailsMsg_ar = pricingDetailMsg_ar;
 
 
-detailsMsg_ar = detailsMsg_ar.replace("<وزن>",pricing.chargableWeight);
-
 detailsMsg_ar = detailsMsg_ar.replace("<سعر>",pricing.chargableWeight);
-
+detailsMsg_ar = detailsMsg_ar.replace("<شحن>",pricing.shipping);
+detailsMsg_ar = detailsMsg_ar.replace("<الصنف>",pricing.category_name);
+detailsMsg_ar = detailsMsg_ar.replace("<وزن>",pricing.chargableWeight);
 detailsMsg_ar = detailsMsg_ar.replace("<عمان جمرك>",pricing.chargableWeight);
 detailsMsg_ar = detailsMsg_ar.replace("<عمان مبيعات>",pricing.tax_amm);
 
