@@ -31,14 +31,15 @@ var pricingDetailMsg_ar = "  وزن الشحن المفترض بالكيلوغر
       "  السعر من المصدر: 149.99 $  يتضمن الشحن داخل بلد المصدر وقيمته   0.0$ 			"+
       " الصنف - لعبة / اكس بوكس ​​بلاي ستيشن PC  : الجمرك فى عمان 35.0%  وضريبة  المبيعات فى عمان  16.0% --- الجمرك فى العقبة  0% و ضريبة المبيعات فى العقبة  7.0% 			"+
       "  			 السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + التخليص 			"
-      var pricingDetailMsg_en = " Assumed Shipping  Weight in KG: %WT% - Note that shipping weight is usually higher than actual product weight (Please verify that we calculated the correct shipping weight)"+
-      +" Warranty is at source country (You can buy local warranty for  15.0% ) 			"+
-      " -------------------------------------------------------------------------------------- 			"+
-      " We guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage  			"+
-      " ----------------------------------------------------------------------------------- 			"+
-      " Pricing details as follows: 			"+
-      " Price at origin:$%P% - Including  Shipping at Origin of:$%SH% 			"+
-      "Category: Game Console -  Amman Customs of %AC% and Amman Tax:%AT%. Aqaba Customs %AQC% and Tax %AT% 			"+
+      var pricingDetailMsg_en =
+      "Shipping  Weight in KG: %WT% - shipping weight may be higher than actual product weight\n"+
+      +" Warranty is at source country (add 15% for local warranty)\n"+
+      "We guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage\n"+
+      "Pricing details as follows:\n"+
+      "Price at origin:$%P% - Including  Shipping at Origin of:$%SH%\n"+
+      "Category: %CAT%\n"+
+      "Amman Customs of %AC% and Amman Tax:%AT%\n"
+      "Aqaba Customs %AQC% and Tax %AT%\n"+
       "Price includes the actual item price + shipping + customs + taxes + clearance"
 // get token from the environment
 const firebase_auth_uri = process.env.FIREBASE_AUTH_URI
