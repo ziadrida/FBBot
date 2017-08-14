@@ -22,15 +22,17 @@ const request = require('request');
 const app = express();
 var amazon = require('amazon-product-api');
 
-var pricingDetailMsg_ar = "  وزن الشحن المفترض بالكيلوغرام : 0.40 ملاحظة - وزن الشحن غالبا ما يكون أعلى من وزن القطعة. الرجاء التحقق أننا احتسبنا الوزن الصحيح.   			"+
-".  الكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0 			"+
-      " -------------------------------------------------------------------------------------- 			"+
-      " .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 			"+
-      " ----------------------------------------------------------------------------------- 			"+
-      "  ( تفاصيل السعر فى ما يلى: ( نضمن أفضل الأسعار عن أى منافس   			"+
-      "  السعر من المصدر: 149.99 $  يتضمن الشحن داخل بلد المصدر وقيمته   0.0$ 			"+
-      " الصنف - لعبة / اكس بوكس ​​بلاي ستيشن PC  : الجمرك فى عمان 35.0%  وضريبة  المبيعات فى عمان  16.0% --- الجمرك فى العقبة  0% و ضريبة المبيعات فى العقبة  7.0% 			"+
-      "  			 السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + التخليص 			"
+var pricingDetailMsg_ar =
+"\nوزن الشحن: <وزن>.  وزن الشحن قد يكون أعلى من وزن القطعة"+
+      "\n تفاصيل السعر فى ما يلى:"+
+      "\n  السعر من المصدر:<سعر>$  يتضمن الشحن داخل بلد المصدر وقيمته  <شحن>$"+
+"\n الصنف: <صنف>"+
+"\n الجمرك فى عمان <عمان جمرك> وضريبة  المبيعات فى عمان  <عمان مبيعات>" +
+"\n الجمرك فى العقبة <عقبة جمرك> وضريبة  المبيعات فى العقبة <عقبة مبيعات>" +
+			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
+"\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
+"\n .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 	";
+
       var pricingDetailMsg_en =
       "Chargable weight: %WT%kg. Shipping weight may be higher than actual product weight\n"+
       "Price at origin:$%P% ;includes shipping at origin of:$%SH%\n"+
@@ -38,7 +40,7 @@ var pricingDetailMsg_ar = "  وزن الشحن المفترض بالكيلوغر
       "Amman customs of %AC% and tax:%AT%\n" +
       "Aqaba customs %AQC% and tax %AT%\n"+
       "Warranty is at source country (add 15% for local warranty)\n"+
-      "Quotes price includes the actual item price + all shipping + all taxes and expenses.\n" +
+      "Prices include the actual item price + all shipping + all taxes and expenses.\n" +
       "Our guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage";
 
 // get token from the environment
@@ -372,7 +374,7 @@ function handleEvent(senderID, event) {
           "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
-   var detailsMsg = pricingDetailMsg_en.replace("%P%",payloadMsg.quotation.item.price);
+   var detailsMsg = pricingDetailMsg_ar.replace("<سعر>",payloadMsg.quotation.item.price);
     btnTxt = detailsMsg;
 
 
