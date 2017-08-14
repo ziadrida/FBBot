@@ -22,16 +22,6 @@ const request = require('request');
 const app = express();
 var amazon = require('amazon-product-api');
 const warranty_price = '15';
-var pricingDetailMsg_ar =
-"\nوزن الشحن: <وزن>.  وزن الشحن قد يكون أعلى من وزن القطعة"+
-      "\n تفاصيل السعر فى ما يلى:"+
-      "\n  السعر من المصدر:<سعر>$  يتضمن الشحن داخل بلد المصدر وقيمته  <شحن>$"+
-"\n الصنف: <صنف>"+
-"\n الجمرك فى عمان <عمان جمرك> وضريبة  المبيعات فى عمان  <عمان مبيعات>" +
-"\n الجمرك فى العقبة <عقبة جمرك> وضريبة  المبيعات فى العقبة <عقبة مبيعات>" +
-			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
-"\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
-"\n .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 	";
 
       var pricingDetailMsg_en =
       "Chargable weight: <chargableWeight>kg. Shipping weight may be higher than actual product weight\n"+
@@ -376,6 +366,7 @@ function handleEvent(senderID, event) {
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
    var detailsMsg_ar = pricingDetailMsg_ar.replace("<سعر>",payloadMsg.quotation.item.price);
   var pricing = {
+    title: payloadMsg.quotation.item.title.substing(0,10) + '...',
     chargableWeight: payloadMsg.quotation.item.chargableWeight,
     shipping: payloadMsg.quotation.item.shipping,
     shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
@@ -384,14 +375,16 @@ function handleEvent(senderID, event) {
     category_name: payloadMsg.quotation.item.category_info.category_name,
     amm_customs: (payloadMsg.quotation.item.category_info.customs * 100).toFixed(1),
     tax_amm: (payloadMsg.quotation.item.category_info.tax_amm * 100).toFixed(1),
-    tax_aqaba: (payloadMsg.quotation.item.category_info.tax_aqaba * 100).toFixed(1)
+    tax_aqaba: (payloadMsg.quotation.item.category_info.tax_aqaba * 100).toFixed(1),
+    aqaba_customs: "0"
   }
    var detailsMsg_en =
-  `Chargable weight: ${pricing.chargableWeight} KG. (shipping weight may be higher than actual product weight)
+  `${pricing.title}
 Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
+Chargable weight: ${pricing.chargableWeight} KG. (shipping weight may be higher than actual product weight)
 Category: ${pricing.category_name}
 Amman customs of ${pricing.amm_customs}% and tax:${pricing.tax_amm}%
-Aqaba customs 0% and tax ${pricing.aqaba_customs}%
+Aqaba customs 0% and tax ${pricing.aqaba_tax}%
 Warranty is at origin (add ${warranty_price}% for local warranty)
 Prices include the actual item price + all shipping + all taxes and expenses.
 Our guarantee:
@@ -404,11 +397,32 @@ Our guarantee:
       replace(" <category_name>",payloadMsg.quotation.item.category_info.category_name).
       replace(" <amm_customs>",payloadMsg.quotation.item.category_info.category_name).
 */
+var pricingDetailMsg_ar =
+  pricing.title+
+      "\n  السعر من المصدر:<سعر>$  يتضمن الشحن داخل بلد المصدر وقيمته  <شحن>$"+
+      "\nوزن الشحن: <وزن>.  وزن الشحن قد يكون أعلى من وزن القطعة"+
+
+"\n الصنف: <صنف>"+
+"\n الجمرك فى عمان <عمان جمرك> وضريبة  المبيعات فى عمان  <عمان مبيعات>" +
+"\n الجمرك فى العقبة <عقبة جمرك> وضريبة  المبيعات فى العقبة <عقبة مبيعات>" +
+			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
+"\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
+"\n .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 	";
+
+pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<وزن>",pricing.chargableWeight);
+
+pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<سعر>",pricing.chargableWeight);
+
+pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<عمان جمرك>",pricing.chargableWeight);
+pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<عمان مبيعات>",pricing.tax_amm);
+
+pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<عقبة جمرك>",pricing.aqaba_customs);
+pricingDetailMsg_ar = pricingDetailMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqaba);
 
   //  btnTxt = JSON.stringify(detailsMsg_en);
 
 
-    return sendPriceButton(senderID,detailsMsg_en,buttonList)
+    return sendPriceButton(senderID,detailsMsg_ar,buttonList)
 
   }
 
