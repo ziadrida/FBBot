@@ -198,9 +198,9 @@ db = mongoUtil.getDb(function() {
     } // sessions[sessionId].context == "set_entity"
 
     // get user public profile
-
+    // if already in session, this function will just return what in the session
     getUserPublicInfo(senderID, function(fbprofile) {
-      console.log("_____ after getUserPublicInfo - fbprofile:", fbprofile);
+      //console.log("_____ after getUserPublicInfo - fbprofile:", fbprofile);
 
       if (typeof fbprofile != 'undefined' && fbprofile) {
         console.log("fbprofile first_name:", fbprofile.first_name);
@@ -220,6 +220,7 @@ db = mongoUtil.getDb(function() {
         MongoClient.connect(mongodbUrl, function(err, db) {
           assert.equal(null, err);
           //console.log("------ call findOrCreateUser");
+          // this function will return userObj in session if found
           findOrCreateUser(senderID, fbprofile, db, function(dbUserObj) {
             // set user info
             userObj = dbUserObj;
@@ -404,12 +405,12 @@ var pricingDetailMsg_ar =
   pricing.title+
       "\n  السعر من المصدر:<سعر>$  "+
    pricing.shippingAtOriginMsg_ar +
-      "\nوزن الشحن: <وزن>كغم.  وزن الشحن قد يكون أعلى من وزن القطعة"+
-
-"\n الصنف: <صنف>"+
-"عمان: الجمرك <عمان جمرك>% ،ضريبةالمبيعات %<عمان مبيعات> و "
+      "\n  وزن الشحن: <وزن>كغم.  وزن الشحن قد يكون أعلى من وزن القطعة "+
+" الصنف: <صنف> "+
 + "\n" +
-" الجمرك فى العقبة 0% وضريبة  المبيعات فى العقبة %<عقبة مبيعات> و" +
+"عمان: الجمرك <عمان جمرك>% ،ضريبةالمبيعات %<عمان مبيعات>   "
++ "\n" +
+"عقبة: الجمرك 0% وضريبةالمبيعات %<عقبة مبيعات>  " +
 + "\n" +
 			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
 "\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
@@ -429,8 +430,12 @@ detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqab
 
   //  btnTxt = JSON.stringify(detailsMsg_en);
 
+if (sessions[sessionId].fbprofile && sessions[sessionId].fbprofile.locale.toLowerCase().includes("en")) {
+  return sendPriceButton(senderID,detailsMsg,buttonList)
+} else {
+  return sendPriceButton(senderID,detailsMsg_ar,buttonList)
+}
 
-    return sendPriceButton(senderID,detailsMsg_ar,buttonList)
 
   }
 
