@@ -21,7 +21,7 @@ const cheerio = require('cheerio');
 const request = require('request');
 const app = express();
 var amazon = require('amazon-product-api');
-
+const warranty_price = '15';
 var pricingDetailMsg_ar =
 "\nوزن الشحن: <وزن>.  وزن الشحن قد يكون أعلى من وزن القطعة"+
       "\n تفاصيل السعر فى ما يلى:"+
@@ -34,12 +34,12 @@ var pricingDetailMsg_ar =
 "\n .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 	";
 
       var pricingDetailMsg_en =
-      "Chargable weight: %WT%kg. Shipping weight may be higher than actual product weight\n"+
-      "Price at origin:$%P% ;includes shipping at origin of:$%SH%\n"+
-      "Category: %CAT%\n"+
-      "Amman customs of %AC% and tax:%AT%\n" +
-      "Aqaba customs %AQC% and tax %AT%\n"+
-      "Warranty is at source country (add 15% for local warranty)\n"+
+      "Chargable weight: <chargableWeight>kg. Shipping weight may be higher than actual product weight\n"+
+      "Price at origin:$<price> ;includes shipping at origin of:$<shippping>\n"+
+      "Category: <category_name>\n"+
+      "Amman customs of <amm_customs>% and tax:<amm_tax>%\n" +
+      "Aqaba customs 0% and tax <aqaba_customs>%\n"+
+      "Warranty is at source country (add ${warranty_price}% for local warranty)\n"+
       "Prices include the actual item price + all shipping + all taxes and expenses.\n" +
       "Our guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage";
 
@@ -374,8 +374,28 @@ function handleEvent(senderID, event) {
           "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
-   var detailsMsg = pricingDetailMsg_ar.replace("<سعر>",payloadMsg.quotation.item.price);
-    btnTxt = detailsMsg;
+   var detailsMsg_ar = pricingDetailMsg_ar.replace("<سعر>",payloadMsg.quotation.item.price);
+  var pricing = {
+    chargableWeight: payloadMsg.quotation.item.chargableWeight,
+    shipping: payloadMsg.quotation.item.shipping
+  }
+   var detailsMsg_en =
+   "Chargable weight: ${pricing.chargableWeight}kg. Shipping weight may be higher than actual product weight\n"+
+   "Price at origin:$<price> ;includes shipping at origin of:$${pricing.shipping}\n"+
+   "Category: <category_name>\n"+
+   "Amman customs of <amm_customs>% and tax:<amm_tax>%\n" +
+   "Aqaba customs 0% and tax <aqaba_customs>%\n"+
+   "Warranty is at source country (add ${warranty_price}% for local warranty)\n"+
+   "Prices include the actual item price + all shipping + all taxes and expenses.\n" +
+   "Our guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage";
+   /*detailsMsg_en = pricingDetailMsg_en.replace("<price>",payloadMsg.quotation.item.price).
+    replace(" <chargableWeight>",payloadMsg.quotation.item.chargableWeight).
+    replace(" <shippping>",payloadMsg.quotation.item.shipping).
+      replace(" <category_name>",payloadMsg.quotation.item.category_info.category_name).
+      replace(" <amm_customs>",payloadMsg.quotation.item.category_info.category_name).
+*/
+
+    btnTxt = detailsMsg_en;
 
 
     return sendPriceButton(senderID,btnTxt,buttonList)
@@ -1953,9 +1973,6 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
   pricingMessage = pricingMessage.replace('/: \//g',':');
 
   lowestPrice = finalAmmanPriceExpress.toFixed(2);
-
-  pricingDetailMsg_en = pricingDetailMsg_en.replace("%P%",item.price);
-  console.log("*** pricingDetailMsg_en:",pricingDetailMsg_en)
 
   var quote_obj = {
     quote_no: 0,
