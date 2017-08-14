@@ -9,6 +9,7 @@ var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 var db;
+
 var callCount = 0;
 var amazonClient ;
 // parse URL
@@ -406,8 +407,10 @@ var pricingDetailMsg_ar =
       "\nوزن الشحن: <وزن>كغم.  وزن الشحن قد يكون أعلى من وزن القطعة"+
 
 "\n الصنف: <صنف>"+
-"\n الجمرك فى عمان <عمان جمرك>% وضريبة  المبيعات فى عمان  <عمان مبيعات>%" +
-"\n الجمرك فى العقبة 0% وضريبة  المبيعات فى العقبة <عقبة مبيعات>%" +
+"عمان: الجمرك <عمان جمرك>% ،ضريبةالمبيعات %<عمان مبيعات> و "
++ "\n" +
+" الجمرك فى العقبة 0% وضريبة  المبيعات فى العقبة %<عقبة مبيعات> و" +
++ "\n" +
 			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
 "\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
 "\n .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 	";
@@ -419,7 +422,7 @@ detailsMsg_ar = detailsMsg_ar.replace("<سعر>",pricing.price);
 detailsMsg_ar = detailsMsg_ar.replace("<شحن>",pricing.shipping);
 detailsMsg_ar = detailsMsg_ar.replace("<صنف>",pricing.category_name_ar);
 detailsMsg_ar = detailsMsg_ar.replace("<وزن>",pricing.chargableWeight);
-detailsMsg_ar = detailsMsg_ar.replace("<عمان جمرك>",pricing.customs);
+detailsMsg_ar = detailsMsg_ar.replace("<عمان جمرك>",pricing.amm_customs);
 detailsMsg_ar = detailsMsg_ar.replace("<عمان مبيعات>",pricing.tax_amm);
 
 detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqaba);
@@ -569,7 +572,7 @@ function determineResponse(event) {
   // and send back the example. Otherwise, just echo the text we received.
 
   if (compareText.includes("button")) {
-      console.log("before insertAllCats")
+    //  console.log("before insertAllCats")
   //  let n = categories.insertAllCats();
   //  let n = categories.insertAllCatsArabic();
   //categories.updateCatArabicName();
@@ -586,7 +589,7 @@ function determineResponse(event) {
   if (typeof userMsg != 'undefined' && userMsg.action === "*pr") {
     getPricing(senderID,userMsg);
     return;
-  } //if action *pr
+  } // action *pr
 
 
   if (typeof userMsg != 'undefined' && userMsg.action === "*report") {
@@ -610,7 +613,7 @@ function determineResponse(event) {
   // if message contains http, then it is a pricing request
   if (compareText.includes("http")) {
     console.log("got HTTP message");
-    sendTextMessage(senderID,"Pricing now... moments please...!")
+    sendTextMessage(senderID,"Pricing now...")
     return processHttpRequest(event);
   } // end of if http
 
@@ -1150,12 +1153,9 @@ function processHttpRequest(event,callback) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
   var messageId = message.mid;
-
   var messageText = message.text;
   var messageAttachments = message.attachments;
-
   let compareText = messageText.toLowerCase();
-
   let domainName = parseDomain(compareText);
 
   if (typeof domainName != 'undefined' && domainName) {
@@ -1168,7 +1168,6 @@ function processHttpRequest(event,callback) {
         db.close();
       });
     }); // connect
-
 
     // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
     var insertMesssageText = function(db, callback) {
