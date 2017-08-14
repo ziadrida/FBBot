@@ -381,7 +381,7 @@ function handleEvent(senderID, event) {
     tax_aqaba: (payloadMsg.quotation.item.category_info.tax_aqaba * 100).toFixed(1),
     aqaba_customs: "0"
   }
-   var detailsMsg_en =
+  var detailsMsg_en =
   `${pricing.title}
 Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
 Chargable weight: ${pricing.chargableWeight} KG. (shipping weight may be higher than actual product weight)
@@ -430,14 +430,15 @@ detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqab
 
   //  btnTxt = JSON.stringify(detailsMsg_en);
 
-if (sessions[sessionId].fbprofile && sessions[sessionId].fbprofile.locale.toLowerCase().includes("en")) {
-  return sendPriceButton(senderID,detailsMsg,buttonList)
+if (sessions[sessionId].fbprofile &&
+  sessions[sessionId].fbprofile.locale.toLowerCase().includes("en")) {
+  return sendPriceButton(senderID,detailsMsg_en,buttonList)
 } else {
-  return sendPriceButton(senderID,detailsMsg_ar,buttonList)
+  return sendPriceButton(senderID,detailsMsg_ar,buttonList);
 }
 
 
-  }
+}
 
   // check the action from the postback if any
   if (typeof payloadText != 'undefined' && payloadText == 'yes_confirm_order') {
@@ -1711,13 +1712,23 @@ function getPricing(senderID,item) {
     }  if (cats && cats.length == 1 ) {
       // got one match - use it
       console.log(" ***> selected category:",cats[0].category_name)
-      sendTextMessage(senderID,"Category:"+cats[0].category_name+"  arabic:"+cats[0].category_name_ar)
+      //sendTextMessage(senderID,"Category:"+cats[0].category_name+"  arabic:"+cats[0].category_name_ar)
+      // do the pricing now TODO
+      item.category = cats[0].category_name;
+      item.category_info = cats[0];
+      // REDUCE ITEM SIZE
+      item.category_info._id = ''; // save space in messages
+      item.category_info.keywords='';
+
+      return calculatePricing(senderID,item);
+
+
     }
     else {
       // more than one - let user select the valid category
     console.log("number of cats:",cats.length);
-
-    for (i=0 ; i < cats.length && i<4 ; i++) {
+    highScore = cats[0].score ;
+    for (i=0 ; i < cats.length && i<3 && cats[i].score >  highScore*0.7; i++) {
       console.log("+++++++++++++= ",cats[i]);
        cats[i].score=  cats[i].score.toFixed(2);
       item.category = cats[i].category_name;
@@ -1726,10 +1737,10 @@ function getPricing(senderID,item) {
       item.category_info._id = ''; // save space in messages
       item.category_info.keywords='';
 
-      var payload = {action: 'getPricing',
+      payload = {action: 'getPricing',
           item: item
-            }
-          payloadStr = JSON.stringify(payload);
+      }
+      payloadStr = JSON.stringify(payload);
         catList.push({
           "title" : cats[i].category_name + "/"+ cats[i].score,
           "subtitle"  : cats[i].category_name_ar,
@@ -2033,12 +2044,19 @@ console.log("++++++++++++++++++ getPrDetPayloadStr:",JSON.stringify(getPrDetPayl
         });
     buttonList.push({
         "type": "postback",
-        "title": "prices from:"+lowestPrice,
+        "title": "more prices("+lowestPrice+")",
         "payload": '{ "action" : "morePrices","quote_obj" :' +  quote_obj +'}'
       });
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
   btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
-
+// TODO
+if (sessions[sessionId].fbprofile &&
+  sessions[sessionId].fbprofile.locale.toLowerCase().includes("en")) {
+  btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
+} else {
+  btnTxt =  " دينار " + finalAmmanPriceExpress.toFixed(2) + " سعر الطلب الخاص 3-5 ايام: ";
+}
+btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
   sendPriceButton(senderID,btnTxt,buttonList)
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage);
