@@ -378,8 +378,8 @@ function handleEvent(senderID, event) {
   var pricing = {
     chargableWeight: payloadMsg.quotation.item.chargableWeight,
     shipping: payloadMsg.quotation.item.shipping,
-    shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)\n':
-            'includes shipping at origin of:' +pricing.shipping +'\n'),
+    shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
+            'includes shipping at origin of:' +pricing.shipping +' USD'),
     price: payloadMsg.quotation.item.price,
     category_name: payloadMsg.quotation.item.category_info.category_name,
     amm_customs: (payloadMsg.quotation.item.category_info.customs * 100).toFixed(1),
@@ -387,14 +387,17 @@ function handleEvent(senderID, event) {
     tax_aqaba: (payloadMsg.quotation.item.category_info.tax_aqaba * 100).toFixed(1)
   }
    var detailsMsg_en =
-   `Chargable weight: ${pricing.chargableWeight} KG. Shipping weight may be higher than actual product weight
-   Price at origin:${pricing.price} ;${pricing.shippingAtOriginMsg}
-   Category: ${pricing.category_name}
-   Amman customs of ${pricing.amm_customs}% and tax:${pricing.tax_amm}%
-   Aqaba customs 0% and tax ${pricing.aqaba_customs}%
-   Warranty is at source country (add ${warranty_price}% for local warranty)
-   Prices include the actual item price + all shipping + all taxes and expenses.
-   Our guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage`;
+  `Chargable weight: ${pricing.chargableWeight} KG. (shipping weight may be higher than actual product weight)
+Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
+Category: ${pricing.category_name}
+Amman customs of ${pricing.amm_customs}% and tax:${pricing.tax_amm}%
+Aqaba customs 0% and tax ${pricing.aqaba_customs}%
+Warranty is at origin (add ${warranty_price}% for local warranty)
+Prices include the actual item price + all shipping + all taxes and expenses.
+Our guarantee:
+1. best price
+2. price will not change upon arrival
+3. arrival with no breakage`;
    /*detailsMsg_en = pricingDetailMsg_en.replace("<price>",payloadMsg.quotation.item.price).
     replace(" <chargableWeight>",payloadMsg.quotation.item.chargableWeight).
     replace(" <shippping>",payloadMsg.quotation.item.shipping).
