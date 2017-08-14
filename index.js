@@ -403,25 +403,25 @@ var pricingDetailMsg_ar =
   pricing.title+
       "\n  السعر من المصدر:<سعر>$  "+
    pricing.shippingAtOriginMsg_ar +
-      "\nوزن الشحن: <وزن>.  وزن الشحن قد يكون أعلى من وزن القطعة"+
+      "\nوزن الشحن: <وزن>كغم.  وزن الشحن قد يكون أعلى من وزن القطعة"+
 
 "\n الصنف: <صنف>"+
 "\n الجمرك فى عمان <عمان جمرك>% وضريبة  المبيعات فى عمان  <عمان مبيعات>%" +
-"\n الجمرك فى العقبة <عقبة جمرك> وضريبة  المبيعات فى العقبة <عقبة مبيعات>%" +
+"\n الجمرك فى العقبة 0% وضريبة  المبيعات فى العقبة <عقبة مبيعات>%" +
 			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
 "\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
 "\n .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 	";
 var detailsMsg_ar = pricingDetailMsg_ar;
 
 
-detailsMsg_ar = detailsMsg_ar.replace("<سعر>",pricing.chargableWeight);
+
+detailsMsg_ar = detailsMsg_ar.replace("<سعر>",pricing.price);
 detailsMsg_ar = detailsMsg_ar.replace("<شحن>",pricing.shipping);
 detailsMsg_ar = detailsMsg_ar.replace("<صنف>",pricing.category_name_ar);
 detailsMsg_ar = detailsMsg_ar.replace("<وزن>",pricing.chargableWeight);
-detailsMsg_ar = detailsMsg_ar.replace("<عمان جمرك>",pricing.chargableWeight);
+detailsMsg_ar = detailsMsg_ar.replace("<عمان جمرك>",pricing.customs);
 detailsMsg_ar = detailsMsg_ar.replace("<عمان مبيعات>",pricing.tax_amm);
 
-detailsMsg_ar = detailsMsg_ar.replace("<عقبة جمرك>",pricing.aqaba_customs);
 detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqaba);
 
   //  btnTxt = JSON.stringify(detailsMsg_en);
