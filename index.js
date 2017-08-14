@@ -358,19 +358,20 @@ function handleEvent(senderID, event) {
   if(jsonpayload && payloadMsg.action == 'getPrDet') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
+
     var buttonList=[]
     buttonList.push({
         "type": "postback",
         "title": "Buy",
-        "payload": "Buy" //'{ "action" : "buy", "quote_obj": ' +  quotation +'}'
+        "payload": "Buy" //'{ "action" : "buy", "quote_obj": ' +  payloadMsg.quote_obj  +'}'
           });
       buttonList.push({
           "type": "postback",
           "title": "other prices from:"+lowestPrice,
-          "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  quotation +'}'
+          "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
-   var detailsMsg = pricingDetailMsg_en.replace("%P%",quote_obj.item.price);
+   var detailsMsg = pricingDetailMsg_en.replace("%P%",payloadMsg.item.price);
     btnTxt = detailsMsg;
 
 
@@ -1969,9 +1970,8 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
       quotation: quote_obj
         }
           getPrDetPayloadStr = JSON.stringify(getPrDetPayload);
-
-var  payloadPriceDetails = '{ "action" : "getPrDet", "quote_obj" :' +   quote_obj +'}'
-console.log("++++++++++++++++++ payloadPriceDetails:",JSON.stringify(payloadPriceDetails));
+console.log("+++++++++++ Length of getPrDetPayloadStr:",getPrDetPayloadStr.length);
+console.log("++++++++++++++++++ getPrDetPayloadStr:",JSON.stringify(getPrDetPayload));
   var buttonList=[]
   buttonList.push({
       "type": "postback",
