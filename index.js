@@ -371,7 +371,7 @@ function handleEvent(senderID, event) {
           "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
-   var detailsMsg = pricingDetailMsg_en.replace("%P%",payloadMsg.item.price);
+   var detailsMsg = pricingDetailMsg_en.replace("%P%",payloadMsg.quotation.item.price);
     btnTxt = detailsMsg;
 
 
