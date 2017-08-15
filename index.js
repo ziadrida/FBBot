@@ -381,7 +381,7 @@ function handleEvent(senderID, event) {
     shipping: payloadMsg.quotation.item.shipping,
     shippingAtOriginMsg_ar: (payloadMsg.quotation.item.shipping >-1?     "يتضمن الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
     shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
-            'includes shipping at origin of:' +pricing.shipping +' USD'),
+            'includes shipping at origin of:' +payloadMsg.quotation.item.shipping +' USD'),
     price: payloadMsg.quotation.item.price,
     category_name: payloadMsg.quotation.item.category_info.category_name,
     category_name_ar: payloadMsg.quotation.item.category_info.category_name_ar,
