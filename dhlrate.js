@@ -100,7 +100,7 @@ var DHLExpressRate = [
 module.exports = {
     getAqabaRate: function( weight ) { // weight in KG
       for (i=1 ; i <aqabaRateWt.length; i++ ) {
-        if (weight*2.2 < aqabaRateWt[i]) { // aqabaRateWt in pounds
+        if (2.2*weight < aqabaRateWt[i]) { // aqabaRateWt in pounds
           console.log("****** Aqaba Rate:",aqabaRate[i-1])
           return aqabaRate[i-1];
         }
