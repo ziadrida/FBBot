@@ -101,6 +101,7 @@ module.exports = {
     getAqabaRate: function( weight ) {
       for (i=1 ; i <aqabaRateWt.length; i++ ) {
         if (weight < aqabaRateWt[i]) {
+          console.log("****** Aqaba Rate:",aqabaRate[i-1])
           return aqabaRate[i-1];
         }
     }
@@ -118,6 +119,7 @@ module.exports = {
       // no rate in DHLLargeShipRate - compute based on
       for (i=1 ; i <DHLLargeShipRateWT.length; i++ ) {
         if (weight < DHLLargeShipRateWT[i]) {
+
           return DHLLargeShipRate1[i-1];
         }
       }

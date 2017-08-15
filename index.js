@@ -2060,16 +2060,18 @@ console.log("AP2_capPrice,AO2_ammStdPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_a
 BL2_itemPriceandShip = B2_price + C2_shipping;
 // BM2 = =INDEX(DHL!L:L,MATCH(Z2*1.05,DHL!A:A))/0.71
 BM2_DHLExpressRate = DHL.getDHLRate(Z2_chargableWeight);
-//logger.log("DHLRate:",BM2_DHLExpressRate);
+console.log("***** DHLRate:",BM2_DHLExpressRate);
 
 BO2_usHandling = AD2_HandlingCostUSD + pricing_params.BN2_paperAWBFees;
 BP2_ShipHandling = BM2_DHLExpressRate+BO2_usHandling;
 
 BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxable_amount?
     AF2_ammCustoms:0);
+    console.log ("Q2_customs:",BQ2_customs);
     // AU2 =
     AU2_Customs = BQ2_customs;
     // BR2 = =IF(BL2+BM2>140,AL2,0)
+
     BR2_salesTax =  (BL2_itemPriceandShip + BM2_DHLExpressRate >pricing_params.min_taxable_amount?
       AL2_ammanSalesTax:0)
 
@@ -2122,6 +2124,8 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
   // BH2 = =BG2*Z2
   BH2_aqabaShipping = BG2_aqabaShipRate*Z2_chargableWeight;
 // BI2 = =(BH2+AE2)*0.71*(1+BE2)
+console.log("BH2_aqabaShipping/AE2_itemCostUSD/BE2_aqabaClerance",
+BH2_aqabaShipping+AE2_itemCostUSD+BE2_aqabaClerance);
 BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1+BE2_aqabaClerance);
 // BJ2 =BI2*(1+BD2)
   BJ2_aqabaCostwTaxJD = BI2_aqabaCostwoTaxJD*(1+BD2_aqabaTax);
@@ -2132,6 +2136,7 @@ BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1+BE2_aqabaCler
   //IF(B7="English","Too big or heavy, not cost effective to ship",
   //"  هذه القطعة وزنها الحجمي كبير جدا نسبة الى سعر القطعة. قد لا يكون طلبها مجدى"),
   //BJ2/(1-Q2)*IF(K2="Yes",(1+Options!B2),1)))
+  console.log("BJ2_aqabaCostwTaxJD/Q2_NetAqabaMargin",BJ2_aqabaCostwTaxJD+"/"+Q2_NetAqabaMargin);
   E14_finalStdAqabaPriceJD = 1.0*(BJ2_aqabaCostwTaxJD/(1-Q2_NetAqabaMargin));
   var finalStdAqabaPriceJD = 1.0*E14_finalStdAqabaPriceJD.toFixed(2);
   console.log("Final Aqaba price: ",E14_finalStdAqabaPriceJD);
