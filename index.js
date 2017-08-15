@@ -610,7 +610,9 @@ function determineResponse(event) {
   //categories.updateCatArabicName();
   //  console.log("after insertAllCats:",n)
     //console.log("*************************cat ",allcats[0]);
-
+     if (sessions[sessionId].userObj.locale.toUpperCase().includes('EN')) {
+       sessions[sessionId].userObj.locale = 'ar_US';
+     } ;
      sendButton(senderID, 'Would you like to confirm order?');
   }
 
