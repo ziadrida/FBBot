@@ -6,7 +6,7 @@ var categories = require('./categories.js');
 var MongoClient = require('mongodb').MongoClient;
 var mongoUtil = require( './mongoUtil.js' );
 var helpers = require( './helpers.js' );
-var dhlrate = require( './dhlrate.js' );
+var DHL = require( './dhlrate.js' );
 var Logger = require( './logger.js' );
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
@@ -1955,7 +1955,13 @@ function calculatePricing(senderID,item) {
     heavyWeightThreshold: 44, // pounds
     J9_unerCostPercentage: 1, // percentage
     min_aqaba_margin: 0.02,
-    min_taxable_amount : 140 // minimum tabable amount
+    min_taxable_amount : 140, // minimum tabable amount
+    BN2_paperAWBFees: 2.25+ 1.85,
+    expressClearanceFee: 25/0.71,  // USD
+    expressMargin: 0.12 ,
+    minExpressFee: 5 ,// USD
+    aqabaCleranceRate: 0.02,  //
+    aqabaShipRate: 2.5 // JD
   }
 
 
@@ -2008,6 +2014,7 @@ function calculatePricing(senderID,item) {
   console.log("AE2_itemCostUSD:",AE2_itemCostUSD.toFixed(2))
   // AF2 is item.customs Percent
   // customs USD =AF2*(B2+C2+AC2*0.5)*J9
+  AF2_ammCustoms = item.category_info.customs * 1.00
   AG2_customsUSD = item.category_info.customs *
           (item.price + item.shipping +AC2_ShipAndHandCostUSD*.5)*pricing_params.J9_unerCostPercentage;
 // AH2 =AE2+AG2
@@ -2041,26 +2048,106 @@ AT2_subjectToCustoms = (B2_price+C2_shipping > pricing_params.min_taxable_amount
 console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_ammanPriceWTax.toFixed(2))
   finalAmmanPriceExpress = Math.min(AP2_capPrice,AO2_ammanPriceWTax);
 // BQ2  = =IF(BL2+BM2>140,AF2,0)
+
 // BL2 = =B2+C2
 BL2_itemPriceandShip = B2_price + C2_shipping;
 // BM2 = =INDEX(DHL!L:L,MATCH(Z2*1.05,DHL!A:A))/0.71
-  console.log("Final Amman Price:",finalAmmanPriceExpress.toFixed(2))
+BM2_DHLExpressRate = DHL.getDHLRate(Z2_chargableWeight);
+logger.log("DHLRate:",BM2_DHLExpressRate);
+
+BO2_usHandling = AD2_HandlingCostUSD + BN2_paperAWBFees;
+BP2_ShipHandling = BM2_DHLExpressRate+BO2_usHandling;
+
+BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxable_amount?
+    AF2_ammCustoms:0);
+    // AU2 =
+    AU2_Customs = BQ2_customs;
+    // BR2 = =IF(BL2+BM2>140,AL2,0)
+    BR2_salesTax =  (BL2_itemPriceandShip + BM2_DHLExpressRate >pricing_params.min_taxable_amount?
+      AL2_ammanSalesTax:0)
+
+    AV2_salesTax = BR2_salesTax;
+    //BS2 = =(BL2+BM2)*(BQ2)
+    BS2_customsAmount = (BL2_itemPriceandShip + BM2_DHLExpressRate) * BQ2_customs;
+    // BT2 = =(BS2+BL2+BM2)*BR2
+    BT2_salesTaxAmount = (BS2_customsAmount + BL2_itemPriceandShip + BM2_DHLExpressRate) * BR2_salesTax;
+    AY2_clearanceFee = pricing_params.expressClearanceFee;
+    BU2_clearanceFee = AY2_clearanceFee;
+    BV2_expressMargin = pricing_params.expressMargin;
+    // BW2_ =MAX(5,BV2*(BL2+BP2))
+    BW2_marginNRisk = Match.max(pricing_params.minExpressFee,
+      (BV2_expressMargin * (BL2_itemPriceandShip + BP2_ShipHandling)));
+    BX2_marginNRiskJD = BW2_marginNRisk * 0.71;
+    // BY2 =BL2+BP2+BW2+BS2+BT2+IF(AT2="Y",AY2,0)
+    BY2_finalExpPriceUSD = (BL2_itemPriceandShip + BP2_ShipHandling +
+      BW2_marginNRisk + BS2_customsAmount + BT2_salesTaxAmount(AT2_subjectToCustoms ? AY2_clearanceFee : 0));
+    BZ2_finalExpPriceJD = BY2_finalExpPriceUSD * 0.71;
+    finalExpPriceJD =BZ2_finalExpPriceJD;
+
+  // CA2 = =IF(H2="Amazon", MIN(BC2*0.99,BZ2),BZ2)
+  // AW2 = =AQ2*AU2
+  AW2_customs = AQ2_usPriceWithUsTax * AU2_Customs;
+
+  // AX2 = =(AQ2+AW2)*AV2
+  AX2_salesTaxAmount = (AQ2_usPriceWithUsTax+AW2_customs)*AV2_salesTax;
+  // BA2 = =MAX(5,(B2+C2)*(1+AR2)*0.1)
+  BA2_cashBashaFees = Match.max(pricing_params.minExpressFee,(B2_price+C2_shipping)*(1+AR2_usSalesTax)*0.1);
+  // BB2 ==((B2)*(1+AR2)+C2)+AS2+AZ2+BA2+AW2+AX2+IF(AT2="Y",AY2,0)
+  AZ2_usFees = 0; // fees charged by competitors in the USA
+  BB2_expressPricing = ((B2_price)* (1+AR2_usSalesTax)+C2_shipping)+
+    AS2_aramexShippingCost+AZ2_usFees+BA2_cashBashaFees+AW2_customs+AX2_salesTaxAmount+
+    (AT2_subjectToCustoms?AY2_clearanceFee:0);
+    BC2_competitorsExpPricingJD = BB2_expressPricing * 0.71;
+
+  BD2_aqabaTax = (item.tax_aqaba*1.0).toFixed(2);
+  BE2_aqabaClerance = pricing_params.aqabaCleranceRate*1.0;
+  BF2_aqabaShipRate = DHL.getAqabaRate(Z2_chargableWeight)*1.0
+  CA2_finalExpPriceMinJD = (H2_seller == "Amazon"?
+      Math.min(BC2_*0.99,BZ2_finalExpPriceJD):BZ2_finalExpPriceJD);
+
+
+    finalExpPriceAmmJD = CA2_finalExpPriceMinJD;
+          console.log("******** Final Express Price:",finalExpPriceAmmJD);
+  // BG2 = =AA2*BF2/0.71
+  BG2_aqabaShipRate = AA2_weightRateAdjust*BF2_aqabaShipRate*1.0/0.71
+  // BH2 = =BG2*Z2
+  BH2_aqabaShipping = BG2_aqabaShipRate*Z2_chargableWeight;
+// BI2 = =(BH2+AE2)*0.71*(1+BE2)
+BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1+BE2_aqabaClerance);
+// BJ2 =BI2*(1+BD2)
+  BJ2_aqabaCostwTaxJD = BI2_aqabaCostwoTaxJD*(1+BD2_aqabaTax);
+
+  //
+  // AqabaPrice
+  //=IF(B4<>"",B4,IF(MIN(AO2,AP2)>15+(B2+C2)*0.71*J10,
+  //IF(B7="English","Too big or heavy, not cost effective to ship",
+  //"  هذه القطعة وزنها الحجمي كبير جدا نسبة الى سعر القطعة. قد لا يكون طلبها مجدى"),
+  //BJ2/(1-Q2)*IF(K2="Yes",(1+Options!B2),1)))
+  E14_finalStdAqabaPriceJD = (BJ2_aqabaCostwTaxJD/(1-Q2_NetAqabaMargin));
+  finalStdAqabaPriceJD = E14_finalStdAqabaPriceJD.toFixed(2);
+  console.log("Final Aqaba price: ",E14_finalStdAqabaPriceJD);
+  console.log("Final Amman Price:", finalAmmanPriceExpress.toFixed(2));
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   pricingMessage = pricingMessage + packageDimensions;
   pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
   pricingMessage = pricingMessage.replace('/: \//g',':');
 
-  lowestPrice = finalAmmanPriceExpress.toFixed(2);
-
+//E13 - MIN(MIN(AO2,AP2),9999)
+E13_finalStandardPrice = Math.min(AO2_ammanPriceWTax,AP2_capPrice);
+finalStandardAmmPrice = E13_finalStandardPrice.toFixed(2);
+console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice)
+  lowestPrice = Math.min(finalExpPriceMinJD.toFixed(2),finalStandardAmmPrice.toFixed(2),
+  finalExpPriceMinAqabaJD.toFixed(2));
+finalExpPriceMinAqabaJD = finalExpPriceAmmJD*1.05*toFixed(2);
   var quote_obj = {
     quote_no: 0,
     quote_date: new Date(),
     item: item,
     price: {
-      amm_exp: finalAmmanPriceExpress.toFixed(2),
-      amm_std: 0,
-      aq_exp: 0,
-      aq_std: 0
+      amm_exp: finalExpPriceMinJD.toFixed(2),
+      amm_std: finalStandardAmmPrice.toFixed(2),
+      aq_exp: finalExpPriceMinAqabaJD.toFixed(2),
+      aq_std: finalStdAqabaPriceJD.toFixed(2)
     },
     notes: pricingMessage
   }
@@ -2072,7 +2159,12 @@ console.log("+++++++++++ Length of getPricingDetailsPayloadStr:",getPricingDetai
 console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(getPricingDetailsPayload));
 if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
     sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
-  btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
+  btnTxt = "Personal express price 3-5 days: "+finalExpPriceAmmJD.toFixed(2) + " JOD" +
+  "\n"+
+  "Amman Price 7-14 days: "+finalStandardAmmPrice.toFixed(2) + " JOD" +
+  "\n"+
+  "Aqaba price 14-25 days: "+finalStdAqabaPriceJD.toFixed(2) + " JOD" ;
+
   priceDetailsLbl = "Price Details";
   morePricesLbl = "more prices";
 } else {

@@ -1,3 +1,43 @@
+var aqabaRate [
+4.00,
+3.60 ,
+3.20 ,
+2.80 ,
+2.40 ,
+2.32 ,
+2.20 ,
+2.00 ,
+1.60 ,
+1.20 ,
+1.04 ,
+0.96 ,
+0.80 ,
+0.72 ,
+0.68 ,
+0.64 ,
+0.60
+]
+
+var aqabaRateWt = [
+  0,
+0.50,
+0.75 ,
+1.00 ,
+2.00 ,
+5.00 ,
+10.00 ,
+15.00 ,
+25.00 ,
+30.00 ,
+50.00 ,
+90.00 ,
+100.00 ,
+120.00 ,
+150.00 ,
+170.00 ,
+180.00 ,
+1000000000
+]
 var DHLLargeShipRate = [
 9.223,
 13.334,
@@ -40,8 +80,8 @@ var DHLLargeShipRate = [
 139.334,
 143.334
 ];
-DHLLargeShipRateWT = [50.0,70.0,300.0];
-DHLLargeShipRate1 = [5.00,4.8,4.6];
+DHLLargeShipRateWT = [50.0,70.0,300.0,10000000000];
+DHLLargeShipRate1 = [5.00,4.8,4.6,4.6];
 
 
 var DHLExpressRate = [
@@ -58,7 +98,14 @@ var DHLExpressRate = [
 ];
 
 module.exports = {
-  getDhlRate: function( weight ) {
+    getAqabaRate: function( weight ) {
+      for (i=1 ; i <aqabaRateWt.length; i++ ) {
+        if (weight < aqabaRateWt[i]) {
+          return aqabaRate[i-1];
+        }
+    },
+
+  getDHLRate: function( weight ) {
 
     var index = weight * 2 ;
    index = Math.ceil(index)-1;
@@ -68,9 +115,9 @@ module.exports = {
       return DHLLargeShipRate[index];
     } else {
       // no rate in DHLLargeShipRate - compute based on
-      for (i=0 ; i <DHLLargeShipRateWT.length; i++ ) {
-        if (weight > DHLLargeShipRateWT[i]) {
-          return DHLLargeShipRate1[i];
+      for (i=1 ; i <DHLLargeShipRateWT.length; i++ ) {
+        if (weight < DHLLargeShipRateWT[i]) {
+          return DHLLargeShipRate1[i-1];
         }
       }
     }
