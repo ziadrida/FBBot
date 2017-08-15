@@ -2143,10 +2143,12 @@ BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1+BE2_aqabaCler
 
 //E13 - MIN(MIN(AO2,AP2),9999)
 E13_finalStandardPrice = Math.min(AO2_ammanPriceWTax,AP2_capPrice);
-finalStandardAmmPrice = E13_finalStandardPrice.toFixed(2);
-console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice)
-  lowestPrice = Math.min(finalExpPriceAmmJD.toFixed(2),finalStandardAmmPrice.toFixed(2),
-  finalExpPriceMinAqabaJD.toFixed(2));
+
+var finalStandardAmmPrice = E13_finalStandardPrice.toFixed(2);
+console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice.toFixed(2))
+  lowestPrice = Math.min(finalExpPriceAmmJD.toFixed(2),
+    finalStandardAmmPrice.toFixed(2),
+    finalExpPriceMinAqabaJD.toFixed(2));
 finalExpPriceMinAqabaJD = finalExpPriceAmmJD*1.05*toFixed(2);
   var quote_obj = {
     quote_no: 0,
