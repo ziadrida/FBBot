@@ -2132,8 +2132,8 @@ BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1+BE2_aqabaCler
   //IF(B7="English","Too big or heavy, not cost effective to ship",
   //"  هذه القطعة وزنها الحجمي كبير جدا نسبة الى سعر القطعة. قد لا يكون طلبها مجدى"),
   //BJ2/(1-Q2)*IF(K2="Yes",(1+Options!B2),1)))
-  E14_finalStdAqabaPriceJD = (BJ2_aqabaCostwTaxJD/(1-Q2_NetAqabaMargin));
-  finalStdAqabaPriceJD = E14_finalStdAqabaPriceJD.toFixed(2);
+  E14_finalStdAqabaPriceJD = 1.0*(BJ2_aqabaCostwTaxJD/(1-Q2_NetAqabaMargin));
+  var finalStdAqabaPriceJD = 1.0*E14_finalStdAqabaPriceJD.toFixed(2);
   console.log("Final Aqaba price: ",E14_finalStdAqabaPriceJD);
   console.log("Final Amman Price:", finalAmmanPriceExpress.toFixed(2));
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
