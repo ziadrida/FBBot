@@ -2054,10 +2054,25 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
           getPricingDetailsPayloadStr = JSON.stringify(getPricingDetailsPayload);
 console.log("+++++++++++ Length of getPricingDetailsPayloadStr:",getPricingDetailsPayloadStr.length);
 console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(getPricingDetailsPayload));
+if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
+  sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
+  btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
+  priceDetailsLbl = "Price Details";
+} else {
+  btnTxt =
+  "   سعر الطلب الخاص 3-5 ايام: "+
+  finalAmmanPriceExpress.toFixed(2) +  " دينار " ;
+
+  priceDetailsLbl = "تفاصيل السعر";
+}
+btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
+
+
+
   var buttonList=[]
   buttonList.push({
       "type": "postback",
-      "title": "Price Details تفاصيل السعر",
+      "title": priceDetailsLbl,
       "payload": getPricingDetailsPayloadStr
         });
     buttonList.push({
@@ -2071,13 +2086,6 @@ console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(get
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
 
-if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
-  sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
-  btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
-} else {
-  btnTxt =  " دينار " +  " سعر الطلب الخاص 3-5 ايام: " + finalAmmanPriceExpress.toFixed(2) ;
-}
-btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
   sendPriceButton(senderID,btnTxt,buttonList)
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage);
