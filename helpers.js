@@ -8,7 +8,7 @@ lines[i] = padding_left(lines[i],char,len)
 }
 
 return lines;
-}
+},
 
 // left padding s with c to a total of n chars
 padding_left: function( s, c, n)
