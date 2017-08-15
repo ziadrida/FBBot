@@ -354,16 +354,23 @@ function handleEvent(senderID, event) {
   if(jsonpayload && payloadMsg.action == 'getPricingDetails') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
-
+    if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
+      sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
+        morePricesLbl = "more prices "
+        confirmOrderLbl = "Buy"
+    } else {
+      morePricesLbl = "أسعار اخرى"
+      confirmOrderLbl = 'اضف للطلب'
+    }
     var buttonList=[]
     buttonList.push({
         "type": "postback",
-        "title": "Buy",
+        "title": confirmOrderLbl,
         "payload": "Buy" //'{ "action" : "buy", "quote_obj": ' +  payloadMsg.quote_obj  +'}'
           });
       buttonList.push({
           "type": "postback",
-          "title": "other prices from:"+lowestPrice,
+          "title": morePricesLbl + ':'+lowestPrice,
           "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
@@ -407,11 +414,11 @@ var pricingDetailMsg_ar =
       "\n  السعر من المصدر:<سعر>$  "+
    pricing.shippingAtOriginMsg_ar +
       "\n  وزن الشحن: <وزن>كغم.  وزن الشحن قد يكون أعلى من وزن القطعة "+
-" الصنف: <صنف> "+
+" الصنف: <صنف> "
 + "\n" +
 "عمان: الجمرك <عمان جمرك>% ،ضريبةالمبيعات %<عمان مبيعات>   "
 + "\n" +
-"عقبة: الجمرك 0% وضريبةالمبيعات %<عقبة مبيعات>  " +
+"عقبة: الجمرك 0% وضريبةالمبيعات %<عقبة مبيعات>  "
 + "\n" +
 			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
 "\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
@@ -2068,7 +2075,7 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
 } else {
-  btnTxt =  " دينار " + finalAmmanPriceExpress.toFixed(2) + " سعر الطلب الخاص 3-5 ايام: ";
+  btnTxt =  " دينار " +  " سعر الطلب الخاص 3-5 ايام: " + finalAmmanPriceExpress.toFixed(2) ;
 }
 btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
