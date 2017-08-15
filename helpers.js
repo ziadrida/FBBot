@@ -3,7 +3,7 @@ leftPadTextArea: function( textArea,char,len )
 {
 var lines= textArea.split('\n');
 for (i=0; i< lines.length; i++) {
-lines[i] = padding_left(lines[i],char,len)
+lines[i] = module.exports.padding_left(lines[i],char,len)
 //console.log(lines[i]);
 }
 
