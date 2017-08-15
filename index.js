@@ -2146,7 +2146,7 @@ E13_finalStandardPrice = Math.min(AO2_ammanPriceWTax*1.0,AP2_capPrice*1.0);
 
 var finalStandardAmmPrice = 1.00*E13_finalStandardPrice.toFixed(2);
 
-finalExpPriceMinAqabaJD = finalExpPriceAmmJD*1.05*toFixed(2);
+finalExpPriceMinAqabaJD = 1.05*finalExpPriceAmmJD.toFixed(2);
 console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice);
   lowestPrice = Math.min(finalExpPriceAmmJD.toFixed(2),
     finalStandardAmmPrice.toFixed(2),
