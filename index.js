@@ -272,7 +272,6 @@ db = mongoUtil.getDb(function() {
         userObj = docs;
         sessions[sessionId].newUser = false;
         sessions[sessionId].userObj = docs;
-        sessions[sessionId].fbprofile.locale = docs.locale ; // Only for now - let DB override fbprofile locale TODO
         return callback(docs);
 
 
@@ -352,7 +351,7 @@ function handleEvent(senderID, event) {
     return calculatePricing(senderID,payloadMsg.item);
   }
 
-  if(jsonpayload && payloadMsg.action == 'getPrDet') {
+  if(jsonpayload && payloadMsg.action == 'getPricingDetails') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
 
@@ -432,8 +431,8 @@ detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqab
 
   //  btnTxt = JSON.stringify(detailsMsg_en);
 
-if (sessions[sessionId].fbprofile &&
-  sessions[sessionId].fbprofile.locale.toLowerCase().includes("en")) {
+if (sessions[sessionId].userObj &&
+  sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   return sendPriceButton(senderID,detailsMsg_en,buttonList)
 } else {
   return sendPriceButton(senderID,detailsMsg_ar,buttonList);
@@ -1776,13 +1775,14 @@ function getUserPublicInfo(fbId, callback) {
     console.log('In getUserPublicInfo - fbprofile already defined:', sessions[sessionId].fbprofile.first_name);
     return callback(sessions[sessionId].fbprofile);
   }
+  /*
   if (sessions[sessionId].userObj && sessions[sessionId].userObj.first_name) {
     // we have a userObj - copy data from DB usr to fbprofile
     // fbprofile may change - will need to change code to update with new data TODO
     sessions[sessionId].fbprofile.locale = sessions[sessionId].userObj.locale;
     sessions[sessionId].fbprofile.first_name = sessions[sessionId].userObj.first_name;
     return callback(sessions[sessionId].fbprofile);
-  }
+  }*/
 
   var url = 'https://graph.facebook.com/v2.6/' + fbId;
   var qs = {
@@ -2040,17 +2040,17 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
     },
     notes: pricingMessage
   }
-  var getPrDetPayload = {action: 'getPrDet',
+  var getPricingDetailsPayload = {action: 'getPricingDetails',
       quotation: quote_obj
         }
-          getPrDetPayloadStr = JSON.stringify(getPrDetPayload);
-console.log("+++++++++++ Length of getPrDetPayloadStr:",getPrDetPayloadStr.length);
-console.log("++++++++++++++++++ getPrDetPayloadStr:",JSON.stringify(getPrDetPayload));
+          getPricingDetailsPayloadStr = JSON.stringify(getPricingDetailsPayload);
+console.log("+++++++++++ Length of getPricingDetailsPayloadStr:",getPricingDetailsPayloadStr.length);
+console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(getPricingDetailsPayload));
   var buttonList=[]
   buttonList.push({
       "type": "postback",
       "title": "Price Details تفاصيل السعر",
-      "payload": getPrDetPayloadStr
+      "payload": getPricingDetailsPayloadStr
         });
     buttonList.push({
         "type": "postback",
@@ -2062,9 +2062,9 @@ console.log("++++++++++++++++++ getPrDetPayloadStr:",JSON.stringify(getPrDetPayl
 // TODO
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
-console.log("user locale:",sessions[sessionId].fbprofile.locale.toLowerCase());
-if (sessions[sessionId].fbprofile &&
-  sessions[sessionId].fbprofile.locale.toLowerCase().includes("en")) {
+
+if (sessions[sessionId].userObj &&
+  sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
 } else {
   btnTxt =  " دينار " + finalAmmanPriceExpress.toFixed(2) + " سعر الطلب الخاص 3-5 ايام: ";
