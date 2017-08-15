@@ -2086,8 +2086,10 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
       (BV2_expressMargin * (BL2_itemPriceandShip + BP2_ShipHandling)));
     BX2_marginNRiskJD = BW2_marginNRisk * 0.71;
     // BY2 =BL2+BP2+BW2+BS2+BT2+IF(AT2="Y",AY2,0)
+
     BY2_finalExpPriceUSD = (BL2_itemPriceandShip + BP2_ShipHandling +
-      BW2_marginNRisk + BS2_customsAmount + BT2_salesTaxAmount(AT2_subjectToCustoms ? AY2_clearanceFee : 0));
+      BW2_marginNRisk + BS2_customsAmount + BT2_salesTaxAmount+
+      (AT2_subjectToCustoms ? AY2_clearanceFee : 0));
     BZ2_finalExpPriceJD = BY2_finalExpPriceUSD * 0.71;
     finalExpPriceJD =BZ2_finalExpPriceJD;
 
