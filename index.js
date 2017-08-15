@@ -568,8 +568,10 @@ function determineResponse(event) {
   } // end  of try block if compareMessage
 
   console.log("sessions[sessionId];:", sessions[sessionId])
+  console.log("********** newUser?",sessions[sessionId].newUser);
   if (sessions[sessionId].newUser) {
     // follow welcome protocol for newUser
+
     //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
     lang = "arabic";
     text = "";
@@ -583,6 +585,7 @@ function determineResponse(event) {
     }
 
     matchEntity("how_to_order", lang, function(doc) {
+      console.log("after matchEntity(how_to_order");
       sessions[sessionId].newUser = false; // welcome message sent
       sendWatchVideoButton(senderID, text, title);
       sendTextMessage(senderID, doc[0].messageText);
