@@ -2049,7 +2049,7 @@ function calculatePricing(senderID,item) {
 AR2_usSalesTax = item.category_info.us_tax;
 AQ2_usPriceWithUsTax = ((B2_price+C2_shipping) * (1+AR2_usSalesTax ));
 
-AS2_aramexShippingCost = dhlrate.aramexShipRate(Z2_chargableWeight)/0.71; // iN USD
+AS2_aramexShippingCost = DHL.aramexShipRate(Z2_chargableWeight)/0.71; // iN USD
 // AT2 = =IF(B2+C2+(B2+C2)*AR2>140,"Y","N")
 AT2_subjectToCustoms = (B2_price+C2_shipping > pricing_params.min_taxable_amount ? true:false)
 console.log("AP2_capPrice,AO2_ammStdPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_ammStdPriceWTax.toFixed(2))
