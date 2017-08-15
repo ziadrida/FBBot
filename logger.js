@@ -1,6 +1,7 @@
 
 module.exports = class Logger {
    constructor(logfile) {
+     console.log("Logger: constructor");
        this.logfile = logfile;
    }
    display() {
