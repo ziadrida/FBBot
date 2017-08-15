@@ -2180,11 +2180,11 @@ console.log("+++++++++++ Length of getPricingDetailsPayloadStr:",getPricingDetai
 console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(getPricingDetailsPayload));
 
 
-console.log("M2_AmmanCost/O2_AmmanDeliveryJD/"+
+console.log("M2_AmmanCost/O2_AmmanDeliveryJDParam/"+
 "P2_netAmmanMargin/Q2_NetAqabaMargin/T2_AmmanCatMargin/"+
 "U2_AqabaCatMargin/V2_marginAdjBasedOnPrice/W2_marginAdjBasedOnWeight/"+
 "X2_marginAdjBasedOnQty/Y2_volumnWeight/Z2_chargableWeight",
-  M2_AmmanCost+'/'+O2_AmmanDeliveryJD+'/'+P2_netAmmanMargin+'/'+Q2_NetAqabaMargin+'/'+T2_AmmanCatMargin+'/'+
+  M2_AmmanCost+'/'+pricing_params.O2_AmmanDeliveryJDParam+'/'+P2_netAmmanMargin+'/'+Q2_NetAqabaMargin+'/'+T2_AmmanCatMargin+'/'+
   U2_AqabaCatMargin+'/'+V2_marginAdjBasedOnPrice+'/'+W2_marginAdjBasedOnWeight+'/'+X2_marginAdjBasedOnQty+'/'+
   Y2_volumnWeight+'/'+Z2_chargableWeight);
 
