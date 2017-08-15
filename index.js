@@ -423,13 +423,13 @@ Our guarantee:
 var pricingDetailMsg_ar =
   pricing.title+
        "\n" +
-      "  السعر من المصدر:<سعر>$  " +
+      "  السعر من المصدر$<سعر>" +
              "\n" +
    pricing.shippingAtOriginMsg_ar +
        "\n" +
-      "  وزن الشحن: <وزن>كغم.  وزن الشحن قد يكون أعلى من وزن القطعة "+
+      "  وزن الشحن: <وزن>كغم قد يكون أعلى من وزن القطعة"+
          "\n" +
-            "<ابعاد> "+
+            "   <ابعاد> "+
            "\n" +
            " الصنف: <صنف> " +
            "\n" +
@@ -444,7 +444,7 @@ var detailsMsg_ar = pricingDetailMsg_ar;
 
 
 
-detailsMsg_ar = detailsMsg_ar.replace("<ابعاد>",pricing.packageDimensions);
+detailsMsg_ar = detailsMsg_ar.replace("<ابعاد>",pricing.packageDimensions + " بوصة");
 detailsMsg_ar = detailsMsg_ar.replace("<سعر>",pricing.price);
 detailsMsg_ar = detailsMsg_ar.replace("<شحن>",pricing.shipping);
 detailsMsg_ar = detailsMsg_ar.replace("<صنف>",pricing.category_name_ar);
