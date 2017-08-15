@@ -359,6 +359,7 @@ function handleEvent(senderID, event) {
   if(jsonpayload && payloadMsg.action == 'getPricingDetails') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
+
     if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
       sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
         morePricesLbl = "more prices "
@@ -392,12 +393,17 @@ function handleEvent(senderID, event) {
     amm_customs: (payloadMsg.quotation.item.category_info.customs * 100).toFixed(1),
     tax_amm: (payloadMsg.quotation.item.category_info.tax_amm * 100).toFixed(1),
     tax_aqaba: (payloadMsg.quotation.item.category_info.tax_aqaba * 100).toFixed(1),
-    aqaba_customs: "0"
+    aqaba_customs: "0",
+    packageDimensions: payloadMsg.quotation.item.length + 'x' +
+        payloadMsg.quotation.item.width + 'x' +
+        payloadMsg.quotation.item.height
+
   }
   var detailsMsg_en =
   `${pricing.title}
 Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
 Chargable weight: ${pricing.chargableWeight} KG. (shipping weight may be higher than actual product weight)
+${pricing.packageDimensions}
 Category: ${pricing.category_name}
 Amman customs of ${pricing.amm_customs}% and tax:${pricing.tax_amm}%
 Aqaba customs 0% and tax ${pricing.aqaba_tax}%
@@ -2015,7 +2021,7 @@ function calculatePricing(senderID,item) {
    } else {
      C2_shipping = item.shipping * 1.00;
    }
-  packageDimensions = "chargableWeight/packageDimensions:"+ item.chargableWeight + 'KG/'+item.length +
+  packageDimensions =  item.chargableWeight + 'KG/'+item.length +
     'x'+item.width + 'x'+ item.height + 'inch' ;
 
   Y2_volumnWeight=-1; // already have chargableWeight
