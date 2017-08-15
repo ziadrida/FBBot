@@ -5,6 +5,7 @@
 var categories = require('./categories.js');
 var MongoClient = require('mongodb').MongoClient;
 var mongoUtil = require( './mongoUtil.js' );
+var helpers = require( './helpers.js' );
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
@@ -442,6 +443,8 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   return sendPriceButton(senderID,detailsMsg_en,buttonList)
 } else {
+  // left pad messageText
+  helpers.leftPadTextArea(detailsMsg_ar,'.',50)
   return sendPriceButton(senderID,detailsMsg_ar,buttonList);
 }
 
@@ -2055,7 +2058,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
 console.log("+++++++++++ Length of getPricingDetailsPayloadStr:",getPricingDetailsPayloadStr.length);
 console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(getPricingDetailsPayload));
 if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
-  sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
+    sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
   priceDetailsLbl = "Price Details";
 } else {
@@ -2081,7 +2084,7 @@ btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
         "payload": '{ "action" : "morePrices","quote_obj" :' +  quote_obj +'}'
       });
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
-  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
+//  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
 // TODO
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
