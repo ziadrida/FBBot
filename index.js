@@ -2176,7 +2176,7 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   "\n"+
   "Amman Price 7-14 days: "+finalStandardAmmPrice.toFixed(2) + " JOD" +
   "\n"+
-  "Aqaba price 14-25 days: "+finalStdAqabaPriceJD.toFixed(2) + " JOD" ;
+  "Aqaba price 14-24 days: "+finalStdAqabaPriceJD.toFixed(2) + " JOD" ;
 
   priceDetailsLbl = "Price Details";
   morePricesLbl = "more prices";
@@ -2184,6 +2184,13 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   btnTxt =
   "   سعر الطلب الخاص 3-5 ايام: "+
   finalAmmanPriceExpress.toFixed(2) +  " دينار " ;
+  btnTxt = btnTxt + "\n" +
+  "   سعر الطلب 7-14 يوم: "+
+  finalStandardAmmPrice.toFixed(2) +  " دينار " ;
+  btnTxt = btnTxt + "\n" +
+  "   سعر الطلب للعقبة 14-24 يوم: "+
+  finalStdAqabaPriceJD.toFixed(2) +  " دينار " ;
+
   morePricesLbl = "اسعار اخرى"
   priceDetailsLbl = "تفاصيل السعر";
 }
