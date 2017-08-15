@@ -1766,7 +1766,12 @@ function getPricing(senderID,item) {
           }]
       });
 }
+  if (catList.length == 1) {
+    console.log("calc price for item:",item);
+      return calculatePricing(senderID,item);
+  } else {
      compactListBuilder(senderID,catList);
+   }
  }
   // compactList(senderID,"Which category best matches this item?");
     // build List template
@@ -2164,7 +2169,7 @@ finalExpPriceMinAqabaJD = 1.05*finalExpPriceAmmJD.toFixed(2);
 console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice);
   lowestPrice = Math.min(finalExpPriceAmmJD.toFixed(2),
     finalStandardAmmPrice.toFixed(2),
-  finalExpPriceMinAqabaJD.toFixed(2));
+  finalStdAqabaPriceJD.toFixed(2));
 
   var quote_obj = {
     quote_no: 0,
