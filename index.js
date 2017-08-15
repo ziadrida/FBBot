@@ -2082,7 +2082,7 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
     BU2_clearanceFee = AY2_clearanceFee;
     BV2_expressMargin = pricing_params.expressMargin;
     // BW2_ =MAX(5,BV2*(BL2+BP2))
-    BW2_marginNRisk = Match.max(pricing_params.minExpressFee,
+    BW2_marginNRisk = Math.max(pricing_params.minExpressFee,
       (BV2_expressMargin * (BL2_itemPriceandShip + BP2_ShipHandling)));
     BX2_marginNRiskJD = BW2_marginNRisk * 0.71;
     // BY2 =BL2+BP2+BW2+BS2+BT2+IF(AT2="Y",AY2,0)
@@ -2098,7 +2098,7 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
   // AX2 = =(AQ2+AW2)*AV2
   AX2_salesTaxAmount = (AQ2_usPriceWithUsTax+AW2_customs)*AV2_salesTax;
   // BA2 = =MAX(5,(B2+C2)*(1+AR2)*0.1)
-  BA2_cashBashaFees = Match.max(pricing_params.minExpressFee,(B2_price+C2_shipping)*(1+AR2_usSalesTax)*0.1);
+  BA2_cashBashaFees = Math.max(pricing_params.minExpressFee,(B2_price+C2_shipping)*(1+AR2_usSalesTax)*0.1);
   // BB2 ==((B2)*(1+AR2)+C2)+AS2+AZ2+BA2+AW2+AX2+IF(AT2="Y",AY2,0)
   AZ2_usFees = 0; // fees charged by competitors in the USA
   BB2_expressPricing = ((B2_price)* (1+AR2_usSalesTax)+C2_shipping)+
