@@ -1,4 +1,4 @@
-var aqabaRate [
+var aqabaRate = [
 4.00,
 3.60 ,
 3.20 ,
@@ -16,7 +16,7 @@ var aqabaRate [
 0.68 ,
 0.64 ,
 0.60
-]
+];
 
 var aqabaRateWt = [
   0,
@@ -37,7 +37,8 @@ var aqabaRateWt = [
 170.00 ,
 180.00 ,
 1000000000
-]
+];
+
 var DHLLargeShipRate = [
 9.223,
 13.334,
@@ -80,10 +81,9 @@ var DHLLargeShipRate = [
 139.334,
 143.334
 ];
-DHLLargeShipRateWT = [50.0,70.0,300.0,10000000000];
-DHLLargeShipRate1 = [5.00,4.8,4.6,4.6];
 
-
+var DHLLargeShipRateWT = [50.0,70.0,300.0,10000000000];
+var DHLLargeShipRate1 = [5.00,4.8,4.6,4.6];
 var DHLExpressRate = [
   6.304,
   6.304,
