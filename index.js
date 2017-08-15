@@ -2200,12 +2200,12 @@ BX2_marginNRiskJD+'/'+BY2_finalExpPriceUSD+'/'+
 BZ2_finalExpPriceJD+'/'+CA2_finalExpPriceMinJD);
 console.log("AA2_weightRateAdjust/AB2_adjustedShippingCost/"+
 "AC2_ShipAndHandCostUSD/AD2_HandlingCostUSD/AE2_itemCostUSD/"+
-"AF2_ammCustoms/AG2_customsUSD/AH2_costWithCustomsUSD/AI2_clearancePercent/"+
+"AF2_ammCustoms/AG2_customsUSD/AH2_costWithCustomsUSD/AI2_clearancePercentParam/"+
 "AJ2_clearanceCost/AK2_loadedCost/AL2_ammanSalesTax",
 AA2_weightRateAdjust+'/'+AB2_adjustedShippingCost+'/'+
 AC2_ShipAndHandCostUSD+'/'+AD2_HandlingCostUSD+'/'+AE2_itemCostUSD+'/'+
 AF2_ammCustoms+'/'+AG2_customsUSD+'/'+AH2_costWithCustomsUSD+'/'+
-AI2_clearancePercent+'/'+AJ2_clearanceCost+'/'+AK2_loadedCost+'/'+
+AI2_clearancePercentParam+'/'+AJ2_clearanceCost+'/'+AK2_loadedCost+'/'+
 AL2_ammanSalesTax);
 
 if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
