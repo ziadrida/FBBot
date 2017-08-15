@@ -444,7 +444,7 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   return sendPriceButton(senderID,detailsMsg_en,buttonList)
 } else {
   // left pad messageText
-  detailsMsg = helpers.leftPadTextArea(detailsMsg_ar,'.',50)
+  detailsMsg = helpers.leftPadTextArea(detailsMsg_ar,' ',55)
   return sendPriceButton(senderID,detailsMsg,buttonList);
 }
 
