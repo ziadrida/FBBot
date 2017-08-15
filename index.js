@@ -1774,9 +1774,9 @@ function getUserPublicInfo(fbId, callback) {
     console.log('In getUserPublicInfo - fbprofile already defined:', sessions[sessionId].fbprofile.first_name);
     return callback(sessions[sessionId].fbprofile);
   }
-  if (userObj && userObj.first_name) {
+  if (sessions[sessionId].userObj && sessions[sessionId].userObj.first_name) {
     // we have a userObj - copy data from DB usr to fbprofile
-    // fbprofile may change - will need to change code to update with new data
+    // fbprofile may change - will need to change code to update with new data TODO
     sessions[sessionId].fbprofile.locale = sessions[sessionId].userObj.locale;
     sessions[sessionId].fbprofile.first_name = sessions[sessionId].userObj.first_name;
     return callback(sessions[sessionId].fbprofile);
