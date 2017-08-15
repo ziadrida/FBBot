@@ -441,12 +441,13 @@ detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqab
 
 if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
-  return sendPriceButton(senderID, detailsMsg_en, buttonList)
+  detailsMsg = detailsMsg_en;
 } else {
   // left pad messageText
-  detailsMsg = helpers.leftPadTextArea(detailsMsg_ar, '-', 80)
-  return sendPriceButton(senderID, detailsMsg, buttonList);
+  //detailsMsg = helpers.leftPadTextArea(detailsMsg_ar, '', 50)
+  detailsMsg = detailsMsg_ar;
 }
+return sendPriceButton(senderID, detailsMsg, buttonList);
 }
 
   // check the action from the postback if any
