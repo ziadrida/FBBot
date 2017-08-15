@@ -2205,7 +2205,7 @@ console.log("AA2_weightRateAdjust/AB2_adjustedShippingCost/"+
 AA2_weightRateAdjust+'/'+AB2_adjustedShippingCost+'/'+
 AC2_ShipAndHandCostUSD+'/'+AD2_HandlingCostUSD+'/'+AE2_itemCostUSD+'/'+
 AF2_ammCustoms+'/'+AG2_customsUSD+'/'+AH2_costWithCustomsUSD+'/'+
-AI2_clearancePercentParam+'/'+AJ2_clearanceCost+'/'+AK2_loadedCost+'/'+
+pricing_params.AI2_clearancePercentParam+'/'+AJ2_clearanceCost+'/'+AK2_loadedCost+'/'+
 AL2_ammanSalesTax);
 
 if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
