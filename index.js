@@ -2059,7 +2059,7 @@ console.log("AP2_capPrice,AO2_ammStdPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_a
 // BL2 = =B2+C2
 BL2_itemPriceandShip = B2_price + C2_shipping;
 // BM2 = =INDEX(DHL!L:L,MATCH(Z2*1.05,DHL!A:A))/0.71
-BM2_DHLExpressRate = DHL.getDHLRate(Z2_chargableWeight);
+BM2_DHLExpressRate = DHL.getDHLRate(Z2_chargableWeight*1.05)/0.71;
 console.log("***** DHLRate:",BM2_DHLExpressRate);
 
 BO2_usHandling = AD2_HandlingCostUSD + pricing_params.BN2_paperAWBFees;
@@ -2125,10 +2125,13 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
   BH2_aqabaShipping = BG2_aqabaShipRate*Z2_chargableWeight;
 // BI2 = =(BH2+AE2)*0.71*(1+BE2)
 console.log("BH2_aqabaShipping/AE2_itemCostUSD/BE2_aqabaClerance",
-BH2_aqabaShipping+AE2_itemCostUSD+BE2_aqabaClerance);
-BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1+BE2_aqabaClerance);
+BH2_aqabaShipping+'/'+AE2_itemCostUSD+'/'+BE2_aqabaClerance);
+
+BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1.0+BE2_aqabaClerance);
 // BJ2 =BI2*(1+BD2)
-  BJ2_aqabaCostwTaxJD = BI2_aqabaCostwoTaxJD*(1+BD2_aqabaTax);
+
+console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aqabaTax);
+  BJ2_aqabaCostwTaxJD = 1.0*BI2_aqabaCostwoTaxJD*(1+BD2_aqabaTax);
 
   //
   // AqabaPrice
