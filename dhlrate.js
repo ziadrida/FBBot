@@ -110,7 +110,7 @@ module.exports = {
   aramexShipRate: function(weightKG) {
     var aramexFirst05 = 8.40; // JD
     var aramexMultiple = 6.80; // JD per 1/2 KG
-    var price = aramexFirst05+(Math.ceil(weightKG*2)/2)-0.5)*aramexMultiple
+    var price = aramexFirst05+((Math.ceil(weightKG*2)/2.0)-0.5)*aramexMultiple
   console.log("Calulcated Aramex price:",price);
     return price; // JD
   },
