@@ -403,7 +403,7 @@ function handleEvent(senderID, event) {
   `${pricing.title}
 Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
 Chargable weight: ${pricing.chargableWeight} KG. (shipping weight may be higher than actual product weight)
-${pricing.packageDimensions}
+Dimensions ${pricing.packageDimensions} inch
 Category: ${pricing.category_name}
 Amman customs of ${pricing.amm_customs}% and tax:${pricing.tax_amm}%
 Aqaba customs 0% and tax ${pricing.aqaba_tax}%
@@ -425,6 +425,7 @@ var pricingDetailMsg_ar =
       "\n  السعر من المصدر:<سعر>$  "+
    pricing.shippingAtOriginMsg_ar +
       "\n  وزن الشحن: <وزن>كغم.  وزن الشحن قد يكون أعلى من وزن القطعة "+
+            "\nالابعاد بوصة ><ابعاد< "+
 " الصنف: <صنف> "
 + "\n" +
 "عمان: الجمرك <عمان جمرك>% ،ضريبةالمبيعات %<عمان مبيعات>   "
@@ -438,6 +439,7 @@ var detailsMsg_ar = pricingDetailMsg_ar;
 
 
 
+detailsMsg_ar = detailsMsg_ar.replace("<ابعاد>",pricing.packageDimensions);
 detailsMsg_ar = detailsMsg_ar.replace("<سعر>",pricing.price);
 detailsMsg_ar = detailsMsg_ar.replace("<شحن>",pricing.shipping);
 detailsMsg_ar = detailsMsg_ar.replace("<صنف>",pricing.category_name_ar);
