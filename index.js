@@ -6,6 +6,8 @@ var categories = require('./categories.js');
 var MongoClient = require('mongodb').MongoClient;
 var mongoUtil = require( './mongoUtil.js' );
 var helpers = require( './helpers.js' );
+var dhlrate = require( './dhlrate.js' );
+var Logger = require( './logger.js' );
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
@@ -24,6 +26,7 @@ const request = require('request');
 const app = express();
 var amazon = require('amazon-product-api');
 const warranty_price = '15';
+var logger = new Logger("MyLogFile");
 
       var pricingDetailMsg_en =
       "Chargable weight: <chargableWeight>kg. Shipping weight may be higher than actual product weight\n"+
@@ -118,6 +121,7 @@ app.post('/webhook', function(req, res) {
 handle message recevied from facebook
 ***************************************************/
 function receivedMessage(event) {
+  logger.log("in ReceiveMessage ","testing Logger","********************").log("in ReceiveMessage ","testing Logger","********************")
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -371,7 +375,7 @@ function handleEvent(senderID, event) {
           });
       buttonList.push({
           "type": "postback",
-          "title": morePricesLbl + ' ('+lowestPrice + ')',
+          "title": morePricesLbl + '  '+lowestPrice + ' ',
           "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
@@ -1942,7 +1946,6 @@ function echoOnly(event) {
 function calculatePricing(senderID,item) {
   console.log("=====================> calculatePricing:",item)
 
-
    var pricing_params =   {// get from DB.
     shippingCostPerKgJD: 5,  // JD
     O2_AmmanDeliveryJD: 1.5, // JD
@@ -1950,7 +1953,9 @@ function calculatePricing(senderID,item) {
     handlingPerPackageUSD: 2.25, // USD
     heavyWeightSurcharge: 10, // USD
     heavyWeightThreshold: 44, // pounds
-    J9_unerCostPercentage: 1 // percentage
+    J9_unerCostPercentage: 1, // percentage
+    min_aqaba_margin: 0.02,
+    min_taxable_amount : 140 // minimum tabable amount
   }
 
 
@@ -1975,6 +1980,8 @@ function calculatePricing(senderID,item) {
   }
   var T2_AmmanCatMargin = item.category_info.margin_amm * 1.00;
   U2_AqabaCatMargin = item.category_info.margin_aqaba * 1.00;
+  Q2_NetAqabaMargin = Math.max(pricing_params.min_aqaba_margin,U2_AqabaCatMargin*W2_marginAdjBasedOnWeight*X2_marginAdjBasedOnQty*V2_marginAdjBasedOnPrice);
+
    B2_price = item.price * 1.00;
    if (item.shipping < 0) {
      // unknown shipping cost
@@ -2027,9 +2034,16 @@ function calculatePricing(senderID,item) {
   }
 AR2_usSalesTax = item.category_info.us_tax;
 AQ2_usPriceWithUsTax = ((B2_price+C2_shipping) * (1+AR2_usSalesTax ));
+
+AS2_aramexShippingCost = aramexShipRate(Z2_chargableWeight);
+// AT2 = =IF(B2+C2+(B2+C2)*AR2>140,"Y","N")
+AT2_subjectToCustoms = (B2_price+C2_shipping > pricing_params.min_taxable_amount ? true:false)
 console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_ammanPriceWTax.toFixed(2))
   finalAmmanPriceExpress = Math.min(AP2_capPrice,AO2_ammanPriceWTax);
-
+// BQ2  = =IF(BL2+BM2>140,AF2,0)
+// BL2 = =B2+C2
+BL2_itemPriceandShip = B2_price + C2_shipping;
+// BM2 = =INDEX(DHL!L:L,MATCH(Z2*1.05,DHL!A:A))/0.71
   console.log("Final Amman Price:",finalAmmanPriceExpress.toFixed(2))
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   pricingMessage = pricingMessage + packageDimensions;
@@ -2080,7 +2094,7 @@ btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
         });
     buttonList.push({
         "type": "postback",
-        "title": morePricesLbl + " ("+lowestPrice+")",
+        "title": morePricesLbl + " "+lowestPrice+" ",
         "payload": '{ "action" : "morePrices","quote_obj" :' +  quote_obj +'}'
       });
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
