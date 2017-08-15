@@ -121,7 +121,7 @@ app.post('/webhook', function(req, res) {
 handle message recevied from facebook
 ***************************************************/
 function receivedMessage(event) {
-  logger.log("in ReceiveMessage ","testing Logger","********************").log("in ReceiveMessage ","testing Logger","********************")
+//  logger.log("in ReceiveMessage ","testing Logger","********************").log("in ReceiveMessage ","testing Logger","********************")
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -2053,7 +2053,7 @@ console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_am
 BL2_itemPriceandShip = B2_price + C2_shipping;
 // BM2 = =INDEX(DHL!L:L,MATCH(Z2*1.05,DHL!A:A))/0.71
 BM2_DHLExpressRate = DHL.getDHLRate(Z2_chargableWeight);
-logger.log("DHLRate:",BM2_DHLExpressRate);
+//logger.log("DHLRate:",BM2_DHLExpressRate);
 
 BO2_usHandling = AD2_HandlingCostUSD + BN2_paperAWBFees;
 BP2_ShipHandling = BM2_DHLExpressRate+BO2_usHandling;
