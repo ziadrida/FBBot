@@ -1956,7 +1956,7 @@ function calculatePricing(senderID,item) {
     J9_unerCostPercentageParam: 1, // percentage
     min_aqaba_marginParam: 0.02,
     min_taxable_amountParam : 140, // minimum tabable amount
-    BN2_paperAWBFeesParam: 2.25+ 1.85,
+    BN2_paperAWBFeesParam: 2.5+ 1.85,
     expressClearanceFeeParam: 25/0.71,  // USD
     expressMarginParam: 0.12 ,
     minExpressFeeParam: 5 ,// USD
@@ -2179,6 +2179,15 @@ console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice);
 console.log("+++++++++++ Length of getPricingDetailsPayloadStr:",getPricingDetailsPayloadStr.length);
 console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(getPricingDetailsPayload));
 
+
+console.log("M2_AmmanCost/O2_AmmanDeliveryJD/"+
+"P2_netAmmanMargin/Q2_NetAqabaMargin/T2_AmmanCatMargin/"+
+"U2_AqabaCatMargin/V2_marginAdjBasedOnPrice/W2_marginAdjBasedOnWeight/"+
+"X2_marginAdjBasedOnQty/Y2_volumnWeight/Z2_chargableWeight",
+  M2_AmmanCost+'/'+O2_AmmanDeliveryJD+'/'+P2_netAmmanMargin+'/'+Q2_NetAqabaMargin+'/'+T2_AmmanCatMargin+'/'+
+  U2_AqabaCatMargin+'/'+V2_marginAdjBasedOnPrice+'/'+W2_marginAdjBasedOnWeight+'/'+X2_marginAdjBasedOnQty+'/'+
+  Y2_volumnWeight+'/'+Z2_chargableWeight);
+
 console.log("BL2_itemPriceandShip/BM2_DHLExpressRate/"+
 "BN2_paperAWBFeesParam/BO2_usHandling/BP2_ShipHandling/BQ2_customs/"+
 "BR2_salesTax/BS2_customsAmount/BT2_salesTaxAmount/"+
@@ -2189,6 +2198,15 @@ BR2_salesTax+'/'+BS2_customsAmount+'/'+BT2_salesTaxAmount+'/'+
 BU2_clearanceFee+'/'+BV2_expressMargin+'/'+BW2_marginNRisk+'/'+
 BX2_marginNRiskJD+'/'+BY2_finalExpPriceUSD+'/'+
 BZ2_finalExpPriceJD+'/'+CA2_finalExpPriceMinJD);
+console.log("AA2_weightRateAdjust/AB2_adjustedShippingCost/"+
+"AC2_ShipAndHandCostUSD/AD2_HandlingCostUSD/AE2_itemCostUSD/"+
+"AF2_ammCustoms/AG2_customsUSD/AH2_costWithCustomsUSD/AI2_clearancePercent/"+
+"AJ2_clearanceCost/AK2_loadedCost/AL2_ammanSalesTax",
+AA2_weightRateAdjust+'/'+AB2_adjustedShippingCost+'/'+
+AC2_ShipAndHandCostUSD+'/'+AD2_HandlingCostUSD+'/'+AE2_itemCostUSD+'/'+
+AF2_ammCustoms+'/'+AG2_customsUSD+'/'+AH2_costWithCustomsUSD+'/'+
+AI2_clearancePercent+'/'+AJ2_clearanceCost+'/'+AK2_loadedCost+'/'+
+AL2_ammanSalesTax);
 
 if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
     sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
