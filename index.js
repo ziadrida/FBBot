@@ -272,6 +272,7 @@ db = mongoUtil.getDb(function() {
         userObj = docs;
         sessions[sessionId].newUser = false;
         sessions[sessionId].userObj = docs;
+        sessions[sessionId].fbprofile.locale = docs.locale ; // Only for now - let DB override fbprofile locale TODO
         return callback(docs);
 
 
@@ -1770,6 +1771,7 @@ function getPricing(senderID,item) {
 function getUserPublicInfo(fbId, callback) {
   var data;
   console.log('In getUserPublicInfo - fbId:', fbId);
+  console.log('In getUserPublicInfo - session:', sessions[sessionId]);
   if (sessions[sessionId].fbprofile) {
     console.log('In getUserPublicInfo - fbprofile already defined:', sessions[sessionId].fbprofile.first_name);
     return callback(sessions[sessionId].fbprofile);
