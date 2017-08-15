@@ -1976,7 +1976,10 @@ function calculatePricing(senderID,item) {
   H2_seller = "";
   F2_numberOfSeller = 1;
   M2_AmmanCost = -1;
+  V2_marginAdjBasedOnPrice = 1;
+  W2_marginAdjBasedOnWeight = 1;
 
+  X2_marginAdjBasedOnQty = 1;
   var Z2_chargableWeight = item.chargableWeight * 1.00; // kg
   var AA2_weightRateAdjust = 1; // no adjustment for now
   var AB2_adjustedShippingCost = AA2_weightRateAdjust * pricing_params.shippingCostPerKgJD/0.71;
@@ -1986,7 +1989,10 @@ function calculatePricing(senderID,item) {
   }
   var T2_AmmanCatMargin = item.category_info.margin_amm * 1.00;
   U2_AqabaCatMargin = item.category_info.margin_aqaba * 1.00;
-  Q2_NetAqabaMargin = Math.max(pricing_params.min_aqaba_margin,U2_AqabaCatMargin*W2_marginAdjBasedOnWeight*X2_marginAdjBasedOnQty*V2_marginAdjBasedOnPrice);
+  Q2_NetAqabaMargin = Math.max(pricing_params.min_aqaba_margin,U2_AqabaCatMargin*
+      W2_marginAdjBasedOnWeight*
+      X2_marginAdjBasedOnQty*
+      V2_marginAdjBasedOnPrice);
 
    B2_price = item.price * 1.00;
    if (item.shipping < 0) {
@@ -1998,9 +2004,7 @@ function calculatePricing(senderID,item) {
    }
   packageDimensions = "chargableWeight/packageDimensions:"+ item.chargableWeight + 'KG/'+item.length +
     'x'+item.width + 'x'+ item.height + 'inch' ;
-  V2_marginAdjBasedOnPrice = 1;
-  W2_marginAdjBasedOnWeight = 1;
-  X2_marginAdjBasedOnQty = 1;
+
   Y2_volumnWeight=-1; // already have chargableWeight
   console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',Z2_chargableWeight.toFixed(2)+'/'+AD2_HandlingCostUSD.toFixed(2));
   AC2_ShipAndHandCostUSD =((AB2_adjustedShippingCost * Z2_chargableWeight)) + AD2_HandlingCostUSD;
@@ -2026,7 +2030,10 @@ function calculatePricing(senderID,item) {
     AJ2_clearanceCost.toFixed(2) +'/'+ AH2_costWithCustomsUSD.toFixed(2));
   AK2_loadedCost = AJ2_clearanceCost + AH2_costWithCustomsUSD;
   AL2_ammanSalesTax = item.category_info.tax_amm;
-  P2_netAmmanMargin = T2_AmmanCatMargin*W2_marginAdjBasedOnWeight*X2_marginAdjBasedOnQty*V2_marginAdjBasedOnPrice;
+  P2_netAmmanMargin = T2_AmmanCatMargin*
+    W2_marginAdjBasedOnWeight*
+      X2_marginAdjBasedOnQty*
+      V2_marginAdjBasedOnPrice;
   // M2_AmmanCost = =AK2*0.71+O2
   console.log('AK2_loadedCost / pricing_params.O2_AmmanDeliveryJD:',
     AK2_loadedCost.toFixed(2)+'/'+ pricing_params.O2_AmmanDeliveryJD.toFixed(2))
