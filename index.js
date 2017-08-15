@@ -425,7 +425,7 @@ var pricingDetailMsg_ar =
       "\n  السعر من المصدر:<سعر>$  "+
    pricing.shippingAtOriginMsg_ar +
       "\n  وزن الشحن: <وزن>كغم.  وزن الشحن قد يكون أعلى من وزن القطعة "+
-            "\nالابعاد بوصة ><ابعاد< "+
+            "\nالابعاد بوصة <ابعاد>  ب "+
 " الصنف: <صنف> "
 + "\n" +
 "عمان: الجمرك <عمان جمرك>% ،ضريبةالمبيعات %<عمان مبيعات>   "
@@ -612,7 +612,9 @@ function determineResponse(event) {
     //console.log("*************************cat ",allcats[0]);
      if (sessions[sessionId].userObj.locale.toUpperCase().includes('EN')) {
        sessions[sessionId].userObj.locale = 'ar_US';
-     } ;
+     } else {
+       sessions[sessionId].userObj.locale = 'en_US'
+     };
      sendButton(senderID, 'Would you like to confirm order?');
   }
 
