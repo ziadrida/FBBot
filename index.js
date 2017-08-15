@@ -271,8 +271,8 @@ db = mongoUtil.getDb(function() {
         // user found
         userObj = docs;
         sessions[sessionId].newUser = false;
-        sessions[sessionId].userObj = docs;
-        return callback(docs);
+        sessions[sessionId].userObj = docs[0];
+        return callback(docs[0]);
 
 
       } else if (docs && docs.length == 0) { // no match for user name
@@ -431,7 +431,7 @@ detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqab
 
   //  btnTxt = JSON.stringify(detailsMsg_en);
 
-if (sessions[sessionId].userObj &&
+if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   return sendPriceButton(senderID,detailsMsg_en,buttonList)
 } else {
@@ -562,7 +562,8 @@ function determineResponse(event) {
     text = "";
 
     title = "فيديو - كيف اطلب"
-    if (sessions[sessionId] && sessions[sessionId].userObj && sessions[sessionId].userObj.locale.toUpperCase().includes("EN")) {
+    if (sessions[sessionId] && sessions[sessionId].userObj &&
+      sessions[sessionId].userObj.locale.toUpperCase().includes("EN")) {
       lang = "english";
       text = "";
       title = "How to order Video"
@@ -2063,7 +2064,7 @@ console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(get
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
 
-if (sessions[sessionId].userObj &&
+if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
 } else {
