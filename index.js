@@ -2062,7 +2062,7 @@ BL2_itemPriceandShip = B2_price + C2_shipping;
 BM2_DHLExpressRate = DHL.getDHLRate(Z2_chargableWeight);
 //logger.log("DHLRate:",BM2_DHLExpressRate);
 
-BO2_usHandling = AD2_HandlingCostUSD + BN2_paperAWBFees;
+BO2_usHandling = AD2_HandlingCostUSD + pricing_params.BN2_paperAWBFees;
 BP2_ShipHandling = BM2_DHLExpressRate+BO2_usHandling;
 
 BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxable_amount?
