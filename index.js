@@ -1994,10 +1994,16 @@ function calculatePricing(senderID,item) {
       V2_marginAdjBasedOnPrice);
 
    B2_price = item.price * 1.00;
+
    if (item.shipping < 0) {
      // unknown shipping cost
      C2_shipping = 0;
+     if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
+         sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
      pricingMessage = pricingMessage + "/local shipping cost not included in price"
+   } else {
+     pricingMessage = pricingMessage + "/لا يشمل الشحن فى بلد المصدر"
+   }
    } else {
      C2_shipping = item.shipping * 1.00;
    }
@@ -2013,13 +2019,13 @@ function calculatePricing(senderID,item) {
   // C2 is item.shipping
   console.log("item.price +  item.shipping + AC2_ShipAndHandCostUSD:",
     item.price.toFixed(2) + "/" + item.shipping.toFixed(2) +"/"+ AC2_ShipAndHandCostUSD.toFixed(2));
-  AE2_itemCostUSD = item.price +  item.shipping + AC2_ShipAndHandCostUSD;
+  AE2_itemCostUSD = item.price +  C2_shipping + AC2_ShipAndHandCostUSD;
   console.log("AE2_itemCostUSD:",AE2_itemCostUSD.toFixed(2))
   // AF2 is item.customs Percent
   // customs USD =AF2*(B2+C2+AC2*0.5)*J9
   AF2_ammCustoms = item.category_info.customs * 1.00
   AG2_customsUSD = item.category_info.customs *
-          (item.price + item.shipping +AC2_ShipAndHandCostUSD*.5)*pricing_params.J9_unerCostPercentageParam;
+          (item.price + C2_shipping +AC2_ShipAndHandCostUSD*.5)*pricing_params.J9_unerCostPercentageParam;
 // AH2 =AE2+AG2
   AH2_costWithCustomsUSD = AE2_itemCostUSD + AG2_customsUSD;
   // AJ2 = =AI2*AE2
