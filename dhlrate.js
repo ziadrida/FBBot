@@ -103,7 +103,8 @@ module.exports = {
         if (weight < aqabaRateWt[i]) {
           return aqabaRate[i-1];
         }
-    },
+    }
+  },
 
   getDHLRate: function( weight ) {
 
