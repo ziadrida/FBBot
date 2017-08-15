@@ -1947,7 +1947,7 @@ function calculatePricing(senderID,item) {
   console.log("=====================> calculatePricing:",item)
 
    var pricing_params =   {// get from DB.
-    shippingCostPerKgJD: 5,  // JD
+    shippingCostPerKgJD:  5.42 ,  // JD
     O2_AmmanDeliveryJD: 1.5, // JD
     AI2_clearancePercent: 0.01,
     handlingPerPackageUSD: 2.25, // USD
@@ -2049,7 +2049,7 @@ function calculatePricing(senderID,item) {
 AR2_usSalesTax = item.category_info.us_tax;
 AQ2_usPriceWithUsTax = ((B2_price+C2_shipping) * (1+AR2_usSalesTax ));
 
-AS2_aramexShippingCost = aramexShipRate(Z2_chargableWeight);
+AS2_aramexShippingCost = dhlrate.aramexShipRate(Z2_chargableWeight)/0.71; // iN USD
 // AT2 = =IF(B2+C2+(B2+C2)*AR2>140,"Y","N")
 AT2_subjectToCustoms = (B2_price+C2_shipping > pricing_params.min_taxable_amount ? true:false)
 console.log("AP2_capPrice,AO2_ammStdPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_ammStdPriceWTax.toFixed(2))
@@ -2114,7 +2114,7 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
   BE2_aqabaClerance = pricing_params.aqabaCleranceRate*1.0;
   BF2_aqabaShipRate = DHL.getAqabaRate(Z2_chargableWeight)*1.0
   CA2_finalExpPriceMinJD = (H2_seller == "Amazon"?
-      Math.min(BC2_*0.99,BZ2_finalExpPriceJD):BZ2_finalExpPriceJD);
+      Math.min(BC2_competitorsExpPricingJD*0.99,BZ2_finalExpPriceJD):BZ2_finalExpPriceJD);
 
 
     finalExpPriceAmmJD = 1.00*CA2_finalExpPriceMinJD;
@@ -2179,6 +2179,15 @@ console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice);
           getPricingDetailsPayloadStr = JSON.stringify(getPricingDetailsPayload);
 console.log("+++++++++++ Length of getPricingDetailsPayloadStr:",getPricingDetailsPayloadStr.length);
 console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(getPricingDetailsPayload));
+console.log("BL2_itemPriceandShip,BM2_DHLExpressRate,BN2_paperAWBFees,BO2_usHandling,BP2_ShipHandling,BQ2_customs,
+BR2_salesTax,BS2_customsAmount,BT2_salesTaxAmount,BU2_clearanceFee,BV2_expressMargin,BW2_marginNRisk,BX2_marginNRiskJD,BY2_finalExpPriceUSD,BZ2_finalExpPriceJD,CA2_finalExpPriceMinJD);
+",
+  BL2_itemPriceandShip+'/'+BM2_DHLExpressRate+'/'+BN2_paperAWBFees+'/'+BO2_usHandling+'/'+BP2_ShipHandling+'/'+BQ2_customs+'/'+
+BR2_salesTax+'/'+BS2_customsAmount+'/'+BT2_salesTaxAmount+'/'+
+BU2_clearanceFee+'/'+BV2_expressMargin+'/'+BW2_marginNRisk+'/'+
+BX2_marginNRiskJD+'/'+BY2_finalExpPriceUSD+'/'+
+BZ2_finalExpPriceJD+'/'+CA2_finalExpPriceMinJD);
+
 if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
     sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   btnTxt = "Personal express price 3-5 days: "+finalExpPriceAmmJD.toFixed(2) + " JOD" +
@@ -2203,7 +2212,7 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   morePricesLbl = "اسعار اخرى"
   priceDetailsLbl = "تفاصيل السعر";
 }
-btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
+btnTxt = item.title.substring(0+'/'+80) + "\n" + btnTxt;
 
 
 
@@ -2229,13 +2238,4 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
   //sendTextMessage(senderID,JSON.stringify(item));
-}
-
-
-function aramexShipRate(weightKG) {
-  var aramexFirst05 = 8.40;
-  var aramexMultiple = 6.80;
-  var price = aramexFirst05+(Math.ceil(1.91*2)/2-0.5)*aramexMultiple
-console.log("Calulcated Aramex price:",price);
-  return price;
 }
