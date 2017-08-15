@@ -371,7 +371,7 @@ function handleEvent(senderID, event) {
           });
       buttonList.push({
           "type": "postback",
-          "title": morePricesLbl + ':'+lowestPrice,
+          "title": morePricesLbl + ' ('+lowestPrice + ')',
           "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
@@ -2060,11 +2060,12 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
     sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   btnTxt = "Personal express price 3-5 days: "+finalAmmanPriceExpress.toFixed(2) + " JOD";
   priceDetailsLbl = "Price Details";
+  morePricesLbl = "more prices";
 } else {
   btnTxt =
   "   سعر الطلب الخاص 3-5 ايام: "+
   finalAmmanPriceExpress.toFixed(2) +  " دينار " ;
-
+  morePricesLbl = "اسعار اخرى"
   priceDetailsLbl = "تفاصيل السعر";
 }
 btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
@@ -2079,7 +2080,7 @@ btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
         });
     buttonList.push({
         "type": "postback",
-        "title": "more prices("+lowestPrice+")",
+        "title": morePricesLbl + " ("+lowestPrice+")",
         "payload": '{ "action" : "morePrices","quote_obj" :' +  quote_obj +'}'
       });
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
