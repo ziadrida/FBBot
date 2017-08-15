@@ -2042,7 +2042,7 @@ function calculatePricing(senderID,item) {
   AN2_ammanSalePricewoTax = M2_AmmanCost/(1- P2_netAmmanMargin);
   console.log("AN2_ammanSalePricewoTax:",AN2_ammanSalePricewoTax.toFixed(2));
   AO2_ammanPriceWTax = AN2_ammanSalePricewoTax*(1+AL2_ammanSalesTax);
-  AP2_capPrice = 9999999;
+  AP2_capPrice = 9999999.00;
   if (B2_price + C2_shipping > 10 ) {
     AP2_capPrice = item.category_info.cap_amm * (B2_price + C2_shipping);
   }
@@ -2142,10 +2142,10 @@ BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1+BE2_aqabaCler
   pricingMessage = pricingMessage.replace('/: \//g',':');
 
 //E13 - MIN(MIN(AO2,AP2),9999)
-E13_finalStandardPrice = Math.min(AO2_ammanPriceWTax,AP2_capPrice);
+E13_finalStandardPrice = Math.min(AO2_ammanPriceWTax*1.0,AP2_capPrice*1.0);
 
-var finalStandardAmmPrice = E13_finalStandardPrice.toFixed(2);
-console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice.toFixed(2))
+var finalStandardAmmPrice = 1.00*E13_finalStandardPrice.toFixed(2);
+console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice);
   lowestPrice = Math.min(finalExpPriceAmmJD.toFixed(2),
     finalStandardAmmPrice.toFixed(2),
     finalExpPriceMinAqabaJD.toFixed(2));
