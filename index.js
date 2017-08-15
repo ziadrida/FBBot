@@ -2041,7 +2041,7 @@ function calculatePricing(senderID,item) {
   console.log("M2_AmmanCost/(1- P2_netAmmanMargin):",M2_AmmanCost.toFixed(2)+'/'+P2_netAmmanMargin.toFixed(2));
   AN2_ammanSalePricewoTax = M2_AmmanCost/(1- P2_netAmmanMargin);
   console.log("AN2_ammanSalePricewoTax:",AN2_ammanSalePricewoTax.toFixed(2));
-  AO2_ammanPriceWTax = AN2_ammanSalePricewoTax*(1+AL2_ammanSalesTax);
+  AO2_ammStdPriceWTax = AN2_ammanSalePricewoTax*(1+AL2_ammanSalesTax);
   AP2_capPrice = 9999999.00;
   if (B2_price + C2_shipping > 10 ) {
     AP2_capPrice = item.category_info.cap_amm * (B2_price + C2_shipping);
@@ -2052,8 +2052,8 @@ AQ2_usPriceWithUsTax = ((B2_price+C2_shipping) * (1+AR2_usSalesTax ));
 AS2_aramexShippingCost = aramexShipRate(Z2_chargableWeight);
 // AT2 = =IF(B2+C2+(B2+C2)*AR2>140,"Y","N")
 AT2_subjectToCustoms = (B2_price+C2_shipping > pricing_params.min_taxable_amount ? true:false)
-console.log("AP2_capPrice,AO2_ammanPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_ammanPriceWTax.toFixed(2))
-  finalAmmanPriceExpress = Math.min(AP2_capPrice,AO2_ammanPriceWTax);
+console.log("AP2_capPrice,AO2_ammStdPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_ammStdPriceWTax.toFixed(2))
+  finalAmmanPriceExpress = Math.min(AP2_capPrice,AO2_ammStdPriceWTax);
 // BQ2  = =IF(BL2+BM2>140,AF2,0)
 
 // BL2 = =B2+C2
@@ -2115,7 +2115,7 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
       Math.min(BC2_*0.99,BZ2_finalExpPriceJD):BZ2_finalExpPriceJD);
 
 
-    finalExpPriceAmmJD = CA2_finalExpPriceMinJD;
+    finalExpPriceAmmJD = 1.00*CA2_finalExpPriceMinJD;
           console.log("******** Final Express Price:",finalExpPriceAmmJD);
   // BG2 = =AA2*BF2/0.71
   BG2_aqabaShipRate = AA2_weightRateAdjust*BF2_aqabaShipRate*1.0/0.71
@@ -2142,9 +2142,10 @@ BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1+BE2_aqabaCler
   pricingMessage = pricingMessage.replace('/: \//g',':');
 
 //E13 - MIN(MIN(AO2,AP2),9999)
-E13_finalStandardPrice = Math.min(AO2_ammanPriceWTax*1.0,AP2_capPrice*1.0);
 
-var finalStandardAmmPrice = 1.00*E13_finalStandardPrice.toFixed(2);
+E13_finalAmmStdPrice = Math.min(AO2_ammStdPriceWTax*1.0,AP2_capPrice*1.0);
+
+var finalStandardAmmPrice = 1.00*E13_finalAmmStdPrice.toFixed(2);
 
 finalExpPriceMinAqabaJD = 1.05*finalExpPriceAmmJD.toFixed(2);
 console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice);
