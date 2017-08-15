@@ -394,9 +394,9 @@ function handleEvent(senderID, event) {
     tax_amm: (payloadMsg.quotation.item.category_info.tax_amm * 100).toFixed(1),
     tax_aqaba: (payloadMsg.quotation.item.category_info.tax_aqaba * 100).toFixed(1),
     aqaba_customs: "0",
-    packageDimensions: payloadMsg.quotation.item.length + 'x' +
-        payloadMsg.quotation.item.width + 'x' +
-        payloadMsg.quotation.item.height
+    packageDimensions: payloadMsg.quotation.item.length.toFixed(1) + 'x' +
+        payloadMsg.quotation.item.width.toFixed(1) + 'x' +
+        payloadMsg.quotation.item.height.toFixed(1)
 
   }
   var detailsMsg_en =
@@ -423,21 +423,21 @@ Our guarantee:
 var pricingDetailMsg_ar =
   pricing.title+
       "  السعر من المصدر:<سعر>$  "+
-           + "\n" +
+             "\n" +
    pricing.shippingAtOriginMsg_ar +
      + "\n" +
       "  وزن الشحن: <وزن>كغم.  وزن الشحن قد يكون أعلى من وزن القطعة "+
          "\n" +
-            "الابعاد بوصة <ابعاد>"+
+            "الابعاد <ابعاد> بوصة"+
            "\n" +
-" الصنف: <صنف> " +
-"\n" +
-"عمان: الجمرك <عمان جمرك>% ،ضريبةالمبيعات %<عمان مبيعات>" +
- "\n" +
-"عقبة: الجمرك 0% وضريبةالمبيعات %<عقبة مبيعات>  "+
- "\n" +
+           " الصنف: <صنف> " +
+           "\n" +
+           "عمان: الجمرك <عمان جمرك>% ،ضريبةالمبيعات %<عمان مبيعات>" +
+           "\n" +
+           "عقبة: الجمرك 0% وضريبةالمبيعات %<عقبة مبيعات>  "+
+           "\n" +
 			"\n السعر يشمل سعر القطعة + الشحن + الجمرك + الضريبة + كل المصاريف "	+
-"\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
+      "\nالكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
 "\n .نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون ان لا يتغير - نضمن أفضل الأسعار 	";
 var detailsMsg_ar = pricingDetailMsg_ar;
 
