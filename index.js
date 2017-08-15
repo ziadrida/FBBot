@@ -2179,10 +2179,13 @@ console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice);
           getPricingDetailsPayloadStr = JSON.stringify(getPricingDetailsPayload);
 console.log("+++++++++++ Length of getPricingDetailsPayloadStr:",getPricingDetailsPayloadStr.length);
 console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(getPricingDetailsPayload));
-console.log("BL2_itemPriceandShip,BM2_DHLExpressRate,BN2_paperAWBFees,BO2_usHandling,BP2_ShipHandling,BQ2_customs,
-BR2_salesTax,BS2_customsAmount,BT2_salesTaxAmount,BU2_clearanceFee,BV2_expressMargin,BW2_marginNRisk,BX2_marginNRiskJD,BY2_finalExpPriceUSD,BZ2_finalExpPriceJD,CA2_finalExpPriceMinJD);
-",
-  BL2_itemPriceandShip+'/'+BM2_DHLExpressRate+'/'+BN2_paperAWBFees+'/'+BO2_usHandling+'/'+BP2_ShipHandling+'/'+BQ2_customs+'/'+
+
+console.log("BL2_itemPriceandShip/BM2_DHLExpressRate/"+
+"BN2_paperAWBFees/BO2_usHandling/BP2_ShipHandling/BQ2_customs/"+
+"BR2_salesTax/BS2_customsAmount/BT2_salesTaxAmount/"+
+"BU2_clearanceFee/BV2_expressMargin/BW2_marginNRisk/BX2_marginNRiskJD/"+
+"BY2_finalExpPriceUSD/BZ2_finalExpPriceJD/CA2_finalExpPriceMinJD",
+BL2_itemPriceandShip+'/'+BM2_DHLExpressRate+'/'+BN2_paperAWBFees+'/'+BO2_usHandling+'/'+BP2_ShipHandling+'/'+BQ2_customs+'/'+
 BR2_salesTax+'/'+BS2_customsAmount+'/'+BT2_salesTaxAmount+'/'+
 BU2_clearanceFee+'/'+BV2_expressMargin+'/'+BW2_marginNRisk+'/'+
 BX2_marginNRiskJD+'/'+BY2_finalExpPriceUSD+'/'+
