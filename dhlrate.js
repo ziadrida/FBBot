@@ -114,19 +114,19 @@ module.exports = {
 
   if (weight > 5) {
     if (DHLLargeShipRate.length >= index) {
-      return DHLLargeShipRate[index];
+      return DHLLargeShipRate[index]*1.13;
     } else {
       // no rate in DHLLargeShipRate - compute based on
       for (i=1 ; i <DHLLargeShipRateWT.length; i++ ) {
         if (weight < DHLLargeShipRateWT[i]) {
 
-          return DHLLargeShipRate1[i-1];
+          return DHLLargeShipRate1[i-1]*1.13;
         }
       }
     }
   } else {
     // weight less than or equal to 5
-    return DHLExpressRate[index];
+    return DHLExpressRate[index]*1.13*1.16; // include surcharge and tax
   }
 
   }

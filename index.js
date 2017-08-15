@@ -378,7 +378,7 @@ function handleEvent(senderID, event) {
           "title": morePricesLbl + '  '+lowestPrice + ' ',
           "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
         });
-  //  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
+  //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
   var pricing = {
     title: payloadMsg.quotation.item.title.substring(0,30) + '...',
     chargableWeight: payloadMsg.quotation.item.chargableWeight,
@@ -2029,7 +2029,7 @@ function calculatePricing(senderID,item) {
   console.log('AJ2_clearanceCost /AH2_costWithCustomsUSD',
     AJ2_clearanceCost.toFixed(2) +'/'+ AH2_costWithCustomsUSD.toFixed(2));
   AK2_loadedCost = AJ2_clearanceCost + AH2_costWithCustomsUSD;
-  AL2_ammanSalesTax = item.category_info.tax_amm;
+  AL2_ammanSalesTax = 1.0*item.category_info.tax_amm.toFixed(2);
   P2_netAmmanMargin = T2_AmmanCatMargin*
     W2_marginAdjBasedOnWeight*
       X2_marginAdjBasedOnQty*
@@ -2053,7 +2053,7 @@ AS2_aramexShippingCost = aramexShipRate(Z2_chargableWeight);
 // AT2 = =IF(B2+C2+(B2+C2)*AR2>140,"Y","N")
 AT2_subjectToCustoms = (B2_price+C2_shipping > pricing_params.min_taxable_amount ? true:false)
 console.log("AP2_capPrice,AO2_ammStdPriceWTax",AP2_capPrice.toFixed(2)+'/'+AO2_ammStdPriceWTax.toFixed(2))
-  finalAmmanPriceExpress = Math.min(AP2_capPrice,AO2_ammStdPriceWTax);
+  finalAmmanPriceStdwTax = Math.min(AP2_capPrice,AO2_ammStdPriceWTax);
 // BQ2  = =IF(BL2+BM2>140,AF2,0)
 
 // BL2 = =B2+C2
@@ -2110,7 +2110,7 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
     (AT2_subjectToCustoms?AY2_clearanceFee:0);
     BC2_competitorsExpPricingJD = BB2_expressPricing * 0.71;
 
-  BD2_aqabaTax = (item.tax_aqaba*1.0).toFixed(2);
+  BD2_aqabaTax = 1.0*item.category_info.tax_aqaba.toFixed(2);
   BE2_aqabaClerance = pricing_params.aqabaCleranceRate*1.0;
   BF2_aqabaShipRate = DHL.getAqabaRate(Z2_chargableWeight)*1.0
   CA2_finalExpPriceMinJD = (H2_seller == "Amazon"?
@@ -2143,7 +2143,7 @@ console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aq
   E14_finalStdAqabaPriceJD = 1.0*(BJ2_aqabaCostwTaxJD/(1-Q2_NetAqabaMargin));
   var finalStdAqabaPriceJD = 1.0*E14_finalStdAqabaPriceJD.toFixed(2);
   console.log("Final Aqaba price: ",E14_finalStdAqabaPriceJD);
-  console.log("Final Amman Price:", finalAmmanPriceExpress.toFixed(2));
+  console.log("Final Amman Price:", finalAmmanPriceStdwTax.toFixed(2));
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   pricingMessage = pricingMessage + packageDimensions;
   pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
@@ -2192,7 +2192,7 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
 } else {
   btnTxt =
   "   سعر الطلب الخاص 3-5 ايام: "+
-  finalAmmanPriceExpress.toFixed(2) +  " دينار " ;
+  finalExpPriceAmmJD.toFixed(2) +  " دينار " ;
   btnTxt = btnTxt + "\n" +
   "   سعر الطلب 7-14 يوم: "+
   finalStandardAmmPrice.toFixed(2) +  " دينار " ;
@@ -2218,15 +2218,15 @@ btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
         "title": morePricesLbl + " "+lowestPrice+" ",
         "payload": '{ "action" : "morePrices","quote_obj" :' +  quote_obj +'}'
       });
-//  btnTxt = "Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage;
-//  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceExpress.toFixed(2);
+//  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
+//  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
 // TODO
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
 
 
   sendPriceButton(senderID,btnTxt,buttonList)
-//  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceExpress.toFixed(2) + '\n' + pricingMessage);
+//  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
   //sendTextMessage(senderID,JSON.stringify(item));
 }
