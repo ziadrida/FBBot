@@ -1,9 +1,9 @@
 module.exports = {
 
   getButton: function(session,btnType,payload,titleSub1,titleSub2) {
-    const  morePricesLbl = ["اسعار اخرى","more prices"];
-    const priceDetailsLbl = ["تفاصيل السعر","price details"];
-    const confirmOrderLbl = ['اضف للطلب', "Buy"];
+    var morePricesLbl = ["اسعار اخرى","more prices"];
+    var priceDetailsLbl = ["تفاصيل السعر","price details"];
+    var confirmOrderLbl = ["اضف للطلب", "Buy"];
 
 
     console.log("*** in getButton btnType:",btnType)
@@ -12,7 +12,7 @@ module.exports = {
     try {
     if (session.userObj && session.userObj.locale &&
       session.userObj.locale.toLowerCase().includes("en")) {
-        lang=1
+        lang=1;
       }
 
       if (typeof titleSub1 == 'undefined' || !titleSub1 ) {
@@ -23,12 +23,13 @@ module.exports = {
       }
     switch (btnType) {
       case 'getMorePrices':
-        console.log("case getPricingDetails ++++++++++++++++")
+        console.log("case getMorePrices ++++++++++++++++ titleSub1;",titleSub1);
+        console.log("case getMorePrices ++++++++++++ morePricesLbl[lang]:",morePricesLbl[lang]);
 
-         buttonTitle  = morePricesLbl[lang] + " "+titleSub1+" ";
+         buttonTitle  = morePricesLbl[lang] ;//+ " "+titleSub1+" ";
         break;
       case 'getPricingDetails':
-        console.log("case getPricingDetails ++++++++++++++++")
+        console.log("case getPricingDetails ++++++++++++++++ priceDetailsLbl[lang]:",priceDetailsLbl[lang])
           buttonTitle = priceDetailsLbl[lang];
             break;
       case 'confirmOrder':
