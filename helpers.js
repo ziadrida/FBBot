@@ -1,15 +1,28 @@
 module.exports = {
-leftPadTextArea: function( textArea,char,len )
+  getMessage: function( textCode,session )
 {
-  var paddedArea;
-var lines= textArea.split('\n');
-for (i=0; i< lines.length; i++) {
-  paddedArea = paddedArea + module.exports.padding_left(lines[i],char,len) + '\n';
-//console.log(lines[i]);
-}
+  if (session.userObj && session.userObj.locale &&
+    session.userObj.locale.toLowerCase().includes("en")) {
+      // english
+      switch (textCode) {
+        case "1001":
+          return "Please wait... we will try to find the correct category of this item";
+          break;
+        default:
 
-return paddedArea;
+      }
+    } else { // arabic
+      switch (textCode) {
+        case "1001":
+          return "سوف نقوم بايجاد صنف المنتج .. الرجاء الإنتظار";
+          break;
+        default:
+
+      }
+    }
+
 },
+
 
 // left padding s with c to a total of n chars
 padding_left: function( s, c, n)
