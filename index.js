@@ -2283,7 +2283,7 @@ lowestPrice = quote_obj.price.min_price;
 var getPricingDetailsPayload = {action: 'getPricingDetails',
     quotation: quote_obj
 }
-
+ 
   buttonList.push(helpers.getButton(sessions[sessionId],'getPricingDetails',getPricingDetailsPayload));
 
   var getMorePricesPayload = {action: 'getMorePrices',
