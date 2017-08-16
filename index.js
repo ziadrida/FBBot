@@ -370,25 +370,18 @@ function handleEvent(senderID, event) {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
 
-    if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
-      sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
-        morePricesLbl = "more prices "
-        confirmOrderLbl = "Buy"
-    } else {
-      morePricesLbl = "أسعار اخرى"
-      confirmOrderLbl = 'اضف للطلب'
-    }
+
     var buttonList=[]
-    buttonList.push({
-        "type": "postback",
-        "title": confirmOrderLbl,
-        "payload": "Buy" //'{ "action" : "buy", "quote_obj": ' +  payloadMsg.quote_obj  +'}'
-          });
-      buttonList.push({
-          "type": "postback",
-          "title": morePricesLbl + '  '+lowestPrice + ' ',
-          "payload": "other" //'{ "action" : "morePrices", "quote_obj" : ' +  payloadMsg.quote_obj  +'}'
-        });
+    var confirmOrderPayload = {action: 'confirmOrder',
+                    quotation: payloadMsg.quotation
+      }
+
+    buttonList.push(helpers.getButton(sessions[sessionId],'confirmOrder',confirmOrderPayload));
+
+    var getMorePricesPayload = {action: 'getMorePrices',
+                    quotation: quote_obj
+      }
+      buttonList.push(helpers.getButton(sessions[sessionId],'getMorePrices',getMorePricesPayload));
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
   var pricing = {
     title: payloadMsg.quotation.item.title.substring(0,60) + '...',
@@ -1006,7 +999,7 @@ following is the template of an Element in a compactList
           "elements": compactListElements,
           // next is the more button
             "buttons": [{
-              "title": "Category not listed above",
+              "title": helpers.getMessage("1002",sessions[sessionId]), // category not listed
               "type": "postback",
               "payload": ' { "action" : "getHelp" , "subject" :"categories" }'
             }]
@@ -1447,7 +1440,7 @@ function processHttpRequest(event,callback) {
            "\n" +
            "Chargable weight:" + chargableWeight +
            "\n" +
-           "Package dimensions:" + packageDimensions +
+            packageDimensions +
             "\n" +
             "Availablity:" + available +
            "\n" +
@@ -2225,25 +2218,6 @@ console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice);
     finalStandardAmmPrice.toFixed(2),
   finalStdAqabaPriceJD.toFixed(2));
 
-  var quote_obj = {
-    quote_no: 0,
-    quote_date: new Date(),
-    item: item,
-    price: {
-      amm_exp: finalExpPriceAmmJD.toFixed(2),
-      amm_std: finalStandardAmmPrice.toFixed(2),
-      aq_exp: finalExpPriceMinAqabaJD.toFixed(2),
-      aq_std: finalStdAqabaPriceJD.toFixed(2)
-    },
-    notes: pricingMessage
-  }
-  var getPricingDetailsPayload = {action: 'getPricingDetails',
-      quotation: quote_obj
-        }
-          getPricingDetailsPayloadStr = JSON.stringify(getPricingDetailsPayload);
-console.log("+++++++++++ Length of getPricingDetailsPayloadStr:",getPricingDetailsPayloadStr.length);
-console.log("++++++++++++++++++ getPricingDetailsPayloadStr:",JSON.stringify(getPricingDetailsPayload));
-
 
 console.log("M2_AmmanCost/O2_AmmanDeliveryJDParam/"+
 "P2_netAmmanMargin/Q2_NetAqabaMargin/T2_AmmanCatMargin/"+
@@ -2299,25 +2273,50 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
 }
 btnTxt = item.title.substring(0+'/'+80) + "\n" + btnTxt;
 
-
+var quote_obj = {
+  quote_no: 0,
+  quote_date: new Date(),
+  item: item,
+  price: {
+    amm_exp: finalExpPriceAmmJD.toFixed(2),
+    amm_std: finalStandardAmmPrice.toFixed(2),
+    aq_exp: finalExpPriceMinAqabaJD.toFixed(2),
+    aq_std: finalStdAqabaPriceJD.toFixed(2)
+  },
+  notes: pricingMessage
+}
 
   var buttonList=[]
-  buttonList.push({
+var getPricingDetailsPayload = {action: 'getPricingDetails',
+    quotation: quote_obj
+}
+
+  /*buttonList.push({
       "type": "postback",
       "title": priceDetailsLbl,
       "payload": getPricingDetailsPayloadStr
         });
-    buttonList.push({
+*/
+  buttonList.put(helpers.getButton(sessions[sessionId],'getPricingDetails',getPricingDetailsPayload));
+
+  var getMorePricesPayload = {action: 'getMorePrices',
+            quotation: quote_obj
+  }
+
+        /*
+  buttonTitle = morePricesLbl + " "+lowestPrice+" ";
+  buttonList.push({
         "type": "postback",
-        "title": morePricesLbl + " "+lowestPrice+" ",
-        "payload": '{ "action" : "morePrices","quote_obj" :' +  quote_obj +'}'
-      });
+        "title": buttonTitle,
+        "payload": getMorePricesPayloadStr
+    });*/
+    
+  buttonList.put(helpers.getButton(sessions[sessionId],
+    'getMorePrices',getMorePricesPayload,lowestPrice));
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
 //  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
 // TODO
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
-
-
 
   sendPriceButton(senderID,btnTxt,buttonList)
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
