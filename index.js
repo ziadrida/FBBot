@@ -2263,13 +2263,17 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   morePricesLbl = "اسعار اخرى"
   priceDetailsLbl = "تفاصيل السعر";
 }*/
+/*
 var valParams = {
-  val1: finalExpPriceAmmJD.toFixed(2),
+  val1: (finalExpPriceAmmJD<finalStandardAmmPrice? finalExpPriceAmmJD.toFixed(2):
   val2: finalStandardAmmPrice.toFixed(2),
   val3: finalStdAqabaPriceJD.toFixed(2)
+}*/
+var valParams = {
+  val1: (finalExpPriceAmmJD<finalStandardAmmPrice? finalExpPriceAmmJD.toFixed(2):finalStandardAmmPrice.toFixed(2))
 }
-
-btnTxt = helpers.getMessage(sessions[sessionId],"1003",valParams)
+msgCode = (finalExpPriceAmmJD<finalStandardAmmPrice? "1003":"1004")
+btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
 var quote_obj = {
