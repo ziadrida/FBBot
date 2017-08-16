@@ -1,7 +1,7 @@
 module.exports = {
 
-  getButton: function(session,btnType,payloadStr,titleSub1,titleSub2) {
-    const  morePricesLbl ["اسعار اخرى","more prices"]
+  getButton: function(session,btnType,payload,titleSub1,titleSub2) {
+    const  morePricesLbl = ["اسعار اخرى","more prices"]
     const priceDetailsLbl = ["تفاصيل السعر","price details"]
     const confirmOrderLbl = ['اضف للطلب', "Buy"]
 
@@ -10,6 +10,7 @@ module.exports = {
       session.userObj.locale.toLowerCase().includes("en")) {
         lang=0
     }
+    var payloadStr = JSON.stringify(payload);
 
     switch (btnType) {
       case "getMorePrices":
