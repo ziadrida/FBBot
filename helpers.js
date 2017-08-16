@@ -1,9 +1,9 @@
 module.exports = {
 
   getButton: function(session,btnType,payload,titleSub1) {
-    var morePricesLbl = ["اAسعار اخرى","more prices"];
-    var priceDetailsLbl = ["Aتفاصيل السعر","price details"];
-    var confirmOrderLbl = ["Aاضف للطلب", "Buy"];
+    var morePricesLbl = ["اسعار اخرى","more prices"];
+    var priceDetailsLbl = ["تفاصيل السعر","price details"];
+    var confirmOrderLbl = ["اضف للطلب", "Buy"];
 
 console.log("morePrices:",morePricesLbl);
 
@@ -29,7 +29,7 @@ console.log("morePrices:",morePricesLbl);
         console.log("case getMorePrices ++++++++++++++++ titleSub1;",titleSub1);
         console.log("case getMorePrices ++++++++++++ morePricesLbl[lang]:",morePricesLbl[lang]);
 
-         buttonTitle  = morePricesLbl[lang] ;//+ " "+titleSub1+" ";
+         buttonTitle  = morePricesLbl[lang] + " "+titleSub1+" ";
         break;
       case 'getPricingDetails':
         console.log("case getPricingDetails ++++++++++++++++ priceDetailsLbl[lang]:",priceDetailsLbl[lang])
