@@ -382,7 +382,7 @@ function handleEvent(senderID, event) {
                     quotation: payloadMsg.quotation
       }
       buttonList.push(helpers.getButton(sessions[sessionId],'getMorePrices',getMorePricesPayload),
-        payloadMsg.quotation.price.min_price    );
+        payloadMsg.quotation.price.min_price);
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
   var pricing = {
     title: payloadMsg.quotation.item.title.substring(0,60) + '...',
@@ -2283,10 +2283,10 @@ var quote_obj = {
     amm_std: finalStandardAmmPrice.toFixed(2),
     aq_exp: finalExpPriceMinAqabaJD.toFixed(2),
     aq_std: finalStdAqabaPriceJD.toFixed(2),
-    min_price: Math.min(quote_obj.price.amm_exp,
-      quote_obj.price.amm_std,
-      quote_obj.price.aq_std,
-      quote_obj.price.aq_exp)
+    min_price: Math.min(finalExpPriceAmmJD,
+      finalStandardAmmPrice,
+      finalExpPriceMinAqabaJD,
+      finalStdAqabaPriceJD)
   },
   notes: pricingMessage
 }
