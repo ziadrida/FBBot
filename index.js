@@ -13,6 +13,10 @@ var ObjectId = require('mongodb').ObjectID;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 var db;
 
+const globalparams = {
+  category_match_percentage: 0.85
+}
+
 var callCount = 0;
 var amazonClient ;
 // parse URL
@@ -365,23 +369,22 @@ function handleEvent(senderID, event) {
     // ignore check for now - just go ahead with pricing calculation
     return calculatePricing(senderID,payloadMsg.item);
   }
+  if(jsonpayload && payloadMsg.action == 'getMorePrices') {
+    // return a lis of valid prices to select from
+
+  }
 
   if(jsonpayload && payloadMsg.action == 'getPricingDetails') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
 
-
     var buttonList=[]
-    var confirmOrderPayload = {action: 'confirmOrder',
-                    quotation: payloadMsg.quotation
-      }
+    var confirmOrderPayload = {action:'confirmOrder',quotation: payloadMsg.quotation }
 
     buttonList.push(helpers.getButton(sessions[sessionId],'confirmOrder',confirmOrderPayload));
 
-    var getMorePricesPayload = {action: 'getMorePrices',
-                    quotation: payloadMsg.quotation
-      }
-      buttonList.push(helpers.getButton(sessions[sessionId],'getMorePrices',getMorePricesPayload,
+    var getMorePricesPayload = {action: 'getMorePrices', quotation: payloadMsg.quotation }
+    buttonList.push(helpers.getButton(sessions[sessionId],'getMorePrices',getMorePricesPayload,
         payloadMsg.quotation.price.min_price));
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
   var pricing = {
@@ -972,37 +975,33 @@ console.log("=====> in sendButton:",btnText);
   callSendAPI(messageData);
 } // sendButton
 
-function compactListBuilder(recipientId, compactListElements) {
-  console.log("=====> in compactListBuilder:",recipientId);
+function compactListBuilder(recipientId, compactListElements, moreButton) {
+  console.log("=====> in compactListBuilder:", recipientId);
 
-    var compactListMessage = {
+  var compactListMessage = {
 
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "list",
-          "top_element_style": "compact",
-          // add elements here
-          "elements": compactListElements,
-          // next is the more button
-            "buttons": [{
-              "title": helpers.getMessage(sessions[sessionId],"1002"), // category not listed
-              "type": "postback",
-              "payload": ' { "action" : "getHelp" , "subject" :"categories" }'
-            }]
-          }
-          }
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "list",
+        "top_element_style": "compact",
+        // add elements here
+        "elements": compactListElements,
+        // next is the more button
+        "buttons": moreButton
+      }
+    }
 
-      };
+  };
 
   let messageData = {
     "recipient": {
       "id": recipientId
     },
   }
-messageData.message =  compactListMessage;
+  messageData.message = compactListMessage;
 
-console.log("******************** before callSendAPI: messageData:",JSON.stringify(messageData));
+  console.log("******************** before callSendAPI: messageData:", JSON.stringify(messageData));
   callSendAPI(messageData);
 }
 
@@ -1753,6 +1752,7 @@ function getPricing(senderID,item) {
   }
 */
   // find category
+
   categories.findCategory(item.category,function(cats) {
   //  console.log("***************** List all CATEGORIES MATCH:",cats);
     if(!cats) {
@@ -1778,7 +1778,7 @@ function getPricing(senderID,item) {
       // more than one - let user select the valid category
     console.log("number of cats:",cats.length);
     highScore = cats[0].score ;
-    for (i=0 ; i < cats.length && i<3 && cats[i].score >  highScore*0.7; i++) {
+    for (i=0 ; i < cats.length && i<3 && cats[i].score >  highScore*globalparams.category_match_percentage; i++) {
       console.log("+++++++++++++= ",cats[i]);
        cats[i].score=  cats[i].score.toFixed(2);
       item.category = cats[i].category_name;
@@ -1791,7 +1791,7 @@ function getPricing(senderID,item) {
           item: item
       }
       payloadStr = JSON.stringify(payload);
-        catList.push({
+      catList.push({
           "title" : cats[i].category_name + "/"+ cats[i].score,
           "subtitle"  : cats[i].category_name_ar,
           buttons : [{
@@ -1800,12 +1800,17 @@ function getPricing(senderID,item) {
             "payload": payloadStr
           }]
       });
+      var moreButton = [{
+        "title": helpers.getMessage(sessions[sessionId],"1002"), // category not listed
+        "type": "postback",
+        "payload": ' { "action" : "getHelp" , "subject" :"categories" }'
+      }]
 }
   if (catList.length == 1) {
     console.log("calc price for item:",item);
       return calculatePricing(senderID,item);
   } else {
-     compactListBuilder(senderID,catList);
+     compactListBuilder(senderID,catList,moreButton);
    }
  }
   // compactList(senderID,"Which category best matches this item?");
@@ -2233,7 +2238,7 @@ AC2_ShipAndHandCostUSD+'/'+AD2_HandlingCostUSD+'/'+AE2_itemCostUSD+'/'+
 AF2_ammCustoms+'/'+AG2_customsUSD+'/'+AH2_costWithCustomsUSD+'/'+
 pricing_params.AI2_clearancePercentParam+'/'+AJ2_clearanceCost+'/'+AK2_loadedCost+'/'+
 AL2_ammanSalesTax);
-
+/*
 if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
     sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
   btnTxt = "Personal express price 3-5 days: "+finalExpPriceAmmJD.toFixed(2) + " JOD" +
@@ -2257,7 +2262,14 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
 
   morePricesLbl = "اسعار اخرى"
   priceDetailsLbl = "تفاصيل السعر";
+}*/
+var valparams = {
+  val1: finalExpPriceAmmJD.toFixed(2),
+  val2: finalStandardAmmPrice.toFixed(2),
+  val3: finalStdAqabaPriceJD.toFixed(2)
 }
+
+btnTxt = helpers.getMessage(sessions[sessionId],"1003",valParams)
 btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
 var quote_obj = {
@@ -2286,9 +2298,7 @@ var getPricingDetailsPayload = {action: 'getPricingDetails',
 
   buttonList.push(helpers.getButton(sessions[sessionId],'getPricingDetails',getPricingDetailsPayload));
 
-  var getMorePricesPayload = {action: 'getMorePrices',
-            quotation: quote_obj
-  }
+  var getMorePricesPayload = {action: 'getMorePrices',quotation: quote_obj }
   buttonList.push(helpers.getButton(sessions[sessionId],
         'getMorePrices',getMorePricesPayload,lowestPrice));
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;

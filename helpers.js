@@ -1,9 +1,9 @@
 module.exports = {
 
   getButton: function(session,btnType,payload,titleSub1) {
-    var morePricesLbl = ["اسعار اخرى","more prices"];
-    var priceDetailsLbl = ["تفاصيل السعر","price details"];
-    var confirmOrderLbl = ["اضف للطلب", "Buy"];
+    const morePricesLbl = ["اسعار اخرى","more prices"];
+    const priceDetailsLbl = ["تفاصيل السعر","price details"];
+    const confirmOrderLbl = ["اضف للطلب", "Buy"];
 
 console.log("morePrices:",morePricesLbl);
 
