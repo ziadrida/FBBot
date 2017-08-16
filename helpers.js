@@ -1,12 +1,13 @@
 module.exports = {
 
-  getButton: function(session,btnType,payload,titleSub1,titleSub2) {
-    var morePricesLbl = ["اسعار اخرى","more prices"];
-    var priceDetailsLbl = ["تفاصيل السعر","price details"];
-    var confirmOrderLbl = ["اضف للطلب", "Buy"];
+  getButton: function(session,btnType,payload,titleSub1) {
+    var morePricesLbl = ["اAسعار اخرى","more prices"];
+    var priceDetailsLbl = ["Aتفاصيل السعر","price details"];
+    var confirmOrderLbl = ["Aاضف للطلب", "Buy"];
 
+console.log("morePrices:",morePricesLbl);
 
-    console.log("*** in getButton btnType:",btnType)
+    console.log("*** in getButton btnType/titleSub1:",btnType+'/'+titleSub1)
     var lang=0;
     var buttonTitle = "Ok";
     try {
@@ -18,9 +19,11 @@ module.exports = {
       if (typeof titleSub1 == 'undefined' || !titleSub1 ) {
         titleSub1 = "";
       }
+      /*
       if (typeof titleSub2 == 'undefined' || !titleSub2 ) {
         titleSub2 = "";
-      }
+      }*/
+
     switch (btnType) {
       case 'getMorePrices':
         console.log("case getMorePrices ++++++++++++++++ titleSub1;",titleSub1);
