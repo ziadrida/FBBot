@@ -1451,7 +1451,7 @@ function processHttpRequest(event,callback) {
             "\n" +
             "Availablity:" + available +
            "\n" +
-           "Condition:" + condition +
+           "Condition:" + itemCondition +
           "\n" +
           " MPN/ASIN:" + MPN+'/'+asin;
 
@@ -1485,7 +1485,7 @@ function processHttpRequest(event,callback) {
 
           try {
             itemToCheck.availability = available;
-            itemToCheck.condition = condition;
+            itemToCheck.condition = itemCondition;
           } catch (e) {
             itemToCheck.availability = "No Info";
             itemToCheck.condition = "No Info";
