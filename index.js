@@ -372,6 +372,29 @@ function handleEvent(senderID, event) {
   if(jsonpayload && payloadMsg.action == 'getMorePrices') {
     // return a lis of valid prices to select from
 
+
+      var buttonList=[]
+      var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: payloadMsg.quotation}
+
+      buttonList.push(helpers.getButton(sessions[sessionId],'getPricingDetails',getPricingDetailsPayload));
+
+    //  var getMorePricesPayload = {action: 'getMorePrices',quotation: quote_obj }
+    //  buttonList.push(helpers.getButton(sessions[sessionId],
+      //      'getMorePrices',getMorePricesPayload,lowestPrice));
+    //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
+    //  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
+
+    msgCode = "1010"; // all prices
+    valParams = {
+      val1: payloadMsg.quotation.amm_exp,
+      val2: payloadMsg.quotation.amm_std,
+      val3: payloadMsg.quotation.aq_std,
+      val4: payloadMsg.quotation.aq_exp
+    }
+
+    btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
+    btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
+    sendPriceButton(senderID,btnTxt,buttonList)
   }
 
   if(jsonpayload && payloadMsg.action == 'getPricingDetails') {
@@ -2293,12 +2316,10 @@ var quote_obj = {
   notes: pricingMessage
 }
 
-lowestPrice = quote_obj.price.min_price;
+  lowestPrice = quote_obj.price.min_price;
 
   var buttonList=[]
-var getPricingDetailsPayload = {action: 'getPricingDetails',
-    quotation: quote_obj
-}
+  var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
   buttonList.push(helpers.getButton(sessions[sessionId],'getPricingDetails',getPricingDetailsPayload));
 
