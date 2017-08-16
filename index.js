@@ -2263,7 +2263,7 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   morePricesLbl = "اسعار اخرى"
   priceDetailsLbl = "تفاصيل السعر";
 }*/
-var valparams = {
+var valParams = {
   val1: finalExpPriceAmmJD.toFixed(2),
   val2: finalStandardAmmPrice.toFixed(2),
   val3: finalStdAqabaPriceJD.toFixed(2)
