@@ -63,9 +63,9 @@ console.log("morePrices:",morePricesLbl);
           };
         return btnDef;
       }
-  }  ,
-  getMessage: function(session,textCode )
-{
+  } ,
+
+getMessage: function(session,textCode,valObj ) {
   if (session.userObj && session.userObj.locale &&
     session.userObj.locale.toLowerCase().includes("en")) {
       // english
@@ -75,6 +75,21 @@ console.log("morePrices:",morePricesLbl);
         case "1002":
           return "Category not listed above"
           break;
+        case "1003":
+          return  "Personal express price 3-5 days: "+valObj.val1 + " JOD"  ;
+        case "1004":
+            return "Amman Price 7-14 days: "+valObj.val1 + " JOD" ;
+
+        case "1010":
+            return  "Personal express price 3-5 days: "+valObj.val1 + " JOD" +
+            "\n"+
+            "Amman Price 7-14 days: "+valObj.val2 + " JOD" +
+            "\n"+
+            "Aqaba price 14-24 days: "+valObj.val3 + " JOD" +
+            "\n"+
+            "Aqaba personal 5-7 days days: "+valObj.val4 + " JOD" ;
+
+
         default:
 
       }
@@ -84,6 +99,29 @@ console.log("morePrices:",morePricesLbl);
           return "سوف نقوم بايجاد صنف المنتج .. الرجاء الإنتظار";
         case "1002":
           return "الصنف غير مدرج"
+        case "1003":
+        btnTxt =
+        "   سعر الطلب الخاص 3-5 ايام: "+
+        valObj.val1 +  " دينار " ;
+
+        return btnTxt;
+        case "1004":
+        btnTxt = btnTxt + "\n" +
+        "   سعر الطلب 7-14 يوم: "+
+        valObj.val1 +  " دينار " ;
+
+        return btnTxt;
+        case "1010":
+        btnTxt =
+        "   سعر الطلب الخاص 3-5 ايام: "+
+        valObj.val1 +  " دينار " ;
+        btnTxt = btnTxt + "\n" +
+        "   سعر الطلب 7-14 يوم: "+
+        valObj.val2 +  " دينار " ;
+        btnTxt = btnTxt + "\n" +
+        "   سعر الطلب للعقبة 14-24 يوم: "+
+        valObj.val3 +  " دينار " ;
+        return btnTxt;
 
           break;
 
