@@ -386,10 +386,10 @@ function handleEvent(senderID, event) {
 
     msgCode = "1010"; // all prices
     valParams = {
-      val1: payloadMsg.quotation.amm_exp,
-      val2: payloadMsg.quotation.amm_std,
-      val3: payloadMsg.quotation.aq_std,
-      val4: payloadMsg.quotation.aq_exp
+      val1: payloadMsg.quotation.price.amm_exp,
+      val2: payloadMsg.quotation.price.amm_std,
+      val3: payloadMsg.quotation.price.aq_std,
+      val4: payloadMsg.quotation.price.aq_exp
     }
 
     btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message

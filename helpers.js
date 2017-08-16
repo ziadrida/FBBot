@@ -121,6 +121,9 @@ getMessage: function(session,textCode,valObj ) {
         btnTxt = btnTxt + "\n" +
         "   سعر الطلب للعقبة 14-24 يوم: "+
         valObj.val3 +  " دينار " ;
+        btnTxt = btnTxt + "\n" +
+        "   سعر الطلب الخاص للعقبة 5-7 يوم: "+
+        valObj.val4 +  " دينار " ;
         return btnTxt;
 
           break;
