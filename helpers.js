@@ -5,8 +5,10 @@ module.exports = {
     const priceDetailsLbl = ["تفاصيل السعر","price details"]
     const confirmOrderLbl = ['اضف للطلب', "Buy"]
 
+console.log("*** in getButton btnType:",btnType)
     var lang=0;
-    var buttonTitle = "Ok"
+    var buttonTitle = "Ok";
+    try {
     if (session.userObj && session.userObj.locale &&
       session.userObj.locale.toLowerCase().includes("en")) {
         lang=1
@@ -25,7 +27,7 @@ module.exports = {
       default:
           buttonTitle = "OK"
         }
-        if (!buttonTitle || buttonTitle == "") {
+        if (typeof buttonTitle == 'undefined' || !buttonTitle || buttonTitle == "") {
           buttonTitle = 'Next!';
         }
 
@@ -37,6 +39,13 @@ module.exports = {
           "title": buttonTitle,
           "payload": payloadStr
         };
+      } catch(e) {
+        return {
+            "type": "postback",
+            "title": "Go!",
+            "payload": "Error"
+          };
+      }
   }  ,
   getMessage: function(session,textCode )
 {
