@@ -5,7 +5,7 @@ module.exports = {
     session.userObj.locale.toLowerCase().includes("en")) {
       // english
       switch (textCode) {
-        case "1001":
+        case "1001": 
           return "Please wait... we will try to find the correct category of this item";
           break;
         default:
