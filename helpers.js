@@ -18,8 +18,10 @@ module.exports = {
         break;
       case "getPricingDetails":
           buttonTitle = priceDetailsLbl[lang];
+            break;
       case "confirmOrder":
             buttonTitle = confirmOrderLbl[lang];
+              break;
       default:
           buttonTitle = "OK"
         }
