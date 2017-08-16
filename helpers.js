@@ -1,29 +1,37 @@
 module.exports = {
 
   getButton: function(session,btnType,payload,titleSub1,titleSub2) {
-console.log("*** in getButton btnType:",btnType)
-    const  morePricesLbl = ["اسعار اخرى","more prices"]
-    const priceDetailsLbl = ["تفاصيل السعر","price details"]
-    const confirmOrderLbl = ['اضف للطلب', "Buy"]
+    const  morePricesLbl = ["اسعار اخرى","more prices"];
+    const priceDetailsLbl = ["تفاصيل السعر","price details"];
+    const confirmOrderLbl = ['اضف للطلب', "Buy"];
 
 
+    console.log("*** in getButton btnType:",btnType)
     var lang=0;
     var buttonTitle = "Ok";
     try {
     if (session.userObj && session.userObj.locale &&
       session.userObj.locale.toLowerCase().includes("en")) {
         lang=1
-    }
+      }
 
+      if (typeof titleSub1 == 'undefined' || !titleSub1 ) {
+        titleSub1 = "";
+      }
+      if (typeof titleSub2 == 'undefined' || !titleSub2 ) {
+        titleSub2 = "";
+      }
     switch (btnType) {
-      case "getMorePrices":
+      case 'getMorePrices':
+        console.log("case getPricingDetails ++++++++++++++++")
+
          buttonTitle  = morePricesLbl[lang] + " "+titleSub1+" ";
         break;
-      case "getPricingDetails":
+      case 'getPricingDetails':
         console.log("case getPricingDetails ++++++++++++++++")
           buttonTitle = priceDetailsLbl[lang];
             break;
-      case "confirmOrder":
+      case 'confirmOrder':
             buttonTitle = confirmOrderLbl[lang];
               break;
       default:
@@ -43,6 +51,7 @@ console.log("*** in getButton btnType:",btnType)
         console.log("*** return from getButton btnDef:",btnDef);
       return  btnDef;
       } catch(e) {
+        cosole.log("Error in getButton  e:",e);
         btnDef = {
             "type": "postback",
             "title": "Go!",
