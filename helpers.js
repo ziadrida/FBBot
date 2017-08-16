@@ -1,11 +1,12 @@
 module.exports = {
 
   getButton: function(session,btnType,payload,titleSub1,titleSub2) {
+console.log("*** in getButton btnType:",btnType)
     const  morePricesLbl = ["اسعار اخرى","more prices"]
     const priceDetailsLbl = ["تفاصيل السعر","price details"]
     const confirmOrderLbl = ['اضف للطلب', "Buy"]
 
-console.log("*** in getButton btnType:",btnType)
+
     var lang=0;
     var buttonTitle = "Ok";
     try {
@@ -19,6 +20,7 @@ console.log("*** in getButton btnType:",btnType)
          buttonTitle  = morePricesLbl[lang] + " "+titleSub1+" ";
         break;
       case "getPricingDetails":
+        console.log("case getPricingDetails ++++++++++++++++")
           buttonTitle = priceDetailsLbl[lang];
             break;
       case "confirmOrder":
@@ -33,18 +35,20 @@ console.log("*** in getButton btnType:",btnType)
 
         console.log("<><><> buttonTitle:",buttonTitle);
         var payloadStr = JSON.stringify(payload);
-
-      return  {
+        var btnDef = {
           "type": "postback",
-          "title": buttonTitle,
-          "payload": payloadStr
-        };
+        "title": buttonTitle,
+        "payload": payloadStr
+        }
+        console.log("*** return from getButton btnDef:",btnDef);
+      return  btnDef;
       } catch(e) {
-        return {
+        btnDef = {
             "type": "postback",
             "title": "Go!",
             "payload": "Error"
           };
+        return btnDef;
       }
   }  ,
   getMessage: function(session,textCode )
