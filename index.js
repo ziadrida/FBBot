@@ -355,7 +355,7 @@ function handleEvent(senderID, event) {
     // ignore check for now - just go ahead with pricing
     if (payloadMsg.subject == "categories") {
       // either ask user for the category or get a human to help
-      return sendTextMessage(senderID,helpers.getMessage("1001",sessions[sessionId]));
+      return sendTextMessage(senderID,helpers.getMessage(sessions[sessionId],"1001"));
 
     }
     return calculatePricing(senderID,payloadMsg.item);
@@ -974,21 +974,7 @@ console.log("=====> in sendButton:",btnText);
 
 function compactListBuilder(recipientId, compactListElements) {
   console.log("=====> in compactListBuilder:",recipientId);
-/*
-following is the template of an Element in a compactList
-  var compactListElements = {
-    elements : [{
-      title: "title",
-      subtitle : "sub",
-      buttons : [{
-        "title": "Select",
-        "type": "postback",
-        "payload": "Select0"
-      }]
 
-    }]
-  };
-*/
     var compactListMessage = {
 
       "attachment": {
@@ -1000,7 +986,7 @@ following is the template of an Element in a compactList
           "elements": compactListElements,
           // next is the more button
             "buttons": [{
-              "title": helpers.getMessage("1002",sessions[sessionId]), // category not listed
+              "title": helpers.getMessage(sessions[sessionId],"1002"), // category not listed
               "type": "postback",
               "payload": ' { "action" : "getHelp" , "subject" :"categories" }'
             }]
@@ -1426,7 +1412,7 @@ function processHttpRequest(event,callback) {
         var title = "";
         try {
 
-            console.log("Title:",object[0].ItemAttributes[0].Title[0]);
+            console.log("**Title:",object[0].ItemAttributes[0].Title[0]);
           itemToCheck.category.push(object[0].ItemAttributes[0].Title[0]);
           title = object[0].ItemAttributes[0].Title[0] ;
         } catch(e) { console.log("____________ NO TITLE!!");
@@ -2272,7 +2258,7 @@ if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
   morePricesLbl = "اسعار اخرى"
   priceDetailsLbl = "تفاصيل السعر";
 }
-btnTxt = item.title.substring(0+'/'+80) + "\n" + btnTxt;
+btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
 var quote_obj = {
   quote_no: 0,
@@ -2303,17 +2289,8 @@ var getPricingDetailsPayload = {action: 'getPricingDetails',
   var getMorePricesPayload = {action: 'getMorePrices',
             quotation: quote_obj
   }
-
-        /*
-  buttonTitle = morePricesLbl + " "+lowestPrice+" ";
-  buttonList.push({
-        "type": "postback",
-        "title": buttonTitle,
-        "payload": getMorePricesPayloadStr
-    });*/
-
   buttonList.push(helpers.getButton(sessions[sessionId],
-    'getMorePrices',getMorePricesPayload,lowestPrice));
+        'getMorePrices',getMorePricesPayload,lowestPrice));
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
 //  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
 // TODO

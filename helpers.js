@@ -6,11 +6,11 @@ module.exports = {
     const confirmOrderLbl = ['اضف للطلب', "Buy"]
 
     var lang=0;
+    var buttonTitle = "Ok"
     if (session.userObj && session.userObj.locale &&
       session.userObj.locale.toLowerCase().includes("en")) {
         lang=1
     }
-    var payloadStr = JSON.stringify(payload);
 
     switch (btnType) {
       case "getMorePrices":
@@ -25,13 +25,20 @@ module.exports = {
       default:
           buttonTitle = "OK"
         }
+        if (!buttonTitle || buttonTitle == "") {
+          buttonTitle = 'Next!';
+        }
+
+        console.log("<><><> buttonTitle:",buttonTitle);
+        var payloadStr = JSON.stringify(payload);
+
       return  {
           "type": "postback",
           "title": buttonTitle,
           "payload": payloadStr
         };
   }  ,
-  getMessage: function( textCode,session )
+  getMessage: function(session,textCode )
 {
   if (session.userObj && session.userObj.locale &&
     session.userObj.locale.toLowerCase().includes("en")) {
