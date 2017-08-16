@@ -2297,7 +2297,7 @@ var getPricingDetailsPayload = {action: 'getPricingDetails',
       "payload": getPricingDetailsPayloadStr
         });
 */
-  buttonList.put(helpers.getButton(sessions[sessionId],'getPricingDetails',getPricingDetailsPayload));
+  buttonList.push(helpers.getButton(sessions[sessionId],'getPricingDetails',getPricingDetailsPayload));
 
   var getMorePricesPayload = {action: 'getMorePrices',
             quotation: quote_obj
@@ -2310,8 +2310,8 @@ var getPricingDetailsPayload = {action: 'getPricingDetails',
         "title": buttonTitle,
         "payload": getMorePricesPayloadStr
     });*/
-    
-  buttonList.put(helpers.getButton(sessions[sessionId],
+
+  buttonList.push(helpers.getButton(sessions[sessionId],
     'getMorePrices',getMorePricesPayload,lowestPrice));
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
 //  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
