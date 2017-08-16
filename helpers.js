@@ -5,10 +5,10 @@ module.exports = {
     const priceDetailsLbl = ["تفاصيل السعر","price details"]
     const confirmOrderLbl = ['اضف للطلب', "Buy"]
 
-    var lang=1;
+    var lang=0;
     if (session.userObj && session.userObj.locale &&
       session.userObj.locale.toLowerCase().includes("en")) {
-        lang=0
+        lang=1
     }
     var payloadStr = JSON.stringify(payload);
 

@@ -381,7 +381,8 @@ function handleEvent(senderID, event) {
     var getMorePricesPayload = {action: 'getMorePrices',
                     quotation: payloadMsg.quotation
       }
-      buttonList.push(helpers.getButton(sessions[sessionId],'getMorePrices',getMorePricesPayload));
+      buttonList.push(helpers.getButton(sessions[sessionId],'getMorePrices',getMorePricesPayload),
+        payloadMsg.quotation.item.price.min_price    );
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
   var pricing = {
     title: payloadMsg.quotation.item.title.substring(0,60) + '...',
@@ -2214,10 +2215,10 @@ var finalStandardAmmPrice = 1.00*E13_finalAmmStdPrice.toFixed(2);
 
 finalExpPriceMinAqabaJD = 1.05*finalExpPriceAmmJD.toFixed(2);
 console.log("************ finalStandardAmmPrice:",finalStandardAmmPrice);
-  lowestPrice = Math.min(finalExpPriceAmmJD.toFixed(2),
-    finalStandardAmmPrice.toFixed(2),
-  finalStdAqabaPriceJD.toFixed(2));
 
+lowestPrice = Math.min(finalExpPriceAmmJD.toFixed(2),
+  finalStandardAmmPrice.toFixed(2),
+finalStdAqabaPriceJD.toFixed(2));
 
 console.log("M2_AmmanCost/O2_AmmanDeliveryJDParam/"+
 "P2_netAmmanMargin/Q2_NetAqabaMargin/T2_AmmanCatMargin/"+
@@ -2281,10 +2282,16 @@ var quote_obj = {
     amm_exp: finalExpPriceAmmJD.toFixed(2),
     amm_std: finalStandardAmmPrice.toFixed(2),
     aq_exp: finalExpPriceMinAqabaJD.toFixed(2),
-    aq_std: finalStdAqabaPriceJD.toFixed(2)
+    aq_std: finalStdAqabaPriceJD.toFixed(2),
+    min_price: Math.min(quote_obj.price.amm_exp,
+      quote_obj.price.amm_std,
+      quote_obj.price.aq_std,
+      quote_obj.price.aq_exp)
   },
   notes: pricingMessage
 }
+
+lowestPrice = quote_obj.price.min_price;
 
   var buttonList=[]
 var getPricingDetailsPayload = {action: 'getPricingDetails',
