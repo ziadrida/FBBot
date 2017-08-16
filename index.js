@@ -350,6 +350,16 @@ function handleEvent(senderID, event) {
     console.log("Payload is not JSON structure");
   }
 
+  if(jsonpayload && payloadMsg.action == 'getHelp') {
+    // this is a pricing payload. Need to check if all pricing data is available
+    // ignore check for now - just go ahead with pricing
+    if (payloadMsg.subject == "categories") {
+      // either ask user for the category or get a human to help
+      return sendTextMessage(senderID,helpers.getMessage("1001",sessions[sessionId]));
+
+    }
+    return calculatePricing(senderID,payloadMsg.item);
+  }
   if(jsonpayload && payloadMsg.action == 'getPricing') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
@@ -381,7 +391,7 @@ function handleEvent(senderID, event) {
         });
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
   var pricing = {
-    title: payloadMsg.quotation.item.title.substring(0,30) + '...',
+    title: payloadMsg.quotation.item.title.substring(0,60) + '...',
     chargableWeight: payloadMsg.quotation.item.chargableWeight,
     shipping: payloadMsg.quotation.item.shipping,
     shippingAtOriginMsg_ar: (payloadMsg.quotation.item.shipping >-1?     "يتضمن الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
@@ -399,8 +409,9 @@ function handleEvent(senderID, event) {
         payloadMsg.quotation.item.height.toFixed(1)
 
   }
+  shortTitle = pricing.title.substring(0,80);
   var detailsMsg_en =
-  `${pricing.title}
+  `${shortTitle}
 Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
 Chargable weight: ${pricing.chargableWeight} KG. (shipping weight may be higher than actual product weight)
 Dimensions ${pricing.packageDimensions} inch
@@ -421,7 +432,7 @@ Our guarantee:
 */
 
 var pricingDetailMsg_ar =
-  pricing.title+
+  pricing.title.substring(0,80)+
        "\n" +
       "  السعر من المصدر$<سعر>" +
              "\n" +
@@ -984,8 +995,6 @@ following is the template of an Element in a compactList
     }]
   };
 */
-
-
     var compactListMessage = {
 
       "attachment": {
@@ -997,9 +1006,9 @@ following is the template of an Element in a compactList
           "elements": compactListElements,
           // next is the more button
             "buttons": [{
-              "title": "None of these!",
+              "title": "Category not listed above",
               "type": "postback",
-              "payload": "Accessories"
+              "payload": ' { "action" : "getHelp" , "subject" :"categories" }'
             }]
           }
           }
@@ -1357,9 +1366,12 @@ function processHttpRequest(event,callback) {
          }
 
         console.log("package HxLxW", length, "x", width, "x", height, " wt", weight);
+        packageDimensions = "package dimensions " + length+"x"+ width+ "x"+height+ ' inch';
 
         console.log("item HxLxW", itemlength, "x", itemwidth, "x", itemheight, " itemWeight:", itemWeight);
-
+        if (!length || length <=0 || !width || width<=0 || !height || height<=0  ) {
+           packageDimensions = "item dimensions " +itemlength+"x"+ itemwidth+ "x"+ itemheight
+        }
         var volWeightKG = (Math.max(length*1.05,length + 1.00) *
         Math.max(width*1.05,width + 1.00) *
         Math.max(height*1.05,height + 1.00) *
@@ -1422,14 +1434,26 @@ function processHttpRequest(event,callback) {
 
             console.log("Title:",object[0].ItemAttributes[0].Title[0]);
           itemToCheck.category.push(object[0].ItemAttributes[0].Title[0]);
-          title = object[0].ItemAttributes[0].Title[0] +"/" + itemCondition +"\n";
+          title = object[0].ItemAttributes[0].Title[0] ;
         } catch(e) { console.log("____________ NO TITLE!!");
         }
 
 
         var msg = title +
-           "Category:" + cat + " chargableWeight:" + chargableWeight + " Price:" + itemPrice + " available:" + available +
-          " MPN:" + MPN;
+        "\n" +
+         "Price:" + itemPrice +
+        "\n" +
+           "Category:" + cat +  // when done debugging change to cat[0]
+           "\n" +
+           "Chargable weight:" + chargableWeight +
+           "\n" +
+           "Package dimensions:" + packageDimensions +
+            "\n" +
+            "Availablity:" + available +
+           "\n" +
+           "Condition:" + condition +
+          "\n" +
+          " MPN/ASIN:" + MPN+'/'+asin;
 
           try {
             itemToCheck.title = title;
@@ -1453,8 +1477,18 @@ function processHttpRequest(event,callback) {
           }
           try {
             itemToCheck.MPN = MPN;
+            itemToCheck.asin = asin;
           } catch (e) {
             itemToCheck.MPN = "";
+            itemToCheck.asin = "";
+          }
+
+          try {
+            itemToCheck.availability = available;
+            itemToCheck.condition = condition;
+          } catch (e) {
+            itemToCheck.availability = "No Info";
+            itemToCheck.condition = "No Info";
           }
           try {
             itemToCheck.height = height;
@@ -1724,6 +1758,7 @@ function getPricing(senderID,item) {
 
   console.log(" =========> in getPricing, senderID",senderID);
   var catList = [];
+  /*
   if (typeof item != 'undefined' && item.price) {
     console.log('price in USD:', item.price)
   }
@@ -1736,7 +1771,7 @@ function getPricing(senderID,item) {
   if (typeof item != 'undefined' && item.category) {
     console.log('category:', item.category)
   }
-
+*/
   // find category
   categories.findCategory(item.category,function(cats) {
   //  console.log("***************** List all CATEGORIES MATCH:",cats);
@@ -1758,8 +1793,6 @@ function getPricing(senderID,item) {
       item.category_info.keywords='';
 
       return calculatePricing(senderID,item);
-
-
     }
     else {
       // more than one - let user select the valid category
@@ -2034,8 +2067,7 @@ function calculatePricing(senderID,item) {
    } else {
      C2_shipping = item.shipping * 1.00;
    }
-  packageDimensions =  item.chargableWeight + 'KG/'+item.length +
-    'x'+item.width + 'x'+ item.height + 'inch' ;
+  packageDimensions = item.length + 'x'+item.width + 'x'+ item.height + 'inch' ;
 
   Y2_volumnWeight=-1; // already have chargableWeight
   console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',Z2_chargableWeight.toFixed(2)+'/'+AD2_HandlingCostUSD.toFixed(2));
