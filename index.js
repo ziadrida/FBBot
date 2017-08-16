@@ -379,7 +379,7 @@ function handleEvent(senderID, event) {
     buttonList.push(helpers.getButton(sessions[sessionId],'confirmOrder',confirmOrderPayload));
 
     var getMorePricesPayload = {action: 'getMorePrices',
-                    quotation: quote_obj
+                    quotation: payloadMsg.quotation
       }
       buttonList.push(helpers.getButton(sessions[sessionId],'getMorePrices',getMorePricesPayload));
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
@@ -2291,12 +2291,6 @@ var getPricingDetailsPayload = {action: 'getPricingDetails',
     quotation: quote_obj
 }
 
-  /*buttonList.push({
-      "type": "postback",
-      "title": priceDetailsLbl,
-      "payload": getPricingDetailsPayloadStr
-        });
-*/
   buttonList.push(helpers.getButton(sessions[sessionId],'getPricingDetails',getPricingDetailsPayload));
 
   var getMorePricesPayload = {action: 'getMorePrices',
