@@ -100,13 +100,13 @@ getMessage: function(session,textCode,valObj ) {
         case "1002":
           return "الصنف غير مدرج"
         case "1003":
-        btnTxt =
+        btnTxt ="\n" +
         "   سعر الطلب الخاص 3-5 ايام: "+
         valObj.val1 +  " دينار " ;
 
         return btnTxt;
         case "1004":
-        btnTxt = btnTxt + "\n" +
+        btnTxt =  "\n" +
         "   سعر الطلب 7-14 يوم: "+
         valObj.val1 +  " دينار " ;
 
