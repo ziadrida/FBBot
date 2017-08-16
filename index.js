@@ -393,7 +393,7 @@ function handleEvent(senderID, event) {
     }
 
     btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
-    btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
+    btnTxt = payloadMsg.quotation.item.title.substring(0,60) + "\n" + btnTxt;
     sendPriceButton(senderID,btnTxt,buttonList)
   }
 
