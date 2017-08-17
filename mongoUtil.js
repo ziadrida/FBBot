@@ -13,12 +13,15 @@ module.exports = {
     console.log("==========> inside getNextSeq seqName:",sequenceName)
       var seq = mongoSequence(_db,sequenceName);
       seq.getNext(function(err,sequence) {
-  if (!err) {
-    console.log(" >>>>>>>>>>>>>>. return squecne for sequenceName "+sequenceName + " of "+sequence);
-    return callback(sequence);
-  }
-  return callback(-1)
-});
+        console.log("==========>  after getNext :",sequence)
+        console.log("==========>  err getNext :",err)
+        if (!err) {
+          console.log(" >>>>>>>>>>>>>>. return squecne for sequenceName "+sequenceName + " of "+sequence);
+          return callback(sequence);
+        }
+        console.log(" >>>>>>>>>>> error in getNext Seq");
+        return callback(-1)
+      });
 },
 
 connectToDB: function( callback ) {
@@ -63,6 +66,7 @@ connectToDB: function( callback ) {
   // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
  insert = function( callback) {
    module.exports.getNextSeq('quotation',function(nextVal) {
+     console.log("After getNextSeq nextVal:",nextVal);
     _db.collection('quotation').insertOne({
       "senderId": senderID,
       "quotationNo": nextVal ,
