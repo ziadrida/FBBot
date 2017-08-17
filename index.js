@@ -870,7 +870,7 @@ function findHighestConfidence(entList, callback) {
       }
     }
   } // for key in entlist
-  console.log("<><>  end of  findHighestConfidence intent,intentValue,highConfidence", intent + "," + intentValue + ",", highConfidence);
+  console.log("<><>  end of  findHighestConfidence inetntList:", JSON.stringify(intentList));
   callback(intentList, highConfidence);
 } // end findHighestConfidence
 
