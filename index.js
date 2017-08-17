@@ -706,10 +706,10 @@ function determineResponse(event) {
 
     } else {
 
-      findHighestConfidence(message.nlp.entities, function(intentList, highConfidence) {
-        console.log("--after findHighestConfidence ---- IntentList:", JSON.stringify(intentList));
-        if (intentList && intentList[0].key == "change_intent"
-            && intentList[0].value == "message" && sessions[sessionId].context.intent) {
+      findHighestConfidence(message.nlp.entities, function(selectedIntentList, highConfidence) {
+        console.log("--after findHighestConfidence ---- IntentList:", JSON.stringify(selectedIntentList));
+        if (selectedIntentList && selectedIntentList[0].key == "change_intent"
+            && selectedIntentList[0].value == "message" && sessions[sessionId].context.intent) {
           // update intent message
           sendTextMessage(senderID, "how should i respond to " + sessions[sessionId].context.intent + "?");
           sessions[sessionId].context = {
@@ -717,10 +717,10 @@ function determineResponse(event) {
             "intent": sessions[sessionId].context.intent,
             "intentValue": sessions[sessionId].context.intentValue
           };
-        } else if (intentList && intentList.length > 0) {
-          for (i=0; i<intentList.legnth;i++) {
-          intent=  intentList[i].key;
-          intentValue = intentList[i].value;
+        } else if (selectedIntentList && selectedIntentList.length > 0) {
+          for (i=0; i<selectedIntentList.legnth;i++) {
+          intent=  selectedIntentList[i].key;
+          intentValue = selectedIntentList[i].value;
           matchEntity(intent, intentValue, function(doc) {
             console.log(">>>>>>>>> matchEntity response:", doc);
             // send message only if highConfidence is higher than the stored entity THRESHOLD
@@ -870,7 +870,7 @@ function findHighestConfidence(entList, callback) {
       }
     }
   } // for key in entlist
-  console.log("<><>  end of  findHighestConfidence inetntList:", JSON.stringify(intentList));
+  console.log("<><>  end of findHighestConfidence inetntList:", JSON.stringify(intentList));
   callback(intentList, highConfidence);
 } // end findHighestConfidence
 
