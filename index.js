@@ -489,14 +489,8 @@ detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqab
 
   //  btnTxt = JSON.stringify(detailsMsg_en);
 
-if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
-  sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
-  detailsMsg = detailsMsg_en;
-} else {
-  // left pad messageText
-  //detailsMsg = helpers.leftPadTextArea(detailsMsg_ar, '', 50)
-  detailsMsg = detailsMsg_ar;
-}
+detailsMsg =  (language() == "english"? detailsMsg_en:detailsMsg_ar);
+
 return sendPriceButton(senderID, detailsMsg, buttonList);
 }
 
@@ -1905,6 +1899,12 @@ function getUserPublicInfo(fbId, callback) {
 var matchEntity = function(entity_name, value, callback) {
   console.log("====> in matchEntity:", entity_name)
   var docs;
+  if (value == "arabic") {
+    sessions[sessionId].userObj.locale = "ar_US"
+  }
+  if (value == "english") {
+    sessions[sessionId].userObj.locale = "en_US"
+  }
   if (entity_name == '') {
     console.log("****** entity_name is blank");
     return callback(docs);
@@ -2064,8 +2064,7 @@ function calculatePricing(senderID,item) {
    if (item.shipping < 0) {
      // unknown shipping cost
      C2_shipping = 0;
-     if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
-         sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
+     if (language() == "english") {
      pricingMessage = pricingMessage + "/local shipping cost not included in price"
    } else {
      pricingMessage = pricingMessage + "/لا يشمل الشحن فى بلد المصدر"
@@ -2338,9 +2337,9 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
 var language = function() {
   if (sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
-    return "arabic"
+    return "english"
   }
-  return "english"
+  return "arabic"
 }
 var langCode = function() {
   if (sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
