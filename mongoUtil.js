@@ -52,11 +52,11 @@ connectToDB: function( callback ) {
   },
   insertQuotation:function(session,quotation,callback) {
      console.log("=================>in  insertQuotation")
-    connectToDB(function(err) {
-    //assert.equal(null, err);
-    insert(function() {
-     console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
-     callback();
+     module.exports.connectToDB(function(err) {
+       //assert.equal(null, err);
+      insert(function() {
+      console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
+      callback();
     });
   }); // connect
 
