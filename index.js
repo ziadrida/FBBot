@@ -703,12 +703,9 @@ function determineResponse(event) {
       console.log("EntList could not be determined")
     }
 
-
-    console.log("**********  action:", action);
     console.log(" ********** sessions[sessionId].context", sessions[sessionId].context);
-    console.log("*********** sessions[sessionId].context.action", sessions[sessionId].context.action);
 
-    if (sessions[sessionId].context.action == "set_entity_msg") {
+    if (sessions[sessionId].context && sessions[sessionId].context.action == "set_entity_msg") {
       // update witentities table and return
 
       console.log("+++++++++++++++++++++++++++++  updateEntity now ");
@@ -929,7 +926,7 @@ function sendWatchVideoButton(recipientId, btnText, title) {
         "type": "template",
         "payload": {
           "template_type": "button",
-          "text": btnText,
+          "text": "How to order كيفية الطلب",
           "buttons": [{
             "type": "web_url",
             "url": "http://techtownjo.com/import/TechtownMailOrder-720p.mp4",
@@ -1147,7 +1144,7 @@ function sendTextMessage(recipientId, messageText) {
 
 
 function callSendAPI(messageData) {
-  console.log("===========> in callSendAPI messageData:",messageData)
+  console.log("===========> in callSendAPI messageData:",JSON.stringify(messageData))
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {
@@ -2335,4 +2332,18 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
   //sendTextMessage(senderID,JSON.stringify(item));
+}
+
+
+var language = function() {
+  if (sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
+    return "arabic"
+  }
+  return "english"
+}
+var langCode = function() {
+  if (sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
+    return 0
+  }
+  return 1
 }
