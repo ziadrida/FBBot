@@ -514,12 +514,13 @@ return sendPriceButton(senderID, detailsMsg, buttonList);
     });
 
     // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+    console.log("<<<<<<<<<<<<<<<<<<<<<< BEFORE insertOrderRequest >>>>>>>>>>>>>>>>>>>>>>")
     var insertOrderRequest = function(db, callback) {
       db.collection('order_request').insertOne({
         "senderId": senderID,
         "recipientId": recipientID,
         "orderItem": payloadText,
-        "messageId": "",
+        "messageId": mongoUtil.getNextSeq('order'),
         "timestamp": new Date(timeOfMessage),
         "dateCreated": new Date()
       }, function(err, result) {
