@@ -50,7 +50,6 @@ connectToDB: function( callback ) {
       console.log("====> before return getDb,db:");//,_db);
     return _db;
   },
-
   insertQuotation:function(session,quotation,callback) {
      console.log("=================>in  insertQuotation")
     connectToDB(function(err) {
@@ -81,4 +80,3 @@ connectToDB: function( callback ) {
 }
 
 };
-}
