@@ -1,7 +1,7 @@
 module.exports = {
 
   getButton: function(session,btnType,payload,titleSub1) {
-    const morePricesLbl = ["اسعار تبدأ من ","more prices"];
+    const morePricesLbl = ["اسعار تبدأ من دأ","Prices starting from (JD)"];
     const priceDetailsLbl = ["تفاصيل السعر","price details"];
     const confirmOrderLbl = ["اضف للطلب", "Buy"];
 
@@ -78,16 +78,16 @@ getMessage: function(session,textCode,valObj ) {
         case "1003":
           return  "Personal express price 3-5 days: "+valObj.val1 + " JOD"  ;
         case "1004":
-            return "Amman Price 7-14 days: "+valObj.val1 + " JOD" ;
+            return "Standard express price 7-14 days: "+valObj.val1 + " JOD" ;
 
         case "1010":
             return  "Personal express price 3-5 days: "+valObj.val1 + " JOD" +
             "\n"+
-            "Amman Price 7-14 days: "+valObj.val2 + " JOD" +
+            "Standard express price 7-14 days: "+valObj.val2 + " JOD" +
             "\n"+
             "Aqaba price 14-24 days: "+valObj.val3 + " JOD" +
             "\n"+
-            "Aqaba personal 5-7 days days: "+valObj.val4 + " JOD" ;
+            "Aqaba personal express 5-7 days days: "+valObj.val4 + " JOD" ;
 
 
         default:
@@ -107,7 +107,7 @@ getMessage: function(session,textCode,valObj ) {
         return btnTxt;
         case "1004":
         btnTxt =  "\n" +
-        "   سعر الطلب 7-14 يوم: "+
+        "   سعر الطلب العادى 7-14 يوم: "+
         valObj.val1 +  " دينار " ;
 
         return btnTxt;
@@ -116,7 +116,7 @@ getMessage: function(session,textCode,valObj ) {
         "   سعر الطلب الخاص 3-5 ايام: "+
         valObj.val1 +  " دينار " ;
         btnTxt = btnTxt + "\n" +
-        "   سعر الطلب 7-14 يوم: "+
+        "   سعر الطلب العادى 7-14 يوم: "+
         valObj.val2 +  " دينار " ;
         btnTxt = btnTxt + "\n" +
         "   سعر الطلب للعقبة 14-24 يوم: "+
