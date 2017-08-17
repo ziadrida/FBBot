@@ -2320,6 +2320,12 @@ var quote_obj = {
   notes: pricingMessage
 }
 
+// insert new quotation in the database
+// TODO
+
+  mongoUtil.insertQuotation(sessions[sessionId],quote_obj,function(){
+    console.log("after inserting quotation")
+  });
   lowestPrice = quote_obj.price.min_price;
 
   var buttonList=[]

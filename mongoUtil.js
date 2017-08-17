@@ -49,5 +49,36 @@ connectToDB: function( callback ) {
     callback(_db);
       console.log("====> before return getDb,db:");//,_db);
     return _db;
-  }
+  },
+
+  insertQuotation:function(session,quotation,callback) {
+     console.log("=================>in  insertQuotation")
+    connectToDB(function(err) {
+    //assert.equal(null, err);
+    insert(function() {
+     console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
+     callback();
+    });
+  }); // connect
+
+  // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+ insert = function( callback) {
+    _db.collection('quotation').insertOne({
+      "senderId": senderID,
+      "recipientId": recipientID,
+      "quotationNo": module.exports.getNextSeq("quotation"),
+      "quotation": quotation,
+      "user": session.userObj,
+      "timestamp": new Date(timeOfMessage),
+      "dateCreated": new Date()
+    }, function(err, result) {
+      //assert.equal(err, null);
+      console.log("Inserted a document into the quotation collection.");
+      callback();
+    });
+  }; // insertMesssageText
+
+}
+
 };
+}
