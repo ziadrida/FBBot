@@ -671,7 +671,7 @@ function determineResponse(event) {
   // if message contains http, then it is a pricing request
   if (compareText.includes("http")) {
     console.log("got HTTP message");
-    sendTextMessage(senderID,"Pricing now...")
+    sendTextMessage(senderID,"Pricing now...نقوم بالتسعير الآن")
     return processHttpRequest(event);
   } // end of if http
 
@@ -848,7 +848,7 @@ function findHighestConfidence(entList, callback) {
   for (var key in entList) {
     // key is the entity
     if (entList.hasOwnProperty(key)) {
-      console.log("key___________:", key + " -> " + entList[key]);
+      console.log("key___________:", key + " -> " + JSON.stringify(entList[key]));
       console.log("confidence____________", entList[key][0].confidence);
       console.log("value__________", entList[key][0].value);
       // find entity with highest confidence
@@ -1895,7 +1895,7 @@ var matchEntity = function(entity_name, value, callback) {
     return callback(docs);
   } else {
     // change language
-    if (value && value.toLowerCase() == "arabic") {
+    if (value && value.toLowerCase() == "arabic" || entity_name.includes("_ar")) {
       console.log("^^^^^^^^^^^^^^^ switch language to arabic");
       sessions[sessionId].userObj.locale = "ar_US"
     }
