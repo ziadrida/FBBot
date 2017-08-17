@@ -617,7 +617,7 @@ function determineResponse(event) {
     matchEntity("how_to_order", language(), function(doc) {
       console.log("after matchEntity(how_to_order");
       sessions[sessionId].newUser = false; // welcome message sent
-      sendWatchVideoButton(senderID, text, helpers.getMessage(sessions[sessionId],"1011"));
+      sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
       sendTextMessage(senderID, doc[0].messageText);
     });
   }
