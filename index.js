@@ -613,21 +613,11 @@ function determineResponse(event) {
     // follow welcome protocol for newUser
 
     //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
-    lang = "arabic";
-    text = "";
 
-    title = "فيديو - كيف اطلب"
-    if (sessions[sessionId] && sessions[sessionId].userObj &&
-      sessions[sessionId].userObj.locale.toUpperCase().includes("EN")) {
-      lang = "english";
-      text = "";
-      title = "How to order Video"
-    }
-
-    matchEntity("how_to_order", lang, function(doc) {
+    matchEntity("how_to_order", language(), function(doc) {
       console.log("after matchEntity(how_to_order");
       sessions[sessionId].newUser = false; // welcome message sent
-      sendWatchVideoButton(senderID, text, title);
+      sendWatchVideoButton(senderID, text, helpers.getMessage(sessions[sessionId],"1011"));
       sendTextMessage(senderID, doc[0].messageText);
     });
   }
@@ -1899,16 +1889,20 @@ function getUserPublicInfo(fbId, callback) {
 var matchEntity = function(entity_name, value, callback) {
   console.log("====> in matchEntity:", entity_name)
   var docs;
-  if (value == "arabic") {
-    sessions[sessionId].userObj.locale = "ar_US"
-  }
-  if (value == "english") {
-    sessions[sessionId].userObj.locale = "en_US"
-  }
+
   if (entity_name == '') {
     console.log("****** entity_name is blank");
     return callback(docs);
   } else {
+    // change language
+    if (value && value.toLowerCase() == "arabic") {
+      console.log("^^^^^^^^^^^^^^^ switch language to arabic");
+      sessions[sessionId].userObj.locale = "ar_US"
+    }
+    if (value && value.toLowerCase() == "english") {
+      console.log("^^^^^^^^^^^^^^^ switch language to english");
+      sessions[sessionId].userObj.locale = "en_US"
+    }
     MongoClient.connect(mongodbUrl, function(err, db) {
       //  assert.equal(null, err);
       // Create a collection we want to drop later

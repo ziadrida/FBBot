@@ -5,7 +5,7 @@ module.exports = {
     const priceDetailsLbl = ["تفاصيل السعر","price details"];
     const confirmOrderLbl = ["اضف للطلب", "Buy"];
 
-console.log("morePrices:",morePricesLbl);
+
 
     console.log("*** in getButton btnType/titleSub1:",btnType+'/'+titleSub1)
     var lang=0;
@@ -89,6 +89,8 @@ getMessage: function(session,textCode,valObj ) {
             "\n"+
             "Aqaba personal express 5-7 days days: "+valObj.val4 + " JOD" ;
 
+         case "1011":
+            return "How to order Video"
 
         default:
 
@@ -126,8 +128,9 @@ getMessage: function(session,textCode,valObj ) {
         valObj.val4 +  " دينار " ;
         return btnTxt;
 
-          break;
-
+        case "1011":
+          return "How to order Video"
+        
         default:
 
       }
