@@ -707,7 +707,7 @@ function determineResponse(event) {
     } else {
 
       findHighestConfidence(message.nlp.entities, function(intentList, highConfidence) {
-        console.log("--after findHighestConfidence ---- Intent:", intent);
+        console.log("--after findHighestConfidence ---- IntentList:", JSON.stringify(intentList));
         if (intentList && intentList[0].key == "change_intent"
             && intentList[0].value == "message" && sessions[sessionId].context.intent) {
           // update intent message
