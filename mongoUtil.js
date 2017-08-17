@@ -67,7 +67,6 @@ connectToDB: function( callback ) {
       "quotationNo": module.exports.getNextSeq("quotation"),
       "quotation": quotation,
       "user": session.userObj,
-      "timestamp": new Date(timeOfMessage),
       "dateCreated": new Date()
     }, function(err, result) {
       //assert.equal(err, null);
