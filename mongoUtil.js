@@ -21,7 +21,7 @@ module.exports = {
 });
 },
 
-  connectToDB: function( callback ) {
+connectToDB: function( callback ) {
       console.log("====> in connectToDB");
     MongoClient.connect( mongodbUrl, function( err, db ) {
 
