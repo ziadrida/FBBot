@@ -706,9 +706,10 @@ function determineResponse(event) {
 
     } else {
 
-      findHighestConfidence(message.nlp.entities, function(intent, intentValue, highConfidence) {
+      findHighestConfidence(message.nlp.entities, function(intentList, highConfidence) {
         console.log("--after findHighestConfidence ---- Intent:", intent);
-        if (intent == "change_intent" && intentValue == "message" && sessions[sessionId].context.intent) {
+        if (intentList && intentList[0].key == "change_intent"
+            && intentList[0].value == "message" && sessions[sessionId].context.intent) {
           // update intent message
           sendTextMessage(senderID, "how should i respond to " + sessions[sessionId].context.intent + "?");
           sessions[sessionId].context = {
@@ -716,7 +717,10 @@ function determineResponse(event) {
             "intent": sessions[sessionId].context.intent,
             "intentValue": sessions[sessionId].context.intentValue
           };
-        } else if (intent != '') {
+        } else if (intentList && intentList.length > 0) {
+          for (i=0; i<intentList.legnth;i++) {
+          intent=  intentList[i].key;
+          intentValue = intentList[i].value;
           matchEntity(intent, intentValue, function(doc) {
             console.log(">>>>>>>>> matchEntity response:", doc);
             // send message only if highConfidence is higher than the stored entity THRESHOLD
@@ -742,6 +746,7 @@ function determineResponse(event) {
             }
 
           });
+        }
         } // intent != ''
         else {
               // intent is blank
@@ -760,8 +765,6 @@ function determineResponse(event) {
        } else {
          console.log ("Not a greetings_ar  ************ ");
        }
-
-
 
        const company_hours = firstEntity(message.nlp, 'company_hours');
        if (company_hours && company_hours.confidence > 0.75) {
@@ -842,9 +845,16 @@ function determineResponse(event) {
 function findHighestConfidence(entList, callback) {
   // find entity with highest confidence
   console.log(" =============> in findHighestConfidence");
-  let intent = "";
+
   let highConfidence = 0;
-  let intentValue = "";
+  //let intent = "";
+  //let intentValue = "";
+  var intentList = [];
+/*  let intent = {
+    key: "",
+    value:""
+  }*/
+
   for (var key in entList) {
     // key is the entity
     if (entList.hasOwnProperty(key)) {
@@ -852,15 +862,16 @@ function findHighestConfidence(entList, callback) {
       console.log("confidence____________", entList[key][0].confidence);
       console.log("value__________", entList[key][0].value);
       // find entity with highest confidence
-      if (entList[key][0].confidence > highConfidence) {
+      if (entList[key][0].confidence > highConfidence || entList[key][0].confidence > 0.95 ) {
         highConfidence = entList[key][0].confidence;
-        intent = key;
-        intentValue = entList[key][0].value
+      //  intent = key;
+        intentList.push({ key: key, value: entList[key][0].value })
+      //  intentValue = entList[key][0].value
       }
     }
   } // for key in entlist
   console.log("<><>  end of  findHighestConfidence intent,intentValue,highConfidence", intent + "," + intentValue + ",", highConfidence);
-  callback(intent, intentValue, highConfidence);
+  callback(intentList, highConfidence);
 } // end findHighestConfidence
 
 function firstEntity(nlp, name) {
