@@ -2323,7 +2323,7 @@ var quote_obj = {
 // insert new quotation in the database
 // TODO
 
-  mongoUtil.insertQuotation(sessions[sessionId],quote_obj,function(){
+  mongoUtil.insertQuotation(senderID,sessions[sessionId],quote_obj,function(){
     console.log("after inserting quotation")
   });
   lowestPrice = quote_obj.price.min_price;

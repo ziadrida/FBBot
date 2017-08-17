@@ -50,7 +50,7 @@ connectToDB: function( callback ) {
       console.log("====> before return getDb,db:");//,_db);
     return _db;
   },
-  insertQuotation:function(session,quotation,callback) {
+  insertQuotation:function(senderID,session,quotation,callback) {
      console.log("=================>in  insertQuotation")
      module.exports.connectToDB(function(err) {
        //assert.equal(null, err);
@@ -64,7 +64,6 @@ connectToDB: function( callback ) {
  insert = function( callback) {
     _db.collection('quotation').insertOne({
       "senderId": senderID,
-      "recipientId": recipientID,
       "quotationNo": module.exports.getNextSeq("quotation"),
       "quotation": quotation,
       "user": session.userObj,
