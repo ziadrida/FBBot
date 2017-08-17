@@ -9,15 +9,15 @@ var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.
 
 module.exports = {
 
-  getNextSeq: function(sequenceName) {
+  getNextSeq: function(sequenceName,callback) {
     console.log("==========> inside getNextSeq seqName:",sequenceName)
       var seq = mongoSequence(_db,sequenceName);
       seq.getNext(function(err,sequence) {
   if (!err) {
     console.log(" >>>>>>>>>>>>>>. return squecne for sequenceName "+sequenceName + " of "+sequence);
-    return sequence;
+    return callback(sequence);
   }
-  return -1;
+  return callback(-1)
 });
 },
 
@@ -62,9 +62,10 @@ connectToDB: function( callback ) {
 
   // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
  insert = function( callback) {
+   module.exports.getNextSeq('quotation',function(nextVal) {
     _db.collection('quotation').insertOne({
       "senderId": senderID,
-      "quotationNo": module.exports.getNextSeq("quotation"),
+      "quotationNo": nextVal ,
       "quotation": quotation,
       "user": session.userObj,
       "dateCreated": new Date()
@@ -73,7 +74,9 @@ connectToDB: function( callback ) {
       console.log("Inserted a document into the quotation collection.");
       callback();
     });
+  });
   }; // insertMesssageText
+
 
 }
 
