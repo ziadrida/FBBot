@@ -718,7 +718,8 @@ function determineResponse(event) {
             "intentValue": sessions[sessionId].context.intentValue
           };
         } else if (selectedIntentList && selectedIntentList.length > 0) {
-          for (i=0; i<selectedIntentList.legnth;i++) {
+          console.log("** match selected intents lis")
+          for (i=0; i<selectedIntentList.length;i++) {
           intent=  selectedIntentList[i].key;
           intentValue = selectedIntentList[i].value;
           matchEntity(intent, intentValue, function(doc) {
