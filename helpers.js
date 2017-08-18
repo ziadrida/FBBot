@@ -1,7 +1,7 @@
 module.exports = {
 
   getButton: function(session,btnType,payload,titleSub1) {
-    const morePricesLbl = ["اسعار تبدأ من دأ","Prices starting from (JD)"];
+    const morePricesLbl = ["اسعار تبدأ من دأ","Prices from JD "];
     const priceDetailsLbl = ["تفاصيل السعر","price details"];
     const confirmOrderLbl = ["اضف للطلب", "Buy"];
 
@@ -130,7 +130,7 @@ getMessage: function(session,textCode,valObj ) {
 
         case "1011":
           return "How to order Video"
-        
+
         default:
 
       }

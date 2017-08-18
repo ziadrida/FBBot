@@ -393,7 +393,7 @@ function handleEvent(senderID, event) {
     }
 
     btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
-    btnTxt = "#:"+ payloadMsg.quotation.quote_no + "\n" + btnTxt;
+    btnTxt = "#"+ payloadMsg.quotation.quote_no + "\n" + btnTxt;
     sendPriceButton(senderID,btnTxt,buttonList)
   }
 
@@ -429,7 +429,7 @@ function handleEvent(senderID, event) {
         payloadMsg.quotation.item.height.toFixed(1)
 
   }
-  shortTitle = pricing.title.substring(0,80);
+  shortTitle = "#"+payloadMsg.quotation.quote_no; // pricing.title.substring(0,80);
   var detailsMsg_en =
   `${shortTitle}
 Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
@@ -1501,8 +1501,6 @@ console.log("-------->",msg);
           }
           console.log("------> itemToCheck:", itemToCheck);
 
-
-
           // we do not know the category yet
           try {
             getPricing(senderID, itemToCheck);
@@ -2331,7 +2329,7 @@ var quote_obj = {
 
     quote_obj.quote_no = quotationNo;
 
-  quotationStr = (quote_obj.quote_no < 0? "" : "#:"+quote_obj.quote_no);
+  quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no);
   console.log("***** quotationStr:",quotationStr)
   lowestPrice = quote_obj.price.min_price;
   btnTxt =  quotationStr + "\n" + btnTxt;
