@@ -16,13 +16,13 @@ module.exports = function(db,name,opts) {
        { '_id': name },
        [],
        { $inc: { sequence: 1} },
-       {returnOriginal: true, upsert: true},
+       {new: false, upsert: true},
     function(err,obj) {
       if (err) {
         cb(err)
       }
       else {
-        console.log("after findAndModify=====> sequence _id:",obj._id)
+        console.log("after findAndModify=====> sequence :",obj)
         console.log("after findAndModify=====> sequence:",obj.sequence)
         cb(null,obj.sequence)
       }
