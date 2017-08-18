@@ -2150,16 +2150,18 @@ BP2_ShipHandling = BM2_DHLExpressRate+BO2_usHandling;
 
 BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxable_amountParam?
     AF2_ammCustoms:0);
-    console.log ("Q2_customs:",BQ2_customs);
+
+console.log ("Q2_customs:",BQ2_customs);
+
     // AU2 =
     AU2_Customs = BQ2_customs;
     // BR2 = =IF(BL2+BM2>140,AL2,0)
-
     BR2_salesTax =  (BL2_itemPriceandShip + BM2_DHLExpressRate >pricing_params.min_taxable_amountParam?
       AL2_ammanSalesTax:0)
 
     AV2_salesTax = BR2_salesTax;
     //BS2 = =(BL2+BM2)*(BQ2)
+
     BS2_customsAmount = (BL2_itemPriceandShip + BM2_DHLExpressRate) * BQ2_customs;
     // BT2 = =(BS2+BL2+BM2)*BR2
     BT2_salesTaxAmount = (BS2_customsAmount + BL2_itemPriceandShip + BM2_DHLExpressRate) * BR2_salesTax;
@@ -2202,18 +2204,17 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
 
 
   finalExpPriceAmmJD = 1.00*CA2_finalExpPriceMinJD;
-          console.log("******** Final Express Price:",finalExpPriceAmmJD);
+    console.log("******** Final Express Price:",finalExpPriceAmmJD);
   // BG2 = =AA2*BF2/0.71
   BG2_aqabaShipRate = AA2_weightRateAdjust*BF2_aqabaShipRate*1.0/0.71
   // BH2 = =BG2*Z2
   BH2_aqabaShipping = BG2_aqabaShipRate*Z2_chargableWeight;
 // BI2 = =(BH2+AE2)*0.71*(1+BE2)
-console.log("BH2_aqabaShipping/AE2_itemCostUSD/BE2_aqabaClerance",
-BH2_aqabaShipping+'/'+AE2_itemCostUSD+'/'+BE2_aqabaClerance);
+console.log("BH2_aqabaShipping/AE2_itemCostUSD/BE2_aqabaClerance:",
+BH2_aqabaShipping + '/' + AE2_itemCostUSD +'/'+ BE2_aqabaClerance);
 
 BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1.0+BE2_aqabaClerance);
 // BJ2 =BI2*(1+BD2)
-
 
   //
   // AqabaPrice
@@ -2221,7 +2222,8 @@ BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1.0+BE2_aqabaCl
   //IF(B7="English","Too big or heavy, not cost effective to ship",
   //"  هذه القطعة وزنها الحجمي كبير جدا نسبة الى سعر القطعة. قد لا يكون طلبها مجدى"),
   //BJ2/(1-Q2)*IF(K2="Yes",(1+Options!B2),1)))
-  console.log("BJ2_aqabaCostwTaxJD/Q2_NetAqabaMargin",BJ2_aqabaCostwTaxJD+"/"+Q2_NetAqabaMargin);
+  console.log("BJ2_aqabaCostwTaxJD/Q2_NetAqabaMargin:",
+      BJ2_aqabaCostwTaxJD+"/"+Q2_NetAqabaMargin);
   E14_finalStdAqabaPriceJD = 1.0*(BJ2_aqabaCostwTaxJD/(1-Q2_NetAqabaMargin));
   var finalStdAqabaPriceJD = 1.0*E14_finalStdAqabaPriceJD.toFixed(2);
   console.log("Final Aqaba price: ",E14_finalStdAqabaPriceJD);
