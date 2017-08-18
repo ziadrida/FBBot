@@ -74,6 +74,7 @@ app.get('/', function(req, res) {
 })
 
 app.get('/wakeup', function(req, res) {
+  sendTextMessage('1636276406383043','Wakeup!');
   res.send('Ready to wakeup and do stuff. Just tell me what!')
 })
 
