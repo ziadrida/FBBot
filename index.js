@@ -2214,20 +2214,7 @@ BH2_aqabaShipping+'/'+AE2_itemCostUSD+'/'+BE2_aqabaClerance);
 BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1.0+BE2_aqabaClerance);
 // BJ2 =BI2*(1+BD2)
 
-console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aqabaTax);
-  BJ2_aqabaCostwTaxJD = 1.0*BI2_aqabaCostwoTaxJD*(1+BD2_aqabaTax);
 
-console.log("AN2_ammanSalePricewoTax/AO2_ammStdPriceWTax/AP2_capPrice",
-  AN2_ammanSalePricewoTax+'/'+AO2_ammStdPriceWTax+'/'+AP2_capPrice);
-
-console.log("AQ2_usPriceWithUsTax/AR2_usSalesTax/AS2_aramexShippingCost",
-AQ2_usPriceWithUsTax+'/'+AR2_usSalesTax+'/'+AS2_aramexShippingCost);
-console.log("AT2_subjectToCustoms/AU2_Customs/AV2_salesTax,AW2_customs",
-  AT2_subjectToCustomscAU2_Customs+'/'+AV2_salesTax+'/'+AW2_customs);
-console.log("AX2_salesTaxAmount/AY2_clearanceFee/AZ2_usFees,BA2_cashBashaFees",
-AX2_salesTaxAmount+'/'+AY2_clearanceFee+'/'+AZ2_usFees,BA2_cashBashaFees);
-console.log("BB2_expressPricing/BC2_competitorsExpPricingJD",
-BB2_expressPricing+'/'+BC2_competitorsExpPricingJD)
   //
   // AqabaPrice
   //=IF(B4<>"",B4,IF(MIN(AO2,AP2)>15+(B2+C2)*0.71*J10,
@@ -2315,6 +2302,22 @@ var valParams = {
   val2: finalStandardAmmPrice.toFixed(2),
   val3: finalStdAqabaPriceJD.toFixed(2)
 }*/
+
+console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aqabaTax);
+  BJ2_aqabaCostwTaxJD = 1.0*BI2_aqabaCostwoTaxJD*(1+BD2_aqabaTax);
+
+console.log("AN2_ammanSalePricewoTax/AO2_ammStdPriceWTax/AP2_capPrice",
+  AN2_ammanSalePricewoTax+'/'+AO2_ammStdPriceWTax+'/'+AP2_capPrice);
+
+console.log("AQ2_usPriceWithUsTax/AR2_usSalesTax/AS2_aramexShippingCost",
+AQ2_usPriceWithUsTax+'/'+AR2_usSalesTax+'/'+AS2_aramexShippingCost);
+console.log("AT2_subjectToCustoms/AU2_Customs/AV2_salesTax,AW2_customs",
+  AT2_subjectToCustomscAU2_Customs+'/'+AV2_salesTax+'/'+AW2_customs);
+console.log("AX2_salesTaxAmount/AY2_clearanceFee/AZ2_usFees,BA2_cashBashaFees",
+AX2_salesTaxAmount+'/'+AY2_clearanceFee+'/'+AZ2_usFees,BA2_cashBashaFees);
+console.log("BB2_expressPricing/BC2_competitorsExpPricingJD",
+BB2_expressPricing+'/'+BC2_competitorsExpPricingJD)
+
 var valParams = {
   val1: (finalExpPriceAmmJD<finalStandardAmmPrice? finalExpPriceAmmJD.toFixed(2):finalStandardAmmPrice.toFixed(2))
 }
