@@ -2327,7 +2327,7 @@ var quote_obj = {
     console.log("after inserting quotation quotationNo:",quotationNo)
 
     quote_obj.quote_no = quotationNo;
-  });
+
   quotationStr = (quote_obj.quote_no < 0? "" : "#:"+quote_obj.quote_no);
   console.log("***** quotationStr:",quotationStr)
   lowestPrice = quote_obj.price.min_price;
@@ -2349,6 +2349,7 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
   //sendTextMessage(senderID,JSON.stringify(item));
+  });
 }
 
 
