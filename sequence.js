@@ -16,7 +16,7 @@ module.exports = function(db,name,opts) {
        { '_id': name },
        [],
        { $inc: { sequence: 1} },
-       {new: true, upsert: true},
+       {returnOriginal: true, upsert: true},
     function(err,obj) {
       if (err) {
         cb(err)
