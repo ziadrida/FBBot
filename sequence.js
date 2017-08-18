@@ -9,10 +9,10 @@ module.exports = function(db,name,opts) {
     function mycb(err,el) { if (err) {cb(err) } else {cb(null,el.sequence)} };
     var collection = db.collection(seq.opts && seq.opts.collname ? seq.opts.collname : 'counters');
     collection.findAndModify({
-      query: { _id: name },
-      update: { $inc: { sequence: 1 } },
-      new: true,
-      upsert : true
+       { _id: name },
+       [['_id','asc']],
+       { $inc: { sequence: 1 } },
+    {  new: true,      upsert : true}
     }, function(err,obj) {
       if (err) {
         cb(err)
