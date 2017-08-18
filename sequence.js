@@ -16,14 +16,14 @@ module.exports = function(db,name,opts) {
        { '_id': name },
        [['_id','asc']],
        { $inc: { sequence: 1 } },
-       { upsert : true},
+       {new: true, upsert : true},
     function(err,obj) {
       if (err) {
         cb(err)
       }
       else {
         console.log("after findAndModify=====> sequence:",obj.sequence)
-        cb(null,obj.sequence++)
+        cb(null,obj.sequence)
       }
     });
   }
