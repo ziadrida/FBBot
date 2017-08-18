@@ -2311,11 +2311,11 @@ var valParams = {
 
 console.log("AN2_ammanSalePricewoTax/AO2_ammStdPriceWTax/AP2_capPrice",
   AN2_ammanSalePricewoTax+'/'+AO2_ammStdPriceWTax+'/'+AP2_capPrice);
-
+AT2_
 console.log("AQ2_usPriceWithUsTax/AR2_usSalesTax/AS2_aramexShippingCost",
 AQ2_usPriceWithUsTax+'/'+AR2_usSalesTax+'/'+AS2_aramexShippingCost);
 console.log("AT2_subjectToCustoms/AU2_Customs/AV2_salesTax,AW2_customs",
-  AT2_subjectToCustomscAU2_Customs+'/'+AV2_salesTax+'/'+AW2_customs);
+  AT2_subjectToCustoms+'/'+AU2_Customs+'/'+AV2_salesTax+'/'+AW2_customs);
 console.log("AX2_salesTaxAmount/AY2_clearanceFee/AZ2_usFees,BA2_cashBashaFees",
 AX2_salesTaxAmount+'/'+AY2_clearanceFee+'/'+AZ2_usFees,BA2_cashBashaFees);
 console.log("BB2_expressPricing/BC2_competitorsExpPricingJD",
