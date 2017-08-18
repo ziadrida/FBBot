@@ -2210,11 +2210,14 @@ console.log ("Q2_customs:",BQ2_customs);
   // BH2 = =BG2*Z2
   BH2_aqabaShipping = BG2_aqabaShipRate*Z2_chargableWeight;
 // BI2 = =(BH2+AE2)*0.71*(1+BE2)
-console.log("BH2_aqabaShipping/AE2_itemCostUSD/BE2_aqabaClerance:",
-BH2_aqabaShipping + '/' + AE2_itemCostUSD +'/'+ BE2_aqabaClerance);
 
 BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1.0+BE2_aqabaClerance);
 // BJ2 =BI2*(1+BD2)
+console.log("BH2_aqabaShipping/AE2_itemCostUSD/BE2_aqabaClerance:",
+BH2_aqabaShipping + '/' + AE2_itemCostUSD +'/'+ BE2_aqabaClerance);
+
+console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aqabaTax);
+  BJ2_aqabaCostwTaxJD = 1.0*BI2_aqabaCostwoTaxJD*(1+BD2_aqabaTax);
 
   //
   // AqabaPrice
@@ -2305,8 +2308,6 @@ var valParams = {
   val3: finalStdAqabaPriceJD.toFixed(2)
 }*/
 
-console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aqabaTax);
-  BJ2_aqabaCostwTaxJD = 1.0*BI2_aqabaCostwoTaxJD*(1+BD2_aqabaTax);
 
 console.log("AN2_ammanSalePricewoTax/AO2_ammStdPriceWTax/AP2_capPrice",
   AN2_ammanSalePricewoTax+'/'+AO2_ammStdPriceWTax+'/'+AP2_capPrice);
