@@ -14,9 +14,9 @@ module.exports = function(db,name,opts) {
 
     collection.findAndModify(
        { '_id': name },
-       [['_id','asc']],
+       [],
        { $inc: { sequence: 1} },
-       new: true,
+       {new: true},
     function(err,obj) {
       if (err) {
         cb(err)
