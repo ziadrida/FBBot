@@ -57,15 +57,16 @@ connectToDB: function( callback ) {
      console.log("=================>in  insertQuotation")
      module.exports.connectToDB(function(err) {
        //assert.equal(null, err);
-      insert(function() {
+      insert(function(nextVal) {
       console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
-      callback();
+      callback(nextVal);
     });
   }); // connect
 
   // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
  insert = function( callback) {
    module.exports.getNextSeq('quotation',function(nextVal) {
+     quotation.quote_no = nextVal;
      console.log("After getNextSeq nextVal:",nextVal);
     _db.collection('quotation').insertOne({
       "senderId": senderID,
@@ -75,8 +76,11 @@ connectToDB: function( callback ) {
       "dateCreated": new Date()
     }, function(err, result) {
       //assert.equal(err, null);
-      console.log("Inserted a document into the quotation collection.");
-      callback();
+      if (!err) {
+        console.log("Inserted a document into the quotation collection.");
+        return callback(nextVal);
+      }
+      return (-1);
     });
   });
   }; // insertMesssageText

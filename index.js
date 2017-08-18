@@ -393,7 +393,7 @@ function handleEvent(senderID, event) {
     }
 
     btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
-    btnTxt = payloadMsg.quotation.item.title.substring(0,60) + "\n" + btnTxt;
+    btnTxt = "#:"+ payloadMsg.quote_no + "\n" + btnTxt;
     sendPriceButton(senderID,btnTxt,buttonList)
   }
 
@@ -2301,7 +2301,7 @@ var valParams = {
 }
 msgCode = (finalExpPriceAmmJD<finalStandardAmmPrice? "1003":"1004")
 btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
-btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
+//btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
 var quote_obj = {
   quote_no: 0,
@@ -2323,11 +2323,13 @@ var quote_obj = {
 // insert new quotation in the database
 // TODO
 
-  mongoUtil.insertQuotation(senderID,sessions[sessionId],quote_obj,function(){
-    console.log("after inserting quotation")
+  mongoUtil.insertQuotation(senderID,sessions[sessionId],quote_obj,function(quotationNo){
+    console.log("after inserting quotation quotationNo:",quotationNo)
+    quote_obj.quote_no = quotationNo;
   });
+  quotationStr = (quotationNo<0? "":"#:"+quotationNo)
   lowestPrice = quote_obj.price.min_price;
-
+  btnTxt =  quotationStr + "\n" + btnTxt;
   var buttonList=[]
   var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
