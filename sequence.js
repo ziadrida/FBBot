@@ -8,12 +8,12 @@ module.exports = function(db,name,opts) {
   seq.getNext = function(cb) {
     function mycb(err,el) { if (err) {cb(err) } else {cb(null,el.sequence)} };
     var collection = db.collection(seq.opts && seq.opts.collname ? seq.opts.collname : 'counters');
-    collection.findAndModify({
-       { _id: name },
+    collection.findAndModify(
+       { '_id': name },
        [['_id','asc']],
-       { $inc: { sequence: 1 } },
-    {  new: true,      upsert : true}
-    }, function(err,obj) {
+       { '$inc': { 'sequence': 1 } },
+       {new: true,      upsert : true},
+    function(err,obj) {
       if (err) {
         cb(err)
       }
