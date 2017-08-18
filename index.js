@@ -80,7 +80,6 @@ app.get('/wakeup', function(req, res) {
 /***********************************
 THIS IS THE CALL FROM FACEBOOK
 *************************************/
-
 app.get('/webhook/', function(req, res) {
   console.log("****** webhook", req);
   if (req.query['hub.verify_token'] === token) {
@@ -91,6 +90,7 @@ app.get('/webhook/', function(req, res) {
 // start of copied code from quick start (Seema)
 app.post('/webhook', function(req, res) {
   var data = req.body;
+  console.log("data:",data);
 
   // Make sure this is a page subscription
   if (data.object === 'page') {
