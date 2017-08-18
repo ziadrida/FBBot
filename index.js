@@ -73,6 +73,10 @@ app.get('/', function(req, res) {
   res.send('Hello - It is now working!')
 })
 
+app.get('/wakeup', function(req, res) {
+  res.send('Ready to wakeup and do stuff. Just tell me what!')
+})
+
 /***********************************
 THIS IS THE CALL FROM FACEBOOK
 *************************************/
@@ -2224,7 +2228,7 @@ console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aq
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   pricingMessage = pricingMessage + packageDimensions;
   pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
-  pricingMessage = pricingMessage.replace('/: \//g',':');
+  pricingMessage = pricingMessage.replace('/:\//g',':');
 
 //E13 - MIN(MIN(AO2,AP2),9999)
 
