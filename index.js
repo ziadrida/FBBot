@@ -2304,7 +2304,7 @@ btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing m
 //btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
 var quote_obj = {
-  quote_no: 0,
+  quote_no:-1,
   quote_date: new Date(),
   item: item,
   price: {
@@ -2327,7 +2327,7 @@ var quote_obj = {
     console.log("after inserting quotation quotationNo:",quotationNo)
     quote_obj.quote_no = quotationNo;
   });
-  quotationStr = (quotationNo<0? "":"#:"+quotationNo)
+  quotationStr = (quote_obj.quote_no < 0? "":"#:"+quote_obj.quote_no)
   lowestPrice = quote_obj.price.min_price;
   btnTxt =  quotationStr + "\n" + btnTxt;
   var buttonList=[]

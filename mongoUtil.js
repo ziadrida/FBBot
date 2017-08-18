@@ -14,7 +14,7 @@ module.exports = {
       var seq = mongoSequence(_db,sequenceName);
       seq.getNext(function(err,sequence) {
         console.log("==========>  after getNext :",sequence)
-        console.log("==========>  err getNext :",err)
+
         if (!err) {
           console.log(" >>>>>>>>>>>>>>. return squecne for sequenceName "+sequenceName + " of "+sequence);
           return callback(sequence);
