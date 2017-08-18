@@ -715,7 +715,7 @@ function determineResponse(event) {
 
       findHighestConfidence(message.nlp.entities, function(selectedIntentList, highConfidence) {
         console.log("--after findHighestConfidence ---- IntentList:", JSON.stringify(selectedIntentList));
-        if (selectedIntentList && selectedIntentList[0].key == "change_intent"
+        if (selectedIntentList && selectedIntentList[0] && selectedIntentList[0].key == "change_intent"
             && selectedIntentList[0].value == "message" && sessions[sessionId].context.intent) {
           // update intent message
           sendTextMessage(senderID, "how should i respond to " + sessions[sessionId].context.intent + "?");
