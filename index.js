@@ -2052,7 +2052,7 @@ function calculatePricing(senderID,item) {
   console.log('numberOfPackages',numberOfPackages)
   K2_localWarranty = false;
   L2_Prime = false;
-  H2_seller = "";
+  H2_seller = "Amazon";
   F2_numberOfSeller = 1;
   M2_AmmanCost = -1;
   V2_marginAdjBasedOnPrice = 1;
@@ -2196,11 +2196,12 @@ BQ2_customs = (BL2_itemPriceandShip+BM2_DHLExpressRate>pricing_params.min_taxabl
   BD2_aqabaTax = 1.0*item.category_info.tax_aqaba.toFixed(2);
   BE2_aqabaClerance = pricing_params.aqabaCleranceRateParam*1.0;
   BF2_aqabaShipRate = DHL.getAqabaRate(Z2_chargableWeight)*1.0
+
   CA2_finalExpPriceMinJD = (H2_seller == "Amazon"?
       Math.min(BC2_competitorsExpPricingJD*0.99,BZ2_finalExpPriceJD):BZ2_finalExpPriceJD);
 
 
-    finalExpPriceAmmJD = 1.00*CA2_finalExpPriceMinJD;
+  finalExpPriceAmmJD = 1.00*CA2_finalExpPriceMinJD;
           console.log("******** Final Express Price:",finalExpPriceAmmJD);
   // BG2 = =AA2*BF2/0.71
   BG2_aqabaShipRate = AA2_weightRateAdjust*BF2_aqabaShipRate*1.0/0.71
@@ -2216,6 +2217,17 @@ BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1.0+BE2_aqabaCl
 console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aqabaTax);
   BJ2_aqabaCostwTaxJD = 1.0*BI2_aqabaCostwoTaxJD*(1+BD2_aqabaTax);
 
+console.log("AN2_ammanSalePricewoTax/AO2_ammStdPriceWTax/AP2_capPrice",
+  AN2_ammanSalePricewoTax+'/'+AO2_ammStdPriceWTax+'/'+AP2_capPrice);
+
+console.log("AQ2_usPriceWithUsTax/AR2_usSalesTax/AS2_aramexShippingCost",
+AQ2_usPriceWithUsTax+'/'+AR2_usSalesTax+'/'+AS2_aramexShippingCost);
+console.log("AT2_subjectToCustoms/AU2_Customs/AV2_salesTax,AW2_customs",
+  AT2_subjectToCustomscAU2_Customs+'/'+AV2_salesTax+'/'+AW2_customs);
+console.log("AX2_salesTaxAmount/AY2_clearanceFee/AZ2_usFees,BA2_cashBashaFees",
+AX2_salesTaxAmount+'/'+AY2_clearanceFee+'/'+AZ2_usFees,BA2_cashBashaFees);
+console.log("BB2_expressPricing/BC2_competitorsExpPricingJD",
+BB2_expressPricing+'/'+BC2_competitorsExpPricingJD)
   //
   // AqabaPrice
   //=IF(B4<>"",B4,IF(MIN(AO2,AP2)>15+(B2+C2)*0.71*J10,
