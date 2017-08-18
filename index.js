@@ -393,7 +393,7 @@ function handleEvent(senderID, event) {
     }
 
     btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
-    btnTxt = "#:"+ payloadMsg.quote_no + "\n" + btnTxt;
+    btnTxt = "#:"+ payloadMsg.quotation.quote_no + "\n" + btnTxt;
     sendPriceButton(senderID,btnTxt,buttonList)
   }
 
@@ -2325,9 +2325,11 @@ var quote_obj = {
 
   mongoUtil.insertQuotation(senderID,sessions[sessionId],quote_obj,function(quotationNo){
     console.log("after inserting quotation quotationNo:",quotationNo)
+
     quote_obj.quote_no = quotationNo;
   });
-  quotationStr = (quote_obj.quote_no < 0? "":"#:"+quote_obj.quote_no)
+  quotationStr = (quote_obj.quote_no < 0? "" : "#:"+quote_obj.quote_no);
+  console.log("***** quotationStr:",quotationStr)
   lowestPrice = quote_obj.price.min_price;
   btnTxt =  quotationStr + "\n" + btnTxt;
   var buttonList=[]
