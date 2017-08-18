@@ -4,20 +4,25 @@ module.exports = function(db,name,opts) {
     name : name,
     opts : opts
   };
-  var collection = db.collection(seq.opts && seq.opts.collname ? seq.opts.collname : 'counters');
+  var collection = db.collection(seq.opts && seq.opts.collname ?
+      seq.opts.collname : 'counters');
   seq.getNext = function(cb) {
+    //console.log(" =====> cb:",cb)
     function mycb(err,el) { if (err) {cb(err) } else {cb(null,el.sequence)} };
     var collection = db.collection(seq.opts && seq.opts.collname ? seq.opts.collname : 'counters');
+    console.log(" name:",name);
+
     collection.findAndModify(
        { '_id': name },
        [['_id','asc']],
        { '$inc': { 'sequence': 1 } },
-       {new: true,      upsert : true},
+       {new: true, upsert : true},
     function(err,obj) {
       if (err) {
         cb(err)
       }
       else {
+        console.log("after findAndModify=====> sequence:",obj.sequence)
         cb(null,obj.sequence)
       }
     });
