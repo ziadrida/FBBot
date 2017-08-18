@@ -2311,7 +2311,7 @@ var valParams = {
 
 console.log("AN2_ammanSalePricewoTax/AO2_ammStdPriceWTax/AP2_capPrice",
   AN2_ammanSalePricewoTax+'/'+AO2_ammStdPriceWTax+'/'+AP2_capPrice);
-AT2_
+
 console.log("AQ2_usPriceWithUsTax/AR2_usSalesTax/AS2_aramexShippingCost",
 AQ2_usPriceWithUsTax+'/'+AR2_usSalesTax+'/'+AS2_aramexShippingCost);
 console.log("AT2_subjectToCustoms/AU2_Customs/AV2_salesTax,AW2_customs",
