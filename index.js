@@ -1436,7 +1436,7 @@ function processHttpRequest(event,callback) {
         }
 
 
-        var msg = title +
+var msg = title +
         "\n" +
          "Price:" + itemPrice +
         "\n" +
@@ -1452,6 +1452,7 @@ function processHttpRequest(event,callback) {
           "\n" +
           " MPN/ASIN:" + MPN+'/'+asin;
 
+console.log("-------->",msg);
           try {
             itemToCheck.title = title;
           } catch (e) {
@@ -1509,7 +1510,9 @@ function processHttpRequest(event,callback) {
             console.log("Error getting pricing");
 
           }
-        sendTextMessage(senderID, msg);
+      //  sendTextMessage(senderID, msg);
+      var shortMsg = title + "[" + cat[0] + "]"
+      sendTextMessage(senderID, shortMsg);
       });
 
     } // if (asin)  price from amazon
