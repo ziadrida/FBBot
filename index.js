@@ -74,6 +74,7 @@ app.get('/', function(req, res) {
 })
 
 app.get('/wakeup', function(req, res) {
+  console.log("Request to wakeup ********************")
   sendTextMessage('1636276406383043','Wakeup!');
   res.send('Ready to wakeup and do stuff. Just tell me what!')
 })
@@ -1128,7 +1129,7 @@ function quickReply(recipientId, titleText) {
   callSendAPI(messageData);
 } // sendButton
 
-
+// sendTextMessage function
 function sendTextMessage(recipientId, messageText) {
   console.log("in sendTextMessage function --> recipentID:", recipientId);
   var messageData = {
