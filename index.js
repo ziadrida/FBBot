@@ -621,7 +621,7 @@ function determineResponse(event) {
 
     //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
 
-    matchEntity("how_to_order", language(), function(doc) {
+    matchEntity("how_to_order",language(), function(doc) {
       console.log("after matchEntity(how_to_order");
       sessions[sessionId].newUser = false; // welcome message sent
       sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
