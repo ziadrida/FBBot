@@ -1915,6 +1915,7 @@ var matchEntity = function(entity_name, value, callback) {
     return callback(docs);
   } else {
     // change language
+    console.log("^^^^^^^^^^^^^^^ switch language:",value && value.toLowerCase());
     if (value && value.toLowerCase() == "arabic" || entity_name.includes("_ar")) {
       console.log("^^^^^^^^^^^^^^^ switch language to arabic");
       sessions[sessionId].userObj.locale = "ar_US"
