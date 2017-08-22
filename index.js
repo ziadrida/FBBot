@@ -663,7 +663,7 @@ function determineResponse(event) {
       length: userMsg.length,
       width: userMsg.width,
       chargableWeight: (userMsg.chargableWeight? userMsg.chargableWeight:
-          getChargableWeight(userMsg.length,userMsg.width,userMsg.height))
+          getChargableWeight(userMsg.weight,userMsg.length,userMsg.width,userMsg.height))
     }
     console.log("**** item:",item)
     getPricing(senderID,item);
@@ -1390,15 +1390,6 @@ function processHttpRequest(event,callback) {
            packageDimensions = "item dimensions " +itemlength+"x"+ itemwidth+ "x"+ itemheight
         }
 
-
-
-        var chargableWeight = getChargableWeight(length,width,height);
-
-        try {
-          itemToCheck.chargableWeight = chargableWeight;
-        } catch (e) {
-          itemToCheck.chargableWeight = -1;
-        }
         try {
           itemToCheck.height = (height>0? height:itemheight);
           itemToCheck.length = (length>0? length:itemlength);
@@ -1410,6 +1401,15 @@ function processHttpRequest(event,callback) {
           itemToCheck.weight = -1;
           itemToCheck.width = -1;
         }
+
+        var chargableWeight = getChargableWeight(itemToCheck.weight,itemToCheck.length,itemToCheck.width,itemToCheck.height);
+
+        try {
+          itemToCheck.chargableWeight = chargableWeight;
+        } catch (e) {
+          itemToCheck.chargableWeight = -1;
+        }
+
         // part#
         try {
         var MPN = object[0].ItemAttributes[0].MPN[0]
@@ -1578,7 +1578,7 @@ console.log("-------->",msg);
   } // valid domainName
 }
 
-var getChargableWeight = function(length,width,height) {
+var getChargableWeight = function(weight,length,width,height) {
   var volWeightKG = (Math.max(length*1.05,length + 1.00) *
   Math.max(width*1.05,width + 1.00) *
   Math.max(height*1.05,height + 1.00) *
