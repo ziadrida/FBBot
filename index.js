@@ -1586,7 +1586,7 @@ var getChargableWeight = function(weight,length,width,height) {
   console.log("volWeightKG:", volWeightKG);
   var chargableWt = 1 * Math.max(volWeightKG * 1, weight/2.20).toFixed(2);
   console.log("x volWeight:", volWeightKG.toFixed(2));
-  console.log("x chargableWeight:", chargableWeight.toFixed(2));
+  console.log("x chargableWt:", chargableWt.toFixed(2));
   return chargableWt;
 }
 
