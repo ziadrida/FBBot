@@ -594,7 +594,7 @@ function determineResponse(event) {
       }, function(err, result) {
         //  assert.equal(err, null);
         console.log("Inserted a document into the user_messages");
-        callback();
+        //callback();
       });
     }; // insertMesssageText
 
@@ -662,8 +662,10 @@ function determineResponse(event) {
       height: userMsg.height,
       length: userMsg.length,
       width: userMsg.width,
-      chargableWeight: (userMsg.chargableWeight? userMsg.chargableWeight:-1)
+      chargableWeight: (userMsg.chargableWeight? userMsg.chargableWeight:
+          getChargableWeight(userMsg.length,userMsg.width,userMsg.height))
     }
+    console.log("**** item:",item)
     getPricing(senderID,item);
     return;
   } // action *pr
@@ -1387,15 +1389,27 @@ function processHttpRequest(event,callback) {
         if (!length || length <=0 || !width || width<=0 || !height || height<=0  ) {
            packageDimensions = "item dimensions " +itemlength+"x"+ itemwidth+ "x"+ itemheight
         }
-        var volWeightKG = (Math.max(length*1.05,length + 1.00) *
-        Math.max(width*1.05,width + 1.00) *
-        Math.max(height*1.05,height + 1.00) *
-             Math.pow(2.54, 3)) / (5000.00);
-        console.log("volWeightKG:", volWeightKG);
-        var chargableWeight = 1 * Math.max(volWeightKG * 1, weight/2.20).toFixed(2);
-        console.log("x volWeight:", volWeightKG.toFixed(2));
-        console.log("x chargableWeight:", chargableWeight.toFixed(2));
 
+
+
+        var chargableWeight = getChargableWeight(length,width,height);
+
+        try {
+          itemToCheck.chargableWeight = chargableWeight;
+        } catch (e) {
+          itemToCheck.chargableWeight = -1;
+        }
+        try {
+          itemToCheck.height = (height>0? height:itemheight);
+          itemToCheck.length = (length>0? length:itemlength);
+          itemToCheck.weight = (weight>0? weight:itemweight);
+          itemToCheck.width =  (width>0? width:itemwidth);
+        } catch (e) {
+          itemToCheck.height = -1;
+          itemToCheck.length = -1;
+          itemToCheck.weight = -1;
+          itemToCheck.width = -1;
+        }
         // part#
         try {
         var MPN = object[0].ItemAttributes[0].MPN[0]
@@ -1486,11 +1500,7 @@ console.log("-------->",msg);
           } catch (e) {
             itemToCheck.shipping = -1;
           }
-          try {
-            itemToCheck.chargableWeight = chargableWeight;
-          } catch (e) {
-            itemToCheck.chargableWeight = -1;
-          }
+
           try {
             itemToCheck.MPN = MPN;
             itemToCheck.asin = asin;
@@ -1506,17 +1516,7 @@ console.log("-------->",msg);
             itemToCheck.availability = "No Info";
             itemToCheck.condition = "No Info";
           }
-          try {
-            itemToCheck.height = height;
-            itemToCheck.length = length;
-            itemToCheck.weight = weight;
-            itemToCheck.width = width;
-          } catch (e) {
-            itemToCheck.height = -1;
-            itemToCheck.length = -1;
-            itemToCheck.weight = -1;
-            itemToCheck.width = -1;
-          }
+
           console.log("------> itemToCheck:", itemToCheck);
 
           // we do not know the category yet
@@ -1576,6 +1576,18 @@ console.log("-------->",msg);
     */
 
   } // valid domainName
+}
+
+var getChargableWeight = function(length,width,height) {
+  var volWeightKG = (Math.max(length*1.05,length + 1.00) *
+  Math.max(width*1.05,width + 1.00) *
+  Math.max(height*1.05,height + 1.00) *
+       Math.pow(2.54, 3)) / (5000.00);
+  console.log("volWeightKG:", volWeightKG);
+  var chargableWt = 1 * Math.max(volWeightKG * 1, weight/2.20).toFixed(2);
+  console.log("x volWeight:", volWeightKG.toFixed(2));
+  console.log("x chargableWeight:", chargableWeight.toFixed(2));
+  return chargableWt;
 }
 
 function amazonItemLookup(itemLookupOptions,callback) {
