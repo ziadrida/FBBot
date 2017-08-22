@@ -651,8 +651,20 @@ function determineResponse(event) {
   /*---------------------------------
    check if this is a pricing request
    ---------------------------------*/
-  if (typeof userMsg != 'undefined' && userMsg.action === "*pr") {
-    getPricing(senderID,userMsg);
+  if (typeof userMsg != 'undefined' && userMsg.action === "*price") {
+    item = {
+      price: userMsg.price,
+      shipping: userMsg.shipping,
+      category: [userMsg.category],
+      title: userMsg.title,
+      condition: userMsg.condition,
+      weight: userMsg.weight,
+      height: userMsg.height,
+      length: userMsg.length,
+      width: userMsg.width,
+      chargableWeight: (userMsg.chargableWeight? userMsg.chargableWeight:-1)
+    }
+    getPricing(senderID,item);
     return;
   } // action *pr
 
