@@ -359,7 +359,9 @@ function handleEvent(senderID, event) {
       return sendTextMessage(senderID,helpers.getMessage(sessions[sessionId],"1001"));
 
     }
-    return calculatePricing(senderID,payloadMsg.item);
+     calculatePricing(senderID,payloadMsg.item,function() {
+       return;
+     });
   }
 
   if(jsonpayload && payloadMsg.action == 'getQuote') {
@@ -371,7 +373,10 @@ function handleEvent(senderID, event) {
   if(jsonpayload && payloadMsg.action == 'getPricing') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
-    return calculatePricing(senderID,payloadMsg.item);
+
+    calculatePricing(senderID,payloadMsg.item,function() {
+      return;
+    });
   }
 
   if(jsonpayload && payloadMsg.action == 'getMorePrices') {
@@ -1785,20 +1790,7 @@ function getPricing(senderID,item) {
 
   console.log(" =========> in getPricing, senderID",senderID);
   var catList = [];
-  /*
-  if (typeof item != 'undefined' && item.price) {
-    console.log('price in USD:', item.price)
-  }
-  if (typeof item != 'undefined' && item.weight) {
-    console.log('weight in lbs:', item.weight)
-  }
-  if (typeof item != 'undefined' && item.chargableWeight) {
-    console.log('chargableWeight in KGs:', item.chargableWeight)
-  }
-  if (typeof item != 'undefined' && item.category) {
-    console.log('category:', item.category)
-  }
-*/
+
   // find category
 
   categories.findCategory(item.category,function(cats) {
@@ -1820,7 +1812,9 @@ function getPricing(senderID,item) {
       item.category_info._id = ''; // save space in messages
       item.category_info.keywords='';
 
-      return calculatePricing(senderID,item);
+      calculatePricing(senderID,item,function() {
+        return;
+      });
     }
     else {
       // more than one - let user select the valid category
@@ -1856,7 +1850,10 @@ function getPricing(senderID,item) {
 }
   if (catList.length == 1) {
     console.log("calc price for item:",item);
-      return calculatePricing(senderID,item);
+
+      calculatePricing(senderID,item,function() {
+        return;
+      });
   } else {
      compactListBuilder(senderID,catList,moreButton);
    }
@@ -2095,8 +2092,7 @@ function getQuotation(senderID,quoteNo) {
     });
 }
 
-
-function calculatePricing(senderID,item) {
+function calculatePricing(senderID,item,callback) {
   console.log("=====================> calculatePricing: senterID/item",senderID + '/\n' + item)
 
    const pricing_params =   {// get from DB.
@@ -2280,7 +2276,7 @@ console.log ("Q2_customs:",BQ2_customs);
    CA2_finalExpPriceMinJD+'/'+H2_seller+'/'+BC2_competitorsExpPricingJD+'/'+BZ2_finalExpPriceJD )
 
   finalExpPriceAmmJD = 1.00*CA2_finalExpPriceMinJD;
-    console.log("******** Final Express Price:",finalExpPriceAmmJD);
+    console.log("******** Final Express Price:/senderID",finalExpPriceAmmJD +'/'+senderID);
   // BG2 = =AA2*BF2/0.71
   BG2_aqabaShipRate = AA2_weightRateAdjust*BF2_aqabaShipRate*1.0/0.71
   // BH2 = =BG2*Z2
@@ -2394,9 +2390,9 @@ var valParams = {
   val1: (quote_obj.price.amm_exp <quote_obj.price.amm_std?
      quote_obj.price.amm_exp:quote_obj.price.amm_std)
 }
-
+console.log("->valParams:",valParams)
 btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
-
+console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
   mongoUtil.insertQuotation(senderID,sessions[sessionId],quote_obj,function(quotationNo){
     console.log("after inserting quotation quotationNo:",quotationNo)
 
@@ -2421,11 +2417,13 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
   sendTextMessage(senderID,quote_obj.item.title)
 
-  console.log("----------> response to senderID:",senderID, " IS btnTxt:",btnTxt , "\n and buttonList is:",buttonList);
+  console.log("----------> response to senderID:",senderID+ " IS btnTxt:"+btnTxt +
+      "\n and buttonList is:"+buttonList);
   sendPriceButton(senderID,btnTxt,buttonList)
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
-  //sendTextMessage(senderID,JSON.stringify(item));
+
+   return callback();
   });
 }
 
