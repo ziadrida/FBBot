@@ -2072,6 +2072,11 @@ function getQuotation(senderID,quoteNo) {
         quote_obj = doc[0].quotation;
 
         msgCode = (quote_obj.price.amm_exp <quote_obj.price.amm_std? "1003":"1004")
+
+        var valParams = {
+          val1: (quote_obj.price.amm_exp <quote_obj.price.amm_std?
+             quote_obj.price.amm_exp.toFixed(2):quote_obj.price.amm_std.toFixed(2))
+        }
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 
         quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no);
@@ -2371,9 +2376,6 @@ AX2_salesTaxAmount+'/'+AY2_clearanceFee+'/'+AZ2_usFees,BA2_cashBashaFees);
 console.log("BB2_expressPricing/BC2_competitorsExpPricingJD",
 BB2_expressPricing+'/'+BC2_competitorsExpPricingJD)
 
-var valParams = {
-  val1: (finalExpPriceAmmJD<finalStandardAmmPrice? finalExpPriceAmmJD.toFixed(2):finalStandardAmmPrice.toFixed(2))
-}
 
 //btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
@@ -2398,6 +2400,12 @@ var quote_obj = {
 // TODO
 
 msgCode = (quote_obj.price.amm_exp <quote_obj.price.amm_std? "1003":"1004")
+
+var valParams = {
+  val1: (quote_obj.price.amm_exp <quote_obj.price.amm_std?
+     quote_obj.price.amm_exp.toFixed(2):quote_obj.price.amm_std.toFixed(2))
+}
+
 btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 
   mongoUtil.insertQuotation(senderID,sessions[sessionId],quote_obj,function(quotationNo){
