@@ -2079,10 +2079,10 @@ function getQuotation(senderID,quoteNo) {
         }
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 
-        quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no + " "+quote_obj.quote_date);
+        quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no + " -- "+quote_obj.quote_date.toLocaleString());
         console.log("***** quotationStr:",quotationStr)
 
-        btnTxt =  quotationStr + "\n" + btnTxt;
+        btnTxt =  quotationStr + "\n\n" + btnTxt;
         var buttonList=[]
         var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
@@ -2414,9 +2414,10 @@ btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing m
 
     quote_obj.quote_no = quotationNo;
 
-  quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no);
+
+  quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no + " -- "+quote_obj.quote_date.toLocaleString());
   console.log("***** quotationStr:",quotationStr)
-  btnTxt =  quotationStr + "\n" + btnTxt;
+  btnTxt =  quotationStr + "\n\n" + btnTxt;
   var buttonList=[]
   var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
