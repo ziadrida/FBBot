@@ -116,12 +116,13 @@ module.exports = {
   },
 
   getDHLRate: function( weight ) {
-
+ // weight in KG
+ console.log("====> In getDHLRate ")
     var index = weight * 2 ;
    index = Math.ceil(index)-1;
 
   if (weight > 5) {
-    if (DHLLargeShipRate.length >= index) {
+    if (index < DHLLargeShipRate.length ) {
       return DHLLargeShipRate[index]*1.13;
     } else {
       // no rate in DHLLargeShipRate - compute based on

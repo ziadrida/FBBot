@@ -2248,8 +2248,9 @@ console.log ("Q2_customs:",BQ2_customs);
     // BY2 =BL2+BP2+BW2+BS2+BT2+IF(AT2="Y",AY2,0)
 
     BY2_finalExpPriceUSD = (BL2_itemPriceandShip + BP2_ShipHandling +
-      BW2_marginNRisk + BS2_customsAmount + BT2_salesTaxAmount+
-      (AT2_subjectToCustoms ? AY2_clearanceFee : 0));
+        BW2_marginNRisk + BS2_customsAmount + BT2_salesTaxAmount+
+        (AT2_subjectToCustoms ? AY2_clearanceFee : 0));
+    console.log("************ BY2_finalExpPriceUSD:",BY2_finalExpPriceUSD)
     BZ2_finalExpPriceJD = BY2_finalExpPriceUSD * 0.71;
     finalExpPriceJD =BZ2_finalExpPriceJD;
 
@@ -2275,6 +2276,8 @@ console.log ("Q2_customs:",BQ2_customs);
   CA2_finalExpPriceMinJD = (H2_seller == "Amazon"?
       Math.min(BC2_competitorsExpPricingJD*0.99,BZ2_finalExpPriceJD):BZ2_finalExpPriceJD);
 
+   console.log("+++ CA2_finalExpPriceMinJD/H2_seller/BC2_competitorsExpPricingJD/BZ2_finalExpPriceJD\n",
+   CA2_finalExpPriceMinJD+'/'+H2_seller+'/'+BC2_competitorsExpPricingJD+'/'+BZ2_finalExpPriceJD )
 
   finalExpPriceAmmJD = 1.00*CA2_finalExpPriceMinJD;
     console.log("******** Final Express Price:",finalExpPriceAmmJD);
@@ -2286,7 +2289,7 @@ console.log ("Q2_customs:",BQ2_customs);
 
 BI2_aqabaCostwoTaxJD = (BH2_aqabaShipping+AE2_itemCostUSD)*0.71*(1.0+BE2_aqabaClerance);
 // BJ2 =BI2*(1+BD2)
-console.log("BH2_aqabaShipping/AE2_itemCostUSD/BE2_aqabaClerance:",
+console.log("BH2_aqabaShipping/AE2_itemCostUSD/BE2_aqabaClerance:\n",
 BH2_aqabaShipping + '/' + AE2_itemCostUSD +'/'+ BE2_aqabaClerance);
 
 console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aqabaTax);
@@ -2325,7 +2328,7 @@ finalStdAqabaPriceJD.toFixed(2));
 console.log("M2_AmmanCost/O2_AmmanDeliveryJDParam/"+
 "P2_netAmmanMargin/Q2_NetAqabaMargin/T2_AmmanCatMargin/"+
 "U2_AqabaCatMargin/V2_marginAdjBasedOnPrice/W2_marginAdjBasedOnWeight/"+
-"X2_marginAdjBasedOnQty/Y2_volumnWeight/Z2_chargableWeight",
+"X2_marginAdjBasedOnQty/Y2_volumnWeight/Z2_chargableWeight\n",
   M2_AmmanCost+'/'+pricing_params.O2_AmmanDeliveryJDParam+'/'+P2_netAmmanMargin+'/'+Q2_NetAqabaMargin+'/'+T2_AmmanCatMargin+'/'+
   U2_AqabaCatMargin+'/'+V2_marginAdjBasedOnPrice+'/'+W2_marginAdjBasedOnWeight+'/'+X2_marginAdjBasedOnQty+'/'+
   Y2_volumnWeight+'/'+Z2_chargableWeight);
@@ -2334,8 +2337,9 @@ console.log("BL2_itemPriceandShip/BM2_DHLExpressRate/"+
 "BN2_paperAWBFeesParam/BO2_usHandling/BP2_ShipHandling/BQ2_customs/"+
 "BR2_salesTax/BS2_customsAmount/BT2_salesTaxAmount/"+
 "BU2_clearanceFee/BV2_expressMargin/BW2_marginNRisk/BX2_marginNRiskJD/"+
-"BY2_finalExpPriceUSD/BZ2_finalExpPriceJD/CA2_finalExpPriceMinJD",
-BL2_itemPriceandShip+'/'+BM2_DHLExpressRate+'/'+pricing_params.BN2_paperAWBFeesParam+'/'+BO2_usHandling+'/'+BP2_ShipHandling+'/'+BQ2_customs+'/'+
+"BY2_finalExpPriceUSD/BZ2_finalExpPriceJD/CA2_finalExpPriceMinJD\n",
+  BL2_itemPriceandShip+'/'+BM2_DHLExpressRate+'/'+pricing_params.BN2_paperAWBFeesParam+'/'+
+  BO2_usHandling+'/'+BP2_ShipHandling+'/'+BQ2_customs+'/'+
 BR2_salesTax+'/'+BS2_customsAmount+'/'+BT2_salesTaxAmount+'/'+
 BU2_clearanceFee+'/'+BV2_expressMargin+'/'+BW2_marginNRisk+'/'+
 BX2_marginNRiskJD+'/'+BY2_finalExpPriceUSD+'/'+
@@ -2343,14 +2347,14 @@ BZ2_finalExpPriceJD+'/'+CA2_finalExpPriceMinJD);
 console.log("AA2_weightRateAdjust/AB2_adjustedShippingCost/"+
 "AC2_ShipAndHandCostUSD/AD2_HandlingCostUSD/AE2_itemCostUSD/"+
 "AF2_ammCustoms/AG2_customsUSD/AH2_costWithCustomsUSD/AI2_clearancePercentParam/"+
-"AJ2_clearanceCost/AK2_loadedCost/AL2_ammanSalesTax",
+"AJ2_clearanceCost/AK2_loadedCost/AL2_ammanSalesTax\n",
 AA2_weightRateAdjust+'/'+AB2_adjustedShippingCost+'/'+
 AC2_ShipAndHandCostUSD+'/'+AD2_HandlingCostUSD+'/'+AE2_itemCostUSD+'/'+
 AF2_ammCustoms+'/'+AG2_customsUSD+'/'+AH2_costWithCustomsUSD+'/'+
 pricing_params.AI2_clearancePercentParam+'/'+AJ2_clearanceCost+'/'+AK2_loadedCost+'/'+
 AL2_ammanSalesTax);
 
-console.log("AN2_ammanSalePricewoTax/AO2_ammStdPriceWTax/AP2_capPrice",
+console.log("AN2_ammanSalePricewoTax/AO2_ammStdPriceWTax/AP2_capPrice\n",
   AN2_ammanSalePricewoTax+'/'+AO2_ammStdPriceWTax+'/'+AP2_capPrice);
 
 console.log("AQ2_usPriceWithUsTax/AR2_usSalesTax/AS2_aramexShippingCost",
@@ -2360,8 +2364,7 @@ console.log("AT2_subjectToCustoms/AU2_Customs/AV2_salesTax,AW2_customs",
 console.log("AX2_salesTaxAmount/AY2_clearanceFee/AZ2_usFees,BA2_cashBashaFees",
 AX2_salesTaxAmount+'/'+AY2_clearanceFee+'/'+AZ2_usFees,BA2_cashBashaFees);
 console.log("BB2_expressPricing/BC2_competitorsExpPricingJD",
-BB2_expressPricing+'/'+BC2_competitorsExpPricingJD)
-
+  BB2_expressPricing+'/'+BC2_competitorsExpPricingJD)
 
 //btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
