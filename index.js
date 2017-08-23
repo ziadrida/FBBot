@@ -32,15 +32,6 @@ var amazon = require('amazon-product-api');
 const warranty_price = '15';
 var logger = new Logger("MyLogFile");
 
-      var pricingDetailMsg_en =
-      "Chargable weight: <chargableWeight>kg. Shipping weight may be higher than actual product weight\n"+
-      "Price at origin:$<price> ;includes shipping at origin of:$<shippping>\n"+
-      "Category: <category_name>\n"+
-      "Amman customs of <amm_customs>% and tax:<tax_amm>%\n" +
-      "Aqaba customs 0% and tax <aqaba_customs>%\n"+
-      "Warranty is at source country (add ${warranty_price}% for local warranty)\n"+
-      "Prices include the actual item price + all shipping + all taxes and expenses.\n" +
-      "Our guarantee 1. best price 2. price will not change upon arrival 3. arrival with no breakage";
 
 // get token from the environment
 const firebase_auth_uri = process.env.FIREBASE_AUTH_URI
@@ -61,9 +52,9 @@ app.use(bodyParser.json())
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
 const sessions = {};
-var sessionId = ""
-var userObj;
-var action = "";
+//var sessionId = ""
+//var userObj;
+//var action = "";
 
 
 
@@ -239,8 +230,8 @@ db = mongoUtil.getDb(function() {
           // this function will return userObj in session if found
           findOrCreateUser(senderID, fbprofile, db, function(dbUserObj) {
             // set user info
-            userObj = dbUserObj;
-            console.log("***after findOrCreateUser *** userObj:", userObj)
+            //userObj = dbUserObj;
+            console.log("***after findOrCreateUser *** dbUserObj:", dbUserObj)
             db.close();
 
 
@@ -284,7 +275,7 @@ db = mongoUtil.getDb(function() {
         //  console.log("*** docs:", docs);
         //  assert.equal(null, err);
         // user found
-        userObj = docs;
+        //userObj = docs;
         sessions[sessionId].newUser = false;
         sessions[sessionId].userObj = docs[0];
         return callback(docs[0]);
@@ -458,12 +449,6 @@ Our guarantee:
 1. best price
 2. price will not change upon arrival
 3. arrival with no breakage`;
-   /*detailsMsg_en = pricingDetailMsg_en.replace("<price>",payloadMsg.quotation.item.price).
-    replace(" <chargableWeight>",payloadMsg.quotation.item.chargableWeight).
-    replace(" <shippping>",payloadMsg.quotation.item.shipping).
-      replace(" <category_name>",payloadMsg.quotation.item.category_info.category_name).
-      replace(" <amm_customs>",payloadMsg.quotation.item.category_info.category_name).
-*/
 
 var pricingDetailMsg_ar =
   pricing.title.substring(0,80)+
@@ -2079,10 +2064,10 @@ function getQuotation(senderID,quoteNo) {
         }
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 
-        quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no + " -- "+quote_obj.quote_date.toLocaleString());
+        quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString()+ " (#"+quote_obj.quote_no +") ]");
         console.log("***** quotationStr:",quotationStr)
+        btnTxt =  quotationStr + "\n\n==>" + btnTxt;
 
-        btnTxt =  quotationStr + "\n\n" + btnTxt;
         var buttonList=[]
         var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
@@ -2415,9 +2400,9 @@ btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing m
     quote_obj.quote_no = quotationNo;
 
 
-  quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no + " -- "+quote_obj.quote_date.toLocaleString());
+  quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString()+ " (#"+quote_obj.quote_no +") ]");
   console.log("***** quotationStr:",quotationStr)
-  btnTxt =  quotationStr + "\n\n" + btnTxt;
+  btnTxt =  quotationStr + "\n\n==>" + btnTxt;
   var buttonList=[]
   var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
