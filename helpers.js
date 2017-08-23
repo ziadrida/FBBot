@@ -66,6 +66,8 @@ module.exports = {
   } ,
 
 getMessage: function(session,textCode,valObj ) {
+  let btnTxn="";
+    console.log("==> in getMessage textCode/valObj:",textCode + '/' +valObj);
   if (session.userObj && session.userObj.locale &&
     session.userObj.locale.toLowerCase().includes("en")) {
       // english
@@ -130,6 +132,79 @@ getMessage: function(session,textCode,valObj ) {
 
         case "1011":
           return "How to order Video"
+
+        default:
+
+      }
+    }
+
+},
+getMessage1: function(session,textCode,valObj ,callback) {
+    console.log("==> in getMessage textCode/valObj:",textCode + '/' +valObj);
+  if (session.userObj && session.userObj.locale &&
+    session.userObj.locale.toLowerCase().includes("en")) {
+      // english
+      switch (textCode) {
+        case "1001":
+          return callback( "Please wait... we will try to find the correct category of this item");
+        case "1002":
+            return callback(  "Category not listed above")
+          break;
+        case "1003":
+            return callback(   "Personal express price 3-5 days: "+valObj.val1 + " JOD" ) ;
+        case "1004":
+              return callback(  "Standard express price 7-14 days: "+valObj.val1 + " JOD" );
+
+        case "1010":
+              return callback(   "Personal express price 3-5 days: "+valObj.val1 + " JOD" +
+            "\n"+
+            "Standard express price 7-14 days: "+valObj.val2 + " JOD" +
+            "\n"+
+            "Aqaba price 14-24 days: "+valObj.val3 + " JOD" +
+            "\n"+
+            "Aqaba personal express 5-7 days days: "+valObj.val4 + " JOD") ;
+
+         case "1011":
+              return callback(  "How to order Video")
+
+        default:
+
+      }
+    } else { // arabic
+      switch (textCode) {
+        case "1001":
+            return callback(  "سوف نقوم بايجاد صنف المنتج .. الرجاء الإنتظار");
+        case "1002":
+            return callback(  "الصنف غير مدرج")
+        case "1003":
+        btnTxt ="\n" +
+        "   سعر الطلب الخاص 3-5 ايام: "+
+        valObj.val1 +  " دينار " ;
+
+          return callback(  btnTxt);
+        case "1004":
+        btnTxt =  "\n" +
+        "   سعر الطلب العادى 7-14 يوم: "+
+        valObj.val1 +  " دينار " ;
+
+          return callback(  btnTxt);
+        case "1010":
+        btnTxt =
+        "   سعر الطلب الخاص 3-5 ايام: "+
+        valObj.val1 +  " دينار " ;
+        btnTxt = btnTxt + "\n" +
+        "   سعر الطلب العادى 7-14 يوم: "+
+        valObj.val2 +  " دينار " ;
+        btnTxt = btnTxt + "\n" +
+        "   سعر الطلب للعقبة 14-24 يوم: "+
+        valObj.val3 +  " دينار " ;
+        btnTxt = btnTxt + "\n" +
+        "   سعر الطلب الخاص للعقبة 5-7 يوم: "+
+        valObj.val4 +  " دينار " ;
+          return callback(  btnTxt);
+
+        case "1011":
+          return callback( "How to order Video");
 
         default:
 

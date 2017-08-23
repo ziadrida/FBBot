@@ -2364,7 +2364,7 @@ console.log("BB2_expressPricing/BC2_competitorsExpPricingJD",
 
 //btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
-var quote_obj = {
+let quote_obj = {
   quote_no:-1,
   quote_date: new Date(),
   item: item,
@@ -2391,7 +2391,9 @@ var valParams = {
      quote_obj.price.amm_exp:quote_obj.price.amm_std)
 }
 console.log("->valParams:",valParams)
-btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
+btnTxt = helpers.getMessage1(sessions[sessionId],msgCode,valParams,function(btnTxt){
+
+
 console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
   mongoUtil.insertQuotation(senderID,sessions[sessionId],quote_obj,function(quotationNo){
     console.log("after inserting quotation quotationNo:",quotationNo)
@@ -2425,6 +2427,7 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
    return callback();
   });
+}); // pricing message
 }
 
 
