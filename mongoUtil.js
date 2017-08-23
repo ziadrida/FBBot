@@ -89,7 +89,7 @@ module.exports = {
     console.log("=================>in  findQuotation")
     module.exports.connectToDB(function(err) {
       //assert.equal(null, err);
-      var collection = _db.collection('quotation');
+
 
       find(function(result) {
         console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
@@ -98,6 +98,7 @@ module.exports = {
     }); // connect
 
     find = function(callback) {
+    var collection = _db.collection('quotation');
     // Peform a simple find and return all the documents
     collection.find({
       "quotationNo": quote_no
