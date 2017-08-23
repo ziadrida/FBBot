@@ -87,9 +87,10 @@ module.exports = {
   } ,// insert quotation
   findQuotation: function(senderID, quotationNo, callback) {
     console.log("=================>in  findQuotation")
-    var collection = db.collection('quotation');
     module.exports.connectToDB(function(err) {
       //assert.equal(null, err);
+      var collection = _db.collection('quotation');
+
       find(function(result) {
         console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
         callback(result);
@@ -105,8 +106,7 @@ module.exports = {
 
       if (docs && docs.length > 0) {
         console.log("*** wit entity:", docs);
-        //    assert.equal(null, err);
-        db.close();
+
     /*    sessions[sessionId].context = {
           "action": "matched_response",
           "intent": entity_name,
