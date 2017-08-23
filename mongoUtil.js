@@ -1,7 +1,7 @@
 /*
 db.categories.createIndex( { category_name: "text", keywords: "text" }, {weights: { category_name: 5, keywords: 10}, name: "TextIndex" })
 */
-var MongoClient = require( 'mongodb' ).MongoClient;
+var MongoClient = require('mongodb').MongoClient;
 var mongoSequence = require("./sequence");
 
 var _db;
@@ -9,80 +9,116 @@ var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.
 
 module.exports = {
 
-  getNextSeq: function(sequenceName,callback) {
-    console.log("==========> inside getNextSeq seqName:",sequenceName)
-      var seq = mongoSequence(_db,sequenceName);
-      seq.getNext(function(err,sequence) {
-        console.log("==========>  after getNext :",sequence)
+  getNextSeq: function(sequenceName, callback) {
+    console.log("==========> inside getNextSeq seqName:", sequenceName)
+    var seq = mongoSequence(_db, sequenceName);
+    seq.getNext(function(err, sequence) {
+      console.log("==========>  after getNext :", sequence)
 
-        if (!err) {
-          console.log(" >>>>>>>>>>>>>>. return squecne for sequenceName "+sequenceName + " of "+sequence);
-          return callback(sequence);
-        }
-        console.log(" >>>>>>>>>>> error in getNext Seq");
-        return callback(-1)
-      });
-},
+      if (!err) {
+        console.log(" >>>>>>>>>>>>>>. return squecne for sequenceName " + sequenceName + " of " + sequence);
+        return callback(sequence);
+      }
+      console.log(" >>>>>>>>>>> error in getNext Seq");
+      return callback(-1)
+    });
+  },
 
-connectToDB: function( callback ) {
-      console.log("====> in connectToDB");
-    MongoClient.connect( mongodbUrl, function( err, db ) {
+  connectToDB: function(callback) {
+    console.log("====> in connectToDB");
+    MongoClient.connect(mongodbUrl, function(err, db) {
 
-      if(!err) {
-        console.log("  DB CONNECTED");//, db);
+      if (!err) {
+        console.log("  DB CONNECTED"); //, db);
       } else {
         console.log("  ERROR DURING DB CONNECTED");
       }
-        _db = db;
-      return callback( err );
-    } );
+      _db = db;
+      return callback(err);
+    });
   },
 
   getDb: function(callback) {
-  //  console.log("====> in getDb,db:",_db);
+    //  console.log("====> in getDb,db:",_db);
     var err = null;
     if (!_db) {
       module.exports.connectToDB(function(err) {
-         console.log("in getDB - after connectToDB")
-      //  callback(err);
+        console.log("in getDB - after connectToDB")
+        //  callback(err);
       });
     } else {
-        console.log("====>  getDb - already connected");
+      console.log("====>  getDb - already connected");
     }
     callback(_db);
-      console.log("====> before return getDb,db:");//,_db);
+    console.log("====> before return getDb,db:"); //,_db);
     return _db;
   },
-  insertQuotation:function(senderID,session,quotation,callback) {
-     console.log("=================>in  insertQuotation")
-     module.exports.connectToDB(function(err) {
-       //assert.equal(null, err);
+  insertQuotation: function(senderID, session, quotation, callback) {
+    console.log("=================>in  insertQuotation")
+    module.exports.connectToDB(function(err) {
+      //assert.equal(null, err);
       insert(function(nextVal) {
-      console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
-      callback(nextVal);
-    });
-  }); // connect
+        console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
+        callback(nextVal);
+      });
+    }); // connect
 
-  // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
- insert = function( callback) {
-   module.exports.getNextSeq('quotation',function(nextVal) {
-     quotation.quote_no = nextVal;
-     console.log("After getNextSeq nextVal:",nextVal);
-    _db.collection('quotation').insertOne({
-      "senderId": senderID,
-      "quotationNo": nextVal ,
-      "quotation": quotation,
-      "user": session.userObj,
-      "dateCreated": new Date()
-    }, function(err, result) {
-      //assert.equal(err, null);
-      if (!err) {
-        console.log("Inserted a document into the quotation collection.");
-        return callback(nextVal);
+    // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
+    insert = function(callback) {
+      module.exports.getNextSeq('quotation', function(nextVal) {
+        quotation.quote_no = nextVal;
+        console.log("After getNextSeq nextVal:", nextVal);
+        _db.collection('quotation').insertOne({
+          "senderId": senderID,
+          "quotationNo": nextVal,
+          "quotation": quotation,
+          "user": session.userObj,
+          "dateCreated": new Date()
+        }, function(err, result) {
+          //assert.equal(err, null);
+          if (!err) {
+            console.log("Inserted a document into the quotation collection.");
+            return callback(nextVal);
+          }
+          return (-1);
+        });
+      });
+    }; // insertMesssageText
+  } ,// insert quotation
+  findQuotation: function(senderID, quotationNo, callback) {
+    console.log("=================>in  findQuotation")
+    var collection = db.collection('quotation');
+    module.exports.connectToDB(function(err) {
+      //assert.equal(null, err);
+      find(function(result) {
+        console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
+        callback(result);
+      });
+    }); // connect
+
+    find = function(callback) {
+    // Peform a simple find and return all the documents
+    collection.find({
+      "quotationNo": quote_no
+    }).limit(1).toArray().then(function(docs) {
+      console.log("_______ docs:", docs);
+
+      if (docs && docs.length > 0) {
+        console.log("*** wit entity:", docs);
+        //    assert.equal(null, err);
+        db.close();
+    /*    sessions[sessionId].context = {
+          "action": "matched_response",
+          "intent": entity_name,
+          "intentValue": value
+        }*/
+        return callback(docs);
+
+      } else if (docs && docs.length == 0) { // no match
+        // how about creating an entry for it and let someone or figure a way later set the message? great idea!
+        return callback(docs);
       }
-      return (-1);
     });
-  });
-  }; // insertMesssageText
-}
+  }// find
+  } // insert quotation
 };

@@ -370,11 +370,19 @@ function handleEvent(senderID, event) {
     }
     return calculatePricing(senderID,payloadMsg.item);
   }
+
+  if(jsonpayload && payloadMsg.action == 'getQuote') {
+    // this is a pricing payload. Need to check if all pricing data is available
+    // ignore check for now - just go ahead with pricing calculation
+    return getQuotation(senderID,payloadMsg.quoteNo);
+  }
+
   if(jsonpayload && payloadMsg.action == 'getPricing') {
     // this is a pricing payload. Need to check if all pricing data is available
     // ignore check for now - just go ahead with pricing calculation
     return calculatePricing(senderID,payloadMsg.item);
   }
+
   if(jsonpayload && payloadMsg.action == 'getMorePrices') {
     // return a lis of valid prices to select from
 
@@ -647,6 +655,10 @@ function determineResponse(event) {
      sendButton(senderID, 'Would you like to confirm order?');
   }
 
+if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
+  // return quoteNo
+  return getQuotation(senderID,userMsg.quoteNo);
+}
 
   /*---------------------------------
    check if this is a pricing request
@@ -1979,7 +1991,7 @@ var matchEntity = function(entity_name, value, callback) {
             db.close();
           });
         }
-      });
+      }); // find
     });
   } // if entity_name == ''
 } // end matchEntity
@@ -2047,6 +2059,44 @@ function echoOnly(event) {
     }
   }
   return false;
+}
+
+function getQuotation(senderID,quoteNo) {
+    console.log("=====================> getQuotation:",quoteNo)
+
+    mongoUtil.findQuotation(senderID,quoteNo,function(doc) {
+      if (doc.length>0) {
+        // found quotation
+        console.log("after findQuotation quotation:",doc)
+        quote_obj = doc[0].quotation;
+        quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no);
+        console.log("***** quotationStr:",quotationStr)
+
+        btnTxt =  quotationStr + "\n" + btnTxt;
+        var buttonList=[]
+        var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
+
+        buttonList.push(helpers.getButton(sessions[sessionId],'getPricingDetails',getPricingDetailsPayload));
+
+        var getMorePricesPayload = {action: 'getMorePrices',quotation: quote_obj }
+        buttonList.push(helpers.getButton(sessions[sessionId],
+              'getMorePrices',getMorePricesPayload,quote_obj.price.min_price));
+    //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
+    //  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
+    // TODO
+    console.log("user locale:",JSON.stringify(sessions[sessionId]));
+
+      sendPriceButton(senderID,btnTxt,buttonList)
+    //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
+      console.log("************* send all itemInfo");
+      //sendTextMessage(senderID,JSON.stringify(item));
+
+      } else {
+        // cannot find quotation
+        sendTextMessage(senderID,"Sorry, i am having trouble finding quotation #",quoteNo);
+        return;
+      }
+    });
 }
 
 
@@ -2303,38 +2353,6 @@ AC2_ShipAndHandCostUSD+'/'+AD2_HandlingCostUSD+'/'+AE2_itemCostUSD+'/'+
 AF2_ammCustoms+'/'+AG2_customsUSD+'/'+AH2_costWithCustomsUSD+'/'+
 pricing_params.AI2_clearancePercentParam+'/'+AJ2_clearanceCost+'/'+AK2_loadedCost+'/'+
 AL2_ammanSalesTax);
-/*
-if (sessions[sessionId].userObj && sessions[sessionId].userObj.locale &&
-    sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
-  btnTxt = "Personal express price 3-5 days: "+finalExpPriceAmmJD.toFixed(2) + " JOD" +
-  "\n"+
-  "Amman Price 7-14 days: "+finalStandardAmmPrice.toFixed(2) + " JOD" +
-  "\n"+
-  "Aqaba price 14-24 days: "+finalStdAqabaPriceJD.toFixed(2) + " JOD" ;
-
-  priceDetailsLbl = "Price Details";
-  morePricesLbl = "more prices";
-} else {
-  btnTxt =
-  "   سعر الطلب الخاص 3-5 ايام: "+
-  finalExpPriceAmmJD.toFixed(2) +  " دينار " ;
-  btnTxt = btnTxt + "\n" +
-  "   سعر الطلب 7-14 يوم: "+
-  finalStandardAmmPrice.toFixed(2) +  " دينار " ;
-  btnTxt = btnTxt + "\n" +
-  "   سعر الطلب للعقبة 14-24 يوم: "+
-  finalStdAqabaPriceJD.toFixed(2) +  " دينار " ;
-
-  morePricesLbl = "اسعار اخرى"
-  priceDetailsLbl = "تفاصيل السعر";
-}*/
-/*
-var valParams = {
-  val1: (finalExpPriceAmmJD<finalStandardAmmPrice? finalExpPriceAmmJD.toFixed(2):
-  val2: finalStandardAmmPrice.toFixed(2),
-  val3: finalStdAqabaPriceJD.toFixed(2)
-}*/
-
 
 console.log("AN2_ammanSalePricewoTax/AO2_ammStdPriceWTax/AP2_capPrice",
   AN2_ammanSalePricewoTax+'/'+AO2_ammStdPriceWTax+'/'+AP2_capPrice);
@@ -2382,7 +2400,6 @@ var quote_obj = {
 
   quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no);
   console.log("***** quotationStr:",quotationStr)
-  lowestPrice = quote_obj.price.min_price;
   btnTxt =  quotationStr + "\n" + btnTxt;
   var buttonList=[]
   var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
@@ -2391,7 +2408,7 @@ var quote_obj = {
 
   var getMorePricesPayload = {action: 'getMorePrices',quotation: quote_obj }
   buttonList.push(helpers.getButton(sessions[sessionId],
-        'getMorePrices',getMorePricesPayload,lowestPrice));
+        'getMorePrices',getMorePricesPayload,quote_obj.price.min_price));
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
 //  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
 // TODO
