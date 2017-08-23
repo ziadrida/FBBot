@@ -129,7 +129,7 @@ module.exports = {
       for (i=1 ; i <DHLLargeShipRateWT.length; i++ ) {
         if (weight < DHLLargeShipRateWT[i]) {
 
-          return DHLLargeShipRate1[i-1]*1.13;
+          return DHLLargeShipRate1[i-1]*weight*1.13;
         }
       }
     }
