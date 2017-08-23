@@ -1289,7 +1289,7 @@ function processHttpRequest(event,callback) {
       amazonItemLookup(itemLookupOptions,function(results) {
         if (!results) {
             console.log("********** No Results from Amazon!");
-            return callback(null);
+            return ; //callback(null);
           }
         console.log(JSON.stringify(results));
         var res = JSON.stringify(results)
@@ -1390,6 +1390,10 @@ function processHttpRequest(event,callback) {
            packageDimensions = "item dimensions " +itemlength+"x"+ itemwidth+ "x"+ itemheight
         }
 
+        var cat = [];
+        var itemToCheck = {
+          category: []
+        };
         try {
           itemToCheck.height = (height>0? height:itemheight);
           itemToCheck.length = (length>0? length:itemlength);
@@ -1440,15 +1444,13 @@ function processHttpRequest(event,callback) {
          } catch(e) { console.log("No category for this item! ");}
 
         */
-        var cat = [];
+
         try {
           iterate("Name", object[0].BrowseNodes[0], cat)
         } catch(e) { console.log("No category or this item"); }
         console.log(" Categories: ", cat);
         // find Matching categories
-          var itemToCheck = {
-            category: []
-          };
+
         cat.forEach(function(a) {
           for (var n =0 ; n<a.length; n++) {
               if (typeof a[n] != 'undefined' && a[n]) {
