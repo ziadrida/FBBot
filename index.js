@@ -2075,7 +2075,7 @@ function getQuotation(senderID,quoteNo) {
 
         var valParams = {
           val1: (quote_obj.price.amm_exp <quote_obj.price.amm_std?
-             quote_obj.price.amm_exp.toFixed(2):quote_obj.price.amm_std.toFixed(2))
+             quote_obj.price.amm_exp:quote_obj.price.amm_std)
         }
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 
@@ -2403,7 +2403,7 @@ msgCode = (quote_obj.price.amm_exp <quote_obj.price.amm_std? "1003":"1004")
 
 var valParams = {
   val1: (quote_obj.price.amm_exp <quote_obj.price.amm_std?
-     quote_obj.price.amm_exp.toFixed(2):quote_obj.price.amm_std.toFixed(2))
+     quote_obj.price.amm_exp:quote_obj.price.amm_std)
 }
 
 btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
