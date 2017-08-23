@@ -2097,9 +2097,9 @@ function getQuotation(senderID,quoteNo) {
 
 
 function calculatePricing(senderID,item) {
-  console.log("=====================> calculatePricing:",item)
+  console.log("=====================> calculatePricing: senterID/item",senderID + '/\n' + item)
 
-   var pricing_params =   {// get from DB.
+   const pricing_params =   {// get from DB.
     shippingCostPerKgJDParam:  5.42 ,  // JD
     O2_AmmanDeliveryJDParam: 1.5, // JD
     AI2_clearancePercentParam: 0.01,
@@ -2419,6 +2419,9 @@ btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing m
 // TODO
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
+  sendTextMessage(senderID,quote_obj.item.title)
+
+  constole.log("----------> response to senderID:",senderID, " IS btnTxt:",btnTxt , "\n and buttonList is:",buttonList);
   sendPriceButton(senderID,btnTxt,buttonList)
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
