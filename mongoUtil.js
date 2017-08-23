@@ -96,7 +96,6 @@ module.exports = {
         callback(result);
       });
     }); // connect
-
     find = function(callback) {
     var collection = _db.collection('quotation');
     // Peform a simple find and return all the documents
