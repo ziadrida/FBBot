@@ -2065,10 +2065,15 @@ function getQuotation(senderID,quoteNo) {
     console.log("=====================> getQuotation:",quoteNo)
 
     mongoUtil.findQuotation(senderID,quoteNo,function(doc) {
+
       if (doc.length>0) {
         // found quotation
         console.log("after findQuotation quotation:",doc)
         quote_obj = doc[0].quotation;
+
+        msgCode = (quote_obj.price.amm_exp <quote_obj.price.amm_std? "1003":"1004")
+        btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
+
         quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no);
         console.log("***** quotationStr:",quotationStr)
 
@@ -2369,8 +2374,7 @@ BB2_expressPricing+'/'+BC2_competitorsExpPricingJD)
 var valParams = {
   val1: (finalExpPriceAmmJD<finalStandardAmmPrice? finalExpPriceAmmJD.toFixed(2):finalStandardAmmPrice.toFixed(2))
 }
-msgCode = (finalExpPriceAmmJD<finalStandardAmmPrice? "1003":"1004")
-btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
+
 //btnTxt = item.title.substring(0,80) + "\n" + btnTxt;
 
 var quote_obj = {
@@ -2392,6 +2396,9 @@ var quote_obj = {
 
 // insert new quotation in the database
 // TODO
+
+msgCode = (quote_obj.price.amm_exp <quote_obj.price.amm_std? "1003":"1004")
+btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 
   mongoUtil.insertQuotation(senderID,sessions[sessionId],quote_obj,function(quotationNo){
     console.log("after inserting quotation quotationNo:",quotationNo)
