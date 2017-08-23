@@ -2079,7 +2079,7 @@ function getQuotation(senderID,quoteNo) {
         }
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 
-        quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no);
+        quotationStr = (quote_obj.quote_no < 0? "" : "#"+quote_obj.quote_no + " "+quote_obj.quote_date);
         console.log("***** quotationStr:",quotationStr)
 
         btnTxt =  quotationStr + "\n" + btnTxt;
@@ -2096,6 +2096,7 @@ function getQuotation(senderID,quoteNo) {
     // TODO
     console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
+      sendTextMessage(senderID,quote_obj.item.title)
       sendPriceButton(senderID,btnTxt,buttonList)
     //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
       console.log("************* send all itemInfo");
