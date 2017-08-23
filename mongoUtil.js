@@ -100,7 +100,7 @@ module.exports = {
     var collection = _db.collection('quotation');
     // Peform a simple find and return all the documents
     collection.find({
-      "quotationNo": quote_no
+      "quotationNo": quotationNo
     }).limit(1).toArray().then(function(docs) {
       console.log("_______ docs:", docs);
 
