@@ -260,8 +260,8 @@ db = mongoUtil.getDb(function() {
 
   // create or get user
   var findOrCreateUser = function(senderID, fbprofile, db, callback) {
-    console.log("=====>   in findOrCreateUser - senderID:", senderID);
-    if (sessions[sessionId].userObj) {
+    console.log("=====>   in findOrCreateUser - senderID/sessionId:", senderID + '/' + sessionId);
+    if (sessions[sessionId] && sessions[sessionId].userObj) {
       console.log("**** findOrCreateUser -  user already known:", sessions[sessionId].userObj)
       return callback(sessions[sessionId].userObj);
     }
@@ -752,7 +752,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
             if (doc && doc[0] && doc[0].messageText && doc[0].messageText.includes("not sure")) {
               sendTextMessage(senderID, "how should i respond?");
               // set session context to expect entity respose TODO
-              console.log(" &&&&&&&&&& ASK how to respond. UserObj:", userObj)
+              console.log(" &&&&&&&&&& ASK how to respond. UserObj:", sessions[sessionId].userObj)
               sessions[sessionId].context = {
                 "action": "set_entity_msg",
                 "intent": intent,
