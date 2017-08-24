@@ -2391,7 +2391,7 @@ var valParams = {
      quote_obj.price.amm_exp:quote_obj.price.amm_std)
 }
 console.log("->valParams:",valParams)
-btnTxt = helpers.getMessage1(sessions[sessionId],msgCode,valParams,function(btnTxt){
+btnTxt = helpers.getMessage1(sessions[sessionId],msgCode,valParams,function(btnTxt){})
 
 
 console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
@@ -2428,7 +2428,7 @@ sendTextMessage(senderID,quote_obj.item.title)
 
    return callback();
   });
-}); // pricing message
+//}); // pricing message
 }
 
 
