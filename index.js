@@ -1531,8 +1531,8 @@ console.log("-------->",msg);
 
           }
       //  sendTextMessage(senderID, msg);
-      var shortMsg = title + "[" + cat[0] + "]"
-      sendTextMessage(senderID, shortMsg);
+    //  var shortMsg = title + "[" + cat[0] + "]"
+      // sendTextMessage(senderID, shortMsg);
       });
 
     } // if (asin)  price from amazon
@@ -2417,10 +2417,11 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
 // TODO
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
-  sendTextMessage(senderID,quote_obj.item.title)
+
 
   console.log("----------> response to senderID:",senderID+ " IS btnTxt:"+btnTxt +
       "\n and buttonList is:"+buttonList);
+sendTextMessage(senderID,quote_obj.item.title)
   sendPriceButton(senderID,btnTxt,buttonList)
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
