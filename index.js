@@ -655,7 +655,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
    ---------------------------------*/
   if (typeof userMsg != 'undefined' && userMsg.action === "*price") {
     item = {
-      recipientID: 1292277040894981,
+      recipientID: userMsg.recipient,
       price: userMsg.price,
       shipping: userMsg.shipping,
       category: [userMsg.category],
