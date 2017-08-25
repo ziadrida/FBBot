@@ -655,6 +655,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
    ---------------------------------*/
   if (typeof userMsg != 'undefined' && userMsg.action === "*price") {
     item = {
+      recipientID: 1292277040894981,
       price: userMsg.price,
       shipping: userMsg.shipping,
       category: [userMsg.category],
@@ -664,6 +665,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
       height: userMsg.height,
       length: userMsg.length,
       width: userMsg.width,
+      username: userMsg.username,
       chargableWeight: (userMsg.chargableWeight? userMsg.chargableWeight:
           getChargableWeight(userMsg.weight,userMsg.length,userMsg.width,userMsg.height))
     }
@@ -2420,8 +2422,9 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
   console.log("----------> response to senderID:",senderID+ " IS btnTxt:"+btnTxt +
       "\n and buttonList is:"+buttonList);
-sendTextMessage(senderID,quote_obj.item.title)
-  sendPriceButton(senderID,btnTxt,buttonList)
+      console.log("item.recipientID || senderID",item.recipientID+'/'+ senderID+'/'+item.recipientID || senderID)
+sendTextMessage(item.recipientID || senderID,quote_obj.item.title)
+  sendPriceButton(item.recipientID || senderID,btnTxt,buttonList)
 //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
 
