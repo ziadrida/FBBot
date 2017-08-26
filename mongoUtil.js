@@ -16,7 +16,7 @@ module.exports = {
       if (err) return callback(null);
 
       find(function(doc) {
-        console.log(">>>>>>>>>>>>> Don find findUserByName ")
+        console.log(">>>>>>>>>>>>> after find findUserByName ")
         callback(doc);
       });
     }); // connect

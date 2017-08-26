@@ -2433,7 +2433,7 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
           if (users && users.length == 1) {
             // expect only one match
             console.log("******** Switch response to another user : ",item.recipentID)
-            senderID = users.recipentID;
+            senderID = users[0].recipentID;
           }
             // cannot find user - send back to requester
           console.log("__________ cannot find username/user:",item.username+'/'+users);
