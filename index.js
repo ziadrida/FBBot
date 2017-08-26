@@ -1270,7 +1270,7 @@ function processHttpRequest(event,callback) {
 
 
 
-    var regex = RegExp("B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])|[0-9]{10}/");
+    var regex = RegExp("/B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(X|0-9])|[0-9]{10}/");
 
     //messageText = "https://www.amazon.com/4pk-Assorted-colors-Pocket-T-Shirt/dp/B00WK0ST3S/ref=sr_1_1?ie=";
 
@@ -1279,6 +1279,7 @@ function processHttpRequest(event,callback) {
     // if ASIN is set then request if from amazon website
     // for now i will assume it is the USA AMAZON
     if (typeof asin != 'undefined' && asin) {
+      asin = asin.replace('/','');
       // price from amazon
       console.log(">>>>>>>>>> AMAZON:", asin[0]);
        amazonClient = amazon.createClient({
