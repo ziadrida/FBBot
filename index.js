@@ -2433,7 +2433,11 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
     return callback();
 });
 
-getRecipientID = function(senderID,item,callback) {
+
+}); // insert quotation
+} // calculatePricing
+
+var getRecipientID = function(senderID,item,callback) {
   // check who to send the price to
   if (item && (item.username || item.recipientID) ) {
     // requester wants this price to go somewhere else
@@ -2458,10 +2462,7 @@ getRecipientID = function(senderID,item,callback) {
   } else {
     callback(senderID);
   }
-}
-}); // insert quotation
-} // calculatePricing
-
+} // get recipient ID
 
 var language = function() {
   if (sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
