@@ -302,9 +302,10 @@ db = mongoUtil.getDb(function() {
           return callback(docs);
         });
       }
+      return callback(null);
     });
 
-  }; // insertMesssageText
+  }; // createOrFindUser
 
 
 
@@ -670,6 +671,8 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
           getChargableWeight(userMsg.weight,userMsg.length,userMsg.width,userMsg.height))
     }
     console.log("**** item:",item)
+
+    // manual pricing
     getPricing(senderID,item);
     return;
   } // action *pr
@@ -2419,16 +2422,34 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
 
+  // check who to send the price to
+  if (item.username || item.recipentID ) {
+    // requester wants this price to go somewhere else
+    // user recipentID if given otherwise find the recipentID by username
+    if (!item.recipentID) {
+      mongoUtil.findUserByName(username,function(users){
 
-  console.log("----------> response to senderID:",senderID+ " IS btnTxt:"+btnTxt +
-      "\n and buttonList is:"+buttonList);
-      console.log("item.recipientID || senderID",item.recipientID+'/'+ senderID+'/'+item.recipientID || senderID)
-sendTextMessage(item.recipientID || senderID,quote_obj.item.title)
-  sendPriceButton(item.recipientID || senderID,btnTxt,buttonList)
-//  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
+          if (users && users.length == 1) {
+            // expect only one match
+            console.log("******** Switch response to another user : ",item.recipentID)
+            senderID = users.recipentID;
+          }
+            // cannot find user - send back to requester
+          console.log("__________ cannot find username/user:",item.username+'/'+users);
+      });
+    } else {
+      senderID = item.recipentID;
+     }
+  }
+  console.log("----------> response to senderID:", senderID + " IS btnTxt:" + btnTxt +
+    "\n and buttonList is:" + buttonList);
+
+  sendTextMessage(senderID, quote_obj.item.title)
+  sendPriceButton(senderID, btnTxt, buttonList)
+  //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
   console.log("************* send all itemInfo");
 
-   return callback();
+  return callback();
   });
 //}); // pricing message
 }

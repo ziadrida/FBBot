@@ -9,6 +9,60 @@ var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.
 
 module.exports = {
 
+  findUserByName: function(username,callback) {
+      console.log("=====>   in findUserByName - username:", username);
+    module.exports.connectToDB(function(err) {
+      //assert.equal(null, err);
+      if (err) return callback(null);
+
+      find(function(doc) {
+        console.log(">>>>>>>>>>>>> Don find findUserByName ")
+        callback(doc);
+      });
+    }); // connect
+
+    find = function(callback) {
+
+      // Peform a simple find and return one  documents
+     let  firstName =  /[^ ]*/.exec(username)[0]
+     let  lastName =  /[^ ]*$/.exec(username)[0]
+      _db.collection('users').find(
+        {
+    "$and": [
+        {
+            "first_name": {
+                "$regex": firstName,
+                "$options": "i"
+            }
+        },
+        {
+            "last_name": {
+                "$regex": lastName,
+                "$options": "i"
+            }
+        }
+    ]
+}
+      ).limit(1).toArray().then(function(docs) {
+        console.log("___user____ docs:", docs);
+          if (docs && docs.length > 1) {
+            // expect only one name! not sure how to proceed
+            // caller should reply to user that name matches more than one user! Caller is an Admin
+            console.log("ERROR - Matched more than one NAME ***************<<><><> ERROR <><><>")
+            return callback(docs);
+          }
+        else  if (docs && docs.length == 1 ) {
+          //  console.log("*** docs:", docs);
+          return callback(docs);
+        } else if (docs && docs.length == 0) { // no match for user name
+          // return the same thing! I may decide to do something else.
+          return callback(docs);
+        }
+        return callback(null);
+      });
+    } // find
+  },
+
   getNextSeq: function(sequenceName, callback) {
     console.log("==========> inside getNextSeq seqName:", sequenceName)
     var seq = mongoSequence(_db, sequenceName);
@@ -44,6 +98,7 @@ module.exports = {
     if (!_db) {
       module.exports.connectToDB(function(err) {
         console.log("in getDB - after connectToDB")
+          if (err) return callback(null);
         //  callback(err);
       });
     } else {
@@ -56,6 +111,7 @@ module.exports = {
   insertQuotation: function(senderID, session, quotation, callback) {
     console.log("=================>in  insertQuotation")
     module.exports.connectToDB(function(err) {
+        if (err) return callback(null);
       //assert.equal(null, err);
       insert(function(nextVal) {
         console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
@@ -89,13 +145,14 @@ module.exports = {
     console.log("=================>in  findQuotation")
     module.exports.connectToDB(function(err) {
       //assert.equal(null, err);
-
+        if (err) return callback(null);
 
       find(function(result) {
         console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
         callback(result);
       });
     }); // connect
+
     find = function(callback) {
     var collection = _db.collection('quotation');
     // Peform a simple find and return all the documents
@@ -118,6 +175,7 @@ module.exports = {
         // how about creating an entry for it and let someone or figure a way later set the message? great idea!
         return callback(docs);
       }
+      return callback(null);
     });
   }// find
   } // insert quotation
