@@ -2070,7 +2070,7 @@ function getQuotation(senderID,quoteNo) {
         quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
         console.log("***** quotationStr:",quotationStr)
         btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
-          (quote_obj.notes  && quote_obj.notes == "Note:"? "":quote_obj.notes);
+          (quote_obj.notes  && quote_obj.notes == "Notes:"? "":quote_obj.notes);
 
         var buttonList=[]
         var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
@@ -2121,7 +2121,7 @@ function calculatePricing(senderID,item,callback) {
 
 
   // user pricing formula
-  pricingMessage = "Note:"
+  pricingMessage = "Notes:"
   I2_quantity = 1;
   J2_unitCapacityPerBox = 1;
   numberOfPackages = Math.ceil((I2_quantity/J2_unitCapacityPerBox)*100)/100;
@@ -2420,7 +2420,7 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
   quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
   console.log("***** quotationStr:",quotationStr)
   btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
-    (quote_obj.notes  && quote_obj.notes == "Note:"? "":quote_obj.notes);
+    (quote_obj.notes  && quote_obj.notes == "Notes:"? "":quote_obj.notes);
   var buttonList=[]
   var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
