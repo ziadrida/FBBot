@@ -2422,12 +2422,16 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
 // TODO
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
+  // item may contain a username or recipientID which take priorty for the reply
   getRecipientID(senderID,item, function(targetRecipient) {
     console.log("----------> response to targetRecipient:", targetRecipient + " IS btnTxt:" + btnTxt +
       "\n and buttonList is:" + buttonList);
 
     sendTextMessage(targetRecipient, quote_obj.item.title)
     sendPriceButton(targetRecipient, btnTxt, buttonList)
+    if ( senderID != targetRecipient ) {
+      sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no );
+    }
     //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
     console.log("************* send all itemInfo");
     return callback();
