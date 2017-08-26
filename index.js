@@ -2062,12 +2062,13 @@ function getQuotation(senderID,quoteNo) {
         msgCode = (quote_obj.price.amm_exp <quote_obj.price.amm_std? "1003":"1004")
 
         var valParams = {
-          val1: (quote_obj.price.amm_exp <quote_obj.price.amm_std?
+          val1: (quote_obj.price.amm_exp < quote_obj.price.amm_std?
              quote_obj.price.amm_exp:quote_obj.price.amm_std)
         }
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 
-        quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
+        quotationStr = (quote_obj.quote_no < 0? "" : "["+
+          quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
         console.log("***** quotationStr:",quotationStr)
         btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
           (quote_obj.notes  && quote_obj.notes == "Notes:"? "":quote_obj.notes);
@@ -2319,7 +2320,7 @@ console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aq
   E14_finalStdAqabaPriceJD = 1.0*(BJ2_aqabaCostwTaxJD/(1-Q2_NetAqabaMargin));
   var finalStdAqabaPriceJD = 1.0*E14_finalStdAqabaPriceJD.toFixed(2);
   console.log("Final Aqaba price: ",E14_finalStdAqabaPriceJD);
-  console.log("Final Amman Price:", finalAmmanPriceStdwTax.toFixed(2));
+  console.log("Final standard Amman Price:", finalAmmanPriceStdwTax.toFixed(2));
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   //pricingMessage = pricingMessage + packageDimensions;
   //pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
@@ -2407,7 +2408,10 @@ var valParams = {
   val1: (quote_obj.price.amm_exp <quote_obj.price.amm_std?
      quote_obj.price.amm_exp:quote_obj.price.amm_std)
 }
-console.log("->valParams:",valParams)
+
+console.log("<><><> quote_obj:",JSON.stringify(quote_obj));
+
+console.log("-=>valParams:",valParams)
 var btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams);
 
 console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
