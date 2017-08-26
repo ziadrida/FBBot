@@ -1279,9 +1279,9 @@ function processHttpRequest(event,callback) {
     // if ASIN is set then request if from amazon website
     // for now i will assume it is the USA AMAZON
     if (typeof asin != 'undefined' && asin) {
-      asin = asin.replace('/','');
+      var searchItem = asin[0].replace('/','');
       // price from amazon
-      console.log(">>>>>>>>>> AMAZON:", asin[0]);
+      console.log(">>>>>>>>>> AMAZON:", searchItem);
        amazonClient = amazon.createClient({
         awsTag: "tech1",
         awsId: "AKIAIN3EIRW3VGI3UT2Q",
@@ -1290,7 +1290,7 @@ function processHttpRequest(event,callback) {
 
 
       var itemLookupOptions = {
-        itemId: asin[0],
+        itemId: searchItem,
         MerchantId: 'Amazon',
         ResponseGroup: 'OfferListings ,ItemAttributes,BrowseNodes'
       }
@@ -1492,7 +1492,7 @@ var msg = title +
            "\n" +
            "Condition:" + itemCondition +
           "\n" +
-          " MPN/ASIN:" + MPN+'/'+asin;
+          " MPN/ASIN:" + MPN+'/'+searchItem;
 
 console.log("-------->",msg);
           try {
@@ -1513,7 +1513,7 @@ console.log("-------->",msg);
 
           try {
             itemToCheck.MPN = MPN;
-            itemToCheck.asin = asin;
+            itemToCheck.asin = searchItem;
           } catch (e) {
             itemToCheck.MPN = "";
             itemToCheck.asin = "";
