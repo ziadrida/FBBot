@@ -2066,9 +2066,10 @@ function getQuotation(senderID,quoteNo) {
              quote_obj.price.amm_exp:quote_obj.price.amm_std)
         }
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
-
+        var options = {}
+        options.timeZone = 'Asia/Amman'
         quotationStr = (quote_obj.quote_no < 0? "" : "["+
-          quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
+          quote_obj.quote_date.toLocaleString("en-US",options)+ " (#"+quote_obj.quote_no +") ]");
         console.log("***** quotationStr:",quotationStr)
         btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
           (quote_obj.notes  && quote_obj.notes == "Notes:"? "":quote_obj.notes);
@@ -2420,8 +2421,9 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
 
     quote_obj.quote_no = quotationNo;
 
-
-  quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
+    var options = {}
+    options.timeZone = 'Asia/Amman'
+  quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",options)+ " (#"+quote_obj.quote_no +") ]");
   console.log("***** quotationStr:",quotationStr)
   btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
     (quote_obj.notes  && quote_obj.notes == "Notes:"? "":quote_obj.notes);
