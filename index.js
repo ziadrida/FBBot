@@ -2432,8 +2432,9 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
           if (users && users.length == 1) {
             // expect only one match
-            console.log("******** Switch response to another user : ",item.recipentID)
-            senderID = users[0].recipentID;
+            console.log("******** Switch response to another user : ",users[0].userId)
+            senderID = users[0].userId;
+            item.recipientID = senderID;
           }
             // cannot find user - send back to requester
           console.log("__________ cannot find username/user:",item.username+'/'+users);
