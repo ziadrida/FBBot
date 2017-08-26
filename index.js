@@ -2059,10 +2059,10 @@ function getQuotation(senderID,quoteNo) {
         console.log("after findQuotation quotation:",doc)
         quote_obj = doc[0].quotation;
 
-        msgCode = (quote_obj.price.amm_exp <quote_obj.price.amm_std? "1003":"1004")
+        msgCode = (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1? "1003":"1004")
 
         var valParams = {
-          val1: (quote_obj.price.amm_exp < quote_obj.price.amm_std?
+          val1: (quote_obj.price.amm_exp*1 < quote_obj.price.amm_std*1?
              quote_obj.price.amm_exp:quote_obj.price.amm_std)
         }
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
@@ -2403,10 +2403,10 @@ let quote_obj = {
 // insert new quotation in the database
 // TODO
 
-msgCode = (quote_obj.price.amm_exp <quote_obj.price.amm_std? "1003":"1004")
+msgCode = (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1? "1003":"1004")
 
 var valParams = {
-  val1: (quote_obj.price.amm_exp <quote_obj.price.amm_std?
+  val1: (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1?
      quote_obj.price.amm_exp:quote_obj.price.amm_std)
 }
 
