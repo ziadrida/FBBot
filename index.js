@@ -2070,7 +2070,7 @@ function getQuotation(senderID,quoteNo) {
         quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
         console.log("***** quotationStr:",quotationStr)
         btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
-          (quote_obj.pricingMessage == "Notes:"? "":quote_obj.pricingMessage);
+          (quote_obj.notes  && quote_obj.notes == "Note:"? "":quote_obj.notes);
 
         var buttonList=[]
         var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
@@ -2121,7 +2121,7 @@ function calculatePricing(senderID,item,callback) {
 
 
   // user pricing formula
-  pricingMessage = "Notes:"
+  pricingMessage = "Note:"
   I2_quantity = 1;
   J2_unitCapacityPerBox = 1;
   numberOfPackages = Math.ceil((I2_quantity/J2_unitCapacityPerBox)*100)/100;
@@ -2155,13 +2155,23 @@ function calculatePricing(senderID,item,callback) {
      // unknown shipping cost
      C2_shipping = 0;
      if (language() == "english") {
-     pricingMessage = pricingMessage + "/local shipping cost not included in price"
-   } else {
-     pricingMessage = pricingMessage + "/لا يشمل الشحن فى بلد المصدر"
-   }
+       pricingMessage = pricingMessage + "/local shipping cost not included in price"
+     } else {
+       pricingMessage = pricingMessage + "/لا يشمل الشحن فى بلد المصدر"
+     }
    } else {
      C2_shipping = item.shipping * 1.00;
    }
+   if((item.length <= 0 || item.width <= 0 || item.height <= 0)
+    && item.weight <= 0 &&
+    item.chargableWeight <= 0 ){
+    // cannot compute weight
+    if (language() == "english") {
+      pricingMessage = pricingMessage + "/WARNING: no weight available. item weight cannot be ZERO!"
+    } else {
+      pricingMessage = pricingMessage + "/لا يوجد وزن للقطعة!يفى بلدا المصدر"
+    }
+  }
   packageDimensions = item.length + 'x'+item.width + 'x'+ item.height + 'inch' ;
 
   Y2_volumnWeight=-1; // already have chargableWeight
@@ -2410,7 +2420,7 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
   quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
   console.log("***** quotationStr:",quotationStr)
   btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
-    (quote_obj.pricingMessage == "Notes:"? "":quote_obj.pricingMessage);
+    (quote_obj.notes  && quote_obj.notes == "Note:"? "":quote_obj.notes);
   var buttonList=[]
   var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
