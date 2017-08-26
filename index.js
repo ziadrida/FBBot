@@ -2424,11 +2424,11 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
 
   // check who to send the price to
-  if (item.username || item.recipentID ) {
+  if (item && (item.username || item.recipentID) ) {
     // requester wants this price to go somewhere else
     // user recipentID if given otherwise find the recipentID by username
     if (!item.recipentID) {
-      mongoUtil.findUserByName(username,function(users){
+      mongoUtil.findUserByName(item.username,function(users){
 
           if (users && users.length == 1) {
             // expect only one match
