@@ -404,7 +404,7 @@ function handleEvent(senderID, event) {
     }
 
     btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
-    btnTxt = "#"+ payloadMsg.quotation.quote_no + "\n" + btnTxt;
+    btnTxt = "#"+ payloadMsg.quotation.quote_no + "\n" + btnTxt ;
     sendPriceButton(senderID,btnTxt,buttonList)
   }
 
@@ -440,7 +440,7 @@ function handleEvent(senderID, event) {
         payloadMsg.quotation.item.height.toFixed(1)
 
   }
-  shortTitle = "#"+payloadMsg.quotation.quote_no; // pricing.title.substring(0,80);
+  shortTitle =  pricing.title.substring(0,60) + '\n' + "#"+payloadMsg.quotation.quote_no;
   var detailsMsg_en =
   `${shortTitle}
 Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
@@ -1840,7 +1840,7 @@ function getPricing(senderID,item) {
       }
       payloadStr = JSON.stringify(payload);
       catList.push({
-          "title" : cats[i].category_name + "/"+ cats[i].score,
+          "title" : cats[i].category_name + "/["+ cats[i].score +']',
           "subtitle"  : cats[i].category_name_ar,
           buttons : [{
             "title": "Select إختر",
@@ -2067,9 +2067,10 @@ function getQuotation(senderID,quoteNo) {
         }
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
 
-        quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString()+ " (#"+quote_obj.quote_no +") ]");
+        quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
         console.log("***** quotationStr:",quotationStr)
-        btnTxt =  quotationStr + "\n\n==>" + btnTxt;
+        btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
+          (quote_obj.pricingMessage == "Notes:"? "":quote_obj.pricingMessage);
 
         var buttonList=[]
         var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
@@ -2084,7 +2085,7 @@ function getQuotation(senderID,quoteNo) {
     // TODO
     console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
-      sendTextMessage(senderID,quote_obj.item.title)
+      sendTextMessage(senderID,quote_obj.item.title + '[' + quote_obj.category + ']')
       sendPriceButton(senderID,btnTxt,buttonList)
     //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
       console.log("************* send all itemInfo");
@@ -2312,7 +2313,7 @@ console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aq
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
   pricingMessage = pricingMessage + packageDimensions;
   pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
-  pricingMessage = pricingMessage.replace('/:\//g',':');
+  pricingMessage = pricingMessage.replace('/:\//',':');
 
 //E13 - MIN(MIN(AO2,AP2),9999)
 
@@ -2406,9 +2407,10 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
     quote_obj.quote_no = quotationNo;
 
 
-  quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString()+ " (#"+quote_obj.quote_no +") ]");
+  quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",{timezone: "Asia/Amman"})+ " (#"+quote_obj.quote_no +") ]");
   console.log("***** quotationStr:",quotationStr)
-  btnTxt =  quotationStr + "\n\n==>" + btnTxt;
+  btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
+    (quote_obj.pricingMessage == "Notes:"? "":quote_obj.pricingMessage);
   var buttonList=[]
   var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
@@ -2427,7 +2429,7 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
     console.log("----------> response to targetRecipient:", targetRecipient + " IS btnTxt:" + btnTxt +
       "\n and buttonList is:" + buttonList);
 
-    sendTextMessage(targetRecipient, quote_obj.item.title)
+    sendTextMessage(targetRecipient, quote_obj.item.title + '[' + quote_obj.category + ']')
     sendPriceButton(targetRecipient, btnTxt, buttonList)
     if ( senderID != targetRecipient ) {
       sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no );
