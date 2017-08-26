@@ -2085,7 +2085,7 @@ function getQuotation(senderID,quoteNo) {
     // TODO
     console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
-      sendTextMessage(senderID,quote_obj.item.title + '[' + quote_obj.category + ']')
+      sendTextMessage(senderID,quote_obj.item.title + '[' + quote_obj.item.category + ']')
       sendPriceButton(senderID,btnTxt,buttonList)
     //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
       console.log("************* send all itemInfo");
@@ -2429,7 +2429,7 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
     console.log("----------> response to targetRecipient:", targetRecipient + " IS btnTxt:" + btnTxt +
       "\n and buttonList is:" + buttonList);
 
-    sendTextMessage(targetRecipient, quote_obj.item.title + '[' + quote_obj.category + ']')
+    sendTextMessage(targetRecipient, quote_obj.item.title + '[' + quote_obj.item.category + ']')
     sendPriceButton(targetRecipient, btnTxt, buttonList)
     if ( senderID != targetRecipient ) {
       sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no );
