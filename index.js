@@ -2155,9 +2155,9 @@ function calculatePricing(senderID,item,callback) {
      // unknown shipping cost
      C2_shipping = 0;
      if (language() == "english") {
-       pricingMessage = pricingMessage + "/local shipping cost not included in price"
+       pricingMessage = pricingMessage + "\nlocal shipping cost not included in price"
      } else {
-       pricingMessage = pricingMessage + "/لا يشمل الشحن فى بلد المصدر"
+       pricingMessage = pricingMessage + "\nلا يشمل الشحن فى بلد المصدر"
      }
    } else {
      C2_shipping = item.shipping * 1.00;
@@ -2167,9 +2167,9 @@ function calculatePricing(senderID,item,callback) {
     item.chargableWeight <= 0 ){
     // cannot compute weight
     if (language() == "english") {
-      pricingMessage = pricingMessage + "/WARNING: no weight available. item weight cannot be ZERO!"
+      pricingMessage = pricingMessage + "\nWARNING: no weight available. item weight cannot be ZERO!"
     } else {
-      pricingMessage = pricingMessage + "/لا يوجد وزن للقطعة!يفى بلدا المصدر"
+      pricingMessage = pricingMessage + "\nلا يوجد وزن للقطعة!يفى بلدا المصدر"
     }
   }
   packageDimensions = item.length + 'x'+item.width + 'x'+ item.height + 'inch' ;
@@ -2321,9 +2321,9 @@ console.log("BI2_aqabaCostwoTaxJD/BD2_aqabaTax:",BI2_aqabaCostwoTaxJD+'/'+BD2_aq
   console.log("Final Aqaba price: ",E14_finalStdAqabaPriceJD);
   console.log("Final Amman Price:", finalAmmanPriceStdwTax.toFixed(2));
   console.log("++++++ calculatePricing - send message:",JSON.stringify(item));
-  pricingMessage = pricingMessage + packageDimensions;
-  pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
-  pricingMessage = pricingMessage.replace('/:\//',':');
+  //pricingMessage = pricingMessage + packageDimensions;
+  //pricingMessage = pricingMessage + "\n price in USD:"+item.price + '\n';
+
 
 //E13 - MIN(MIN(AO2,AP2),9999)
 
@@ -2395,7 +2395,7 @@ let quote_obj = {
       finalExpPriceMinAqabaJD,
       finalStdAqabaPriceJD)
   },
-  notes: pricingMessage
+  notes:  pricingMessage
 }
 
 // insert new quotation in the database

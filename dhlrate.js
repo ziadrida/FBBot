@@ -118,6 +118,7 @@ module.exports = {
   getDHLRate: function( weight ) {
  // weight in KG
  console.log("====> In getDHLRate ")
+  if (weight <= 0 ) return 0;
     var index = weight * 2 ;
    index = Math.ceil(index)-1;
 
