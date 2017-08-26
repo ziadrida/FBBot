@@ -2422,39 +2422,45 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
 // TODO
 console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
+  getRecipientID(senderID,item, function(targetRecipient) {
+    console.log("----------> response to targetRecipient:", targetRecipient + " IS btnTxt:" + btnTxt +
+      "\n and buttonList is:" + buttonList);
 
+    sendTextMessage(targetRecipient, quote_obj.item.title)
+    sendPriceButton(targetRecipient, btnTxt, buttonList)
+    //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
+    console.log("************* send all itemInfo");
+    return callback();
+});
+
+getRecipientID = function(senderID,item,callback) {
   // check who to send the price to
-  if (item && (item.username || item.recipentID) ) {
+  if (item && (item.username || item.recipientID) ) {
     // requester wants this price to go somewhere else
     // user recipentID if given otherwise find the recipentID by username
-    if (!item.recipentID) {
+    if (!item.recipientID) {
       mongoUtil.findUserByName(item.username,function(users){
 
           if (users && users.length == 1) {
             // expect only one match
             console.log("******** Switch response to another user : ",users[0].userId)
-            senderID = users[0].userId;
-            item.recipientID = senderID;
-          }
+
+            callback(users[0].userId);
+          } else {
             // cannot find user - send back to requester
-          console.log("__________ cannot find username/user:",item.username+'/'+users);
+          console.log("__________ cannot find username/user:",item.username+'/'+JSON.stringify(users));
+          callback(senderID)
+        }
       });
     } else {
-      senderID = item.recipentID;
-     }
+        callback(item.recipientID);
+    }
+  } else {
+    callback(senderID);
   }
-  console.log("----------> response to senderID:", senderID + " IS btnTxt:" + btnTxt +
-    "\n and buttonList is:" + buttonList);
-
-  sendTextMessage(senderID, quote_obj.item.title)
-  sendPriceButton(senderID, btnTxt, buttonList)
-  //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
-  console.log("************* send all itemInfo");
-
-  return callback();
-  });
-//}); // pricing message
 }
+}); // insert quotation
+} // calculatePricing
 
 
 var language = function() {
