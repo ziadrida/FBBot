@@ -707,7 +707,27 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
     return processHttpRequest(event);
   } // end of if http
 
+
+   checkNlp(function() {
+     console.log("********** newUser?",sessions[sessionId].newUser);
+     if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
+       // follow welcome protocol for newUser
+       // skip if user sent us a URL
+
+       //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
+
+       matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
+         console.log("*********** after matchEntity(how_to_order");
+         sessions[sessionId].newUser = false; // welcome message sent
+         sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
+         sendTextMessage(senderID, doc[0].messageText);
+       });
+     }
+     console.log("sessions[sessionId];:", sessions[sessionId])
+   });
   //
+
+  checkNlp = function () {
   if (message.nlp) {
     var witNlp = message.nlp;
     console.log("<><> --> witNlp:", witNlp);
@@ -791,24 +811,14 @@ console.log("--after findHighestConfidence ---- ALL INTENTS:", JSON.stringify(al
 
   } // if message.nlp
   else {
+    if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
+          sendTextMessage(senderID,(language() == "arabic"? "مرحبا": "Welcome"));
+    }
     console.log("NOT NLP message");
   }
+}
 
-  console.log("sessions[sessionId];:", sessions[sessionId])
-  console.log("********** newUser?",sessions[sessionId].newUser);
-  if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
-    // follow welcome protocol for newUser
-    // skip if user sent us a URL
 
-    //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
-
-    matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
-      console.log("*********** after matchEntity(how_to_order");
-      sessions[sessionId].newUser = false; // welcome message sent
-      sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
-      sendTextMessage(senderID, doc[0].messageText);
-    });
-  }
 
 } // end function determineResponse
 
