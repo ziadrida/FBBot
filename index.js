@@ -297,6 +297,7 @@ db = mongoUtil.getDb(function() {
         db.collection('users').insertOne(docs, function(err, result) {
           // assert.equal(err, null);
           console.log("Inserted a document into the users table");
+          console.log("**** New User");
           sessions[sessionId].newUser = true;
           sessions[sessionId].userObj = docs;
           return callback(docs);
