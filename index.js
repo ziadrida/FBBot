@@ -630,21 +630,7 @@ function determineResponse(event) {
     console.log("message.text not a JSON string - not a problem");
   } // end  of try block if compareMessage
 
-  console.log("sessions[sessionId];:", sessions[sessionId])
-  console.log("********** newUser?",sessions[sessionId].newUser);
-  if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
-    // follow welcome protocol for newUser
-    // skip if user sent us a URL
 
-    //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
-
-    matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
-      console.log("after matchEntity(how_to_order");
-      sessions[sessionId].newUser = false; // welcome message sent
-      sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
-      sendTextMessage(senderID, doc[0].messageText);
-    });
-  }
 
   // If we receive a text message, check to see if it matches a keyword
   // and send back the example. Otherwise, just echo the text we received.
@@ -661,7 +647,7 @@ function determineResponse(event) {
      } else {
        sessions[sessionId].userObj.locale = 'en_US'
      };
-     sendButton(senderID, 'Would you like to confirm order?');
+     return sendButton(senderID, 'Would you like to confirm order?');
   }
 
 if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
@@ -711,7 +697,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
     });
 
 
-
+    return;
   } // if *report action
 
   // if message contains http, then it is a pricing request
@@ -752,7 +738,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
     } else {
 
-      findHighestConfidence(message.nlp.entities, function(selectedIntentList, highConfidence) {
+      findHighestConfidence(message.nlp.entities, function(selectedIntentList, highConfidence,allIntents) {
         console.log("--after findHighestConfidence ---- IntentList:", JSON.stringify(selectedIntentList));
         if (selectedIntentList && selectedIntentList[0] && selectedIntentList[0].key == "change_intent"
             && selectedIntentList[0].value == "message" && sessions[sessionId].context.intent) {
@@ -788,7 +774,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
               sendTextMessage(senderID, doc[0].messageText);
             } else if (doc[0].entity_name != '') {
-              console.log(" Found entity but threshold is lower.  ");
+              console.log(" !!!!!!!!!!!! Found entity but threshold is lower.  ");
               console.log(" ++ user intent was:", intent);
             }
 
@@ -807,6 +793,21 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
     console.log("NOT NLP message");
   }
 
+  console.log("sessions[sessionId];:", sessions[sessionId])
+  console.log("********** newUser?",sessions[sessionId].newUser);
+  if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
+    // follow welcome protocol for newUser
+    // skip if user sent us a URL
+
+    //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
+
+    matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
+      console.log("*********** after matchEntity(how_to_order");
+      sessions[sessionId].newUser = false; // welcome message sent
+      sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
+      sendTextMessage(senderID, doc[0].messageText);
+    });
+  }
 
 } // end function determineResponse
 
@@ -819,6 +820,7 @@ function findHighestConfidence(entList, callback) {
   //let intent = "";
   //let intentValue = "";
   var intentList = [];
+  var allMatchedIntents = [];
 /*  let intent = {
     key: "",
     value:""
@@ -835,12 +837,14 @@ function findHighestConfidence(entList, callback) {
         highConfidence = entList[key][0].confidence;
       //  intent = key;
         intentList.push({ key: key, value: entList[key][0].value })
+
       //  intentValue = entList[key][0].value
       }
+      allMatchedIntents.push({ key: key, value: entList[key][0].value })
     }
   } // for key in entlist
   console.log("<><>  end of findHighestConfidence inetntList:", JSON.stringify(intentList));
-  callback(intentList, highConfidence);
+  callback(intentList, highConfidence,allMatchedIntents);
 } // end findHighestConfidence
 
 function firstEntity(nlp, name) {
