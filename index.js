@@ -574,6 +574,7 @@ function determineResponse(event) {
 
     MongoClient.connect(mongodbUrl, function(err, db) {
       assert.equal(null, err);
+      // insert user message
       insertuserMsg(db, function() {
         db.close();
       });
@@ -602,6 +603,21 @@ function determineResponse(event) {
   // check if message from user is a JSON formatted message (i.e. Command)
   try {
     if (message.text) {
+
+      // check is message is Arabic or english
+      // change language
+      if (message.text.match(/(?=.*[@!#\$\^%&*()+=\-\[\]\\\';,\.\/\{\}\|\":<>\? ]+?).*[^_\W]+?.*/)) {
+        // english
+          console.log('String contains both alpha-numeric and your pre-defined special characters!');
+          console.log("^^^^^^^^^^^^^^^ switch language to english");
+            sessions[sessionId].userObj.locale = "en_US"
+      } else {
+        console.log("^^^^^^^^^^^^^^^ switch language to arabic");
+        sessions[sessionId].userObj.locale = "ar_US"
+      }
+
+
+
       console.log("do JSON parse of message.text");
       userMsg = JSON.parse(message.text);
       console.log("after JSON parse of compareText");
@@ -784,84 +800,6 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
         }
       }); // end findHighestConfidence
     }
-    /*
-       const greetings_ar = firstEntity(message.nlp, 'greetings_ar');
-       if (greetings_ar && greetings_ar.confidence > 0.75) {
-         if (greetings_ar.value == 'islamic') {
-            sendTextMessage(senderID,'وعليكم السلام');
-         } else {
-           sendTextMessage(senderID,'اهلا وسهلا');
-        }
-       } else {
-         console.log ("Not a greetings_ar  ************ ");
-       }
-
-       const company_hours = firstEntity(message.nlp, 'company_hours');
-       if (company_hours && company_hours.confidence > 0.75) {
-         if (company_hours.value == 'general') {
-         sendTextMessage(senderID,'amman: 9am-8pm Sat-Thu Friday 4pm-8pm');
-          sendTextMessage(senderID,'aqaba: 10am-11pm Sat-Thu Friday: closed ');
-        } else if (company_hours.value == 'amman') {
-           sendTextMessage(senderID,'amman: 9am-8pm Sat-Thu Friday 4pm-8pm');
-        } else if (company_hours.value == 'aqaba') {
-          sendTextMessage(senderID,'aqaba: 10am-11pm Sat-Thu Friday: closed ');
-        }
-       } else {
-         console.log ("Not a company_hours  ************ "  );
-       }
-
-       const company_phone = firstEntity(message.nlp, 'company_phone');
-       if (company_phone && company_phone.confidence > 0.75) {
-         if (company_phone.value == 'amman') {
-               sendTextMessage(senderID,'amman: 0785000010');
-         } else if (company_phone.value == 'aqaba') {
-             sendTextMessage(senderID,'aqaba: 0785000032 ');
-         }  else  {
-           sendTextMessage(senderID,'amman: 0785000010');
-           sendTextMessage(senderID,'aqaba: 0785000032 ');
-         }
-       } else {
-         console.log ("Not a company_phone  ************ "  );
-       }
-
-       const bye = firstEntity(message.nlp, 'bye');
-       if (bye && bye.confidence > 0.75) {
-         if (bye.value == 'true') {
-         sendTextMessage(senderID,'see you soon!');
-         }
-       } else {
-         console.log ("Not a bye  ************ confidence:");
-       }
-
-       const goodbye = firstEntity(message.nlp, 'goodbye');
-       if (goodbye && goodbye.confidence > 0.75) {
-        if (goodbye.value == 'formal') {
-         sendTextMessage(senderID,'take care');
-       } else if (goodbye.value == 'formal_ar') {
-          sendTextMessage(senderID,'سلامات اهلا وسهلا');
-        } else { // unknown value
-          sendTextMessage(senderID,'اهلا وسهلا');
-        }
-
-       } else {
-         console.log ("Not a goodbye  ************ ");
-       }
-
-       const company_location = firstEntity(message.nlp, 'company_location');
-       if (company_location && company_location.confidence > 0.75) {
-         if (company_location.value == 'aqaba') {
-           sendTextMessage(senderID,'inside Dream Mall');
-         } else if (company_location.value == 'amman') {
-            sendTextMessage(senderID,'86 Gardens street ');
-
-        } else {
-         sendTextMessage(senderID,'Aqaba: inside Dream Mall');
-         sendTextMessage(senderID,'Amman: 86 Gardens street ');
-       }
-       } else {
-         console.log ("Not a company_location  ************" );
-       }
-    */
 
   } // if message.nlp
   else {
@@ -1941,16 +1879,7 @@ var matchEntity = function(entity_name, value, callback) {
     console.log("****** entity_name is blank");
     return callback(docs);
   } else {
-    // change language
-    console.log("^^^^^^^^^^^^^^^ switch language:",value && value.toLowerCase());
-    if (value && value.toLowerCase() == "arabic" || entity_name.includes("_ar")) {
-      console.log("^^^^^^^^^^^^^^^ switch language to arabic");
-      sessions[sessionId].userObj.locale = "ar_US"
-    }
-    if (value && value.toLowerCase() == "english") {
-      console.log("^^^^^^^^^^^^^^^ switch language to english");
-      sessions[sessionId].userObj.locale = "en_US"
-    }
+
     MongoClient.connect(mongodbUrl, function(err, db) {
       //  assert.equal(null, err);
       // Create a collection we want to drop later
