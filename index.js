@@ -905,7 +905,7 @@ function sendWatchVideoButton(recipientId, btnText, title) {
         "type": "template",
         "payload": {
           "template_type": "button",
-          "text": "Click on the viedo below to learn how to order" // we are always here to help you place your orders! "
+          "text": "Click on the video below to learn how to order" // we are always here to help you place your orders! "
         + "\n"+ " اضغط على الفيديو لمشاهدة اجراءات الطلب",
           "buttons": [{
             "type": "web_url",
