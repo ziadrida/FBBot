@@ -726,6 +726,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
      console.log("sessions[sessionId];:", sessions[sessionId])
    });
   //
+} // end function determineResponse
 
   var checkNlp = function () {
   if (message.nlp) {
@@ -821,7 +822,6 @@ console.log("--after findHighestConfidence ---- ALL INTENTS:", JSON.stringify(al
 
 
 
-} // end function determineResponse
 
 
 function findHighestConfidence(entList, callback) {
