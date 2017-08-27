@@ -708,7 +708,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   } // end of if http
 
 
-   checkNlp(message,function() {
+   checkNlp(senderID,message,function() {
      console.log("********** newUser?",sessions[sessionId].newUser);
      if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
        // follow welcome protocol for newUser
@@ -728,7 +728,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   //
 } // end function determineResponse
 
-  var checkNlp = function (message) {
+  var checkNlp = function (senderID,message) {
   if (message.nlp) {
     var witNlp = message.nlp;
     console.log("<><> --> witNlp:", witNlp);
