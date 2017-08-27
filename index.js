@@ -397,10 +397,10 @@ function handleEvent(senderID, event) {
 
     msgCode = "1010"; // all prices
     valParams = {
-      val1: payloadMsg.quotation.price.amm_exp,
-      val2: payloadMsg.quotation.price.amm_std,
-      val3: payloadMsg.quotation.price.aq_std,
-      val4: payloadMsg.quotation.price.aq_exp
+      val1: payloadMsg.quotation.price.amm_exp*1,
+      val2: payloadMsg.quotation.price.amm_std*1,
+      val3: payloadMsg.quotation.price.aq_std*1,
+      val4: payloadMsg.quotation.price.aq_exp*1
     }
 
     btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
@@ -615,8 +615,9 @@ function determineResponse(event) {
 
   console.log("sessions[sessionId];:", sessions[sessionId])
   console.log("********** newUser?",sessions[sessionId].newUser);
-  if (sessions[sessionId].newUser) {
+  if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
     // follow welcome protocol for newUser
+    // skip if user sent us a URL
 
     //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
 
@@ -2388,10 +2389,10 @@ let quote_obj = {
   quote_date: new Date(),
   item: item,
   price: {
-    amm_exp: finalExpPriceAmmJD.toFixed(2),
-    amm_std: finalStandardAmmPrice.toFixed(2),
-    aq_exp: finalExpPriceMinAqabaJD.toFixed(2),
-    aq_std: finalStdAqabaPriceJD.toFixed(2),
+    amm_exp: 1*finalExpPriceAmmJD.toFixed(2),
+    amm_std: 1*finalStandardAmmPrice.toFixed(2),
+    aq_exp: 1*finalExpPriceMinAqabaJD.toFixed(2),
+    aq_std: 1*finalStdAqabaPriceJD.toFixed(2),
     min_price: Math.min(finalExpPriceAmmJD,
       finalStandardAmmPrice,
       finalExpPriceMinAqabaJD,
