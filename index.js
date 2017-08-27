@@ -727,7 +727,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
    });
   //
 
-  checkNlp = function () {
+  var checkNlp = function () {
   if (message.nlp) {
     var witNlp = message.nlp;
     console.log("<><> --> witNlp:", witNlp);
