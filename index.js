@@ -753,7 +753,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
           action = ""
           sendTextMessage(senderID, sessions[sessionId].context.intent + " updated");
           sessions[sessionId].context = {}
-          return;
+          return callback();
         });
 
     } else {
@@ -816,6 +816,7 @@ console.log("--after findHighestConfidence ---- ALL INTENTS:", JSON.stringify(al
     }
     console.log("NOT NLP message");
   }
+  return callback();
 }
 
 
