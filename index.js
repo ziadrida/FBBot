@@ -740,6 +740,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
       findHighestConfidence(message.nlp.entities, function(selectedIntentList, highConfidence,allIntents) {
         console.log("--after findHighestConfidence ---- IntentList:", JSON.stringify(selectedIntentList));
+console.log("--after findHighestConfidence ---- ALL INTENTS:", JSON.stringify(allIntents));
         if (selectedIntentList && selectedIntentList[0] && selectedIntentList[0].key == "change_intent"
             && selectedIntentList[0].value == "message" && sessions[sessionId].context.intent) {
           // update intent message
