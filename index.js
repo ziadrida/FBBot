@@ -728,7 +728,8 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   //
 } // end function determineResponse
 
-  var checkNlp = function (senderID,message) {
+  var checkNlp = function (senderID,message,callback) {
+    console.log("=====> in checkNlp")
   if (message.nlp) {
     var witNlp = message.nlp;
     console.log("<><> --> witNlp:", witNlp);
