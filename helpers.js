@@ -92,7 +92,7 @@ getMessage: function(session,textCode,valObj ) {
             "Aqaba personal express 5-7 days days: "+valObj.val4 + " JOD" ;
 
          case "1011":
-            return "How to order Video"
+            return "Video"
 
         default:
 
@@ -165,7 +165,7 @@ getMessage1: function(session,textCode,valObj ,callback) {
             "Aqaba personal express 5-7 days days: "+valObj.val4 + " JOD") ;
 
          case "1011":
-              return callback(  "How to order Video")
+              return callback("Video")
 
         default:
 
@@ -204,7 +204,7 @@ getMessage1: function(session,textCode,valObj ,callback) {
           return callback(  btnTxt);
 
         case "1011":
-          return callback( "How to order Video");
+          return callback( "فيديو");
 
         default:
 

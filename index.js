@@ -889,8 +889,8 @@ function sendWatchVideoButton(recipientId, btnText, title) {
         "type": "template",
         "payload": {
           "template_type": "button",
-          "text": "Click on the viedo below to learn how to order, we are always here to help you place your orders! "
-        + "\n"+ " اضغط على الفيديو لمشاهدة اجراءات الطلب ونحن دائما معك لمساعدتك ",
+          "text": "Click on the viedo below to learn how to order" // we are always here to help you place your orders! "
+        + "\n"+ " اضغط على الفيديو لمشاهدة اجراءات الطلب",
           "buttons": [{
             "type": "web_url",
             "url": "http://techtownjo.com/import/TechtownMailOrder-720p.mp4",
