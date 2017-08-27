@@ -247,7 +247,7 @@ db = mongoUtil.getDb(function() {
 
               determineResponse(event);
             } else if (messageAttachments) {
-              sendTextMessage(senderID, "Message with attachment received");
+              //sendTextMessage(senderID, "Message with attachment received");
             } // (messageText)
           }); // findOrCreateUser
         }); // connect
@@ -719,8 +719,8 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
        matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
          console.log("*********** after matchEntity(how_to_order");
          sessions[sessionId].newUser = false; // welcome message sent
-         sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
          sendTextMessage(senderID, doc[0].messageText);
+         sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
        });
      }
      console.log("sessions[sessionId];:", sessions[sessionId])
@@ -760,7 +760,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
       findHighestConfidence(message.nlp.entities, function(selectedIntentList, highConfidence,allIntents) {
         console.log("--after findHighestConfidence ---- IntentList:", JSON.stringify(selectedIntentList));
-console.log("--after findHighestConfidence ---- ALL INTENTS:", JSON.stringify(allIntents));
+          console.log("--after findHighestConfidence ---- ALL INTENTS:", JSON.stringify(allIntents));
         if (selectedIntentList && selectedIntentList[0] && selectedIntentList[0].key == "change_intent"
             && selectedIntentList[0].value == "message" && sessions[sessionId].context.intent) {
           // update intent message
@@ -788,12 +788,12 @@ console.log("--after findHighestConfidence ---- ALL INTENTS:", JSON.stringify(al
                 "intent": intent,
                 "intentValue": intentValue
               };
-
+              return callback();
 
             }
             if (highConfidence > doc[0].threshold) {
 
-              sendTextMessage(senderID, doc[0].messageText);
+                sendTextMessage(senderID, doc[0].messageText);
             } else if (doc[0].entity_name != '') {
               console.log(" !!!!!!!!!!!! Found entity but threshold is lower.  ");
               console.log(" ++ user intent was:", intent);
