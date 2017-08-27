@@ -561,10 +561,10 @@ function determineResponse(event) {
   var message = event.message;
   var messageId = message.mid;
 
-  var messageText = message.text;
+
   var messageAttachments = message.attachments;
 
-  let compareText = messageText.toLowerCase();
+  let compareText = message.text.toLowerCase();
   console.log("<><><><><>   compareText:", compareText);
   var userMsg;
 
@@ -708,7 +708,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   } // end of if http
 
 
-   checkNlp(function() {
+   checkNlp(message,function() {
      console.log("********** newUser?",sessions[sessionId].newUser);
      if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
        // follow welcome protocol for newUser
@@ -728,7 +728,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   //
 } // end function determineResponse
 
-  var checkNlp = function () {
+  var checkNlp = function (message) {
   if (message.nlp) {
     var witNlp = message.nlp;
     console.log("<><> --> witNlp:", witNlp);
@@ -746,12 +746,10 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
       // update witentities table and return
 
       console.log("+++++++++++++++++++++++++++++  updateEntity now ");
-      updateEntity(sessions[sessionId].context.intent, sessions[sessionId].context.intentValue, messageText,
+      updateEntity(sessions[sessionId].context.intent, sessions[sessionId].context.intentValue, message.text,
         function(doc) {
           console.log("+++++++++++++++++++++++++++++  updateEntity done  doc updated:", doc)
           // clear context
-
-          action = ""
           sendTextMessage(senderID, sessions[sessionId].context.intent + " updated");
           sessions[sessionId].context = {}
           return callback();
