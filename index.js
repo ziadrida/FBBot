@@ -870,7 +870,7 @@ function sendWatchVideoButton(recipientId, btnText, title,cb) {
       }
     }
   }
-  let timeout  = 50000
+  let timeout  = 250000
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
