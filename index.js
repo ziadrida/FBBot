@@ -655,7 +655,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
        console.log("^^^^^^^^^^^^^^^ arabic match switch language to english");
          sessions[sessionId].userObj.locale = "en_US"
      }; // displays true
-    
+
      console.log("********** newUser?",sessions[sessionId].newUser);
      if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
        // follow welcome protocol for newUser
@@ -745,12 +745,18 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
             }
             if (highConfidence > doc[0].threshold) {
                 console.log("highConfidence more than threshold - send message back")
-                sendTextMessage(senderID, doc[0].messageText,function(){
-                  return callback();
+                 if ( sessions[sessionId].newUser && intent == "how_to_order" ) {
+                   // do not tell a new user how to order because that is an auto message
+                   return callback();
+                 } else {
+                   sendTextMessage(senderID, doc[0].messageText,function(){
+                     return callback();
                 });
+               }
+
             } else if (doc[0].entity_name != '') {
               console.log(" !!!!!!!!!!!! Found entity but threshold is lower.  ");
-              console.log(" ++ user intent was:", intent);
+              console.log(" ++ user intent was:", doc);
               return callback();
             }
 
