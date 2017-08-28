@@ -1061,7 +1061,7 @@ function sendTextMessage(recipientId, messageText,cb) {
       text: messageText
     }
   };
-  let timeout  = 10000
+  let timeout  = 15000
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
