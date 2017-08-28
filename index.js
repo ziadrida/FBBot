@@ -685,9 +685,11 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
         function(doc) {
           console.log("+++++++++++++++++++++++++++++  updateEntity done  doc updated:", doc)
           // clear context
-          sendTextMessage(senderID, sessions[sessionId].context.intent + " updated");
-          sessions[sessionId].context = {}
-          return callback();
+          sendTextMessage(senderID, sessions[sessionId].context.intent + " updated",function() {
+            sessions[sessionId].context = {}
+            return callback();
+          });
+
         });
 
     } else {
@@ -698,12 +700,14 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
         if (selectedIntentList && selectedIntentList[0] && selectedIntentList[0].key == "change_intent"
             && selectedIntentList[0].value == "message" && sessions[sessionId].context.intent) {
           // update intent message
-          sendTextMessage(senderID, "how should i respond to " + sessions[sessionId].context.intent + "?");
-          sessions[sessionId].context = {
-            "action": "set_entity_msg",
-            "intent": sessions[sessionId].context.intent,
-            "intentValue": sessions[sessionId].context.intentValue
-          };
+          sendTextMessage(senderID, "how should i respond to " + sessions[sessionId].context.intent + "?",function(){
+            sessions[sessionId].context = {
+              "action": "set_entity_msg",
+              "intent": sessions[sessionId].context.intent,
+              "intentValue": sessions[sessionId].context.intentValue
+            }
+          });
+
         } else if (selectedIntentList && selectedIntentList.length > 0) {
           console.log("** match selectedIntentList")
           for (i=0; i<selectedIntentList.length;i++) {
@@ -714,23 +718,27 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
             // send message only if highConfidence is higher than the stored entity THRESHOLD
             console.log("storedThreshold <> highConfidence => ", doc[0].threshold + " <> ", highConfidence)
             if (doc && doc[0] && doc[0].messageText && doc[0].messageText.includes("not sure")) {
-              sendTextMessage(senderID, "how should i respond?");
-              // set session context to expect entity respose TODO
-              console.log(" &&&&&&&&&& ASK how to respond. UserObj:", sessions[sessionId].userObj)
-              sessions[sessionId].context = {
-                "action": "set_entity_msg",
-                "intent": intent,
-                "intentValue": intentValue
-              };
-              return callback();
+              sendTextMessage(senderID, "how should i respond?",function(){
+                // set session context to expect entity respose TODO
+                console.log(" &&&&&&&&&& ASK how to respond. UserObj:", sessions[sessionId].userObj)
+                sessions[sessionId].context = {
+                  "action": "set_entity_msg",
+                  "intent": intent,
+                  "intentValue": intentValue
+                };
+                return callback();
+              });
 
             }
             if (highConfidence > doc[0].threshold) {
 
-                sendTextMessage(senderID, doc[0].messageText);
+                sendTextMessage(senderID, doc[0].messageText,function(){
+                  return callback();
+                });
             } else if (doc[0].entity_name != '') {
               console.log(" !!!!!!!!!!!! Found entity but threshold is lower.  ");
               console.log(" ++ user intent was:", intent);
+              return callback();
             }
 
           });
@@ -739,14 +747,19 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
         else {
               // intent is blank
               console.log(" ******** NO Intents Found  ***********");
+              // no answer to give . for now do nothing - later may want to say "..." or "one moment please"
+                return callback();
         }
       }); // end findHighestConfidence
     }
 
   } // if message.nlp
   else {
+    // new user and we have no clue what user said - just say welcome
     if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
-          sendTextMessage(senderID,(language() == "arabic"? "مرحبا": "Welcome"));
+          sendTextMessage(senderID,(language() == "arabic"? "مرحبا": "Welcome"),function(){
+            return callback();
+          });
     }
     console.log("NOT NLP message");
   }
@@ -1037,7 +1050,8 @@ function quickReply(recipientId, titleText) {
 } // sendButton
 
 // sendTextMessage function
-function sendTextMessage(recipientId, messageText) {
+function sendTextMessage(recipientId, messageText,cb) {
+
   console.log("in sendTextMessage function --> recipentID:", recipientId);
   var messageData = {
     recipient: {
@@ -1048,13 +1062,29 @@ function sendTextMessage(recipientId, messageText) {
     }
   };
 
-  callSendAPI(messageData);
+  callSendAPI(messageData,function(error,response,body){
+    if (!error && response.statusCode == 200) {
+      var recipientId = body.recipient_id;
+      var messageId = body.message_id;
+
+      console.log("Successfully sent generic message with id %s to recipient %s",
+        messageId, recipientId);
+        if (cb) return callback()
+      } else {
+        console.error("<><><> Unable to send message. <><><>statusCode:", response.statusCode);
+        console.error("<><><> Unable to send message. <><><>statusCode:", error);
+        if (cb) return callback()
+        //console.error(response);
+        //console.error(error);
+      }
+
+  });
 } // sendTextMessage
 
 
 
 
-function callSendAPI(messageData) {
+function callSendAPI(messageData,cb) {
   console.log("===========> in callSendAPI messageData:",JSON.stringify(messageData))
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
@@ -1065,18 +1095,9 @@ function callSendAPI(messageData) {
     json: messageData
 
   }, function(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
 
-      console.log("Successfully sent generic message with id %s to recipient %s",
-        messageId, recipientId);
-    } else {
-      console.error("<><><> Unable to send message. <><><>statusCode:", response.statusCode);
-      console.error("<><><> Unable to send message. <><><>statusCode:", response);
-      //console.error(response);
-      //console.error(error);
-    }
+        return callback(error,response,body);
+
   });
 }
 // end of code that i copied from quick start (Seema)
