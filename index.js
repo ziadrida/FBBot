@@ -1162,6 +1162,26 @@ function getRegularAmmanPrice(item) {
 
 }
 
+function findUrls( text )
+{
+    var source = (text || '').toString();
+    var urlArray = [];
+    var url;
+    var matchArray;
+
+    // Regular expression to find FTP, HTTP(S) and email URLs.
+    var regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
+
+    // Iterate through any URLs in the text.
+    while( (matchArray = regexToken.exec( source )) !== null )
+    {
+        var token = matchArray[0];
+        urlArray.push( token );
+        console.log("*** found url:",token)
+    }
+
+    return urlArray;
+}
 
 // processHttpRequest function
 function processHttpRequest(event,callback) {
@@ -1174,11 +1194,16 @@ function processHttpRequest(event,callback) {
   var messageText = message.text;
   var messageAttachments = message.attachments;
   let compareText = messageText.toLowerCase();
+  var urls = findUrls(message.text);
+  console.log("url found is:",urls[0])
+  if (urls.length <= 0 ) return callback();
+
   try {
-  let domainName = parseDomain(compareText);
-} catch (e) {
+    var domainName = parseDomain(urls[0]);
+  } catch (e) {
   console.log("error parsing domain:",compareText)
   console.log("Error: ",e)
+  return callback()
 }
 
 
@@ -1188,9 +1213,11 @@ function processHttpRequest(event,callback) {
     // insert all http request in the database
     MongoClient.connect(mongodbUrl, function(err, db) {
       //assert.equal(null, err);
+      if (!err) {
       insertMesssageText(db, function() {
         db.close();
       });
+      }
     }); // connect
 
     // insertDocument copied example fromhttps://docs.mongodb.com/getting-started/node/insert/
@@ -1198,7 +1225,7 @@ function processHttpRequest(event,callback) {
       db.collection('pricing_request').insertOne({
         "senderId": senderID,
         "recipientId": recipientID,
-        "domainName": domainName.domain,
+        "domainName": ( domainName? domainName.domain:""),
         "messageText": messageText,
         "messageId": messageId,
         "timestamp": new Date(timeOfMessage),
@@ -1222,7 +1249,7 @@ function processHttpRequest(event,callback) {
 
     //messageText = "https://www.amazon.com/4pk-Assorted-colors-Pocket-T-Shirt/dp/B00WK0ST3S/ref=sr_1_1?ie=";
 
-    var asin = messageText.match(regex);
+    var asin = url[0].match(regex);
     console.log(">>>>>>>>>>>>>>>ASIN:", asin);
     // if ASIN is set then request if from amazon website
     // for now i will assume it is the USA AMAZON
