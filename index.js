@@ -550,8 +550,7 @@ function determineResponse(event) {
         console.log("^^^^^^^^^^^^^^^ switch language to arabic");
         sessions[sessionId].userObj.locale = "ar_US"
       }
-      var arabic = /[\u0600-\u06FF]/;
-  
+      var arabic = /[\u0600-\u06FF]/
 
       if(arabic.test(message.text)) {
         console.log("^^^^^^^^^^^^^^^ arabic match switch language to arabic");
