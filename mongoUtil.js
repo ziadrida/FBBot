@@ -56,6 +56,7 @@ module.exports = {
          console.log(" ************** Insert new User:", fbprofile.first_name);
         _db.collection('users').insertOne(newDoc, function(err, result) {
           // assert.equal(err, null);
+          console.log("<><> After insertOne user")
           if (err) {
               console.log("Error inserting new user info err:",err);
             console.log("Error inserting new user info newDoc:",newDoc);
@@ -67,11 +68,12 @@ module.exports = {
           sessions[sessionId].userObj = newDoc;
           return callback(newDoc);
         });
-      }
+      } else {
       console.log("Error in  findOrCreateUser - return null ><><><> ERROR <><><> ")
 
       sessions[sessionId].newUser = false;
       return callback(null);
+    }
     });
 }
   }, // createOrFindUser
