@@ -719,7 +719,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
           });
 
         } else if (selectedIntentList && selectedIntentList.length > 0) {
-          console.log("** match selectedIntentList")
+          console.log("** match selectedIntentList length:",selectedIntentList.length)
           for (i=0; i<selectedIntentList.length;i++) {
           intent=  selectedIntentList[i].key;
           intentValue = selectedIntentList[i].value;
@@ -741,7 +741,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
             }
             if (highConfidence > doc[0].threshold) {
-
+                console.log("highConfidence more than threshold - send message back")
                 sendTextMessage(senderID, doc[0].messageText,function(){
                   return callback();
                 });
@@ -870,15 +870,13 @@ function sendWatchVideoButton(recipientId, btnText, title) {
       }
     }
   }
-  let timeout  = 30000
+  let timeout  = 50000
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
     callSendAPI(messageData,function(){
       if (cb) return cb();
     })    ,timeout});
-
-
 } // sendWatchVideoButton
 
 function sendPriceButton(recipientId, btnText,buttonList) {
@@ -1868,12 +1866,12 @@ function getUserPublicInfo(fbId, callback) {
 
 
 var matchEntity = function(entity_name, value, callback) {
-  console.log("====> in matchEntity:", entity_name)
-  var docs;
+  console.log("====> in matchEntity entity_name/value", entity_name + '/' + value)
+  var mydocs = [];
 
   if (entity_name == '') {
     console.log("****** entity_name is blank");
-    return callback(docs);
+    return callback(mydocs);
   } else {
 
     MongoClient.connect(mongodbUrl, function(err, db) {
@@ -1885,11 +1883,11 @@ var matchEntity = function(entity_name, value, callback) {
       collection.find({
         "entity_name": entity_name,
         "value": value
-      }).limit(1).toArray().then(function(docs) {
-        console.log("_______ docs:", docs);
+      }).limit(1).toArray().then(function(mydocs) {
+        console.log("_______ mydocs:", mydocs);
 
-        if (docs && docs.length > 0) {
-          console.log("*** wit entity:", docs);
+        if (mydocs && mydocs.length > 0) {
+          console.log("*** wit entity:", mydocs);
           //    assert.equal(null, err);
           db.close();
           sessions[sessionId].context = {
@@ -1897,9 +1895,9 @@ var matchEntity = function(entity_name, value, callback) {
             "intent": entity_name,
             "intentValue": value
           }
-          callback(docs);
+          callback(mydocs);
 
-        } else if (docs && docs.length == 0) { // no match for entity_name
+        } else if (mydocs && mydocs.length == 0) { // no match for entity_name
           // how about creating an entry for it and let someone or figure a way later set the message? great idea!
           insertNewEntity(entity_name, value, db, function() {
             db.close();
