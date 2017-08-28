@@ -1252,7 +1252,7 @@ function processHttpRequest(event,callback) {
 
     //messageText = "https://www.amazon.com/4pk-Assorted-colors-Pocket-T-Shirt/dp/B00WK0ST3S/ref=sr_1_1?ie=";
 
-    var asin = url[0].match(regex);
+    var asin = urls[0].match(regex);
     console.log(">>>>>>>>>>>>>>>ASIN:", asin);
     // if ASIN is set then request if from amazon website
     // for now i will assume it is the USA AMAZON
