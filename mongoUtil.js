@@ -8,6 +8,65 @@ var _db;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 
 module.exports = {
+  // create or get user
+  findOrCreateUser: function(senderID, fbprofile, callback) {
+    console.log("=====>   in findOrCreateUser - senderID/sessionId:", senderID + '/' + sessionId);
+    if (sessions[sessionId] && sessions[sessionId].userObj) {
+      console.log("**** findOrCreateUser -  user already known:", sessions[sessionId].userObj)
+      return callback(sessions[sessionId].userObj);
+    }
+    // Peform a simple find and return one  documents
+    module.exports.connectToDB(function(err) {
+      if (err) return callback(null);
+
+      find(function(doc) {
+        console.log(">>>>>>>>>>>>> after find findUserByName ")
+        callback(doc);
+      });
+    }); // connect
+
+  find = function(callback)   {
+    _db.collection('users').find({
+      "userId": senderID
+    }).limit(1).toArray().then(function(docs) {
+      console.log("___user____ docs:", docs);
+
+      if (docs && docs.length > 0) {
+        //  console.log("*** docs:", docs);
+        //  assert.equal(null, err);
+        // user found
+        //userObj = docs;
+        sessions[sessionId].newUser = false;
+        sessions[sessionId].userObj = docs[0];
+        return callback(docs[0]);
+      } else if (docs && docs.length == 0) { // no match for user name
+
+        //add new user
+        let docs = {
+          "userId": senderID,
+          "first_name": fbprofile.first_name,
+          "last_name": fbprofile.last_name,
+          "locale": fbprofile.locale,
+          "gender": fbprofile.gender,
+          "timezone": fbprofile.timezone,
+          "role": "user",
+          "dateCreated": new Date()
+        };
+        console.log(" ************** Insert new User:", fbprofile.first_name);
+        db.collection('users').insertOne(docs, function(err, result) {
+          // assert.equal(err, null);
+          console.log("Inserted a document into the users table");
+          console.log("**** New User");
+          sessions[sessionId].newUser = true;
+          sessions[sessionId].userObj = docs;
+          return callback(docs);
+        });
+      }
+      sessions[sessionId].newUser = false;
+      return callback(null);
+    });
+}
+  }, // createOrFindUser
 
   findUserByName: function(username,callback) {
       console.log("=====>   in findUserByName - username:", username);

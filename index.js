@@ -123,18 +123,22 @@ handle message recevied from facebook
 ***************************************************/
 function receivedMessage(event) {
 //  logger.log("in ReceiveMessage ","testing Logger","********************").log("in ReceiveMessage ","testing Logger","********************")
+
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
 
+
   var message = event.message;
+  console.log("==========================>>> in Received message for user %d and page %d at %d with message:",
+    senderID, recipientID, timeOfMessage);
+    console.log(">>>  Received message::",
+      message);
   action = "";
   if (echoOnly(event)) {
     return;
   }
 
-  console.log("==========================>>> in Received message for user %d and page %d at %d with message:",
-    senderID, recipientID, timeOfMessage);
 
 // connect do db
 db = mongoUtil.getDb(function() {
@@ -210,30 +214,19 @@ db = mongoUtil.getDb(function() {
       if (typeof fbprofile != 'undefined' && fbprofile) {
         console.log("fbprofile first_name:", fbprofile.first_name);
       //  console.log("fbprofile last_name:", fbprofile.last_name);
-        //console.log("fbprofile last_name:", fbprofile.locale);
-        //console.log("fbprofile last_name:", fbprofile.gender);
-        //  sessions[sessionId].fbprofile = fbprofile;
+        //console.log("fbprofile locale:", fbprofile.locale);
+        //console.log("fbprofile gender:", fbprofile.gender);
 
-        /*  if (fbprofile.locale && fbprofile.locale.toLowerCase().includes("en")) {
-            sendTextMessage(senderID, "Hello ",fbprofile.first_name);
-          } else {
-            sendTextMessage(senderID, fbprofile.first_name,  " مرحبا ");
-          }*/
 
         // create user if new
 
-        MongoClient.connect(mongodbUrl, function(err, db) {
-          assert.equal(null, err);
-          //console.log("------ call findOrCreateUser");
-          // this function will return userObj in session if found
 
+          // this function will return userObj in session if found otherwise create new user
           // check 1
-          findOrCreateUser(senderID, fbprofile, db, function(dbUserObj) {
+          mongoUtil.findOrCreateUser(senderID, fbprofile, function(dbUserObj) {
             // set user info
             //userObj = dbUserObj;
             console.log("***after findOrCreateUser *** dbUserObj:", dbUserObj)
-            db.close();
-
 
             // at this point we have user information.
             // check if event is a postback
@@ -241,74 +234,21 @@ db = mongoUtil.getDb(function() {
               handleEvent(senderID, event);
             } // if (typeof event != 'undefined' && event.postback)
 
-            if (messageText) {
+            if (message.text) {
               //  call function to determine what response to give based on messagae text
               console.log("-------------- Call determineResponse ", callCount)
-
               determineResponse(event); // event
             } else if (messageAttachments) {
               //sendTextMessage(senderID, "Message with attachment received");
             } // (messageText)
           }); // findOrCreateUser
-        }); // connect
+
 
       } //  if (typeof fbprofile != 'undefined' && fbprofile)
 
     }); // end getUserPublicInfo
 
   }); // end findOrCreateSession
-
-  // create or get user
-  var findOrCreateUser = function(senderID, fbprofile, db, callback) {
-    console.log("=====>   in findOrCreateUser - senderID/sessionId:", senderID + '/' + sessionId);
-    if (sessions[sessionId] && sessions[sessionId].userObj) {
-      console.log("**** findOrCreateUser -  user already known:", sessions[sessionId].userObj)
-      return callback(sessions[sessionId].userObj);
-    }
-    // Peform a simple find and return one  documents
-    db.collection('users').find({
-      "userId": senderID
-    }).limit(1).toArray().then(function(docs) {
-      console.log("___user____ docs:", docs);
-
-      if (docs && docs.length > 0) {
-        //  console.log("*** docs:", docs);
-        //  assert.equal(null, err);
-        // user found
-        //userObj = docs;
-        sessions[sessionId].newUser = false;
-        sessions[sessionId].userObj = docs[0];
-        return callback(docs[0]);
-
-
-      } else if (docs && docs.length == 0) { // no match for user name
-        //add new user
-        docs = {
-          "userId": senderID,
-          "first_name": fbprofile.first_name,
-          "last_name": fbprofile.last_name,
-          "locale": fbprofile.locale,
-          "gender": fbprofile.gender,
-          "timezone": fbprofile.timezone,
-          "role": "user",
-          "dateCreated": new Date()
-        };
-        console.log(" ************** Insert new User:", fbprofile.first_name);
-        db.collection('users').insertOne(docs, function(err, result) {
-          // assert.equal(err, null);
-          console.log("Inserted a document into the users table");
-          console.log("**** New User");
-          sessions[sessionId].newUser = true;
-          sessions[sessionId].userObj = docs;
-          return callback(docs);
-        });
-      }
-      return callback(null);
-    });
-
-  }; // createOrFindUser
-
-
 
 }
 
@@ -709,6 +649,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
 
    checkNlp(senderID,message,function() {
+     console.log("===> After checkNlp")
      console.log("********** newUser?",sessions[sessionId].newUser);
      if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
        // follow welcome protocol for newUser
@@ -771,7 +712,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
             "intentValue": sessions[sessionId].context.intentValue
           };
         } else if (selectedIntentList && selectedIntentList.length > 0) {
-          console.log("** match selected intents lis")
+          console.log("** match selectedIntentList")
           for (i=0; i<selectedIntentList.length;i++) {
           intent=  selectedIntentList[i].key;
           intentValue = selectedIntentList[i].value;
