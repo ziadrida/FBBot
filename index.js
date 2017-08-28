@@ -650,12 +650,12 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
        //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
 
-    /*   matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
+       matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
          console.log("*********** after matchEntity(how_to_order");
          sessions[sessionId].newUser = false; // welcome message sent
          sendTextMessage(senderID, doc[0].messageText);
          sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
-       });*/
+       });
      }
      console.log("sessions[sessionId];:", sessions[sessionId])
    });
