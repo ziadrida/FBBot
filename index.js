@@ -848,7 +848,7 @@ function sendGenericMessage(recipientId, messageText) {
   // To be expanded in later sections
 }
 
-function sendWatchVideoButton(recipientId, btnText, title) {
+function sendWatchVideoButton(recipientId, btnText, title,cb) {
   console.log("=================> In   sendWatchVideoButton() ");
   let messageData = {
     "recipient": {
@@ -879,7 +879,7 @@ function sendWatchVideoButton(recipientId, btnText, title) {
     })    ,timeout});
 } // sendWatchVideoButton
 
-function sendPriceButton(recipientId, btnText,buttonList) {
+function sendPriceButton(recipientId, btnText,buttonList,cb) {
   console.log("===============> in  sendPriceButton buttonList:",buttonList);
     console.log("===============> in  sendPriceButton btnTxt:",btnText);
   let messageData = {
