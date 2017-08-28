@@ -1061,12 +1061,12 @@ function sendTextMessage(recipientId, messageText,cb) {
       text: messageText
     }
   };
-  let timeout  = 3000
+  let timeout  = 5000
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
     callSendAPI(messageData,function(){
-      if (cb) return callback();
+      if (cb) return cb();
     })    ,timeout});
 
 } // sendTextMessage
@@ -1074,7 +1074,7 @@ function sendTextMessage(recipientId, messageText,cb) {
 
 
 
-function callSendAPI(messageData,cb) {
+function callSendAPI(messageData,callback) {
   console.log("===========> in callSendAPI messageData:",JSON.stringify(messageData))
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
@@ -1091,11 +1091,11 @@ function callSendAPI(messageData,cb) {
 
       console.log("Successfully sent generic message with id %s to recipient %s",
         messageId, recipientId);
-          if (cb) return callback();
+          if (callback) return callback();
       } else {
         console.error("<><><> Unable to send message. <><><>statusCode:", response.statusCode);
         console.error("<><><> Unable to send message. <><><>statusCode:", error);
-          if (cb) return callback();
+          if (callback) return callback();
         //console.error(response);
         //console.error(error);
       }
