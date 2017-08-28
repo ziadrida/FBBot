@@ -1062,22 +1062,8 @@ function sendTextMessage(recipientId, messageText,cb) {
     }
   };
 
-  callSendAPI(messageData,function(error,response,body){
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
-      console.log("Successfully sent generic message with id %s to recipient %s",
-        messageId, recipientId);
-        if (cb) return callback()
-      } else {
-        console.error("<><><> Unable to send message. <><><>statusCode:", response.statusCode);
-        console.error("<><><> Unable to send message. <><><>statusCode:", error);
-        if (cb) return callback()
-        //console.error(response);
-        //console.error(error);
-      }
-
+  callSendAPI(messageData,function(){
+    if (cb) return callback();
   });
 } // sendTextMessage
 
@@ -1095,8 +1081,22 @@ function callSendAPI(messageData,cb) {
     json: messageData
 
   }, function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var recipientId = body.recipient_id;
+      var messageId = body.message_id;
 
-        return callback(error,response,body);
+      console.log("Successfully sent generic message with id %s to recipient %s",
+        messageId, recipientId);
+          if (cb) return callback();
+      } else {
+        console.error("<><><> Unable to send message. <><><>statusCode:", response.statusCode);
+        console.error("<><><> Unable to send message. <><><>statusCode:", error);
+          if (cb) return callback();
+        //console.error(response);
+        //console.error(error);
+      }
+
+
 
   });
 }
