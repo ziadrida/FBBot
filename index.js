@@ -1174,7 +1174,13 @@ function processHttpRequest(event,callback) {
   var messageText = message.text;
   var messageAttachments = message.attachments;
   let compareText = messageText.toLowerCase();
+  try {
   let domainName = parseDomain(compareText);
+} catch (e) {
+  console.log("error parsing domain:",compareText)
+  console.log("Error: ",e)
+}
+
 
   if (typeof domainName != 'undefined' && domainName) {
     console.log("<><><> Domain Name:", domainName.domain);
