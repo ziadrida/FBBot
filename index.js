@@ -15,7 +15,7 @@ var db;
 // This will contain all user sessions.
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
-var sessions = {}
+ sessions = {}
 
 const globalparams = {
   category_match_percentage: 0.85
