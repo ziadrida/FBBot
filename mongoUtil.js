@@ -11,17 +11,17 @@ module.exports = {
   // create or get user
   findOrCreateUser: function(senderID, fbprofile, callback) {
     console.log("=====>   in findOrCreateUser - senderID/sessionId:", senderID + '/' + sessionId);
-    if (sessions[sessionId] && sessions[sessionId].userObj) {
-      console.log("**** findOrCreateUser -  user already known:", sessions[sessionId].userObj)
-      return callback(sessions[sessionId].userObj);
+    if (global.sessions[sessionId] && global.sessions[sessionId].userObj) {
+      console.log("**** findOrCreateUser -  user already known:", global.sessions[sessionId].userObj)
+      return callback(global.sessions[sessionId].userObj);
     }
     // Peform a simple find and return one  documents
     module.exports.connectToDB(function(err) {
       if (err) return callback(null);
 
-      find(function(doc) {
+      find(function(resp) {
         console.log(">>>>>>>>>>>>> after find findUserByName ")
-        callback(doc);
+        return callback(resp);
       });
     }); // connect
 
@@ -36,13 +36,14 @@ module.exports = {
         //  assert.equal(null, err);
         // user found
         //userObj = docs;
-        sessions[sessionId].newUser = false;
-        sessions[sessionId].userObj = docs[0];
+        console.log("user doscs found. length:",docs.length)
+        global.sessions[sessionId].newUser = false;
+        global.sessions[sessionId].userObj = docs[0];
         return callback(docs[0]);
       } else if (docs && docs.length == 0) { // no match for user name
-
+        console.log("user doscs NOT found.")
         //add new user
-        let docs = {
+        let newDoc = {
           "userId": senderID,
           "first_name": fbprofile.first_name,
           "last_name": fbprofile.last_name,
@@ -53,16 +54,16 @@ module.exports = {
           "dateCreated": new Date()
         };
         console.log(" ************** Insert new User:", fbprofile.first_name);
-        db.collection('users').insertOne(docs, function(err, result) {
+        db.collection('users').insertOne(newDoc, function(err, result) {
           // assert.equal(err, null);
-          console.log("Inserted a document into the users table");
+          console.log("Inserted a document into the users table, result:",result);
           console.log("**** New User");
-          sessions[sessionId].newUser = true;
-          sessions[sessionId].userObj = docs;
-          return callback(docs);
+          global.sessions[sessionId].newUser = true;
+          global.sessions[sessionId].userObj = newDoc;
+          return callback(newDoc);
         });
       }
-      sessions[sessionId].newUser = false;
+      global.sessions[sessionId].newUser = false;
       return callback(null);
     });
 }

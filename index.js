@@ -12,6 +12,10 @@ var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
 var db;
+// This will contain all user sessions.
+// Each session has an entry:
+// sessionId -> {fbid: facebookUserId, context: sessionState}
+var sessions = {}
 
 const globalparams = {
   category_match_percentage: 0.85
@@ -44,17 +48,6 @@ app.use(bodyParser.urlencoded({
   extended: false
 }))
 app.use(bodyParser.json())
-
-
-// Wit.ai bot specific code
-
-// This will contain all user sessions.
-// Each session has an entry:
-// sessionId -> {fbid: facebookUserId, context: sessionState}
-const sessions = {};
-//var sessionId = ""
-//var userObj;
-//var action = "";
 
 
 
@@ -223,7 +216,7 @@ db = mongoUtil.getDb(function() {
 
           // this function will return userObj in session if found otherwise create new user
           // check 1
-          mongoUtil.findOrCreateUser(senderID, fbprofile, function(dbUserObj) {
+          mongoUtil.findOrCreateUser(senderID,fbprofile, function(dbUserObj) {
             // set user info
             //userObj = dbUserObj;
             console.log("***after findOrCreateUser *** dbUserObj:", dbUserObj)
