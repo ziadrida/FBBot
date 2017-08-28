@@ -37,8 +37,8 @@ module.exports = {
         // user found
         //userObj = docs;
         console.log("user doscs found. length:",docs.length)
-        global.sessions[sessionId].newUser = false;
-        global.sessions[sessionId].userObj = docs[0];
+        sessions[sessionId].newUser = false;
+        sessions[sessionId].userObj = docs[0];
         return callback(docs[0]);
       } else if (docs && docs.length == 0) { // no match for user name
         console.log("user doscs NOT found.")
@@ -58,12 +58,12 @@ module.exports = {
           // assert.equal(err, null);
           console.log("Inserted a document into the users table, result:",result);
           console.log("**** New User");
-          global.sessions[sessionId].newUser = true;
-          global.sessions[sessionId].userObj = newDoc;
+          sessions[sessionId].newUser = true;
+          sessions[sessionId].userObj = newDoc;
           return callback(newDoc);
         });
       }
-      global.sessions[sessionId].newUser = false;
+      sessions[sessionId].newUser = false;
       return callback(null);
     });
 }
