@@ -62,7 +62,7 @@ module.exports = {
             console.log("Error inserting new user info newDoc:",newDoc);
             return callback(null)
           }
-          console.log("Inserted a document into the users table, result:",result);
+          console.log("Inserted a document into the users table, result:",result.insertedCount);
           console.log("**** New User");
           sessions[sessionId].newUser = true;
           sessions[sessionId].userObj = newDoc;

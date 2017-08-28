@@ -540,7 +540,8 @@ function determineResponse(event) {
 
       // check is message is Arabic or english
       // change language
-      if (message.text.match(/(?=.*[@!#\$\^%&*()+=\-\[\]\\\';,\.\/\{\}\|\":<>\? ]+?).*[^_\W]+?.*/)) {
+      enPattern = /(?=.*[@!#\$\^%&*()+=\-\[\]\\\';,\.\/\{\}\|\":<>\? ]+?).*[^_\W]+?.*/
+      if (enPattern.test(message.text)) {
         // english
           console.log('String contains both alpha-numeric and your pre-defined special characters!');
           console.log("^^^^^^^^^^^^^^^ switch language to english");
@@ -549,6 +550,16 @@ function determineResponse(event) {
         console.log("^^^^^^^^^^^^^^^ switch language to arabic");
         sessions[sessionId].userObj.locale = "ar_US"
       }
+      var arabic = /[\u0600-\u06FF]/;
+  
+
+      if(arabic.test(message.text)) {
+        console.log("^^^^^^^^^^^^^^^ arabic match switch language to arabic");
+        sessions[sessionId].userObj.locale = "ar_US"
+      } else {
+        console.log("^^^^^^^^^^^^^^^ arabic match switch language to english");
+          sessions[sessionId].userObj.locale = "en_US"
+      }; // displays true
 
 
 
