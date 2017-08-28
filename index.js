@@ -551,15 +551,7 @@ function determineResponse(event) {
         console.log("^^^^^^^^^^^^^^^ switch language to arabic");
         sessions[sessionId].userObj.locale = "ar_US"
       }*/
-      var arabic = /[\u0600-\u06FF]/
 
-      if(arabic.test(message.text)) {
-        console.log("^^^^^^^^^^^^^^^ arabic match switch language to arabic");
-        sessions[sessionId].userObj.locale = "ar_US"
-      } else {
-        console.log("^^^^^^^^^^^^^^^ arabic match switch language to english");
-          sessions[sessionId].userObj.locale = "en_US"
-      }; // displays true
 
 
 
@@ -654,6 +646,16 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
   checkNlp(senderID,message,function() {
      console.log("===> After checkNlp")
+     var arabic = /[\u0600-\u06FF]/
+
+     if(arabic.test(message.text)) {
+       console.log("^^^^^^^^^^^^^^^ arabic match switch language to arabic");
+       sessions[sessionId].userObj.locale = "ar_US"
+     } else {
+       console.log("^^^^^^^^^^^^^^^ arabic match switch language to english");
+         sessions[sessionId].userObj.locale = "en_US"
+     }; // displays true
+     
      console.log("********** newUser?",sessions[sessionId].newUser);
      if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
        // follow welcome protocol for newUser
@@ -1997,7 +1999,7 @@ function getQuotation(senderID,quoteNo) {
           quote_obj.quote_date.toLocaleString("en-US",options)+ " (#"+quote_obj.quote_no +") ]");
         console.log("***** quotationStr:",quotationStr)
         btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
-          (quote_obj.notes  && quote_obj.notes == "Notes:"? "":quote_obj.notes);
+          (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
 
         var buttonList=[]
         var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
@@ -2048,7 +2050,7 @@ function calculatePricing(senderID,item,callback) {
 
 
   // user pricing formula
-  pricingMessage = "Notes:"
+  pricingMessage = "Important Notes:"
   I2_quantity = 1;
   J2_unitCapacityPerBox = 1;
   numberOfPackages = Math.ceil((I2_quantity/J2_unitCapacityPerBox)*100)/100;
@@ -2351,7 +2353,7 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
   quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",options)+ " (#"+quote_obj.quote_no +") ]");
   console.log("***** quotationStr:",quotationStr)
   btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
-    (quote_obj.notes  && quote_obj.notes == "Notes:"? "":quote_obj.notes);
+    (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
   var buttonList=[]
   var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
 
