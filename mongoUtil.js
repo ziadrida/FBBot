@@ -11,9 +11,9 @@ module.exports = {
   // create or get user
   findOrCreateUser: function(senderID, fbprofile, callback) {
     console.log("=====>   in findOrCreateUser - senderID/sessionId:", senderID + '/' + sessionId);
-    if (global.sessions[sessionId] && global.sessions[sessionId].userObj) {
-      console.log("**** findOrCreateUser -  user already known:", global.sessions[sessionId].userObj)
-      return callback(global.sessions[sessionId].userObj);
+    if (sessions[sessionId] && sessions[sessionId].userObj) {
+      console.log("**** findOrCreateUser -  user already known:", sessions[sessionId].userObj)
+      return callback(sessions[sessionId].userObj);
     }
     // Peform a simple find and return one  documents
     module.exports.connectToDB(function(err) {
@@ -54,7 +54,7 @@ module.exports = {
           "dateCreated": new Date()
         };
         console.log(" ************** Insert new User:", fbprofile.first_name);
-        db.collection('users').insertOne(newDoc, function(err, result) {
+        _db.collection('users').insertOne(newDoc, function(err, result) {
           // assert.equal(err, null);
           console.log("Inserted a document into the users table, result:",result);
           console.log("**** New User");
