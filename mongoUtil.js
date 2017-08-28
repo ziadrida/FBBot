@@ -20,7 +20,7 @@ module.exports = {
       if (err) return callback(null);
 
       find(function(resp) {
-        console.log(">>>>>>>>>>>>> after find findUserByName ")
+        console.log(">>>>>>>>>>>>> after find findOrCreateUser ")
         return callback(resp);
       });
     }); // connect
@@ -43,7 +43,7 @@ module.exports = {
       } else if (docs && docs.length == 0) { // no match for user name
         console.log("user doscs NOT found.")
         //add new user
-        let newDoc = {
+        var newDoc = {
           "userId": senderID,
           "first_name": fbprofile.first_name,
           "last_name": fbprofile.last_name,
@@ -53,9 +53,14 @@ module.exports = {
           "role": "user",
           "dateCreated": new Date()
         };
-        console.log(" ************** Insert new User:", fbprofile.first_name);
+         console.log(" ************** Insert new User:", fbprofile.first_name);
         _db.collection('users').insertOne(newDoc, function(err, result) {
           // assert.equal(err, null);
+          if (err) {
+              console.log("Error inserting new user info err:",err);
+            console.log("Error inserting new user info newDoc:",newDoc);
+            return callback(null)
+          }
           console.log("Inserted a document into the users table, result:",result);
           console.log("**** New User");
           sessions[sessionId].newUser = true;
@@ -63,6 +68,8 @@ module.exports = {
           return callback(newDoc);
         });
       }
+      console.log("Error in  findOrCreateUser - return null ><><><> ERROR <><><> ")
+
       sessions[sessionId].newUser = false;
       return callback(null);
     });
