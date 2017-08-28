@@ -227,7 +227,7 @@ db = mongoUtil.getDb(function() {
               handleEvent(senderID, event);
             } // if (typeof event != 'undefined' && event.postback)
 
-            if (message.text) {
+            if (message && message.text) {
               //  call function to determine what response to give based on messagae text
               console.log("-------------- Call determineResponse ", callCount)
               determineResponse(event); // event
@@ -495,14 +495,15 @@ function determineResponse(event) {
   var messageId = message.mid;
 
 
-  var messageAttachments = message.attachments;
+  var messageAttachments = (message && message.attachments);
 
-  let compareText = message.text.toLowerCase();
-  console.log("<><><><><>   compareText:", compareText);
+
   var userMsg;
 
 
-  if (message.text) {
+  if (message && message.text) {
+    var compareText = message.text.toLowerCase();
+    console.log("<><><><><>   compareText:", compareText);
     // store all text messages
     console.log("<<<<<<< insert message:", message.text);
 

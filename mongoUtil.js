@@ -185,6 +185,7 @@ module.exports = {
       insert(function(nextVal) {
         console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
         callback(nextVal);
+
       });
     }); // connect
 
@@ -205,11 +206,13 @@ module.exports = {
             console.log("Inserted a document into the quotation collection.");
             return callback(nextVal);
           }
-          return (-1);
+          return callback(-1);
         });
       });
     }; // insertMesssageText
   } ,// insert quotation
+
+  
   findQuotation: function(senderID, quotationNo, callback) {
     console.log("=================>in  findQuotation")
     module.exports.connectToDB(function(err) {
