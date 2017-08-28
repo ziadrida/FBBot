@@ -1197,7 +1197,7 @@ function processHttpRequest(event,callback) {
   var urls = findUrls(message.text);
   console.log("url found is:",urls[0])
   if (urls.length <= 0 ) return callback();
-  if (ulrs.length > 1 ) {
+  if (urls.length > 1 ) {
     sendTextMessage(senderID,"please send one URL at a time");
   }
 
