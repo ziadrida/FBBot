@@ -146,8 +146,6 @@ db = mongoUtil.getDb(function() {
   }
 });
 
-
-
   if (typeof event == 'undefined') {
     console.log(" receivedMessage ---> EVENT is Undefined <><>")
   } else {
@@ -228,6 +226,8 @@ db = mongoUtil.getDb(function() {
           assert.equal(null, err);
           //console.log("------ call findOrCreateUser");
           // this function will return userObj in session if found
+
+          // check 1
           findOrCreateUser(senderID, fbprofile, db, function(dbUserObj) {
             // set user info
             //userObj = dbUserObj;
@@ -245,7 +245,7 @@ db = mongoUtil.getDb(function() {
               //  call function to determine what response to give based on messagae text
               console.log("-------------- Call determineResponse ", callCount)
 
-              determineResponse(event);
+              determineResponse(event); // event
             } else if (messageAttachments) {
               //sendTextMessage(senderID, "Message with attachment received");
             } // (messageText)
@@ -716,12 +716,12 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
        //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
 
-       matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
+    /*   matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
          console.log("*********** after matchEntity(how_to_order");
          sessions[sessionId].newUser = false; // welcome message sent
          sendTextMessage(senderID, doc[0].messageText);
          sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
-       });
+       });*/
      }
      console.log("sessions[sessionId];:", sessions[sessionId])
    });
@@ -818,9 +818,6 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   }
   return callback();
 }
-
-
-
 
 
 function findHighestConfidence(entList, callback) {
@@ -1835,9 +1832,9 @@ function getPricing(senderID,item) {
 function getUserPublicInfo(fbId, callback) {
   var data;
   console.log('In getUserPublicInfo - fbId:', fbId);
-  console.log('In getUserPublicInfo - session:', sessions[sessionId]);
+  console.log(' getUserPublicInfo - session:', sessions[sessionId]);
   if (sessions[sessionId].fbprofile) {
-    console.log('In getUserPublicInfo - fbprofile already defined:', sessions[sessionId].fbprofile.first_name);
+    console.log(' getUserPublicInfo - fbprofile already defined:', sessions[sessionId].fbprofile.first_name);
     return callback(sessions[sessionId].fbprofile);
   }
   /*
