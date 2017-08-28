@@ -540,8 +540,8 @@ function determineResponse(event) {
 
       // check is message is Arabic or english
       // change language
-      enPattern = /(?=.*[@!#\$\^%&*()+=\-\[\]\\\';,\.\/\{\}\|\":<>\? ]+?).*[^_\W]+?.*/
-      if (enPattern.test(message.text)) {
+    //  enPattern = /(?=.*[@!#\$\^%&*()+=\-\[\]\\\';,\.\/\{\}\|\":<>\? ]+?).*[^_\W]+?.*/
+  /*    if (enPattern.test(message.text)) {
         // english
           console.log('String contains both alpha-numeric and your pre-defined special characters!');
           console.log("^^^^^^^^^^^^^^^ switch language to english");
@@ -549,7 +549,7 @@ function determineResponse(event) {
       } else {
         console.log("^^^^^^^^^^^^^^^ switch language to arabic");
         sessions[sessionId].userObj.locale = "ar_US"
-      }
+      }*/
       var arabic = /[\u0600-\u06FF]/
 
       if(arabic.test(message.text)) {
@@ -651,7 +651,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   } // end of if http
 
 
-   checkNlp(senderID,message,function() {
+  checkNlp(senderID,message,function() {
      console.log("===> After checkNlp")
      console.log("********** newUser?",sessions[sessionId].newUser);
      if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
@@ -870,7 +870,15 @@ function sendWatchVideoButton(recipientId, btnText, title) {
       }
     }
   }
-  callSendAPI(messageData);
+  let timeout  = 30000
+  console.log("call callSendAPI **** - wait first for ",timeout)
+  setTimeout(function(){
+    console.log("now calling callSendAPI **** - after wait for ",timeout)
+    callSendAPI(messageData,function(){
+      if (cb) return cb();
+    })    ,timeout});
+
+
 } // sendWatchVideoButton
 
 function sendPriceButton(recipientId, btnText,buttonList) {
@@ -892,8 +900,14 @@ function sendPriceButton(recipientId, btnText,buttonList) {
       }
     }
 
-  callSendAPI(messageData);
-} // sendButton
+    let timeout  = 20000
+    console.log("call callSendAPI **** - wait first for ",timeout)
+    setTimeout(function(){
+      console.log("now calling callSendAPI **** - after wait for ",timeout)
+      callSendAPI(messageData,function(){
+        if (cb) return cb();
+      })    ,timeout});
+} // sendPriceButton
 
 
 function sendButton(recipientId, btnText) {
