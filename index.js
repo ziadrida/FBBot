@@ -655,7 +655,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
        console.log("^^^^^^^^^^^^^^^ arabic match switch language to english");
          sessions[sessionId].userObj.locale = "en_US"
      }; // displays true
-     
+    
      console.log("********** newUser?",sessions[sessionId].newUser);
      if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
        // follow welcome protocol for newUser
