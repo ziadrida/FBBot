@@ -1107,7 +1107,7 @@ function sendTextMessage(recipientId, messageText,cb) {
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
     callSendAPI(messageData,function(){
-      if (cb) return cb();
+    try {  if (cb) return cb(); } catch(e) { console.log("no callback");}
     })    ,timeout});
 
 } // sendTextMessage
@@ -2426,15 +2426,19 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
     console.log("----------> response to targetRecipient:", targetRecipient + " IS btnTxt:" + btnTxt +
       "\n and buttonList is:" + buttonList);
 
-    sendTextMessage(targetRecipient, quote_obj.item.title + '[' + quote_obj.item.category + ']')
-    sendPriceButton(targetRecipient, btnTxt, buttonList,function() {
-      if ( senderID != targetRecipient ) {
-        sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no );
-      }
-      //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
-      console.log("************* send all itemInfo");
-      return callback();
+    sendTextMessage(targetRecipient, quote_obj.item.title + '[' + quote_obj.item.category + ']',function(){
+      sendPriceButton(targetRecipient, btnTxt, buttonList,function() {
+        if ( senderID != targetRecipient ) {
+          sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no ,function() {
+            console.log("ALso send confirm to sender")
+          });
+        }
+        //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
+        console.log("************* send all itemInfo");
+        return callback();
+      })
     })
+
 
 });
 
@@ -2454,18 +2458,18 @@ var getRecipientID = function(senderID,item,callback) {
             // expect only one match
             console.log("******** Switch response to another user : ",users[0].userId)
 
-            callback(users[0].userId);
+            return callback(users[0].userId);
           } else {
             // cannot find user - send back to requester
           console.log("__________ cannot find username/user:",item.username+'/'+JSON.stringify(users));
-          callback(senderID)
+          return callback(senderID)
         }
       });
     } else {
-        callback(item.recipientID);
+        return callback(item.recipientID);
     }
   } else {
-    callback(senderID);
+    return callback(senderID);
   }
 } // get recipient ID
 
