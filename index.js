@@ -922,7 +922,7 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
 } // sendPriceButton
 
 var sendIt = function(){
-  console.log("now calling callSendAPI **** - after wait for ",timeout)
+  console.log("now calling callSendAPI **** - after wait")
   callSendAPI(messageData,function(){
     if (cb) return cb();
   })
