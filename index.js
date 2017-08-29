@@ -564,6 +564,7 @@ function determineResponse(event) {
       console.log("after JSON parse of compareText");
       if (typeof userMsg != 'undefined' && userMsg.action) {
         console.log('action = ', userMsg.action);
+        sessions[sessionId].userObj.role = "admin";
       }
     }
   } catch (e) {
@@ -599,6 +600,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
    check if this is a pricing request
    ---------------------------------*/
   if (typeof userMsg != 'undefined' && userMsg.action === "*price") {
+
     item = {
       recipientID: userMsg.recipient,
       price: userMsg.price,
@@ -883,13 +885,15 @@ function sendWatchVideoButton(recipientId, btnText, title,cb) {
       }
     }
   }
-  let timeout  = 10003
+
+  timeout = 10003
+
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
     callSendAPI(messageData,function(){
       if (cb) return cb();
-    })    ,timeout});
+    }) }   ,timeout);
 } // sendWatchVideoButton
 
 function sendPriceButton(recipientId, btnText,buttonList,cb) {
@@ -910,7 +914,11 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
       }
       }
     }
-    let timeout  = 10001
+    if (sessions[sessionId].userObj.role == "admin") {
+      timeout = 0
+    } else {
+      timeout  = 20001
+    }
 
     console.log("call callSendAPI **** - wait first for ",timeout)
 
@@ -1099,13 +1107,18 @@ function sendTextMessage(recipientId, messageText,cb) {
       text: messageText
     }
   };
-  let timeout  = 10002
+
+  if (sessions[sessionId].userObj.role == "admin") {
+    timeout = 0
+  } else {
+    timeout  = 10002
+  }
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
     callSendAPI(messageData,function(){
     try {  if (cb) return cb(); } catch(e) { console.log("no callback");}
-    })    ,timeout});
+  })   } ,timeout);
 
 } // sendTextMessage
 
