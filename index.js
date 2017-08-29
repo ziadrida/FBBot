@@ -886,7 +886,7 @@ function sendWatchVideoButton(recipientId, btnText, title,cb) {
     }
   }
 
-  timeout = 10003
+  timeout = 7003
 
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
@@ -917,7 +917,7 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
     if (sessions[sessionId].userObj.role == "admin") {
       timeout = 0
     } else {
-      timeout  = 17001
+      timeout  = 9001
     }
 
     console.log("call callSendAPI **** - wait first for ",timeout)
@@ -1111,7 +1111,7 @@ function sendTextMessage(recipientId, messageText,cb) {
   if (sessions[sessionId].userObj.role == "admin") {
     timeout = 0
   } else {
-    timeout  = 12002
+    timeout  = 5002
   }
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
