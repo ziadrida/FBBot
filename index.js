@@ -920,7 +920,7 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
 
 } // sendPriceButton
 
-sendIt = function(messageData,cb){
+function sendIt(messageData,cb){
   console.log("now calling callSendAPI **** - after wait")
   callSendAPI(messageData,function(){
       if (cb) return cb();
