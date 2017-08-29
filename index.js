@@ -911,7 +911,6 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
       }
     }
     let timeout  = 10001
-    setTimeout("console.log('=====>Wait')",timeout);
 
     console.log("call callSendAPI **** - wait first for ",timeout)
     setTimeout(function(){

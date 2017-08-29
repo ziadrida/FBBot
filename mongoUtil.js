@@ -184,7 +184,7 @@ module.exports = {
       //assert.equal(null, err);
       insert(function(nextVal) {
         console.log(">>>>>>>>>>>>> Done inserting into quotation collection")
-        callback(nextVal);
+        return callback(nextVal);
 
       });
     }); // connect
@@ -212,7 +212,7 @@ module.exports = {
     }; // insertMesssageText
   } ,// insert quotation
 
-  
+
   findQuotation: function(senderID, quotationNo, callback) {
     console.log("=================>in  findQuotation")
     module.exports.connectToDB(function(err) {
