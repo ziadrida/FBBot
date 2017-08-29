@@ -879,7 +879,7 @@ function sendWatchVideoButton(recipientId, btnText, title,cb) {
       }
     }
   }
-  let timeout  = 250000
+  let timeout  = 10003
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
@@ -905,9 +905,10 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
         }
       }
       }
-    }
+    } 
+    let timeout  = 10001
+    setTimeout("console.log('=====>Wait')",timeout);
 
-    let timeout  = 2000000
     console.log("call callSendAPI **** - wait first for ",timeout)
     setTimeout(function(){
       console.log("now calling callSendAPI **** - after wait for ",timeout)
@@ -1092,7 +1093,7 @@ function sendTextMessage(recipientId, messageText,cb) {
       text: messageText
     }
   };
-  let timeout  = 15000
+  let timeout  = 10002
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
