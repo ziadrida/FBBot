@@ -914,18 +914,15 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
 
     console.log("call callSendAPI **** - wait first for ",timeout)
 
-
-
-    setTimeout(sendIt(messageData,function() { if (cb) return cb(); }) ,timeout);
+    setTimeout( function() {
+    console.log("now calling callSendAPI **** - after wait")
+    callSendAPI(messageData,function(){
+        if (cb) return cb();
+      })
+    } ,timeout);
 
 } // sendPriceButton
 
-function sendIt(messageData,cb){
-  console.log("now calling callSendAPI **** - after wait")
-  callSendAPI(messageData,function(){
-      if (cb) return cb();
-    })
-  }
 
 function sendButton(recipientId, btnText) {
 console.log("=====> in sendButton:",recipientId);
