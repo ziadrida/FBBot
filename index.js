@@ -917,7 +917,7 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
     if (sessions[sessionId].userObj.role == "admin") {
       timeout = 0
     } else {
-      timeout  = 20001
+      timeout  = 17001
     }
 
     console.log("call callSendAPI **** - wait first for ",timeout)
@@ -1111,7 +1111,7 @@ function sendTextMessage(recipientId, messageText,cb) {
   if (sessions[sessionId].userObj.role == "admin") {
     timeout = 0
   } else {
-    timeout  = 10002
+    timeout  = 12002
   }
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
