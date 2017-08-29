@@ -916,14 +916,17 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
 
 
 
-    setTimeout(sendIt() ,timeout);
-    sendIt = function(){
-      console.log("now calling callSendAPI **** - after wait")
-      callSendAPI(messageData,function(){
-          if (cb) return cb();
-        })
-      }
+    setTimeout(sendIt(messageData,function() { if (cb) return cb(); }) ,timeout);
+
 } // sendPriceButton
+
+sendIt = function(messageData,cb){
+  console.log("now calling callSendAPI **** - after wait")
+  callSendAPI(messageData,function(){
+      if (cb) return cb();
+    })
+  }
+
 function sendButton(recipientId, btnText) {
 console.log("=====> in sendButton:",recipientId);
 console.log("=====> in sendButton:",btnText);
