@@ -913,14 +913,16 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
     let timeout  = 10001
 
     console.log("call callSendAPI **** - wait first for ",timeout)
-    setTimeout(sendIt() ,timeout);
-
     var sendIt = function(){
       console.log("now calling callSendAPI **** - after wait for ",timeout)
       callSendAPI(messageData,function(){
         if (cb) return cb();
       })
     }
+    
+    setTimeout(sendIt() ,timeout);
+
+
 } // sendPriceButton
 
 
