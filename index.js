@@ -1242,6 +1242,7 @@ function processHttpRequest(event,callback) {
   }
   let msg="Pricing now...نقوم بالتسعير الآن"
   sendTextMessage(senderID,msg,1000,function(){
+    console.log("after sendTextMessage:",msg)
   if (typeof domainName != 'undefined' && domainName) {
     console.log("<><><> Domain Name:", domainName.domain);
     // valid domainName
