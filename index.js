@@ -1116,13 +1116,15 @@ function sendTextMessage(recipientId, messageText,sendTimeout,cb) {
     if (!sendTimeout)  timeout  = 2002;
   }
   console.log("call callSendAPI **** - wait first for ",timeout)
+try {
   setTimeout(function(){
     console.log("now calling callSendAPI **** - after wait for ",timeout)
     callSendAPI(messageData,function(){
     try {  if (cb) return cb(); } catch(e) { console.log("no callback");}
-  })   } ,timeout).catch(function(e){
+  })   } ,timeout)
+} catch(e){
     console.log("<><><><>><><>< ERROR <><><><> setTimeout - err:",e);
-  })
+  }
 
 } // sendTextMessage
 
