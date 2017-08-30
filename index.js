@@ -1098,7 +1098,7 @@ function quickReply(recipientId, titleText) {
 } // sendButton
 
 // sendTextMessage function
-function sendTextMessage(recipientId, messageText,sendTimeout,cb) {
+function sendTextMessage(recipientId, messageText, sendTimeout, callback) {
 
   console.log("in sendTextMessage function --> recipentID:", recipientId);
   var messageData = {
@@ -1113,17 +1113,29 @@ function sendTextMessage(recipientId, messageText,sendTimeout,cb) {
   if (sessions[sessionId].userObj.role == "admin") {
     timeout = 0
   } else {
-    if (!sendTimeout)  timeout  = 2002;
+    if (!sendTimeout) timeout = 2002;
   }
-  console.log("call callSendAPI **** - wait first for ",timeout)
-try {
-  setTimeout(function(){
-    console.log("now calling callSendAPI **** - after wait for ",timeout)
-    callSendAPI(messageData,function(){
-    try {  if (cb) return cb(); } catch(e) { console.log("no callback");}
-  })   } ,timeout)
-} catch(e){
-    console.log("<><><><>><><>< ERROR <><><><> setTimeout - err:",e);
+
+  console.log("call callSendAPI **** - wait first for ", timeout)
+  try {
+    setTimeout(function() {
+      console.log("now calling callSendAPI **** - after wait for ", timeout)
+      callSendAPI(messageData, function() {
+        try {
+          if (callback) {
+            console.log("done with sendTextMessage - call callback")
+            return callback();
+          } else {
+            console.log("done with sendTextMessage - No callback")
+            return;
+          }
+        } catch (e) {
+          console.log("no callback");
+        }
+      })
+    }, timeout)
+  } catch (e) {
+    console.log("<><><><>><><>< ERROR <><><><> setTimeout - err:", e);
   }
 
 } // sendTextMessage
@@ -1230,7 +1242,6 @@ function processHttpRequest(event,callback) {
   }
   let msg="Pricing now...نقوم بالتسعير الآن"
   sendTextMessage(senderID,msg,1000,function(){
-
   if (typeof domainName != 'undefined' && domainName) {
     console.log("<><><> Domain Name:", domainName.domain);
     // valid domainName
