@@ -920,7 +920,7 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
       timeout = 0
     } else {
       timeout  = 4001
-    }bu
+    }
 
     console.log("call callSendAPI **** - wait first for ",timeout)
 
@@ -1132,7 +1132,8 @@ function sendTextMessage(recipientId, messageText, sendTimeout, callback) {
             return;
           }
         } catch (e) {
-          console.log("no callback");
+          console.log("error during callback sendTextMessage error:",e);
+          return;
         }
       })
     }, timeout)
