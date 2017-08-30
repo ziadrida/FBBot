@@ -1232,6 +1232,9 @@ function processHttpRequest(event,callback) {
   var messageText = message.text;
   var messageAttachments = message.attachments;
   let compareText = messageText.toLowerCase();
+
+
+
   var urls = findUrls(message.text);
   console.log("url found is:",urls[0])
   if (urls.length <= 0 ) return callback();
@@ -1240,9 +1243,22 @@ function processHttpRequest(event,callback) {
   if (urls.length > 1 ) {
     sendTextMessage(senderID,"please send one URL at a time",1000);
   }
+  try {
+    var domainName = parseDomain(urls[0]);
+  } catch (e) {
+    sendTextMessage(senderID,"Url is not openning! Did you send the correct one?",1000,function(){
+      console.log("error parsing domain:", compareText)
+      console.log("Error: ", e)
+      return callback()
+    })
+
+  }
+
   let msg="Pricing now...نقوم بالتسعير الآن"
   sendTextMessage(senderID,msg,1000,function(){
     console.log("after sendTextMessage:",msg)
+
+
   if (typeof domainName != 'undefined' && domainName) {
     console.log("<><><> Domain Name:", domainName.domain);
     // valid domainName
