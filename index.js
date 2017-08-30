@@ -59,7 +59,7 @@ app.get('/', function(req, res) {
 
 app.get('/wakeup', function(req, res) {
   console.log("Request to wakeup ********************")
-  sendTextMessage('1636276406383043','Wakeup!');
+  sendTextMessage('1636276406383043','Wakeup!',0);
   res.send('Ready to wakeup and do stuff. Just tell me what!')
 })
 
@@ -291,7 +291,7 @@ function handleEvent(senderID, event) {
     // ignore check for now - just go ahead with pricing
     if (payloadMsg.subject == "categories") {
       // either ask user for the category or get a human to help
-      return sendTextMessage(senderID,helpers.getMessage(sessions[sessionId],"1001"));
+      return sendTextMessage(senderID,helpers.getMessage(sessions[sessionId],"1001"),500);
 
     }
      calculatePricing(senderID,payloadMsg.item,function() {
@@ -445,7 +445,7 @@ detailsMsg =  (language() == "english"? detailsMsg_en:detailsMsg_ar);
   if (typeof payloadText != 'undefined' && payloadText == 'yes_confirm_order') {
     //  let postbackText = JSON.stringify(event.postback);
     //  if (messageText.toLowerCase().includes("confirm order")) {
-    sendTextMessage(senderID, "Thank You");
+    sendTextMessage(senderID, "Thank You",0);
 
     // insert order request to database
     //
@@ -474,7 +474,7 @@ detailsMsg =  (language() == "english"? detailsMsg_en:detailsMsg_ar);
     }; // end of insertOrderRequest
     // "timestamp" : new Date(timeOfMessage).toString("<YYYY-mm-ddTHH:MM:ss>"),
   } else if (typeof payloadText != 'undefined' && payloadText == 'not_now') {
-    sendTextMessage(senderID, "WHY WHY WHY???!!!");
+    sendTextMessage(senderID, "WHY WHY WHY???!!!",0);
     // ask WHY
     // insert follow up to why user did not buy
   }
@@ -645,7 +645,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   // if message contains http, then it is a pricing request
   if (compareText.includes("http")) {
     console.log("got HTTP message");
-    sendTextMessage(senderID,"Pricing now...نقوم بالتسعير الآن")
+
     return processHttpRequest(event);
   } // end of if http
 
@@ -671,9 +671,11 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
        matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
          console.log("*********** after matchEntity(how_to_order");
-         sessions[sessionId].newUser = false; // welcome message sent
-         sendTextMessage(senderID, doc[0].messageText);
-         sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
+         sendTextMessage(senderID, doc[0].messageText,500,function(){
+           sessions[sessionId].newUser = false; // welcome message sent
+          sendWatchVideoButton(senderID, "", helpers.getMessage(sessions[sessionId],"1011"));
+         });
+
        });
      }
      console.log("sessions[sessionId];:", sessions[sessionId])
@@ -704,7 +706,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
         function(doc) {
           console.log("+++++++++++++++++++++++++++++  updateEntity done  doc updated:", doc)
           // clear context
-          sendTextMessage(senderID, sessions[sessionId].context.intent + " updated",function() {
+          sendTextMessage(senderID, sessions[sessionId].context.intent + " updated",0,function() {
             sessions[sessionId].context = {}
             return callback();
           });
@@ -719,7 +721,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
         if (selectedIntentList && selectedIntentList[0] && selectedIntentList[0].key == "change_intent"
             && selectedIntentList[0].value == "message" && sessions[sessionId].context.intent) {
           // update intent message
-          sendTextMessage(senderID, "how should i respond to " + sessions[sessionId].context.intent + "?",function(){
+          sendTextMessage(senderID, "how should i respond to " + sessions[sessionId].context.intent + "?",0,function(){
             sessions[sessionId].context = {
               "action": "set_entity_msg",
               "intent": sessions[sessionId].context.intent,
@@ -737,7 +739,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
             // send message only if highConfidence is higher than the stored entity THRESHOLD
             console.log("storedThreshold <> highConfidence => ", doc[0].threshold + " <> ", highConfidence)
             if (doc && doc[0] && doc[0].messageText && doc[0].messageText.includes("not sure")) {
-              sendTextMessage(senderID, "how should i respond?",function(){
+              sendTextMessage(senderID, "how should i respond?",0,function(){
                 // set session context to expect entity respose TODO
                 console.log(" &&&&&&&&&& ASK how to respond. UserObj:", sessions[sessionId].userObj)
                 sessions[sessionId].context = {
@@ -755,7 +757,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
                    // do not tell a new user how to order because that is an auto message
                    return callback();
                  } else {
-                   sendTextMessage(senderID, doc[0].messageText,function(){
+                   sendTextMessage(senderID, doc[0].messageText,1000,function(){
                      return callback();
                 });
                }
@@ -782,7 +784,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   else {
     // new user and we have no clue what user said - just say welcome
     if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
-          sendTextMessage(senderID,(language() == "arabic"? "مرحبا": "Welcome"),function(){
+          sendTextMessage(senderID,(language() == "arabic"? "مرحبا": "Welcome"),100,function(){
             return callback();
           });
     }
@@ -886,7 +888,7 @@ function sendWatchVideoButton(recipientId, btnText, title,cb) {
     }
   }
 
-  timeout = 7003
+  timeout = 3003
 
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
@@ -917,8 +919,8 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
     if (sessions[sessionId].userObj.role == "admin") {
       timeout = 0
     } else {
-      timeout  = 9001
-    }
+      timeout  = 4001
+    }bu
 
     console.log("call callSendAPI **** - wait first for ",timeout)
 
@@ -1096,7 +1098,7 @@ function quickReply(recipientId, titleText) {
 } // sendButton
 
 // sendTextMessage function
-function sendTextMessage(recipientId, messageText,cb) {
+function sendTextMessage(recipientId, messageText,sendTimeout,cb) {
 
   console.log("in sendTextMessage function --> recipentID:", recipientId);
   var messageData = {
@@ -1111,7 +1113,7 @@ function sendTextMessage(recipientId, messageText,cb) {
   if (sessions[sessionId].userObj.role == "admin") {
     timeout = 0
   } else {
-    timeout  = 5002
+    if (!sendTimeout)  timeout  = 2002;
   }
   console.log("call callSendAPI **** - wait first for ",timeout)
   setTimeout(function(){
@@ -1217,18 +1219,13 @@ function processHttpRequest(event,callback) {
   var urls = findUrls(message.text);
   console.log("url found is:",urls[0])
   if (urls.length <= 0 ) return callback();
+
+
   if (urls.length > 1 ) {
-    sendTextMessage(senderID,"please send one URL at a time");
+    sendTextMessage(senderID,"please send one URL at a time",1000);
   }
-
-  try {
-    var domainName = parseDomain(urls[0]);
-  } catch (e) {
-  console.log("error parsing domain:",compareText)
-  console.log("Error: ",e)
-  return callback()
-}
-
+  let msg="Pricing now...نقوم بالتسعير الآن"
+  sendTextMessage(senderID,msg,1000,function(){
 
   if (typeof domainName != 'undefined' && domainName) {
     console.log("<><><> Domain Name:", domainName.domain);
@@ -1584,6 +1581,7 @@ console.log("-------->",msg);
     */
 
   } // valid domainName
+}) // sendTextMessage pricing now
 }
 
 var getChargableWeight = function(weight,length,width,height) {
@@ -1707,7 +1705,7 @@ function genNewUserReport(senderID, daysBack,callback) {
 
       //  sendTextMessage(senderID, a._id.day + "/" + a._id.month + "/" + a._id.year + "-" + a._id.hour + ": NEW=" + a.totalrequests);
       });
-      sendTextMessage(senderID,JSON.stringify(out));
+      sendTextMessage(senderID,JSON.stringify(out),0);
       console.log(out);
 
 
@@ -1779,7 +1777,7 @@ function genPrReport(senderID, daysBack,callback) {
       });
 
       console.log(out);
-      sendTextMessage(senderID,JSON.stringify(out));
+      sendTextMessage(senderID,JSON.stringify(out),0);
       // sendTextMessage(senderID, out);
       callback(out);
     }); // aggregate
@@ -1801,7 +1799,7 @@ function getPricing(senderID,item) {
   //  console.log("***************** List all CATEGORIES MATCH:",cats);
     if(!cats) {
         console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
-        sendTextMessage(senderID,"Could not find matching category")
+        sendTextMessage(senderID,"Could not find matching category",1000)
     } else if (cats && cats.length == 0 ) {
       console.log("***************** NO CATEGORIES MATCH:",searchCat)
       sendTextMessage(senderID,"No matching category");
@@ -2076,17 +2074,19 @@ function getQuotation(senderID,quoteNo) {
     // TODO
     console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
-      sendTextMessage(senderID,quote_obj.item.title + '[' + quote_obj.item.category + ']')
+      sendTextMessage(senderID,quote_obj.item.title + '[' + quote_obj.item.category + ']',1000,function(){
+
       sendPriceButton(senderID,btnTxt,buttonList,function() {
           console.log("************* send all itemInfo");
       })
+        })
     //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
 
       //sendTextMessage(senderID,JSON.stringify(item));
 
       } else {
         // cannot find quotation
-        sendTextMessage(senderID,"Sorry, i am having trouble finding quotation #",quoteNo);
+        sendTextMessage(senderID,"Sorry, i am having trouble finding quotation #"+quoteNo,0);
         return;
       }
     });
@@ -2436,10 +2436,10 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
     console.log("----------> response to targetRecipient:", targetRecipient + " IS btnTxt:" + btnTxt +
       "\n and buttonList is:" + buttonList);
 
-    sendTextMessage(targetRecipient, quote_obj.item.title + '[' + quote_obj.item.category + ']',function(){
+    sendTextMessage(targetRecipient, quote_obj.item.title + '[' + quote_obj.item.category + ']',1000,function(){
       sendPriceButton(targetRecipient, btnTxt, buttonList,function() {
         if ( senderID != targetRecipient ) {
-          sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no ,function() {
+          sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no ,0,function() {
             console.log("ALso send confirm to sender")
           });
         }
