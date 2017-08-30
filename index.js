@@ -2087,11 +2087,12 @@ function getQuotation(senderID,quoteNo) {
           val1: (quote_obj.price.amm_exp*1 < quote_obj.price.amm_std*1?
              quote_obj.price.amm_exp:quote_obj.price.amm_std)
         }
+        quoteLbl = (language() == "arabic"? "سعر":"quotation")
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
         var options = {}
         options.timeZone = 'Asia/Amman'
         quotationStr = (quote_obj.quote_no < 0? "" : "["+
-          quote_obj.quote_date.toLocaleString("en-US",options)+ " (#"+quote_obj.quote_no +") ]");
+          quote_obj.quote_date.toLocaleString("en-US",options)+ " ("+ quoteLbl +"#" +quote_obj.quote_no +") ]");
         console.log("***** quotationStr:",quotationStr)
         btnTxt =  "=>" + btnTxt + '\n' +
           (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
@@ -2448,10 +2449,11 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
     console.log("after inserting quotation quotationNo:",quotationNo)
 
     quote_obj.quote_no = quotationNo;
-
+quoteLbl = (language() == "arabic"? "سعر":"quotation")
     var options = {}
     options.timeZone = 'Asia/Amman'
-  quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",options)+ " (#"+quote_obj.quote_no +") ]");
+  quotationStr = (quote_obj.quote_no < 0? "" : "["+
+  quote_obj.quote_date.toLocaleString("en-US",options)+ " ("+quoteLbl + "#" +quote_obj.quote_no +") ]");
   console.log("***** quotationStr:",quotationStr)
   btnTxt =   "=>" + btnTxt + '\n' +
     (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
