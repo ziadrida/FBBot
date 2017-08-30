@@ -1109,6 +1109,8 @@ function sendTextMessage(recipientId, messageText, sendTimeout, callback) {
       text: messageText
     }
   };
+  if (sendTimeout) console.log("Got timeout sendTimeout:",sendTimeout);
+
   timeout = sendTimeout;
   if (sessions[sessionId].userObj.role == "admin") {
     timeout = 0
@@ -2090,7 +2092,7 @@ function getQuotation(senderID,quoteNo) {
         quotationStr = (quote_obj.quote_no < 0? "" : "["+
           quote_obj.quote_date.toLocaleString("en-US",options)+ " (#"+quote_obj.quote_no +") ]");
         console.log("***** quotationStr:",quotationStr)
-        btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
+        btnTxt =  "=>" + btnTxt + '\n' +
           (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
 
         var buttonList=[]
@@ -2106,7 +2108,9 @@ function getQuotation(senderID,quoteNo) {
     // TODO
     console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
-      sendTextMessage(senderID,quote_obj.item.title + '[' + quote_obj.item.category + ']',1000,function(){
+      sendTextMessage(senderID,quotationStr + '\n' +
+        quote_obj.item.title.substring(0,80) + ' [' +
+        quote_obj.item.category + ']',1000,function() {
 
       sendPriceButton(senderID,btnTxt,buttonList,function() {
           console.log("************* send all itemInfo");
@@ -2448,7 +2452,7 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
     options.timeZone = 'Asia/Amman'
   quotationStr = (quote_obj.quote_no < 0? "" : "["+quote_obj.quote_date.toLocaleString("en-US",options)+ " (#"+quote_obj.quote_no +") ]");
   console.log("***** quotationStr:",quotationStr)
-  btnTxt =  quotationStr + "\n\n==>" + btnTxt + '\n' +
+  btnTxt =   "=>" + btnTxt + '\n' +
     (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
   var buttonList=[]
   var getPricingDetailsPayload = {action: 'getPricingDetails', quotation: quote_obj}
@@ -2468,7 +2472,8 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
     console.log("----------> response to targetRecipient:", targetRecipient + " IS btnTxt:" + btnTxt +
       "\n and buttonList is:" + buttonList);
 
-    sendTextMessage(targetRecipient, quote_obj.item.title + '[' + quote_obj.item.category + ']',1000,function(){
+    sendTextMessage(targetRecipient,quotationStr + '\n'+
+       quote_obj.item.title.substring(0,80)+ ' [' + quote_obj.item.category + ']',1000,function(){
       sendPriceButton(targetRecipient, btnTxt, buttonList,function() {
         if ( senderID != targetRecipient ) {
           sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no ,0,function() {
