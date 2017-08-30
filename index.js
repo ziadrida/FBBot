@@ -1109,7 +1109,7 @@ function sendTextMessage(recipientId, messageText,sendTimeout,cb) {
       text: messageText
     }
   };
-
+  timeout = sendTimeout;
   if (sessions[sessionId].userObj.role == "admin") {
     timeout = 0
   } else {
@@ -1120,7 +1120,9 @@ function sendTextMessage(recipientId, messageText,sendTimeout,cb) {
     console.log("now calling callSendAPI **** - after wait for ",timeout)
     callSendAPI(messageData,function(){
     try {  if (cb) return cb(); } catch(e) { console.log("no callback");}
-  })   } ,timeout);
+  })   } ,timeout).catch(function(e){
+    console.log("<><><><>><><>< ERROR <><><><> setTimeout - err:",e);
+  })
 
 } // sendTextMessage
 
