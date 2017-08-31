@@ -378,7 +378,7 @@ function handleEvent(senderID, event) {
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
     quote_obj = payloadMsg.quotation;
   var pricing = {
-    title: quote_obj.item.title.substring(0,60) + '...',
+    title: quote_obj.item.title.substring(0,80) + '...',
     chargableWeight: 1*quote_obj.item.chargableWeight.toFixed(2),
     shipping: 1*quote_obj.item.shipping.toFixed(2),
     shippingAtOriginMsg_ar: (quote_obj.item.shipping >-1?     "اضافة الى الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
@@ -2484,7 +2484,8 @@ let quote_obj = {
   },
   notes:  pricingMessage
 }
-
+// reduce size of title
+quote_obj.item.title = quote_obj.item.title.substring(0,80);
 // insert new quotation in the database
 // TODO
 console.log("<><> Amman Exp Price - ceil + fixed(2)",Math.ceil(quote_obj.price.amm_exp*1).toFixed(2))
