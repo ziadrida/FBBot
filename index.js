@@ -391,8 +391,8 @@ function handleEvent(senderID, event) {
     tax_amm: (quote_obj.item.category_info.tax_amm * 100).toFixed(1),
     tax_aqaba: (quote_obj.item.category_info.tax_aqaba * 100).toFixed(1),
     aqaba_customs: "0",
-    packageDimensions: 1*quote_obj.item.length.toFixed(1) + ' x ' +
-        1*quote_obj.item.width.toFixed(1) + ' x ' +
+    packageDimensions: 1*quote_obj.item.length.toFixed(1) + 'x' +
+        1*quote_obj.item.width.toFixed(1) + 'x' +
         1*quote_obj.item.height.toFixed(1)
 
   }
@@ -2260,7 +2260,7 @@ function calculatePricing(senderID,item,callback) {
       pricingMessage = pricingMessage + "\nلا يوجد وزن للقطعة!يفى بلدا المصدر"
     }
   }
-  packageDimensions = item.length + ' x '+item.width + ' x '+ item.height + 'inch' ;
+  packageDimensions = item.length + 'x'+item.width + 'x'+ item.height + 'inch' ;
 
   Y2_volumnWeight=-1; // already have chargableWeight
   console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',Z2_chargableWeight.toFixed(2)+'/'+AD2_HandlingCostUSD.toFixed(2));
