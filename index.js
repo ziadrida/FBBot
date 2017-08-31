@@ -333,10 +333,10 @@ function handleEvent(senderID, event) {
 
     msgCode = "1010"; // all prices
     valParams = {
-      val1: Mat.ceil(quote_obj.price.amm_exp*1).toFixed(2),
-      val2: Mat.ceil(quote_obj.price.amm_std*1).toFixed(2),
-      val3: Mat.ceil(quote_obj.price.aq_std*1).toFixed(2),
-      val4: Mat.ceil(quote_obj.price.aq_exp*1).toFixed(2)
+      val1: Math.ceil(quote_obj.price.amm_exp*1).toFixed(2),
+      val2: Math.ceil(quote_obj.price.amm_std*1).toFixed(2),
+      val3: Math.ceil(quote_obj.price.aq_std*1).toFixed(2),
+      val4: Math.ceil(quote_obj.price.aq_exp*1).toFixed(2)
     }
 
     quoteLbl = (language() == "arabic"? "سعر":"quotation")
