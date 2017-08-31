@@ -76,18 +76,18 @@ getMessage: function(session,textCode,valObj ) {
           return "Category not listed above"
           break;
         case "1003":
-          return  "Personal express price 3-5 days: "+valObj.val1 + " JOD"  ;
+          return  "Personal express price 3-5 days: "+Math.ceil().valObj.val1.toFixed(2) + " JOD"  ;
         case "1004":
-            return "Standard express price 7-14 days: "+valObj.val1 + " JOD" ;
+            return "Standard express price 7-14 days: "+Math.ceil().valObj.val1.toFixed(2) + " JOD" ;
 
         case "1010":
-            return  "Personal express price 3-5 days: "+valObj.val1 + " JOD" +
+            return  "Personal express price 3-5 days: "+Math.ceil().valObj.val1.toFixed(2) + " JOD" +
             "\n"+
-            "Standard express price 7-14 days: "+valObj.val2 + " JOD" +
+            "Standard express price 7-14 days: "+Math.ceil().valObj.val2.toFixed(2) + " JOD" +
             "\n"+
-            "Aqaba price 14-24 days: "+valObj.val3 + " JOD" +
+            "Aqaba price 14-24 days: "+Math.ceil().valObj.val3.toFixed(2) + " JOD" +
             "\n"+
-            "Aqaba personal express 5-7 days days: "+valObj.val4 + " JOD" ;
+            "Aqaba personal express 5-7 days days: "+Math.ceil().valObj.val4.toFixed(2) + " JOD" ;
 
          case "1011":
             return "Video"
@@ -177,28 +177,28 @@ getMessage1: function(session,textCode,valObj ,callback) {
         case "1003":
         btnTxt ="\n" +
         "   سعر الطلب الخاص 3-5 ايام: "+
-        valObj.val1 +  " دينار " ;
+        Math.ceil().valObj.val1.toFixed(2) +  " دينار " ;
 
           return callback(  btnTxt);
         case "1004":
         btnTxt =  "\n" +
         "   سعر الطلب العادى 7-14 يوم: "+
-        valObj.val1 +  " دينار " ;
+        Math.ceil().valObj.val1.toFixed(2) +  " دينار " ;
 
           return callback(  btnTxt);
         case "1010":
         btnTxt =
         "   سعر الطلب الخاص 3-5 ايام: "+
-        valObj.val1 +  " دينار " ;
+        Math.ceil().valObj.val1.toFixed(2) +  " دينار " ;
         btnTxt = btnTxt + "\n" +
         "   سعر الطلب العادى 7-14 يوم: "+
-        valObj.val2 +  " دينار " ;
+        Math.ceil().valObj.val2.toFixed(2) +  " دينار " ;
         btnTxt = btnTxt + "\n" +
         "   سعر الطلب للعقبة 14-24 يوم: "+
-        valObj.val3 +  " دينار " ;
+        Math.ceil().valObj.val3.toFixed(2) +  " دينار " ;
         btnTxt = btnTxt + "\n" +
         "   سعر الطلب الخاص للعقبة 5-7 يوم: "+
-        valObj.val4 +  " دينار " ;
+        Math.ceil().valObj.val4.toFixed(2) +  " دينار " ;
           return callback(  btnTxt);
 
         case "1011":
