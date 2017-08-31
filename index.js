@@ -333,10 +333,10 @@ function handleEvent(senderID, event) {
 
     msgCode = "1010"; // all prices
     valParams = {
-      val1: Math.ceil(quote_obj.price.amm_exp*1).toFixed(2),
-      val2: Math.ceil(quote_obj.price.amm_std*1).toFixed(2),
-      val3: Math.ceil(quote_obj.price.aq_std*1).toFixed(2),
-      val4: Math.ceil(quote_obj.price.aq_exp*1).toFixed(2)
+      val1: Math.ceil(quote_obj.price.amm_exp*1).toFixed(1),
+      val2: Math.ceil(quote_obj.price.amm_std*1).toFixed(1),
+      val3: Math.ceil(quote_obj.price.aq_std*1).toFixed(1),
+      val4: Math.ceil(quote_obj.price.aq_exp*1).toFixed(1)
     }
 
     quoteLbl = (language() == "arabic"? "سعر":"quotation")
@@ -374,7 +374,7 @@ function handleEvent(senderID, event) {
 
     var getMorePricesPayload = {action: 'getMorePrices', quotation: payloadMsg.quotation }
     buttonList.push(helpers.getButton(sessions[sessionId],'getMorePrices',getMorePricesPayload,
-        payloadMsg.quotation.price.min_price));
+        Math.ceil(payloadMsg.quotation.price.min_price).toFixed(0)));
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
     quote_obj = payloadMsg.quotation;
   var pricing = {
@@ -2140,7 +2140,7 @@ function getQuotation(senderID,quoteNo) {
 
         var valParams = {
           val1: (quote_obj.price.amm_exp*1 < quote_obj.price.amm_std*1?
-             Math.ceil(quote_obj.price.amm_exp*1).toFixed(2):Math.ceil(quote_obj.price.amm_std*1).toFixed(2))
+             Math.ceil(quote_obj.price.amm_exp*1).toFixed(1):Math.ceil(quote_obj.price.amm_std*1).toFixed(1))
         }
         quoteLbl = (language() == "arabic"? "سعر":"quotation")
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
@@ -2159,7 +2159,7 @@ function getQuotation(senderID,quoteNo) {
 
         var getMorePricesPayload = {action: 'getMorePrices',quotation: quote_obj }
         buttonList.push(helpers.getButton(sessions[sessionId],
-              'getMorePrices',getMorePricesPayload,quote_obj.price.min_price));
+              'getMorePrices',getMorePricesPayload,Math.ceil(quote_obj.price.min_price).toFixed(0)));
     //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
     //  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
     // TODO
@@ -2494,7 +2494,7 @@ msgCode = (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1? "1003":"1004")
 
 var valParams = {
   val1: (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1?
-     Math.ceil(quote_obj.price.amm_exp*1).toFixed(2):Math.ceil(quote_obj.price.amm_std*1).toFixed(2))
+     Math.ceil(quote_obj.price.amm_exp*1).toFixed(1):Math.ceil(quote_obj.price.amm_std*1).toFixed(1))
 }
 
 console.log("<><><> quote_obj:",JSON.stringify(quote_obj));
@@ -2522,7 +2522,7 @@ quoteLbl = (language() == "arabic"? "سعر":"quotation")
 
   var getMorePricesPayload = {action: 'getMorePrices',quotation: quote_obj }
   buttonList.push(helpers.getButton(sessions[sessionId],
-        'getMorePrices',getMorePricesPayload,quote_obj.price.min_price));
+        'getMorePrices',getMorePricesPayload,Math.ceil(quote_obj.price.min_price).toFixed(0)));
 //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
 //  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
 // TODO
