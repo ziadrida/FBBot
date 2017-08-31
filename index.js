@@ -2493,7 +2493,7 @@ msgCode = (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1? "1003":"1004")
 
 var valParams = {
   val1: (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1?
-     Math.cei(quote_obj.price.amm_exp*1).toFixed(2):Math.ceil(quote_obj.price.amm_std*1).toFixed(2))
+     Math.ceil(quote_obj.price.amm_exp*1).toFixed(2):Math.ceil(quote_obj.price.amm_std*1).toFixed(2))
 }
 
 console.log("<><><> quote_obj:",JSON.stringify(quote_obj));
