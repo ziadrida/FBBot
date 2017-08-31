@@ -357,7 +357,7 @@ function handleEvent(senderID, event) {
       function() {
         // send quotation
         sendPriceButton(senderID, btnTxt, buttonList, 200, function() {
-          console.log("************* send all itemInfo");
+          console.log("***3********** send all itemInfo");
         })
       })
 
@@ -476,11 +476,10 @@ btnTxt =  "=>" + btnTxt + '\n' +
 
   sendTextMessage(senderID, quotationStr + '\n' +
   quote_obj.item.title.substring(0, 80) + ' [' +
-  quote_obj.item.category + ']', 0,
-  function() {
+  quote_obj.item.category + ']', 0, function() {
     // send quotation
     sendPriceButton(senderID, btnTxt, buttonList, 200, function() {
-      console.log("************* send all itemInfo");
+      console.log("***4********** send all itemInfo");
     })
   })
   //--------------
@@ -2172,7 +2171,7 @@ function getQuotation(senderID,quoteNo) {
 
           // send quotation
           sendPriceButton(senderID, btnTxt, buttonList, 0, function() {
-            console.log("************* send all itemInfo");
+            console.log("****1********* send all itemInfo");
           })
         })
     //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
@@ -2542,15 +2541,11 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
           });
         }
         //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
-        console.log("************* send all itemInfo");
+        console.log("***2********** send all itemInfo");
         return callback();
       })
     })
-
-
 });
-
-
 }); // insert quotation
 } // calculatePricing
 
