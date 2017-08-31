@@ -379,11 +379,11 @@ function handleEvent(senderID, event) {
     quote_obj = payloadMsg.quotation;
   var pricing = {
     title: quote_obj.item.title.substring(0,60) + '...',
-    chargableWeight: quote_obj.item.chargableWeight,
-    shipping: quote_obj.item.shipping,
+    chargableWeight: 1*quote_obj.item.chargableWeight.toFixed(2),
+    shipping: 1*quote_obj.item.shipping.toFixed(2),
     shippingAtOriginMsg_ar: (quote_obj.item.shipping >-1?     "اضافة الى الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
     shippingAtOriginMsg: (quote_obj.item.shipping <0? 'does not include shipping at origin (if any)':
-            'plus shipping at origin of:' +quote_obj.item.shipping +' USD'),
+            'plus shipping at origin of: ' +1*quote_obj.item.shipping.toFixed(2) +' USD'),
     price: quote_obj.item.price,
     category_name: quote_obj.item.category_info.category_name,
     category_name_ar: quote_obj.item.category_info.category_name_ar,
@@ -391,9 +391,9 @@ function handleEvent(senderID, event) {
     tax_amm: (quote_obj.item.category_info.tax_amm * 100).toFixed(1),
     tax_aqaba: (quote_obj.item.category_info.tax_aqaba * 100).toFixed(1),
     aqaba_customs: "0",
-    packageDimensions: quote_obj.item.length.toFixed(1) + 'x' +
-        quote_obj.item.width.toFixed(1) + 'x' +
-        quote_obj.item.height.toFixed(1)
+    packageDimensions: 1*quote_obj.item.length.toFixed(1) + ' x ' +
+        1*quote_obj.item.width.toFixed(1) + ' x ' +
+        1*quote_obj.item.height.toFixed(1)
 
   }
 
@@ -2260,7 +2260,7 @@ function calculatePricing(senderID,item,callback) {
       pricingMessage = pricingMessage + "\nلا يوجد وزن للقطعة!يفى بلدا المصدر"
     }
   }
-  packageDimensions = item.length + 'x'+item.width + 'x'+ item.height + 'inch' ;
+  packageDimensions = item.length + ' x '+item.width + ' x '+ item.height + 'inch' ;
 
   Y2_volumnWeight=-1; // already have chargableWeight
   console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',Z2_chargableWeight.toFixed(2)+'/'+AD2_HandlingCostUSD.toFixed(2));
