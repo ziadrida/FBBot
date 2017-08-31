@@ -353,7 +353,8 @@ function handleEvent(senderID, event) {
 
     sendTextMessage(senderID, quotationStr + '\n' +
       quote_obj.item.title.substring(0, 80) + ' [' +
-      quote_obj.item.category + ']', 0,
+      (language()=="arabic" ? quote_obj.item.category_ar :quote_obj.item.category) +
+       ']', 0,
       function() {
         // send quotation
         sendPriceButton(senderID, btnTxt, buttonList, 200, function() {
@@ -476,7 +477,8 @@ btnTxt =  "=>" + btnTxt + '\n' +
 
   sendTextMessage(senderID, quotationStr + '\n' +
   quote_obj.item.title.substring(0, 80) + ' [' +
-  quote_obj.item.category + ']', 0, function() {
+  (language()=="arabic" ? quote_obj.item.category_ar :quote_obj.item.category) +
+  ']', 0, function() {
     // send quotation
     sendPriceButton(senderID, btnTxt, buttonList, 200, function() {
       console.log("***4********** send all itemInfo");
@@ -1889,10 +1891,12 @@ function getPricing(senderID,item) {
     if(!cats) {
         console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
         sendTextMessage(senderID,"Could not find matching category",1000)
+        return;
     } else if (cats && cats.length == 0 ) {
       console.log("***************** NO CATEGORIES MATCH:",searchCat)
       sendTextMessage(senderID,"No matching category");
-    }  if (cats && cats.length == 1 ) {
+      return;
+    } else if (cats && cats.length == 1 ) {
       // got one match - use it
       console.log(" ***> selected category:",cats[0].category_name)
       //sendTextMessage(senderID,"Category:"+cats[0].category_name+"  arabic:"+cats[0].category_name_ar)
@@ -1921,7 +1925,7 @@ function getPricing(senderID,item) {
       item.category_info.keywords='';
 
       payload = {action: 'getPricing',
-          item: item
+          item: item.substring(0,80)
       }
       payloadStr = JSON.stringify(payload);
       catList.push({
@@ -1954,9 +1958,6 @@ function getPricing(senderID,item) {
     //sendTextMessage(senderID,"Pricing now...");
 
   });
-
-
-
 
 //  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
 } // end function getPricing
@@ -2534,7 +2535,9 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
       "\n and buttonList is:" + buttonList);
 
     sendTextMessage(targetRecipient,quotationStr + '\n'+
-       quote_obj.item.title.substring(0,80)+ ' [' + quote_obj.item.category + ']',1000,function(){
+       quote_obj.item.title.substring(0,80)+ ' [' +
+       (language()=="arabic" ? quote_obj.item.category_ar :quote_obj.item.category) +
+       ']',1000,function(){
       sendPriceButton(targetRecipient, btnTxt, buttonList,0,function() {
         if ( senderID != targetRecipient ) {
           sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no ,0,function() {
