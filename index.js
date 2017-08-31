@@ -2488,6 +2488,7 @@ let quote_obj = {
 
 // insert new quotation in the database
 // TODO
+console.log("<><> Amman Exp Price - ceil + fixed(2)",Math.ceil(quote_obj.price.amm_exp*1).toFixed(2))
 
 msgCode = (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1? "1003":"1004")
 
@@ -2498,7 +2499,7 @@ var valParams = {
 
 console.log("<><><> quote_obj:",JSON.stringify(quote_obj));
 
-console.log("-=>valParams:",valParams)
+console.log("1=>valParams:",valParams)
 var btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams);
 
 console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)

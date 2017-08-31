@@ -5,6 +5,8 @@ module.exports = {
     const priceDetailsLbl = ["تفاصيل السعر","price details"];
     const confirmOrderLbl = ["اضف للطلب", "Buy"];
 
+
+
     console.log("*** in getButton btnType/titleSub1:",btnType+'/'+titleSub1)
     var lang=0;
     var buttonTitle = "Ok";
@@ -65,7 +67,7 @@ module.exports = {
 
 getMessage: function(session,textCode,valObj ) {
   let btnTxn="";
-    console.log("==> in getMessage textCode/valObj:",textCode + '/' +valObj);
+    console.log("4==> in getMessage textCode/valObj:",textCode + '/' +JSON.stringify(valObj));
   if (session.userObj && session.userObj.locale &&
     session.userObj.locale.toLowerCase().includes("en")) {
       // english
@@ -76,18 +78,18 @@ getMessage: function(session,textCode,valObj ) {
           return "Category not listed above"
           break;
         case "1003":
-          return  "Personal express price 3-5 days: "+Math.ceil().valObj.val1.toFixed(2) + " JOD"  ;
+          return  "Personal express price 3-5 days: "+ valObj.val1 + " JOD"  ;
         case "1004":
-            return "Standard express price 7-14 days: "+Math.ceil().valObj.val1.toFixed(2) + " JOD" ;
+            return "Standard express price 7-14 days: "+ valObj.val1 + " JOD" ;
 
         case "1010":
-            return  "Personal express price 3-5 days: "+Math.ceil().valObj.val1.toFixed(2) + " JOD" +
+            return  "Personal express price 3-5 days: "+valObj.val1 + " JOD" +
             "\n"+
-            "Standard express price 7-14 days: "+Math.ceil().valObj.val2.toFixed(2) + " JOD" +
+            "Standard express price 7-14 days: "+valObj.val2 + " JOD" +
             "\n"+
-            "Aqaba price 14-24 days: "+Math.ceil().valObj.val3.toFixed(2) + " JOD" +
+            "Aqaba price 14-24 days: "+valObj.val3 + " JOD" +
             "\n"+
-            "Aqaba personal express 5-7 days days: "+Math.ceil().valObj.val4.toFixed(2) + " JOD" ;
+            "Aqaba personal express 5-7 days days: "+valObj.val4 + " JOD" ;
 
          case "1011":
             return "Video"
@@ -138,7 +140,7 @@ getMessage: function(session,textCode,valObj ) {
 
 },
 getMessage1: function(session,textCode,valObj ,callback) {
-    console.log("==> in getMessage textCode/valObj:",textCode + '/' +valObj);
+    console.log("==> in getMessage1 with callback  textCode/valObj:",textCode + '/' +valObj);
   if (session.userObj && session.userObj.locale &&
     session.userObj.locale.toLowerCase().includes("en")) {
       // english
@@ -177,28 +179,28 @@ getMessage1: function(session,textCode,valObj ,callback) {
         case "1003":
         btnTxt ="\n" +
         "   سعر الطلب الخاص 3-5 ايام: "+
-        Math.ceil().valObj.val1.toFixed(2) +  " دينار " ;
+        valObj.val1 +  " دينار " ;
 
           return callback(  btnTxt);
         case "1004":
         btnTxt =  "\n" +
         "   سعر الطلب العادى 7-14 يوم: "+
-        Math.ceil().valObj.val1.toFixed(2) +  " دينار " ;
+        valObj.val1 +  " دينار " ;
 
           return callback(  btnTxt);
         case "1010":
         btnTxt =
         "   سعر الطلب الخاص 3-5 ايام: "+
-        Math.ceil().valObj.val1.toFixed(2) +  " دينار " ;
+        valObj.val1 +  " دينار " ;
         btnTxt = btnTxt + "\n" +
         "   سعر الطلب العادى 7-14 يوم: "+
-        Math.ceil().valObj.val2.toFixed(2) +  " دينار " ;
+        valObj.val2 +  " دينار " ;
         btnTxt = btnTxt + "\n" +
         "   سعر الطلب للعقبة 14-24 يوم: "+
-        Math.ceil().valObj.val3.toFixed(2) +  " دينار " ;
+        valObj.val3 +  " دينار " ;
         btnTxt = btnTxt + "\n" +
         "   سعر الطلب الخاص للعقبة 5-7 يوم: "+
-        Math.ceil().valObj.val4.toFixed(2) +  " دينار " ;
+        valObj.val4 +  " دينار " ;
           return callback(  btnTxt);
 
         case "1011":
