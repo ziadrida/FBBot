@@ -381,9 +381,9 @@ function handleEvent(senderID, event) {
     title: quote_obj.item.title.substring(0,60) + '...',
     chargableWeight: quote_obj.item.chargableWeight,
     shipping: quote_obj.item.shipping,
-    shippingAtOriginMsg_ar: (quote_obj.item.shipping >-1?     "يتضمن الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
+    shippingAtOriginMsg_ar: (quote_obj.item.shipping >-1?     "اضافة الى الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
     shippingAtOriginMsg: (quote_obj.item.shipping <0? 'does not include shipping at origin (if any)':
-            'includes shipping at origin of:' +quote_obj.item.shipping +' USD'),
+            'plus shipping at origin of:' +quote_obj.item.shipping +' USD'),
     price: quote_obj.item.price,
     category_name: quote_obj.item.category_info.category_name,
     category_name_ar: quote_obj.item.category_info.category_name_ar,
@@ -400,13 +400,20 @@ function handleEvent(senderID, event) {
   var detailsMsg_en =
   `
 Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
+
 Chargable weight: ${pricing.chargableWeight} KG. (shipping weight may be higher than actual product weight)
+
 Dimensions ${pricing.packageDimensions} inch
+
 Category: ${pricing.category_name}
+
 Amman customs of ${pricing.amm_customs}% and tax:${pricing.tax_amm}%
 Aqaba customs 0% and tax ${pricing.aqaba_tax}%
+
 Warranty is at origin (add ${warranty_price}% for local warranty)
+
 Prices include the actual item price + all shipping + all taxes and expenses.
+
 Our guarantee:
 1. best price
 2. price will not change upon arrival
@@ -419,19 +426,19 @@ var pricingDetailMsg_ar =
    pricing.shippingAtOriginMsg_ar +
        "\n" +
       "  وزن الشحن: <وزن>كغم قد يكون أعلى من وزن القطعة"+
-         "\n" +
+         "\n\n" +
             "   <ابعاد> "+
-           "\n" +
+           "\n\n" +
            " الصنف: <صنف> " +
-           "\n" +
+           "\n\n" +
            "عمان: الجمرك <عمان جمرك>% ،ضريبةالمبيعات %<عمان مبيعات>" +
            "\n" +
            "العقبة: الجمرك 0% وضريبةالمبيعات %<عقبة مبيعات>  "+
-           "\n" +
+           "\n\n" +
 			" السعر يشمل سعر القطعة+الشحن+الجمرك+الضريبة+ كل المصاريف"	+
       "\n" +
       "الكفالة فى بلد المصدر. للكفالة المحلية الإختيارية أضف %15.0"+
-          "\n" +
+          "\n\n" +
 ".نضمن الوصول وغير مكسور إن شاء الله  - سعر القطعة  شامل ومضمون الا يتغير - نضمن أفضل الأسعار";
 var detailsMsg_ar = pricingDetailMsg_ar;
 
