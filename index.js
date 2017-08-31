@@ -333,10 +333,10 @@ function handleEvent(senderID, event) {
 
     msgCode = "1010"; // all prices
     valParams = {
-      val1: quote_obj.price.amm_exp*1,
-      val2: quote_obj.price.amm_std*1,
-      val3: quote_obj.price.aq_std*1,
-      val4: quote_obj.price.aq_exp*1
+      val1: Mat.ceil(quote_obj.price.amm_exp*1).toFixed(2),
+      val2: Mat.ceil(quote_obj.price.amm_std*1).toFixed(2),
+      val3: Mat.ceil(quote_obj.price.aq_std*1).toFixed(2),
+      val4: Mat.ceil(quote_obj.price.aq_exp*1).toFixed(2)
     }
 
     quoteLbl = (language() == "arabic"? "سعر":"quotation")
@@ -2140,7 +2140,7 @@ function getQuotation(senderID,quoteNo) {
 
         var valParams = {
           val1: (quote_obj.price.amm_exp*1 < quote_obj.price.amm_std*1?
-             quote_obj.price.amm_exp:quote_obj.price.amm_std)
+             Math.ceil(quote_obj.price.amm_exp*1).toFixed(2):Math.ceil(quote_obj.price.amm_std*1).toFixed(2))
         }
         quoteLbl = (language() == "arabic"? "سعر":"quotation")
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
@@ -2493,7 +2493,7 @@ msgCode = (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1? "1003":"1004")
 
 var valParams = {
   val1: (quote_obj.price.amm_exp*1 <quote_obj.price.amm_std*1?
-     quote_obj.price.amm_exp:quote_obj.price.amm_std)
+     Math.cei(quote_obj.price.amm_exp*1).toFixed(2):Math.ceil(quote_obj.price.amm_std*1).toFixed(2))
 }
 
 console.log("<><><> quote_obj:",JSON.stringify(quote_obj));
