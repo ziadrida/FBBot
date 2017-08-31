@@ -376,28 +376,29 @@ function handleEvent(senderID, event) {
     buttonList.push(helpers.getButton(sessions[sessionId],'getMorePrices',getMorePricesPayload,
         payloadMsg.quotation.price.min_price));
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
+    quote_obj = payloadMsg.quotation;
   var pricing = {
-    title: payloadMsg.quotation.item.title.substring(0,60) + '...',
-    chargableWeight: payloadMsg.quotation.item.chargableWeight,
-    shipping: payloadMsg.quotation.item.shipping,
-    shippingAtOriginMsg_ar: (payloadMsg.quotation.item.shipping >-1?     "يتضمن الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
-    shippingAtOriginMsg: (payloadMsg.quotation.item.shipping <0? 'does not include shipping at origin (if any)':
-            'includes shipping at origin of:' +payloadMsg.quotation.item.shipping +' USD'),
-    price: payloadMsg.quotation.item.price,
-    category_name: payloadMsg.quotation.item.category_info.category_name,
-    category_name_ar: payloadMsg.quotation.item.category_info.category_name_ar,
-    amm_customs: (payloadMsg.quotation.item.category_info.customs * 100).toFixed(1),
-    tax_amm: (payloadMsg.quotation.item.category_info.tax_amm * 100).toFixed(1),
-    tax_aqaba: (payloadMsg.quotation.item.category_info.tax_aqaba * 100).toFixed(1),
+    title: quote_obj.item.title.substring(0,60) + '...',
+    chargableWeight: quote_obj.item.chargableWeight,
+    shipping: quote_obj.item.shipping,
+    shippingAtOriginMsg_ar: (quote_obj.item.shipping >-1?     "يتضمن الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
+    shippingAtOriginMsg: (quote_obj.item.shipping <0? 'does not include shipping at origin (if any)':
+            'includes shipping at origin of:' +quote_obj.item.shipping +' USD'),
+    price: quote_obj.item.price,
+    category_name: quote_obj.item.category_info.category_name,
+    category_name_ar: quote_obj.item.category_info.category_name_ar,
+    amm_customs: (quote_obj.item.category_info.customs * 100).toFixed(1),
+    tax_amm: (quote_obj.item.category_info.tax_amm * 100).toFixed(1),
+    tax_aqaba: (quote_obj.item.category_info.tax_aqaba * 100).toFixed(1),
     aqaba_customs: "0",
-    packageDimensions: payloadMsg.quotation.item.length.toFixed(1) + 'x' +
-        payloadMsg.quotation.item.width.toFixed(1) + 'x' +
-        payloadMsg.quotation.item.height.toFixed(1)
+    packageDimensions: quote_obj.item.length.toFixed(1) + 'x' +
+        quote_obj.item.width.toFixed(1) + 'x' +
+        quote_obj.item.height.toFixed(1)
 
   }
-  shortTitle =  pricing.title.substring(0,60) + '\n' + "#"+payloadMsg.quotation.quote_no;
+
   var detailsMsg_en =
-  `${shortTitle}
+  `
 Price at origin:${pricing.price} USD ;${pricing.shippingAtOriginMsg}
 Chargable weight: ${pricing.chargableWeight} KG. (shipping weight may be higher than actual product weight)
 Dimensions ${pricing.packageDimensions} inch
@@ -412,7 +413,6 @@ Our guarantee:
 3. arrival with no breakage`;
 
 var pricingDetailMsg_ar =
-  pricing.title.substring(0,80)+
        "\n" +
       "  السعر من المصدر$<سعر>" +
              "\n" +
@@ -449,12 +449,35 @@ detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqab
 
   //  btnTxt = JSON.stringify(detailsMsg_en);
 
-detailsMsg =  (language() == "english"? detailsMsg_en:detailsMsg_ar);
 
- sendPriceButton(senderID, detailsMsg, buttonList,0,function() {
-   return;
 
- });
+//
+// TODO
+//------------------
+btnTxt =  (language() == "english"? detailsMsg_en:detailsMsg_ar);
+quoteLbl = (language() == "arabic"? "سعر":"quotation")
+
+var options = {}
+options.timeZone = 'Asia/Amman'
+
+quotationStr = (quote_obj.quote_no < 0? "" : "["+
+  quote_obj.quote_date.toLocaleString("en-US",options)+ " ("+ quoteLbl +"#" +quote_obj.quote_no +") ]");
+console.log("***** quotationStr:",quotationStr)
+
+btnTxt =  "=>" + btnTxt + '\n' +
+  (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
+
+  sendTextMessage(senderID, quotationStr + '\n' +
+  quote_obj.item.title.substring(0, 80) + ' [' +
+  quote_obj.item.category + ']', 0,
+  function() {
+    // send quotation
+    sendPriceButton(senderID, btnTxt, buttonList, 200, function() {
+      console.log("************* send all itemInfo");
+    })
+  })
+  //--------------
+
 }
 
   // check the action from the postback if any
