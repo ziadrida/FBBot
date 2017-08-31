@@ -948,7 +948,7 @@ function sendWatchVideoButton(recipientId, btnText, title,cb) {
 } // sendWatchVideoButton
 
 function sendPriceButton(recipientId, btnText,buttonList,sendTimeout,cb) {
-  console.log("===============> in  sendPriceButton buttonList:",buttonList);
+  console.log("===============> in  sendPriceButton buttonList:",JSON.stringify(buttonList));
     console.log("===============> in  sendPriceButton btnTxt:",btnText);
   let messageData = {
     "recipient": {
@@ -1219,8 +1219,8 @@ function callSendAPI(messageData,callback) {
         messageId, recipientId);
           if (callback) return callback();
       } else {
-        console.error("<><><> Unable to send message. <><><>statusCode:", response.statusCode);
-        console.error("<><><> Unable to send message. <><><>statusCode:", error);
+        console.error("<><><> Unable to send message. <>1<><>statusCode:", response.statusCode);
+        console.error("<><><> Unable to send message. <><><>response:", response);
           if (callback) return callback();
         //console.error(response);
         //console.error(error);
