@@ -329,19 +329,38 @@ function handleEvent(senderID, event) {
     //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
     //  btnTxt = "Amman Express 3-5 days:"+finalAmmanPriceStdwTax.toFixed(2);
 
+    quote_obj = payloadMsg.quotation;
+
     msgCode = "1010"; // all prices
     valParams = {
-      val1: payloadMsg.quotation.price.amm_exp*1,
-      val2: payloadMsg.quotation.price.amm_std*1,
-      val3: payloadMsg.quotation.price.aq_std*1,
-      val4: payloadMsg.quotation.price.aq_exp*1
+      val1: quote_obj.price.amm_exp*1,
+      val2: quote_obj.price.amm_std*1,
+      val3: quote_obj.price.aq_std*1,
+      val4: quote_obj.price.aq_exp*1
     }
 
+    quoteLbl = (language() == "arabic"? "سعر":"quotation")
     btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
-    btnTxt = "#"+ payloadMsg.quotation.quote_no + "\n" + btnTxt ;
-    sendPriceButton(senderID,btnTxt,buttonList,function() {
+    var options = {}
+    options.timeZone = 'Asia/Amman'
+    quotationStr = (quote_obj.quote_no < 0? "" : "["+
+      quote_obj.quote_date.toLocaleString("en-US",options)+ " ("+ quoteLbl +"#" +quote_obj.quote_no +") ]");
+    console.log("***** quotationStr:",quotationStr)
 
-    })
+  //  btnTxt = quoteLbl+"#"+ payloadMsg.quotation.quote_no + "\n" + btnTxt ;
+    btnTxt =  "=>" + btnTxt + '\n' +
+      (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
+
+    sendTextMessage(senderID, quotationStr + '\n' +
+      quote_obj.item.title.substring(0, 80) + ' [' +
+      quote_obj.item.category + ']', 0,
+      function() {
+        // send quotation
+        sendPriceButton(senderID, btnTxt, buttonList, 200, function() {
+          console.log("************* send all itemInfo");
+        })
+      })
+
   }
 
   if(jsonpayload && payloadMsg.action == 'getPricingDetails') {
@@ -432,8 +451,9 @@ detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqab
 
 detailsMsg =  (language() == "english"? detailsMsg_en:detailsMsg_ar);
 
- sendPriceButton(senderID, detailsMsg, buttonList,function() {
+ sendPriceButton(senderID, detailsMsg, buttonList,0,function() {
    return;
+
  });
 }
 
@@ -898,7 +918,7 @@ function sendWatchVideoButton(recipientId, btnText, title,cb) {
     }) }   ,timeout);
 } // sendWatchVideoButton
 
-function sendPriceButton(recipientId, btnText,buttonList,cb) {
+function sendPriceButton(recipientId, btnText,buttonList,sendTimeout,cb) {
   console.log("===============> in  sendPriceButton buttonList:",buttonList);
     console.log("===============> in  sendPriceButton btnTxt:",btnText);
   let messageData = {
@@ -916,13 +936,18 @@ function sendPriceButton(recipientId, btnText,buttonList,cb) {
       }
       }
     }
+
+    if (sendTimeout) console.log("Got timeout sendTimeout:",sendTimeout);
+
+    timeout = sendTimeout;
     if (sessions[sessionId].userObj.role == "admin") {
       timeout = 0
     } else {
-      timeout  = 4001
+      if (!sendTimeout) timeout = 4002;
     }
 
-    console.log("call callSendAPI **** - wait first for ",timeout)
+    console.log("call callSendAPI **** - wait first for ", timeout)
+
 
     setTimeout( function() {
     console.log("now calling callSendAPI **** - after wait")
@@ -2110,13 +2135,15 @@ function getQuotation(senderID,quoteNo) {
     // TODO
     console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
-      sendTextMessage(senderID,quotationStr + '\n' +
-        quote_obj.item.title.substring(0,80) + ' [' +
-        quote_obj.item.category + ']',1000,function() {
+      sendTextMessage(senderID, quotationStr + '\n' +
+        quote_obj.item.title.substring(0, 80) + ' [' +
+        quote_obj.item.category + ']', 1000,
+        function() {
 
-      sendPriceButton(senderID,btnTxt,buttonList,function() {
-          console.log("************* send all itemInfo");
-      })
+          // send quotation
+          sendPriceButton(senderID, btnTxt, buttonList, 0, function() {
+            console.log("************* send all itemInfo");
+          })
         })
     //  sendTextMessage(senderID,"Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage);
 
@@ -2477,7 +2504,7 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
     sendTextMessage(targetRecipient,quotationStr + '\n'+
        quote_obj.item.title.substring(0,80)+ ' [' + quote_obj.item.category + ']',1000,function(){
-      sendPriceButton(targetRecipient, btnTxt, buttonList,function() {
+      sendPriceButton(targetRecipient, btnTxt, buttonList,0,function() {
         if ( senderID != targetRecipient ) {
           sendTextMessage(senderID,"Sent quotation to customer quotation# " + quote_obj.quote_no ,0,function() {
             console.log("ALso send confirm to sender")

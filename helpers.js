@@ -1,11 +1,9 @@
 module.exports = {
 
   getButton: function(session,btnType,payload,titleSub1) {
-    const morePricesLbl = ["اسعار تبدأ من دأ","Prices from JD "];
+    const morePricesLbl = ["اسعار من ","Prices from "];
     const priceDetailsLbl = ["تفاصيل السعر","price details"];
     const confirmOrderLbl = ["اضف للطلب", "Buy"];
-
-
 
     console.log("*** in getButton btnType/titleSub1:",btnType+'/'+titleSub1)
     var lang=0;
