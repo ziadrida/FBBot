@@ -704,6 +704,8 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
       console.log("<=== After processHttpRequest")
       return;
     });
+// TODO should we return 
+      return;
   } // end of if http
 
 
