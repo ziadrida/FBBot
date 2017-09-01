@@ -352,7 +352,7 @@ function handleEvent(senderID, event) {
       (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
 
     sendTextMessage(senderID, quotationStr + '\n' +
-      quote_obj.item.title.substring(0, 80) + ' [' +
+      quote_obj.item.title.substring(0, 60) + ' [' +
       (language()=="arabic" ? quote_obj.item.category_ar :quote_obj.item.category) +
        ']', 0,
       function() {
@@ -379,7 +379,7 @@ function handleEvent(senderID, event) {
   //  btnTxt = "Final Amman Price:"+finalAmmanPriceStdwTax.toFixed(2) + '\n' + pricingMessage;
     quote_obj = payloadMsg.quotation;
   var pricing = {
-    title: quote_obj.item.title.substring(0,80) + '...',
+    title: quote_obj.item.title.substring(0,60) + '...',
     chargableWeight: 1*quote_obj.item.chargableWeight.toFixed(2),
     shipping: 1*quote_obj.item.shipping.toFixed(2),
     shippingAtOriginMsg_ar: (quote_obj.item.shipping >-1?     "اضافة الى الشحن داخل بلد المصدر وقيمته  $<شحن> ":"ولا بشمل سعر الشحن فى بلد المصدر"),
@@ -476,7 +476,7 @@ btnTxt =  "=>" + btnTxt + '\n' +
   (quote_obj.notes  && quote_obj.notes == "Important Notes:"? "":quote_obj.notes);
 
   sendTextMessage(senderID, quotationStr + '\n' +
-  quote_obj.item.title.substring(0, 80) + ' [' +
+  quote_obj.item.title.substring(0, 60) + ' [' +
   (language()=="arabic" ? quote_obj.item.category_ar :quote_obj.item.category) +
   ']', 0, function() {
     // send quotation
@@ -699,7 +699,11 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   if (compareText.includes("http")) {
     console.log("got HTTP message");
 
-    return processHttpRequest(event);
+     processHttpRequest(event,function(){
+
+      console.log("<=== After processHttpRequest")
+      return;
+    });
   } // end of if http
 
 
@@ -1918,7 +1922,7 @@ function getPricing(senderID,item,callback) {
       payload = {action: 'getPricing',
           item: item
       }
-      payload.item.title = payload.item.title.substring(0,80)
+      payload.item.title = payload.item.title.substring(0,60)
 
       payloadStr = JSON.stringify(payload);
       catList.push({
@@ -2161,7 +2165,7 @@ function getQuotation(senderID,quoteNo) {
     console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
       sendTextMessage(senderID, quotationStr + '\n' +
-        quote_obj.item.title.substring(0, 80) + ' [' +
+        quote_obj.item.title.substring(0, 60) + ' [' +
         quote_obj.item.category + ']', 1000,
         function() {
 
@@ -2482,7 +2486,7 @@ let quote_obj = {
   notes:  pricingMessage
 }
 // reduce size of title
-quote_obj.item.title = quote_obj.item.title.substring(0,80);
+quote_obj.item.title = quote_obj.item.title.substring(0,60);
 // insert new quotation in the database
 // TODO
 console.log("<><> Amman Exp Price - ceil + fixed(2)",Math.ceil(quote_obj.price.amm_exp*1).toFixed(2))
@@ -2531,7 +2535,7 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
       "\n and buttonList is:" + buttonList);
 
     sendTextMessage(targetRecipient,quotationStr + '\n'+
-       quote_obj.item.title.substring(0,80)+ ' [' +
+       quote_obj.item.title.substring(0,60)+ ' [' +
        (language()=="arabic" ? quote_obj.item.category_ar :quote_obj.item.category) +
        ']',1000,function(){
       sendPriceButton(targetRecipient, btnTxt, buttonList,0,function() {
