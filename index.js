@@ -1925,8 +1925,10 @@ function getPricing(senderID,item) {
       item.category_info.keywords='';
 
       payload = {action: 'getPricing',
-          item: item.substring(0,80)
+          item: item
       }
+      payload.item.title = payload.item.title.substring(0,80)
+      
       payloadStr = JSON.stringify(payload);
       catList.push({
           "title" : cats[i].category_name + "/["+ cats[i].score +']',
