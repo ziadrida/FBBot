@@ -1940,6 +1940,7 @@ findCategory: function(findVal,callback) {
           }
 
 function cleanupCat(cat) {
+    console.log("===> in cleanupCat");
 
     cat = cat.replace(/  /, " "); // two spaces to one
     cat = cat.replace(/Categories/i,"");
@@ -1966,7 +1967,7 @@ function cleanupCat(cat) {
         //  db = mongoUtil.getDb();
         var collection = db.collection('categories');
 
-      findExp = [] ;//{category_name:{$regex:'t'}},
+  //    findExp = [] ;//{category_name:{$regex:'t'}},
 
       // remove ies from work endings
 
@@ -1983,7 +1984,7 @@ function cleanupCat(cat) {
             }*/
 
          }
-         console.log("------- findVal is an array findExp:",findExp);
+        // console.log("------- findVal is an array findExp:",findExp);
        }  else {
          allCatsString = findVal;
           /*searchCat = cleanupCat(findVal);
@@ -2025,13 +2026,16 @@ function cleanupCat(cat) {
           //  db.close();
           console.log("# of categories matched:",docs.length);
 
-            callback(docs);
+            return callback(docs);
 
           } else if (docs && docs.length == 0) { // no match for findVal
             // how about creating an entry for it and let someone or figure a way later set the message? great idea!
           console.log("******* no categories found");
-          callback(docs);
+          return callback(docs);
           } // else if
+          else {
+            return callback(docs);
+          }
         });
    });
 

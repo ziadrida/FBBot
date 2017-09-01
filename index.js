@@ -670,8 +670,10 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
     console.log("**** item:",item)
 
     // manual pricing
-    getPricing(senderID,item);
-    return;
+    getPricing(senderID,item, function() {
+          return;
+    });
+
   } // action *pr
 
 
@@ -1242,22 +1244,7 @@ app.listen(app.get('port'), function() {
 /*******************************************
   This is hte pricing MODULE
 **********************************************/
-function getRegularAmmanPrice(item) {
-  // input price is in USD
-  // return price in JD
-  console.log("item price:",item.price);
-   console.log("item price:",item.weight);
-   console.log("item price:", item.shipping);
-   console.log("item price:", item.category);
-  console.log('in getRegularAmmanPrice *********** ')
 
-
-
-
-
-
-
-}
 
 function findUrls( text )
 {
@@ -1292,12 +1279,9 @@ function processHttpRequest(event,callback) {
   var messageAttachments = message.attachments;
   let compareText = messageText.toLowerCase();
 
-
-
   var urls = findUrls(message.text);
   console.log("url found is:",urls[0])
   if (urls.length <= 0 ) return callback();
-
 
   if (urls.length > 1 ) {
     sendTextMessage(senderID,"please send one URL at a time",1000);
@@ -1343,8 +1327,12 @@ function processHttpRequest(event,callback) {
         "dateCreated": new Date()
       }, function(err, result) {
         //assert.equal(err, null);
-        console.log("Inserted a document into the pricing_request collection.");
-        callback();
+        if(!err) {
+          console.log("Inserted a document into the pricing_request collection.");
+        } else {
+          console.log("Error inserting document into pricing_request err:",err)
+        }
+         return callback();
       });
     }; // insertMesssageText
 
@@ -1383,7 +1371,7 @@ function processHttpRequest(event,callback) {
       amazonItemLookup(itemLookupOptions,function(results) {
         if (!results) {
             console.log("********** No Results from Amazon!");
-            return ; //callback(null);
+            return callback(); //callback(null);
           }
         console.log(JSON.stringify(results));
         var res = JSON.stringify(results)
@@ -1404,11 +1392,8 @@ function processHttpRequest(event,callback) {
 
         }
 
-
-
         var prime = "";
         var itemCondition=""
-
 
         if (prime == "") {
           try {
@@ -1564,7 +1549,7 @@ function processHttpRequest(event,callback) {
         }
 
 
-var msg = title +
+        var msg = title +
         "\n" +
          "Price:" + itemPrice +
         "\n" +
@@ -1580,7 +1565,7 @@ var msg = title +
           "\n" +
           " MPN/ASIN:" + MPN+'/'+searchItem;
 
-console.log("-------->",msg);
+          console.log("-------->",msg);
           try {
             itemToCheck.title = title;
           } catch (e) {
@@ -1617,9 +1602,12 @@ console.log("-------->",msg);
 
           // we do not know the category yet
           try {
-            getPricing(senderID, itemToCheck);
+            getPricing(senderID, itemToCheck,function() {
+                return callback();
+            });
           } catch (e) {
-            console.log("Error getting pricing");
+            console.log("Error getting pricing e:",e);
+            return callback();
 
           }
       //  sendTextMessage(senderID, msg);
@@ -1630,6 +1618,7 @@ console.log("-------->",msg);
     } // if (asin)  price from amazon
     else {
       console.log("not amazon");
+      return callback();
     }
 
     /*
@@ -1879,7 +1868,7 @@ function genPrReport(senderID, daysBack,callback) {
 /*************************
 getPricing
 **************************/
-function getPricing(senderID,item) {
+function getPricing(senderID,item,callback) {
 
   console.log(" =========> in getPricing, senderID",senderID);
   var catList = [];
@@ -1891,11 +1880,11 @@ function getPricing(senderID,item) {
     if(!cats) {
         console.log("***************** NO CATEGORIES - RETURNED NULL ********** ");
         sendTextMessage(senderID,"Could not find matching category",1000)
-        return;
+        return callback();
     } else if (cats && cats.length == 0 ) {
       console.log("***************** NO CATEGORIES MATCH:",searchCat)
       sendTextMessage(senderID,"No matching category");
-      return;
+      return callback();
     } else if (cats && cats.length == 1 ) {
       // got one match - use it
       console.log(" ***> selected category:",cats[0].category_name)
@@ -1909,7 +1898,7 @@ function getPricing(senderID,item) {
       item.category_info.keywords='';
 
       calculatePricing(senderID,item,function() {
-        return;
+        return callback();
       });
     }
     else {
@@ -1952,11 +1941,12 @@ if (catList.length == 1) {
     console.log("calc price for item:",JSON.stringify(item));
 
       calculatePricing(senderID,item,function() {
-        return;
+        return callback();
       });
 } else {
     console.log("++>build cat selectio catList.length:",catList.length )
      compactListBuilder(senderID,catList,moreButton);
+     return callback();
 }
  }
   // compactList(senderID,"Which category best matches this item?");
@@ -1965,7 +1955,6 @@ if (catList.length == 1) {
 
   });
 
-//  sendTextMessage(senderID, getRegularAmmanPrice(userMsg));
 } // end function getPricing
 
 
