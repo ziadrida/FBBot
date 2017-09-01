@@ -1902,6 +1902,7 @@ function getPricing(senderID,item) {
       //sendTextMessage(senderID,"Category:"+cats[0].category_name+"  arabic:"+cats[0].category_name_ar)
       // do the pricing now TODO
       item.category = cats[0].category_name;
+      item.category_ar = cats[0].category_name_ar;
       item.category_info = cats[0];
       // REDUCE ITEM SIZE
       item.category_info._id = ''; // save space in messages
@@ -1915,7 +1916,8 @@ function getPricing(senderID,item) {
       // more than one - let user select the valid category
     console.log("number of cats:",cats.length);
     highScore = cats[0].score ;
-    for (i=0 ; i < cats.length && i<3 && cats[i].score >  highScore*globalparams.category_match_percentage; i++) {
+
+    for (i=0 ; i < cats.length &&  i<3 && cats[i].score >  highScore*globalparams.category_match_percentage; i++) {
       console.log("+++++++++++++= ",cats[i]);
        cats[i].score=  cats[i].score.toFixed(2);
       item.category = cats[i].category_name;
@@ -1928,7 +1930,7 @@ function getPricing(senderID,item) {
           item: item
       }
       payload.item.title = payload.item.title.substring(0,80)
-      
+
       payloadStr = JSON.stringify(payload);
       catList.push({
           "title" : cats[i].category_name + "/["+ cats[i].score +']',
@@ -1939,21 +1941,23 @@ function getPricing(senderID,item) {
             "payload": payloadStr
           }]
       });
-      var moreButton = [{
+    }  // for loop
+    var moreButton = [{
         "title": helpers.getMessage(sessions[sessionId],"1002"), // category not listed
         "type": "postback",
         "payload": ' { "action" : "getHelp" , "subject" :"categories" }'
       }]
-}
-  if (catList.length == 1) {
-    console.log("calc price for item:",item);
+
+if (catList.length == 1) {
+    console.log("calc price for item:",JSON.stringify(item));
 
       calculatePricing(senderID,item,function() {
         return;
       });
-  } else {
+} else {
+    console.log("++>build cat selectio catList.length:",catList.length )
      compactListBuilder(senderID,catList,moreButton);
-   }
+}
  }
   // compactList(senderID,"Which category best matches this item?");
     // build List template
@@ -2265,7 +2269,8 @@ function calculatePricing(senderID,item,callback) {
   packageDimensions = item.length + 'x'+item.width + 'x'+ item.height + 'inch' ;
 
   Y2_volumnWeight=-1; // already have chargableWeight
-  console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',Z2_chargableWeight.toFixed(2)+'/'+AD2_HandlingCostUSD.toFixed(2));
+  console.log('Z2_chargableWeight/AD2_HandlingCostUSD:',
+  Z2_chargableWeight.toFixed(2)+'/'+AD2_HandlingCostUSD.toFixed(2));
   AC2_ShipAndHandCostUSD =((AB2_adjustedShippingCost * Z2_chargableWeight)) + AD2_HandlingCostUSD;
   console.log("AC2_ShipAndHandCostUSD:",AC2_ShipAndHandCostUSD.toFixed(2));
 
