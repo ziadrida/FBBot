@@ -2014,7 +2014,8 @@ function cleanupCat(cat) {
             $or: findExp
           })*/
           console.log("^^^^^^^^^ allCatsString",allCatsString)
-          allCatsString = allCatsString.substring(0,80);
+        //  allCatsString = allCatsString.substring(0,80);
+          allCatsString = allCatsString.replace(/"/," ");
           collection.find({ $text: { $search: allCatsString } },
             { score: { $meta: "textScore" }} ).sort({score:{ $meta : "textScore"}})
           .limit(10).toArray().then(function(docs) {
