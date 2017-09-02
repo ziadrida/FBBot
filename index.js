@@ -179,7 +179,8 @@ db = mongoUtil.getDb(function() {
       sessionId = new Date().toISOString();
       sessions[sessionId] = {
         fbid: fbid,
-        context: {}
+        context: {},
+        contexts: []
       };
     }
     callback(sessionId)
@@ -339,7 +340,7 @@ function handleEvent(senderID, event) {
       val4: Math.ceil(quote_obj.price.aq_exp*1).toFixed(1)
     }
 
-    quoteLbl = (language() == "arabic"? "سعر":"quotation")
+    quoteLbl = (arabicLang()? "سعر":"quotation")
     btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
     var options = {}
     options.timeZone = 'Asia/Amman'
@@ -353,7 +354,7 @@ function handleEvent(senderID, event) {
 
     sendTextMessage(senderID, quotationStr + '\n' +
       quote_obj.item.title.substring(0, 60) + ' [' +
-      (language()=="arabic" ? quote_obj.item.category_ar :quote_obj.item.category) +
+      (arabicLang() ? quote_obj.item.category_ar :quote_obj.item.category) +
        ']', 0,
       function() {
         // send quotation
@@ -462,8 +463,8 @@ detailsMsg_ar = detailsMsg_ar.replace("<عقبة مبيعات>",pricing.tax_aqab
 //
 // TODO
 //------------------
-btnTxt =  (language() == "english"? detailsMsg_en:detailsMsg_ar);
-quoteLbl = (language() == "arabic"? "سعر":"quotation")
+btnTxt =  (!arabicLang()? detailsMsg_en:detailsMsg_ar);
+quoteLbl = (arabicLang()? "سعر":"quotation")
 
 var options = {}
 options.timeZone = 'Asia/Amman'
@@ -477,7 +478,7 @@ btnTxt =  "=>" + btnTxt + '\n' +
 
   sendTextMessage(senderID, quotationStr + '\n' +
   quote_obj.item.title.substring(0, 60) + ' [' +
-  (language()=="arabic" ? quote_obj.item.category_ar :quote_obj.item.category) +
+  (arabicLang() ? quote_obj.item.category_ar :quote_obj.item.category) +
   ']', 0, function() {
     // send quotation
     sendPriceButton(senderID, btnTxt, buttonList, 200, function() {
@@ -728,7 +729,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
 
        //sendTextMessage(senderID,sessions[sessionId].fbprofile.first_name+", welcome to TechTown MailOrder Service");
 
-       matchEntity("how_to_order"+(language()== "arabic"? "_ar":""),language(), function(doc) {
+       matchEntity("how_to_order",language(), function(doc) {
          console.log("*********** after matchEntity(how_to_order");
          sendTextMessage(senderID, doc[0].messageText,500,function(){
            sessions[sessionId].newUser = false; // welcome message sent
@@ -843,7 +844,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
   else {
     // new user and we have no clue what user said - just say welcome
     if (!userMsg &&  !compareText.includes("http") && sessions[sessionId].newUser ) {
-          sendTextMessage(senderID,(language() == "arabic"? "مرحبا": "Welcome"),100,function(){
+          sendTextMessage(senderID,(arabicLang()? "مرحبا": "Welcome"),100,function(){
             return callback();
           });
     }
@@ -2151,7 +2152,7 @@ function getQuotation(senderID,quoteNo) {
           val1: (quote_obj.price.amm_exp*1 < quote_obj.price.amm_std*1?
              Math.ceil(quote_obj.price.amm_exp*1).toFixed(1):Math.ceil(quote_obj.price.amm_std*1).toFixed(1))
         }
-        quoteLbl = (language() == "arabic"? "سعر":"quotation")
+        quoteLbl = (arabicLang()? "سعر":"quotation")
         btnTxt = helpers.getMessage(sessions[sessionId],msgCode,valParams); // pricing message
         var options = {}
         options.timeZone = 'Asia/Amman'
@@ -2176,7 +2177,7 @@ function getQuotation(senderID,quoteNo) {
 
       sendTextMessage(senderID, quotationStr + '\n' +
         quote_obj.item.title.substring(0, 60) + ' [' +
-        (language() == "arabic" ? quote_obj.item.category_ar: quote_obj.item.category) + ']', 1000,
+        (arabicLang() ? quote_obj.item.category_ar: quote_obj.item.category) + ']', 1000,
         function() {
 
           // send quotation
@@ -2219,6 +2220,37 @@ function calculatePricing(senderID,item,callback) {
 
   // user pricing formula
   pricingMessage = "Important Notes:"
+
+  if (item.shipping < 0) {
+    // unknown shipping cost
+    C2_shipping = 0;
+    if (!arabicLang()) {
+      pricingMessage = pricingMessage + "\nlocal shipping cost not included in price"
+    } else {
+      pricingMessage = pricingMessage + "\nلا يشمل الشحن فى بلد المصدر"
+    }
+  } else {
+    C2_shipping = item.shipping * 1.00;
+  }
+
+  if((item.length <= 0 || item.width <= 0 || item.height <= 0)
+   && item.weight <= 0 &&
+   item.chargableWeight <= 0 ){
+   // cannot compute weight
+   if (!arabicLang()) {
+     pricingMessage = pricingMessage + "\nWARNING: no weight available. item weight cannot be ZERO!"
+   } else {
+     pricingMessage = pricingMessage + "\nلا يوجد وزن للقطعة"
+   }
+   //
+   // TODO ask for item weight
+   sessions[sessionId].contexts.push  = {
+     "action": "get_item_weight",
+     "message": (arabicLang()? "ممكن وزن المنتج؟": "Can you give me item weight?"),
+     "expect" : "/[0-9][.]/"
+   }
+  }
+
   I2_quantity = 1;
   J2_unitCapacityPerBox = 1;
   numberOfPackages = Math.ceil((I2_quantity/J2_unitCapacityPerBox)*100)/100;
@@ -2248,27 +2280,7 @@ function calculatePricing(senderID,item,callback) {
 
    B2_price = item.price * 1.00;
 
-   if (item.shipping < 0) {
-     // unknown shipping cost
-     C2_shipping = 0;
-     if (language() == "english") {
-       pricingMessage = pricingMessage + "\nlocal shipping cost not included in price"
-     } else {
-       pricingMessage = pricingMessage + "\nلا يشمل الشحن فى بلد المصدر"
-     }
-   } else {
-     C2_shipping = item.shipping * 1.00;
-   }
-   if((item.length <= 0 || item.width <= 0 || item.height <= 0)
-    && item.weight <= 0 &&
-    item.chargableWeight <= 0 ){
-    // cannot compute weight
-    if (language() == "english") {
-      pricingMessage = pricingMessage + "\nWARNING: no weight available. item weight cannot be ZERO!"
-    } else {
-      pricingMessage = pricingMessage + "\nلا يوجد وزن للقطعة!يفى بلدا المصدر"
-    }
-  }
+
   packageDimensions = item.length + 'x'+item.width + 'x'+ item.height + 'inch' ;
 
   Y2_volumnWeight=-1; // already have chargableWeight
@@ -2518,7 +2530,7 @@ console.log("-->SenderID/btnTxt:",senderID+'/'+btnTxt)
     console.log("after inserting quotation quotationNo:",quotationNo)
 
     quote_obj.quote_no = quotationNo;
-quoteLbl = (language() == "arabic"? "سعر":"quotation")
+quoteLbl = (arabicLang()? "سعر":"quotation")
     var options = {}
     options.timeZone = 'Asia/Amman'
   quotationStr = (quote_obj.quote_no < 0? "" : "["+
@@ -2546,7 +2558,7 @@ console.log("user locale:",JSON.stringify(sessions[sessionId]));
 
     sendTextMessage(targetRecipient,quotationStr + '\n'+
        quote_obj.item.title.substring(0,60)+ ' [' +
-       (language()=="arabic" ? quote_obj.item.category_ar :quote_obj.item.category) +
+       (arabicLang() ? quote_obj.item.category_ar :quote_obj.item.category) +
        ']',1000,function(){
       sendPriceButton(targetRecipient, btnTxt, buttonList,0,function() {
         if ( senderID != targetRecipient ) {
@@ -2595,6 +2607,12 @@ var language = function() {
     return "english"
   }
   return "arabic"
+}
+var arabicLang = function() {
+  if (sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
+    return false
+  }
+  return true
 }
 var langCode = function() {
   if (sessions[sessionId].userObj.locale.toLowerCase().includes("en")) {
