@@ -627,7 +627,7 @@ function determineResponse(event) {
   // If we receive a text message, check to see if it matches a keyword
   // and send back the example. Otherwise, just echo the text we received.
 
-  if (compareText.includes("button")) {
+  if (typeof userMsg != 'undefined' && userMsg.action === "*button") {
     //  console.log("before insertAllCats")
   //  let n = categories.insertAllCats();
   //  let n = categories.insertAllCatsArabic();
@@ -704,7 +704,7 @@ if (typeof userMsg != 'undefined' && userMsg.action === "*quote") {
       console.log("<=== After processHttpRequest")
       return;
     });
-// TODO should we return 
+// TODO should we return
       return;
   } // end of if http
 
@@ -1712,6 +1712,12 @@ function amazonItemLookup(itemLookupOptions,callback) {
            ResponseGroup: 'OfferListings ,ItemAttributes,BrowseNodes'
          }
          console.log("************* BEFORE itemLookup 2");
+         // TODO put timeout so amazon does not complain about too many fast requests
+         setTimeout(function(){
+           console.log("now calling Lookup2 **** - after wait for ",1000)
+
+
+
          amazonClient.itemLookup(itemLookupOptions2).then(function(results2) {
            console.log(">>>>>>>>>>>>  Resulting Message from Amazon lookup2 >>>>>>>>>>>>>>>>");
            console.log(JSON.stringify(results2));
@@ -1723,7 +1729,8 @@ function amazonItemLookup(itemLookupOptions,callback) {
           console.log(JSON.stringify(err));
           return callback(null);
         });
-     } // catch (e)
+      }   ,1000); // setTimeout
+    } // catch (e) for Lookup1
   }).catch(function(err) {
     console.log("ERROR from itemLookup1 ********** ",err)
     console.log(JSON.stringify(err));
@@ -1916,6 +1923,7 @@ function getPricing(senderID,item,callback) {
       console.log("+++++++++++++= ",cats[i]);
        cats[i].score=  cats[i].score.toFixed(2);
       item.category = cats[i].category_name;
+      item.category_ar = cats[i].category_name_ar;
       item.category_info = cats[i];
       // REDUCE ITEM SIZE
       item.category_info._id = ''; // save space in messages
@@ -2168,7 +2176,7 @@ function getQuotation(senderID,quoteNo) {
 
       sendTextMessage(senderID, quotationStr + '\n' +
         quote_obj.item.title.substring(0, 60) + ' [' +
-        quote_obj.item.category + ']', 1000,
+        (language() == "arabic" ? quote_obj.item.category_ar: quote_obj.item.category) + ']', 1000,
         function() {
 
           // send quotation
