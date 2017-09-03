@@ -8,7 +8,6 @@
 // get token from the environment
 mongodbUrl = process.env.MONGODB_URI // 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s'
 
-
 var categories = require('./categories.js');
 var MongoClient = require('mongodb').MongoClient;
 var mongoUtil = require( './mongoUtil.js' );
@@ -1370,8 +1369,8 @@ function processHttpRequest(event,callback) {
       console.log(">>>>>>>>>> AMAZON:", searchItem);
        amazonClient = amazon.createClient({
         awsTag: "tech1",
-        awsId: "AKIAIN3EIRW3VGI3UT2Q",
-        awsSecret: "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"
+        awsId: "AKIAILYVOFA3D375AIWA",
+        awsSecret: "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"
       });
 
 
@@ -1692,8 +1691,8 @@ function amazonItemLookup(itemLookupOptions,callback) {
   if (!amazonClient) {
   amazonClient = amazon.createClient({
    awsTag: "tech1",
-   awsId: "AKIAIN3EIRW3VGI3UT2Q",
-   awsSecret: "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"
+   awsId: "AKIAILYVOFA3D375AIWA",
+   awsSecret: "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"
  });
  }
 
