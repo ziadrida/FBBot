@@ -2,6 +2,13 @@
 //var FB = require('fb');
 //  fb = new FB.Facebook(options);
 // mongodb
+
+
+
+// get token from the environment
+mongodbUrl = process.env.MONGODB_URI // 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s'
+
+
 var categories = require('./categories.js');
 var MongoClient = require('mongodb').MongoClient;
 var mongoUtil = require( './mongoUtil.js' );
@@ -10,7 +17,7 @@ var DHL = require( './dhlrate.js' );
 var Logger = require( './logger.js' );
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
-var mongodbUrl = 'mongodb://heroku_lrtnbx3s:5c5t5gtstipg3k6b9n6721mfpn@ds149412.mlab.com:49412/heroku_lrtnbx3s';
+
 var db;
 // This will contain all user sessions.
 // Each session has an entry:
@@ -37,8 +44,6 @@ const warranty_price = '15';
 var logger = new Logger("MyLogFile");
 
 
-// get token from the environment
-const firebase_auth_uri = process.env.FIREBASE_AUTH_URI
 const token = process.env.FB_VERIFY_TOKEN
 const fb_access_token = process.env.FB_ACCESS_TOKEN
 //const wit_access_token = process.env.WIT_ACCESS_TOKEN
